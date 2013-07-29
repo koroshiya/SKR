@@ -196,13 +196,14 @@ public class GameScreen extends AppGameContainer{
 	
 	public void swapToCharacterWindow(){
 		//TODO: Port char window
+		swapView(4);
 	}
 	
 	public void swapToInventory(){
 		
 		swapView(3);
-		this.setVSync(false);
-		this.setTargetFrameRate(5);
+		//this.setVSync(false);
+		//this.setTargetFrameRate(5);
 		//MovementListener ml = new MovementListener((MapScreen) getState(3));
 		
 		//getInput().addKeyListener(ml);
@@ -395,13 +396,9 @@ public class GameScreen extends AppGameContainer{
 		
 	}
 			
-	public void gameover(){
+	public void gameover() throws SlickException{
 
-		GameOver go = new GameOver();
-
-		this.panel.removeAll();
-		this.panel.add(go);
-		cards.next(panel);
+		swapView(666);
 				
 		int choice = MessageBox.ChoiceBox("Resume from last save point?", "Game Over", null);
 		if (choice == JOptionPane.YES_OPTION){

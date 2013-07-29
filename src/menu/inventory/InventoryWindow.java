@@ -262,7 +262,24 @@ public class InventoryWindow extends BasicGameState {
 	
 	public void process(int x, int y){
 		
-		Object source = arg0.getSource();
+		if (x <= 300){
+			String command = null;
+			if (y <= 50){
+				command = InventoryWindow.ALL;
+			} else if (y <= 100){
+				command = InventoryWindow.CONSUMABLES;
+			} else if (y <= 150){
+				command = InventoryWindow.WEAPONS;
+			} else if (y <= 200){
+				command = InventoryWindow.MISC;
+			}
+			if (command != null){
+				this.setFilter(command);
+			}
+			
+		}
+		
+		/*Object source = arg0.getSource();
 		
 		//TODO: separate into filters and menu items
 		
@@ -283,7 +300,7 @@ public class InventoryWindow extends BasicGameState {
 				parent.setItem(command);
 			}
 			
-		}
+		}*/
 		
 	}
 	

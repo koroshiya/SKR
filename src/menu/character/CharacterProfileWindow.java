@@ -1,7 +1,5 @@
 package menu.character;
 
-import javax.swing.border.EmptyBorder;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -9,22 +7,21 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import screen.GameScreen;
+
 import com.japanzai.skr.Party;
 
 import character.PlayableCharacter;
 
 public class CharacterProfileWindow extends BasicGameState {
 	
+	private final int state;
 	private PlayableCharacter character;
 	private Image lblAvatar;
 	
-	public CharacterProfileWindow(PlayableCharacter character) throws SlickException{
+	public CharacterProfileWindow(int state, GameScreen gameScreen) throws SlickException{
 		
-		this.character = character;
-		
-		//this.setLayout(new GridLayout(1, 1));
-		
-		lblAvatar = character.getProfilePicture();
+		this.state = state;
 		
 	}
 	
@@ -62,20 +59,18 @@ public class CharacterProfileWindow extends BasicGameState {
 		//panel.setBorder(new EmptyBorder(20, 0, 0, 0));
 		//panel.setPreferredSize(new Dimension(350, 400));
 
-		g.drawString(lblName, x, y);
-		g.drawString(lblHeight, x, y);
-		g.drawString(lblOccupation, x, y);
-		g.drawString(lblNationality, x, y);
-		g.drawString(lblRightHand, x, y);
-		g.drawString(lblLevel, x, y);
-		g.drawString(lblHP, x, y);
-		g.drawString(lblStrength, x, y);
-		g.drawString(lblDefence, x, y);
-		g.drawString(lblMind, x, y);
-		g.drawString(lblEvasion, x, y);
-		g.drawString(lblAccuracy, x, y);
-		g.drawString(lblSpeed, x, y);
-		g.drawString(lblUnique, x, y);
+		int x = 455;
+		int y = 15;
+		int inc = 15;
+		
+		String[] labels = {lblName, lblHeight, lblOccupation, lblNationality, 
+							lblRightHand, lblLevel, lblHP, lblStrength, lblDefence, 
+							lblMind, lblEvasion, lblAccuracy, lblSpeed, lblUnique};
+		
+		for (String label : labels){
+			g.drawString(label, x, y);
+			y += inc;
+		}
 		
 	}
 	
@@ -83,21 +78,22 @@ public class CharacterProfileWindow extends BasicGameState {
 		
 		CharacterSelectionListener l = new CharacterSelectionListener(this);
 		
-		int y = 10; //value to increment startY
-		int startY = 0; 
+		int y = 10;
+		int startY = 510;
+		int x = 455;
 		
 		for (PlayableCharacter c : Party.getCharacters()){
 			g.drawString(c.getName(), x, startY);
-			label.addMouseListener(l);
+			//label.addMouseListener(l);
 			startY += y;
 		}
 		
 	}
 	
-	public void setCharacter(PlayableCharacter character){
+	public void setCharacter(PlayableCharacter character) throws SlickException{
 		
 		this.character = character;
-		
+		lblAvatar = new Image(this.character.getProfilePicture());
 		//this.updateUI();
 		
 	}
@@ -107,23 +103,22 @@ public class CharacterProfileWindow extends BasicGameState {
 		return this.character;
 		
 	}
-
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		// TODO Auto-generated method stub
+		
+		this.setCharacter(Party.getCharacterByIndex(0));
 		
 	}
 
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
 			throws SlickException {
-		// TODO Auto-generated method stub
 		
 		drawCharacterInfoPanel(g);
 		drawCharacterPanel(g);
-		g.drawImage(lblAvatar, x, y, null);
+		g.drawImage(lblAvatar, 0, 0);
 		
 	}
 
@@ -136,8 +131,7 @@ public class CharacterProfileWindow extends BasicGameState {
 
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.state;
 	}
 	
 }

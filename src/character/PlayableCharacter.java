@@ -185,8 +185,8 @@ public class PlayableCharacter extends CombatCapableCharacter implements Seriali
 		
 	}
 	
-	public Image getProfilePicture() throws SlickException {
-		return new Image(this.getSpriteDirectory() + "profile.png");		
+	public String getProfilePicture() throws SlickException {
+		return this.getSpriteDirectory() + "profile.png";		
 	}
 	
 }
