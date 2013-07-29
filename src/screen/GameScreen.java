@@ -3,9 +3,7 @@ package screen;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -19,31 +17,16 @@ import map.MovementListener;
 import map.ParentMap;
 import menu.MenuItemListener;
 import menu.MenuMainWindow;
-import menu.character.CharacterProfileWindow;
-import menu.inventory.InventoryWindow;
 
-import animation.AnimatedSprite;
 import battle.Battle;
 import character.EnemyCharacter;
-import character.PlayableCharacter;
 
 import com.japanzai.skr.Dialogue;
 import com.japanzai.skr.Driver;
 import com.japanzai.skr.MapScreen;
-import com.japanzai.skr.Opponents;
-import com.japanzai.skr.Party;
 import com.japanzai.skr.SlickSKR;
 
-import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.event.ComponentListener;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class GameScreen extends AppGameContainer{
@@ -56,14 +39,11 @@ public class GameScreen extends AppGameContainer{
 	
 	private static JFrame frame;
 	private static JMenuBar menuBar;
-
-	private final int target;
 	
 	public GameScreen(SlickSKR skr) throws SlickException{
 		
 		super(skr);
 		this.setVSync(true);
-		this.target = this.targetFPS;
 		this.setSmoothDeltas(true);
 		this.setUpdateOnlyWhenVisible(true);
 		//this.setShowFPS(false);
@@ -89,7 +69,7 @@ public class GameScreen extends AppGameContainer{
 			layer = new JPanel();
 			layer.setDoubleBuffered(true);
 
-			instantiateMenuBar();
+			//instantiateMenuBar();
 			//frame.pack(); //add insets
 			//setResizable(false);
 			
@@ -102,69 +82,7 @@ public class GameScreen extends AppGameContainer{
 	public void setSKR(SlickSKR skr){
 		super.game = skr;
 	}
-	
-	public void instantiateMenuBar(){
-		
-		JMenuBar bar = new JMenuBar();
-		
-		JMenu menuFile = new JMenu("File");
-		JMenu menuView = new JMenu("View");
-		JMenu menuHelp = new JMenu("Help");
-		JMenu menuTesting = new JMenu("TESTING");
-
-		setMenuItem("Save", menuFile);
-		setMenuItem("Load", menuFile);
-		setMenuItem("Quit", menuFile);
-		
-		setMenuItem("Fullscreen", menuView);
-		setMenuItem("Menu", menuView);
-
-		never = setJCheckBoxMenuItem(menuTesting, "No encounters");
-		never.setSelected(true); //Because we're testing //TODO: remove before production, obviously
-		always = setJCheckBoxMenuItem(menuTesting, "Encounter every step");
-		
-		JMenu fight = new JMenu("FIGHT");
-		for (EnemyCharacter ex : Opponents.getEnemies()){
-			setMenuItem(ex.getNickName(), fight);
-		}
-		menuTesting.add(fight);
-		
-		setMenuItem("About", menuHelp);
-		setMenuItem("Hotkeys", menuHelp);
-		setMenuItem("Changelog", menuHelp);
-		
-		bar.add(menuFile);
-		bar.add(menuView);
-		bar.add(menuHelp);
-		bar.add(menuTesting);
-		
-		menuBar = bar;
-		//this.setJMenuBar(menuBar);
-		
-	}
-	
-	private JCheckBoxMenuItem setJCheckBoxMenuItem(JMenu menu, String tag){
-		JCheckBoxMenuItem item = new JCheckBoxMenuItem();
-		item.setActionCommand(tag);
-		item.setText(tag);
-		item.setName(tag);
-		item.addActionListener(new MenuBarListener(this));
-		menu.add(item);
-		return item;
-	}
-	
-	private void setMenuItem(String tag, JMenu menu){
-		
-		JMenuItem item = new JMenuItem();
-		item.setName(tag);
-		item.setText(tag);
-		item.setActionCommand(tag);
-		item.addActionListener(new MenuBarListener(this));
-		
-		menu.add(item);
-		
-	}
-		
+			
 	public void swapToBattle() throws SlickException{
 		
 		Battle battle = (Battle)panel.getComponent(1);
