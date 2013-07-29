@@ -5,6 +5,8 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
 
+import org.newdawn.slick.SlickException;
+
 import com.japanzai.skr.Party;
 
 import character.PlayableCharacter;
@@ -36,8 +38,12 @@ public class CharacterSelectionListener implements MouseListener {
 		
 		JLabel lbl = (JLabel) arg0.getSource();
 		PlayableCharacter c = Party.getCharacterByName(lbl.getName());
-		parent.setCharacter(c);
-		//System.out.print(lbl.getName());
+		try {
+			parent.setCharacter(c);
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 

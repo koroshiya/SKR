@@ -1,0 +1,60 @@
+		v0.16
+		Migrated to Git
+		Fixes for port from Swing to Slick
+		Deprecated in-class changelog
+		Fixed image associations
+		Removed interlacing; Slick doesn't handle PNG interlacing properly
+		Implemented new character menu
+		Removed CharacterMenuPane; replaced with new slick-based interface
+		Borrowed listeners from main menu for inventory and character window; 
+			yet to implement proper key or mouse listeners
+		
+		v0.15
+		Implemented Slick2D graphics engine. Completely rewriting UI
+		Implemented Slick2D A* algorithm. No further alterations required.
+		
+		v0.14
+		Implemented basic save/load mechanism (experience, items, money)
+		Implemented JxFileDialog - Custom file chooser (currently load only)
+		Improvements made to A* algorithm. Still not perfect
+		
+		v0.13
+		Improvements to A* algorithm. Still not perfect
+		Added Game Over screen and option to restart upon Game Over
+		Added first instance of a boss character
+		Character displayed on map is now first active character. eg. If Ken is removed from the party, Yumin will be displayed
+		Losing with at least one living character outside party now means survival
+		Can no longer remove last living character from party
+		Drastically improved graphic performance for maps
+		Improved character movement graphic on map
+		Fixed MouseListener bug from ParentMap transition
+		Point & click movement now invokes random encounters too
+		Added global enemy class and enemy encounter debugging options
+		Implemented technique learning system; techniques are learnt by class and level
+		Further improvements to menu + general improvements
+		
+		v0.12
+		Implemented A* algorithm. Not perfect.
+		Added new enemies and character sprites
+		Fixed battle encounter system
+		Added default map background; grass and such can now be behind objects
+		
+		v0.11
+		In the menu, you now need to double click on a character to remove/add them to/from the party
+		Implemented color scheme for party state
+		Overhauled Tile and Map generation algorithms and implemented several new classes to that end
+		Overhauled Character avatar and profile pic implementation
+		Added character profile pages and made the Character menu item functional
+		
+		v0.10
+		NPCs face speaker
+		Mouseclick can be used to move
+		Changelog implemented
+		Encounter rate now map-dependent
+		Encounters are randomly generated instead of set
+		Borders and transitions implemented
+		
+		v0.09
+		Map dialogue window now docked
+		New NPC added - To be removed later or used for tutorials
+		Dialogue options implemented (Yes, No, Back)

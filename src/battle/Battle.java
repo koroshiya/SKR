@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import org.newdawn.slick.SlickException;
+
 import screen.BattleConsole;
 import screen.GameScreen;
 import screen.MessageBox;
@@ -58,7 +60,7 @@ public class Battle extends JPanel{
 		
 	}
 	
-	public void start(){
+	public void start() throws SlickException{
 		
 		//make arraylist of all players and enemies, then order by speed?
 

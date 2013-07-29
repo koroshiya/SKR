@@ -8,6 +8,8 @@ import character.PlayableCharacter;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.SlickException;
+
 import technique.CombatTechnique;
 
 public class BattleAttackListener implements ActionListener{
@@ -45,7 +47,11 @@ public class BattleAttackListener implements ActionListener{
 			}
 		}
 		this.menu.resetDefaultInterface();
-		this.menu.start();
+		try {
+			this.menu.start();
+		} catch (SlickException e1) {
+			e1.printStackTrace();
+		}
 		
 	}
 

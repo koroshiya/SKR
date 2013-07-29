@@ -7,6 +7,8 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 
+import org.newdawn.slick.SlickException;
+
 import com.japanzai.skr.Dialogue;
 
 public class ConsoleMenuListener implements ActionListener, KeyListener {
@@ -30,22 +32,25 @@ public class ConsoleMenuListener implements ActionListener, KeyListener {
 		if (arg0.getSource() instanceof JButton){
 			
 			String code = arg0.getActionCommand();
-			
-			if (code.equals("Back")){
-				back();
-			}else if (code.equals("Next")){
-				next();
-			}else if (code.equals("Yes")){
-				answer(true);
-			} else if (code.equals("No")){
-				answer(false);
-			}			
+			try{
+				if (code.equals("Back")){
+					back();
+				}else if (code.equals("Next")){
+					next();
+				}else if (code.equals("Yes")){
+					answer(true);
+				} else if (code.equals("No")){
+					answer(false);
+				}			
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
 			
 		}
 		
 	}
 	
-	private void next(){
+	private void next() throws SlickException{
 		
 		if (!console.isTalking()){return;}
 		
@@ -58,7 +63,7 @@ public class ConsoleMenuListener implements ActionListener, KeyListener {
 		}
 	}
 	
-	private void back(){
+	private void back() throws SlickException{
 		Dialogue d = console.getDialogue();
 		if (d.canGoBack()){
 			d.back();
@@ -68,7 +73,7 @@ public class ConsoleMenuListener implements ActionListener, KeyListener {
 		}
 	}
 	
-	private void answer(boolean answer){
+	private void answer(boolean answer) throws SlickException{
 		
 		if (console.isTalking()){return;}
 		
@@ -85,16 +90,20 @@ public class ConsoleMenuListener implements ActionListener, KeyListener {
 		
 		int code = arg0.getKeyCode();
 		//System.out.println(code);
-		
-		if (code == INTERACT){
-			next();
-		}else if (code == BACK){
-			back();
-		}else if (code == YES){
-			answer(true);
-		}else if (code == NO){
-			answer(false);
+		try{
+			if (code == INTERACT){
+				next();
+			}else if (code == BACK){
+				back();
+			}else if (code == YES){
+				answer(true);
+			}else if (code == NO){
+				answer(false);
+			}
+		} catch (SlickException e) {
+			e.printStackTrace();
 		}
+		
 		
 	}
 

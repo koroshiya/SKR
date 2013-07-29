@@ -7,6 +7,7 @@ import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.MouseListener;
 
 import com.japanzai.skr.Driver;
+import com.japanzai.skr.SlickSKR;
 
 import screen.GameScreen;
 
@@ -50,40 +51,34 @@ public class MenuItemListener implements MouseListener, KeyListener {
 		}
 	}
 
-	
 	@Override
-	public void inputEnded() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void inputEnded() {}
 
-	
 	@Override
-	public void inputStarted() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void inputStarted() {}
 
-	
 	@Override
 	public boolean isAcceptingInput() {
 		return true;
 	}
 
-	
 	@Override
 	public void setInput(Input arg0) {}
 
-	
 	@Override
 	public void keyPressed(int arg0, char arg1) {}
 
-	
 	@Override
 	public void keyReleased(int code, char arg1) {
-				
+		
+		System.out.println(code);
+		
 		if (code == MENU){
-			parent.swapToMap();
+			if (parent.getStateIndex() == SlickSKR.MENU){
+				parent.swapToMap();
+			}else{
+				parent.swapToMenu();
+			}
 		}else if (code == QUIT){
 			Driver.quit();
 		}else if (code == CHARACTERS){
@@ -101,7 +96,6 @@ public class MenuItemListener implements MouseListener, KeyListener {
 		}
 		
 	}
-
 	
 	@Override
 	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {}
@@ -128,14 +122,10 @@ public class MenuItemListener implements MouseListener, KeyListener {
 		try {
 			window.processMouseClick(arg0, x, y);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
 		
 	}
 

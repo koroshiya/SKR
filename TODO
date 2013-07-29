@@ -1,0 +1,19 @@
+Finish InventoryPane stuff
+Add wait between attacks
+Add animation to attacks
+Memo: isKeyDown can be used to check for ctrl in hotkeys
+
+
+Implement adjacent maps and boundaries expressed by fences and gates; entry/exit points coded in
+Code in arraylist of enemies to randomly generate, as well as items to give, pairings, size of party, etc.
+Encounter rate dependent on tile type?
+Code in one-time conversations, items, etc.; two Dialogue classes per certain NPC?
+
+-Battle gif/animation?
+-Load gif/animation?
+-Level up learn technique? //public void levelUp(Character c){c.getTechniques().add} //+message on screen
+-Background image for map dialogue
+-Image for outside of map, or use base tile repeated? eg. grass for map, stone for town, etc.
+-Shop interface?
+
+**Make single instance

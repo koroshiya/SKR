@@ -175,7 +175,7 @@ public class InventoryWindow extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		// TODO Auto-generated method stub
+		
 		setItem(0);
 		Inventory.initialize();
 		

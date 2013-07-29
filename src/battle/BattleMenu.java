@@ -4,6 +4,8 @@ import item.ConsumableItem;
 
 import javax.swing.*;
 
+import org.newdawn.slick.SlickException;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -92,7 +94,7 @@ public class BattleMenu extends JScrollPane {
 		
 	}
 	
-	public void start(){
+	public void start() throws SlickException{
 		this.battle.start();
 	}
 	

@@ -15,12 +15,12 @@ import screen.GameScreen;
 public class SlickSKR extends StateBasedGame {
 
 	private static final String GAME_NAME = "SKR";
-	private static final int MAP = 0;
-	private static final int BATTLE = 1;
-	private static final int MENU = 2;
-	private static final int INVENTORY = 3;
-	private static final int CHARACTER = 4;
-	private static final int GAMEOVER = 666;
+	public static final int MAP = 0;
+	public static final int BATTLE = 1;
+	public static final int MENU = 2;
+	public static final int INVENTORY = 3;
+	public static final int CHARACTER = 4;
+	public static final int GAMEOVER = 666;
 	
 	public SlickSKR(ParentMap current) throws SlickException{
 

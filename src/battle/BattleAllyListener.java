@@ -5,6 +5,8 @@ import item.ConsumableItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import org.newdawn.slick.SlickException;
+
 import character.PlayableCharacter;
 
 import com.japanzai.skr.Party;
@@ -46,7 +48,12 @@ public class BattleAllyListener implements ActionListener{
 			}
 		}
 		this.menu.resetDefaultInterface();
-		this.menu.start();
+		try {
+			this.menu.start();
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	

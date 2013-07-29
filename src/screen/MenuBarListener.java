@@ -10,6 +10,7 @@ import character.EnemyCharacter;
 
 import com.japanzai.skr.Driver;
 import com.japanzai.skr.Opponents;
+import com.japanzai.skr.SlickSKR;
 
 
 public class MenuBarListener implements ActionListener {
@@ -44,10 +45,12 @@ public class MenuBarListener implements ActionListener {
 			if (this.parent.isInBattle()){
 				GameScreen.WriteOnScreen("You cannot open the menu during battle", "Operation not allowed");
 			}else{
-				this.parent.swapView();
+				if (this.parent.getStateIndex() == SlickSKR.MAP){
+					this.parent.swapToMenu();
+				}else{
+					this.parent.swapToMap();
+				}
 			}
-		}else if (tag.equals("Changelog")){
-			MessageBox.Changelog(this.parent);
 		}else if (tag.equals("No encounters")){
 			JCheckBoxMenuItem noEncounters = (JCheckBoxMenuItem) arg0.getSource();
 			GameScreen.setNeverEncounter(noEncounters.isSelected());

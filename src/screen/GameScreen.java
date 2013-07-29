@@ -165,7 +165,7 @@ public class GameScreen extends AppGameContainer{
 		
 	}
 		
-	public void swapToBattle(){
+	public void swapToBattle() throws SlickException{
 		
 		Battle battle = (Battle)panel.getComponent(1);
 		battle.start();
@@ -175,8 +175,8 @@ public class GameScreen extends AppGameContainer{
 	public void swapToMenu(){
 		
 		swapView(2);
-		this.setVSync(false);
-		this.setTargetFrameRate(5);
+		//this.setVSync(false);
+		//this.setTargetFrameRate(5);
 		MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
 		this.getInput().addKeyListener(ml);
 		this.getInput().addMouseListener(ml);
@@ -195,29 +195,38 @@ public class GameScreen extends AppGameContainer{
 	}
 	
 	public void swapToCharacterWindow(){
-		//TODO: Port char window
 		swapView(4);
+		MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
+		
+		getInput().addKeyListener(ml);
+		//getInput().addMouseListener(ml);
 	}
 	
 	public void swapToInventory(){
 		
 		swapView(3);
-		//this.setVSync(false);
-		//this.setTargetFrameRate(5);
-		//MovementListener ml = new MovementListener((MapScreen) getState(3));
+		MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
 		
-		//getInput().addKeyListener(ml);
+		getInput().addKeyListener(ml);
 		//getInput().addMouseListener(ml);
 		
 	}
 	
 	public void swapView(int i){
 
-		this.setTargetFrameRate(this.target);
-		this.setVSync(true);
+		//this.setTargetFrameRate(this.target);
+		//this.setVSync(true);
 		((StateBasedGame)super.game).enterState(i);
 		removeListeners();
 		
+	}
+	
+	public int getStateIndex(){
+		return ((StateBasedGame)super.game).getCurrentStateID();
+	}
+	
+	public GameState getState(){
+		return ((StateBasedGame)super.game).getCurrentState();
 	}
 	
 	public GameState getState(int i){
