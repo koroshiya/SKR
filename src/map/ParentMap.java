@@ -169,6 +169,10 @@ public class ParentMap {
 		
 	}
 	
+	public int getHeight(){return this.tileMap.getHeightInTiles() * ICON_SIZE;}
+	
+	public int getWidth(){return this.tileMap.getWidthInTiles() * ICON_SIZE;}
+	
 	public double getPositionX(){
 		return this.currentPositionx;
 	}

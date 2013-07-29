@@ -91,7 +91,7 @@ public class GameScreen extends AppGameContainer{
 
 			instantiateMenuBar();
 			//frame.pack(); //add insets
-			setResizable(false);
+			//setResizable(false);
 			
 		}catch (Exception ex){
 			MessageBox.ErrorBox(ex, "Driver error 1", null);
@@ -289,15 +289,15 @@ public class GameScreen extends AppGameContainer{
 		always.setSelected(false);	
 	}
 		
-	public void WriteOnMap(Dialogue dialogue){
+	public void WriteOnMap(Dialogue dialogue) throws SlickException{
 		
 		int mapHeight = 0;
-		Component comp = panel.getComponent(0);
+		GameState comp = ((StateBasedGame)super.game).getCurrentState();
 		
-		if (comp.isVisible() && comp instanceof ParentMap){
+		if (comp instanceof MapScreen){
 						
-			ParentMap map = (ParentMap) comp;
-			mapHeight = map.getHeight();
+			MapScreen map = (MapScreen) comp;
+			mapHeight = map.getParentMap().getYBoundary();
 		
 		}else if (panel.getComponents().length > 0){
 			Component comp2 = panel.getComponent(1);
@@ -314,7 +314,7 @@ public class GameScreen extends AppGameContainer{
 			removeListeners();
 			MapConsole console = new MapConsole(null, dialogue, this);
 			//this.addKeyListener(mapListener);
-			this.addKeyListener(console.getListener());
+			//this.addKeyListener(console.getListener()); //TODO: check if needed
 			
 			this.layer.add(console);
 			layer.setPreferredSize(console.getPreferredSize());

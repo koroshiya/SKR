@@ -81,15 +81,15 @@ public class CharacterProfilePane extends BasicGameState {
 		
 		lblInParty = (inParty ? "In party" : "Not in party");
 		
-		this.setBackground(inParty ? Color.lightGray : Color.darkGray);
+		/*this.setBackground(inParty ? Color.lightGray : Color.darkGray);
 		this.getComponent(1).setBackground(this.getBackground());
 		
-		lblName.setForeground(inParty ? Color.BLACK : Color.WHITE);
+		lblName.setForeground(inParty ? Color.black : Color.white);
 		lblHP.setForeground(lblName.getForeground());
 		lblLevel.setForeground(lblName.getForeground());
 		lblNextLevel.setForeground(lblName.getForeground());
 		lblType.setForeground(lblName.getForeground());
-		lblInParty.setForeground(lblName.getForeground());
+		lblInParty.setForeground(lblName.getForeground());*/
 		
 	}
 	

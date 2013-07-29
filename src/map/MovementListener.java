@@ -39,7 +39,7 @@ public class MovementListener implements KeyListener, MouseListener {
 	}
 	
 	
-	private void interact(){
+	private void interact() throws SlickException{
 		
 		int dir = map.getParentMap().getDirection();
 		int x = (int)map.getParentMap().getCurrentPositionX() + map.getParentMap().getCharacterPositionX() * ParentMap.ICON_SIZE;
@@ -162,7 +162,12 @@ public class MovementListener implements KeyListener, MouseListener {
 			//TODO: make exit prompt
 			System.exit(0);
 		}else if (code == INTERACT){
-			interact();
+			try {
+				interact();
+			} catch (SlickException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}else if (code == FULLSCREEN){
 			GameScreen parent = map.getParentMap().getFrame();
 			parent.setFullScreen();

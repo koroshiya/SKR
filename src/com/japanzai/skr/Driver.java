@@ -453,6 +453,7 @@ public class Driver implements Serializable{
 		oos.writeObject(Inventory.getItems());
 		oos.writeObject(Party.getCharacters());
 		//oos.writeObject(d.bs);
+		oos.close();
 		
 	}
 	
@@ -481,6 +482,8 @@ public class Driver implements Serializable{
 		Inventory.setMoney((Integer)ois.readObject());
 		Inventory.setItems((ArrayList<Item>)ois.readObject());
 		Party.setParty((ArrayList<PlayableCharacter>)ois.readObject());
+		ois.close();
+		
 		//d.bs = (BattleScreen)ois.readObject();
 		//d.repaint();
 		

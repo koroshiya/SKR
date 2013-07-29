@@ -100,6 +100,7 @@ public class MapConsole extends JPanel{
 		
 	public void speak(Dialogue d) throws SlickException{
 		
+		System.out.println(d.getAvatar());
 		cache = new Image(d.getAvatar());
 		display(cache, d.speak());
 		d.increment();

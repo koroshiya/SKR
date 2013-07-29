@@ -34,6 +34,7 @@ public class WalkingSprite implements Runnable, Serializable {
 		this.pics = new ArrayList<Image>();
 		
 		for (String s : pic){
+			System.out.println(s);
 			pics.add(new Image(s));
 		}
 		
