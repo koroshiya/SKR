@@ -4,7 +4,11 @@ import item.ConsumableItem;
 
 import javax.swing.*;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -19,9 +23,7 @@ import character.PlayableCharacter;
 import com.japanzai.skr.Inventory;
 import com.japanzai.skr.Party;
 
-public class BattleMenu extends JScrollPane {
-	
-	private static final long serialVersionUID = 1L;
+public class BattleMenu extends BasicGameState {
 	
 	private JButton btnAttack;
 	private JButton btnTechnique;
@@ -43,9 +45,6 @@ public class BattleMenu extends JScrollPane {
 
 	public BattleMenu(ArrayList<EnemyCharacter> enemies, Battle battle){
 		
-		this.setBackground(Color.GRAY);
-		this.setForeground(Color.BLACK);
-		
 		//BattleMenuListener listener = new BattleMenuListener();
 		this.enemies = enemies;
 		this.currentCharacter = null;
@@ -55,25 +54,25 @@ public class BattleMenu extends JScrollPane {
 		//this.setLayout());
 		//this.setLayout(new GridLayout(4, 1));
 		//this.setLayout(new FlowLayout());
-		this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		//this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		//this.setVerticalScrollBar();
 	
 		
-		Dimension size = new Dimension(165, 120);
+		/*Dimension size = new Dimension(165, 120);
 		this.setMinimumSize(size);
 		this.setMaximumSize(size);
 		this.setPreferredSize(size);
-		this.setSize(size);
+		this.setSize(size);*/
 		
 		panel = new JPanel();	
-		size = new Dimension(165, 120);
-		this.panel.setMinimumSize(size);
+		//size = new Dimension(165, 120);
+		//this.panel.setMinimumSize(size);
 		//this.panel.setMaximumSize(size);
 		this.panel.setLayout(new GridLayout(4, 1));	
 		
 		//resetDefaultInterface();
 
-		this.setViewportView(panel);
+		//this.setViewportView(panel);
 		//this.setResizable(false);
 		
 	}
@@ -230,6 +229,34 @@ public class BattleMenu extends JScrollPane {
 		int size = count < 4 ? 4 : count;
 		this.panel.setLayout(new GridLayout(size, 1));
 
+	}
+	
+
+	@Override
+	public void init(GameContainer arg0, StateBasedGame arg1)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

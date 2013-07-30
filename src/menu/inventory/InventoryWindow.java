@@ -13,8 +13,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.geom.Rectangle;
 
-import screen.GameScreen;
-
 import com.japanzai.skr.Inventory;
 
 public class InventoryWindow extends BasicGameState {
@@ -43,12 +41,10 @@ public class InventoryWindow extends BasicGameState {
 	
 	private final int state;
 	private Item item;
-	private GameScreen parent;
 	
-	public InventoryWindow(int state, GameScreen parent){
+	public InventoryWindow(int state){
 		
 		this.state = state;
-		this.parent = parent;
 		setFilter(ALL);
 		lblMoney = "Funds: " + Inventory.getMoney() + " yen";
 		

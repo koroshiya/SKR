@@ -22,6 +22,8 @@ public class SlickSKR extends StateBasedGame {
 	public static final int CHARACTER = 4;
 	public static final int GAMEOVER = 666;
 	
+	public static final boolean DEBUG_MODE = false;
+	
 	public SlickSKR(ParentMap current) throws SlickException{
 
 		super(GAME_NAME);
@@ -30,7 +32,7 @@ public class SlickSKR extends StateBasedGame {
 		this.addState(new MenuMainWindow(MENU, current.getFrame()));
 		this.addState(new InventoryWindow(INVENTORY, current.getFrame()));
 		this.addState(new CharacterProfileWindow(CHARACTER, current.getFrame()));
-		this.addState(new GameOver(GAMEOVER));
+		//this.addState(new GameOver(GAMEOVER));
 		
 	}
 	

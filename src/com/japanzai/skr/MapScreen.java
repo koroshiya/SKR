@@ -17,6 +17,7 @@ public class MapScreen extends BasicGameState implements KeyListener{
 	 //character whose sprite we'll show
 	
 	private Image sprite;
+	private Dialogue dialog = null;
 	
 	public static final int LEFT = 37;
 	public static final int RIGHT = 39;
@@ -90,6 +91,10 @@ public class MapScreen extends BasicGameState implements KeyListener{
 			//ex.printStackTrace();
 		}
 		
+		if (dialog != null){
+			
+		}
+		
 	}
 
 	@Override
@@ -117,6 +122,11 @@ public class MapScreen extends BasicGameState implements KeyListener{
 		map.instantiateImages();
 	}
 
-		
+	public void startDialog(Dialogue dialog){
+		this.dialog = dialog;
+		//TODO: set listener for dialog
+	}
+	
+	
 
 }

@@ -16,7 +16,7 @@ public class BattleConsole extends Console{
 		
 		//BattleMenuListener listener = new BattleMenuListener();
 		this.setAutoscrolls(true);
-		GameScreen.setComponentSize(768, 120, this);
+		//GameScreen.setComponentSize(768, 120, this);
 		
 	}
 	

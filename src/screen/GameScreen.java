@@ -32,13 +32,12 @@ import java.util.ArrayList;
 public class GameScreen extends AppGameContainer{
 	
 	private JPanel panel;
-	private JPanel layer;
+	//private JPanel layer;
 	
 	private static JCheckBoxMenuItem always;
 	private static JCheckBoxMenuItem never;
 	
 	private static JFrame frame;
-	private static JMenuBar menuBar;
 	
 	public GameScreen(SlickSKR skr) throws SlickException{
 		
@@ -64,10 +63,6 @@ public class GameScreen extends AppGameContainer{
 			panel.setDoubleBuffered(true);
 			//panel.setLayout(cards);
 			
-			//this.add(panel);
-			//frame = this;
-			layer = new JPanel();
-			layer.setDoubleBuffered(true);
 
 			//instantiateMenuBar();
 			//frame.pack(); //add insets
@@ -159,16 +154,9 @@ public class GameScreen extends AppGameContainer{
 		
 	public void setBattle(ArrayList<EnemyCharacter> arrayList){
 		
-		Battle battle = new Battle(arrayList, this);
-		
-		for (Component comp : this.panel.getComponents()){
-			if (comp instanceof Battle){
-				comp = battle;
-				return;
-			}
-		}
-		
-		addContent(battle);
+		((StateBasedGame)super.game).addState(new Battle(arrayList, this));
+		((StateBasedGame)super.game).enterState(6);
+		removeListeners();
 		
 	}
 	
@@ -191,20 +179,7 @@ public class GameScreen extends AppGameContainer{
 	}
 		
 	public boolean isInBattle(){
-		if (panel.getComponents().length < 2){return false;}
-		return (panel.getComponent(1) instanceof Battle && panel.getComponent(1).isVisible());
-	}
-	
-	public static JMenuBar getJMenuBarInstance(){
-		return menuBar;
-	}
-	
-	public static boolean alwaysEncounter(){
-		return always.isSelected();
-	}
-	
-	public static boolean neverEncounter(){
-		return never.isSelected();
+		return getState() instanceof Battle;
 	}
 	
 	public static void setAlwaysEncounter(boolean encounter){
@@ -228,11 +203,12 @@ public class GameScreen extends AppGameContainer{
 			mapHeight = map.getParentMap().getYBoundary();
 		
 		}else if (panel.getComponents().length > 0){
-			Component comp2 = panel.getComponent(1);
-			if (comp2.isVisible() && comp2 instanceof Battle){
+			//Component comp2 = panel.getComponent(1);
+			if (isInBattle()){
 					
-				Battle map = (Battle) comp2;
-				mapHeight = map.getHeight();
+				//Battle map = (Battle) comp2;
+				mapHeight = 800;
+				//mapHeight = map.getHeight();
 				
 			}
 		}
@@ -241,36 +217,10 @@ public class GameScreen extends AppGameContainer{
 			
 			removeListeners();
 			MapConsole console = new MapConsole(null, dialogue, this);
-			//this.addKeyListener(mapListener);
-			//this.addKeyListener(console.getListener()); //TODO: check if needed
-			
-			this.layer.add(console);
-			layer.setPreferredSize(console.getPreferredSize());
-			layer.setSize(console.getSize());
-			layer.setMaximumSize(console.getMaximumSize());
-			layer.setMinimumSize(console.getMinimumSize());
-			this.layer.setOpaque(false);
-			this.panel.add(this.layer, 0);
-			//comp.add(this.layer);
-			//this.layer.setLocation(0, map.getHeight() - 50); //map.getHeight() - 50
-			this.layer.setBorder(new EmptyBorder(mapHeight - 120, 0, 0, 0));
-			this.layer.setVisible(true);
-			this.panel.updateUI();
-			//this.layer.grabFocus();
 				
 			console.start();
 			console.converse();
 		}
-		
-	}
-	
-	public void removeMapConsole(){
-		
-		this.layer.removeAll();
-		this.layer.setVisible(false);
-		this.panel.remove(0);
-		
-		removeListeners();
 		
 	}
 	
@@ -283,15 +233,9 @@ public class GameScreen extends AppGameContainer{
 	
 	
 	
-	
-	
-	
-	
-	
-	
 	public boolean isEncounter(ParentMap map){
 		
-		if (alwaysEncounter() || !neverEncounter() && map.randomEncounter()){
+		if (!SlickSKR.DEBUG_MODE && map.randomEncounter()){
 			return true;
 		}
 		return false;
@@ -314,12 +258,12 @@ public class GameScreen extends AppGameContainer{
 	
 	public void encounter(ArrayList<EnemyCharacter> enemies){
 		
-		if (panel.getComponent(0).isVisible()){
+		//if (panel.getComponent(0).isVisible()){
 			setBattle(enemies);
 			swapView(1);
-		}else {
-			System.out.println("Can only do this from the map");
-		}
+		//}else {
+		//	System.out.println("Can only do this from the map");
+		//}
 		
 	}
 			

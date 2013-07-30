@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
 import screen.BattleConsole;
 import screen.GameScreen;
@@ -16,9 +20,7 @@ import character.PlayableCharacter;
 
 import com.japanzai.skr.Party;
 
-public class Battle extends JPanel{
-	
-	private static final long serialVersionUID = 1L;
+public class Battle extends BasicGameState{
 	
 	private ArrayList<EnemyCharacter> enemies;
 	private GameScreen parent;
@@ -43,10 +45,10 @@ public class Battle extends JPanel{
 		BattleParticipants battleParticipants = new BattleParticipants(enemies);
 		//this.battleParticipants = new BattleParticipants(enemies);
 		
-		this.add(battleConsole);
+		/*this.add(battleConsole);
 		this.add(pane);
 		this.add(battleParticipants);
-		this.add(this.battleMenu);
+		this.add(this.battleMenu);*/
 		
 		for (PlayableCharacter c : Party.getCharactersInParty()){
 			c.startBattle();
@@ -68,28 +70,13 @@ public class Battle extends JPanel{
 		/*if (enemies.get(0) instanceof BossCharacter){
 			BossCharacter bc = (BossCharacter) enemies.get(0);
 			parent.WriteOnMap(bc.getDialogue());
-			
-			parent.repaint();
-			battleMenu.updateUI();
-			this.invalidate();
-			this.validate();
-			this.updateUI();
-
 		}*/
-
-		
 		
 		if (running){
 			battleMenu.resetDefaultInterface();
 		}else{
 			battleMenu.setDefaultInterface(this.currentCharacter);
 		}
-		//parent.repaint();
-		battleMenu.updateUI();		
-		this.invalidate();
-		this.validate();
-		this.updateUI();
-		
 		
 		do {
 			
@@ -181,6 +168,34 @@ public class Battle extends JPanel{
 		}else {
 			c.incrementGauge();
 		}
+	}
+	
+
+	@Override
+	public void init(GameContainer arg0, StateBasedGame arg1)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 		
 }

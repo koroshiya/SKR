@@ -1,73 +1,69 @@
 package battle;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
 import com.japanzai.skr.Party;
 
 import character.EnemyCharacter;
 import character.PlayableCharacter;
 
-public class BattlePane extends JPanel {
-
-	private static final long serialVersionUID = 1L;
+public class BattlePane extends BasicGameState {
 	
-	private ArrayList<JLabel> enemies;
-	private ArrayList<JLabel> party;
+	private ArrayList<EnemyCharacter> enemies;
+	private ArrayList<PlayableCharacter> party;
 	
 	/**
 	 * TODO: panel down bottom with names and hp bars
+	 * ATB gauge
 	 * */
 	
 	public BattlePane(ArrayList<EnemyCharacter> enemies){
+		
+		this.enemies = enemies;
+		this.party = Party.getCharactersInParty();
+		
+	}
+	
 
-		this.setLayout(new FlowLayout(FlowLayout.LEADING));
+	@Override
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {		
+		
+	}
 
-		JPanel left = new JPanel();
-		left.setLayout(new GridLayout(4, 1));
-		left.setPreferredSize(new Dimension(130, 355));
+	@Override
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
+
+		final int constY = 50;
+		int enemyY = 405;
 		
-		JPanel emptySpace = new JPanel();
-		emptySpace.setPreferredSize(new Dimension(480, 355));
-		
-		JPanel right = new JPanel();
-		right.setLayout(new GridLayout(4, 1));
-		right.setPreferredSize(new Dimension(130, 355));
-		
-		this.enemies = new ArrayList<JLabel>();
-		this.party = new ArrayList<JLabel>();
-		
-		for (EnemyCharacter e : enemies){
-			this.enemies.add(e.getSprite());
+		for (EnemyCharacter e : this.enemies){
+			g.drawImage(e.getCache(), 25, enemyY);
+			enemyY += constY;
 		}
 		
-		for (PlayableCharacter e : Party.getCharactersInParty()){
-			this.party.add(e.getSprite());
+		int partyY = 405;
+		for (PlayableCharacter e : this.party){
+			g.drawImage(e.getCache(), 727, partyY);
+			partyY += constY;
 		}
 		
-		for (JLabel label : this.enemies){
-			left.add(label);
-		}
 		
-		for (JLabel label : this.party){
-			right.add(label);
-		}
-		
-		this.add(left, FlowLayout.LEFT);
-		this.add(emptySpace, FlowLayout.CENTER);
-		this.add(right, FlowLayout.RIGHT);
-		
-		Dimension size = new Dimension(768, 365); //768, 626
-		this.setMinimumSize(size);
-		this.setMaximumSize(size);
-		this.setPreferredSize(size);
-		this.setSize(size);
-		
+	}
+
+	@Override
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {}
+	
+
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

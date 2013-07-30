@@ -52,6 +52,9 @@ public class Driver implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
+	private final String grass = "/res/terrain/grass.png";
+	private final String mud = "/res/terrain/mud.png";
+	
 	ArrayList<FightingStyle> styles = new ArrayList<FightingStyle>();
 	ArrayList<Weapon> weapons = new ArrayList<Weapon>();
 	ArrayList<Gender> genders = new ArrayList<Gender>();
@@ -279,7 +282,7 @@ public class Driver implements Serializable{
 		
 		ParentMap current = null;
 		ParentMap destination = null;
-		String grass = ("/res/terrain/grass.png");
+		
 		
 		Point mapSize = new Point(16 * ParentMap.ICON_SIZE, 13 * ParentMap.ICON_SIZE);
 		Point coordinates = new Point(32 * ParentMap.ICON_SIZE, 24 * ParentMap.ICON_SIZE); //Multiple base by pix size?
@@ -304,8 +307,7 @@ public class Driver implements Serializable{
 		//bs.setSKR(sk);
 		
 		destination = new ParentMap(coordinates, newCurPos, Party.getCharacterByIndex(0),
-				animatedSprite, bossEnemies, bs, mapSize, 5, 
-				"/res/terrain/mud.png");	
+				animatedSprite, bossEnemies, bs, mapSize, 5, mud);	
 		destination.setTiles(deadTile);
 
 		
@@ -520,7 +522,7 @@ public class Driver implements Serializable{
 		
 	}
 	
-	/*
+/*
 Name : Ken
 Age : 18yo (currently 20ish)
 
@@ -612,6 +614,6 @@ Nationality : Italian
 Occupation : Henchman
 Fighting style: wild, kinda like parkour
 Unique : Huge ****
-	 * */
+*/
 
 }

@@ -76,7 +76,7 @@ public class CharacterProfileWindow extends BasicGameState {
 	
 	private void drawCharacterPanel(Graphics g){
 		
-		CharacterSelectionListener l = new CharacterSelectionListener(this);
+		//CharacterSelectionListener l = new CharacterSelectionListener(this);
 		
 		int y = 10;
 		int startY = 510;
