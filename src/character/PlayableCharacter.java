@@ -173,6 +173,8 @@ public class PlayableCharacter extends CombatCapableCharacter implements Seriali
 	
 	public void setInParty(boolean inParty){this.inParty = inParty;}
 	
+	public void toggleInParty(){this.inParty = !this.inParty;}
+	
 	public int getTemper(){return this.temper;}
 	
 	public void setTemper(boolean boolTemper){

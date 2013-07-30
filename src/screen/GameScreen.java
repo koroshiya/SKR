@@ -88,8 +88,6 @@ public class GameScreen extends AppGameContainer{
 	public void swapToMenu(){
 		
 		swapView(2);
-		//this.setVSync(false);
-		//this.setTargetFrameRate(5);
 		MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
 		this.getInput().addKeyListener(ml);
 		this.getInput().addMouseListener(ml);
@@ -127,8 +125,6 @@ public class GameScreen extends AppGameContainer{
 	
 	public void swapView(int i){
 
-		//this.setTargetFrameRate(this.target);
-		//this.setVSync(true);
 		((StateBasedGame)super.game).enterState(i);
 		removeListeners();
 		
@@ -229,8 +225,6 @@ public class GameScreen extends AppGameContainer{
 		this.getInput().removeAllListeners();
 		
 	}
-	
-	
 	
 	
 	public boolean isEncounter(ParentMap map){

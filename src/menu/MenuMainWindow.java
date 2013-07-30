@@ -1,5 +1,7 @@
 package menu;
 
+import interfaces.SlickEventHandler;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -8,7 +10,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -19,7 +20,9 @@ import character.PlayableCharacter;
 import com.japanzai.skr.Driver;
 import com.japanzai.skr.Party;
 
-public class MenuMainWindow extends BasicGameState{
+import controls.SlickRectangle;
+
+public class MenuMainWindow extends BasicGameState implements SlickEventHandler{
 	
 	public static final String INVENTORY = "Inventory [I]";
 	public static final String EQUIPMENT = "Equipment [E]";
@@ -35,6 +38,10 @@ public class MenuMainWindow extends BasicGameState{
 			{CHARACTERS, 3 * MENU_ITEM_HEIGHT}, {BACKLOG, 4 * MENU_ITEM_HEIGHT},
 			{SAVE, 5 * MENU_ITEM_HEIGHT}, {LOAD, 6 * MENU_ITEM_HEIGHT}, 
 			{EXIT, 7 * MENU_ITEM_HEIGHT}, {QUIT, 8 * MENU_ITEM_HEIGHT}};
+	private SlickRectangle[] menuItems;
+	private SlickRectangle[] menuCharacters;
+	
+	ArrayList<PlayableCharacter> characters;
 	
 	private final int state;
 	private final GameScreen parent;
@@ -46,7 +53,7 @@ public class MenuMainWindow extends BasicGameState{
 		
 	}
 	
-	public void menuItemPane(Graphics g){
+	public void menuItemPane(Graphics g) throws SlickException{
 			
 		float x = 350;
 		float y = 0;
@@ -57,14 +64,10 @@ public class MenuMainWindow extends BasicGameState{
 		String s = "";
 		for (int i = 0; i < MENU_ITEMS.length; i++){
 			s = (String) MENU_ITEMS[i][0];
-			Rectangle rect = new Rectangle(x, y, 450f, 50f);
-			g.draw(rect);
+			g.draw(menuItems[i]);
 			textx = g.getFont().getWidth(s);
 			texty = g.getFont().getHeight(s);
 			g.drawString(s, x + (450 - textx) / 2, y + texty);
-			//JLabel label = new MenuItemLabel(tag);
-			//label.addMouseListener(new MenuItemListener(this.parent));
-			//this.add(label);
 			y += 50f;
 		}
 					
@@ -72,20 +75,15 @@ public class MenuMainWindow extends BasicGameState{
 	
 	public void characterPane(Graphics g){
 		
-		ArrayList<PlayableCharacter> characters = Party.getCharacters();
-						
-		//GameScreen.setComponentSize(340, 600, this);
-		
 		float x = 160;
 		float y = 0;
 		int inc;
 		int baseInc = 13;
-		for (PlayableCharacter c : characters){
+		for (int i = 0; i < menuCharacters.length; i++){
+			PlayableCharacter c = characters.get(i);
 			inc = baseInc;
-			Rectangle rect = new Rectangle(0, y, 350f, 150f);
 			g.setColor(Color.lightGray);
-			g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 12), false));
-			g.draw(rect);
+			g.draw(menuCharacters[i]);
 			g.drawImage(c.getCache(), 0, y);
 			g.drawString(c.getName(), x, y + inc);
 			inc += baseInc;
@@ -107,10 +105,27 @@ public class MenuMainWindow extends BasicGameState{
 	}	
 
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
-			throws SlickException {
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		
 		Party.initialize();
+		characters = Party.getCharacters();
+		
+		float x = 350;
+		float y = 0;
+		
+		menuItems = new SlickRectangle[MENU_ITEMS.length];
+		for (int i = 0; i < menuItems.length; i++){
+			menuItems[i] = new SlickRectangle(x, y, 450f, 50f, MENU_ITEMS[i][0].toString());
+			y += 50f;
+		}
+		
+		y = 0;
+		
+		menuCharacters = new SlickRectangle[Party.getCharacters().size()];
+		for (int i = 0; i < menuCharacters.length; i++){
+			menuCharacters[i] = new SlickRectangle(0, y, 350f, 150f, Integer.toString(i));
+			y += 150f;
+		}
 		
 	}
 
@@ -124,49 +139,42 @@ public class MenuMainWindow extends BasicGameState{
 	}
 
 	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
-			throws SlickException {
-		// TODO Auto-generated method stub
-		
-	}
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {}
 
 	@Override
 	public int getID() {
 		return this.state;
 	}
 
-	public void processMouseClick(int arg0, int x, int y) throws IOException, ClassNotFoundException {
+	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
 		
-		if (x <= 350){
-			//Character
-			
-			if (arg0 == 2){
-				//CharacterProfilePane pane = (CharacterProfilePane)arg0.getSource();
-				//pane.ToggleCharacterInParty();
+		for (SlickRectangle rect : menuItems){
+			if (rect.isWithinBounds(x, y)){
+				this.processMenuItem(rect.getTag(), clickCount);
+				break;
 			}
-			
-		}else {
-			System.out.println("Processing");
-			//Menu
-			int maxY = 0;
-			int baseY = 50;
-
-			maxY = baseY * MENU_ITEMS.length;
-			if (y <= maxY){
-
-				for (int i = 0; i < MENU_ITEMS.length; i++){
-					if (y <= (Integer)MENU_ITEMS[i][1]){
-						processMenuItem((String)MENU_ITEMS[i][0]);
-						break;
-					}
-				}
+		}
+		for (SlickRectangle rect : menuCharacters){
+			if (rect.isWithinBounds(x, y)){
+				this.processMenuItem(rect.getTag(), clickCount);
+				break;
 			}
-		}		
+		}
+		
 	}
 	
-	private void processMenuItem(String s) throws IOException, ClassNotFoundException{
+	private void processMenuItem(String s, int clickCount) throws IOException, ClassNotFoundException{
 		
-		if (s.equals(EXIT)){
+		if (clickCount == 2){
+			try{
+				int i = Integer.parseInt(s);
+				if (i >= 0 && i < characters.size()){
+					characters.get(i).toggleInParty();
+				}
+			}catch (NumberFormatException nfe){
+				nfe.printStackTrace();
+			}
+		}else if (s.equals(EXIT)){
 			parent.swapToMap();
 		}else if (s.equals(CHARACTERS)){
 			parent.swapToCharacterWindow();

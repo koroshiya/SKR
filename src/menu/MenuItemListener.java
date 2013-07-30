@@ -98,29 +98,10 @@ public class MenuItemListener implements MouseListener, KeyListener {
 	}
 	
 	@Override
-	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {}
-
-	
-	@Override
-	public void mouseDragged(int arg0, int arg1, int arg2, int arg3) {}
-
-	
-	@Override
-	public void mouseMoved(int arg0, int arg1, int arg2, int arg3) {}
-
-	
-	@Override
-	public void mousePressed(int arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-	@Override
-	public void mouseReleased(int arg0, int x, int y) {
+	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
 		
 		try {
-			window.processMouseClick(arg0, x, y);
+			window.processMouseClick(arg3, arg1, arg2);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -129,6 +110,18 @@ public class MenuItemListener implements MouseListener, KeyListener {
 		
 	}
 
+	
+	@Override
+	public void mouseDragged(int arg0, int arg1, int arg2, int arg3) {}
+
+	@Override
+	public void mouseMoved(int arg0, int arg1, int arg2, int arg3) {}
+
+	@Override
+	public void mousePressed(int arg0, int arg1, int arg2) {}
+	
+	@Override
+	public void mouseReleased(int arg0, int x, int y) {}
 	
 	@Override
 	public void mouseWheelMoved(int arg0) {
