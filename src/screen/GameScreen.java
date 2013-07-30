@@ -1,5 +1,7 @@
 package screen;
 
+import interfaces.SlickEventHandler;
+
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -107,10 +109,10 @@ public class GameScreen extends AppGameContainer{
 	
 	public void swapToCharacterWindow(){
 		swapView(4);
-		MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
+		MenuItemListener ml = new MenuItemListener(this, (SlickEventHandler) getState(4));
 		
 		getInput().addKeyListener(ml);
-		//getInput().addMouseListener(ml);
+		getInput().addMouseListener(ml);
 	}
 	
 	public void swapToInventory(){

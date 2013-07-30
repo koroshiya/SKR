@@ -200,7 +200,6 @@ public class InventoryWindow extends BasicGameState {
 		return this.state;
 	}
 	
-
 	public void setItem(String itemName){
 		
 		setItem(Inventory.getItemByName(itemName));

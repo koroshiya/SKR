@@ -1,5 +1,7 @@
 package menu;
 
+import interfaces.SlickEventHandler;
+
 import java.io.IOException;
 
 import org.newdawn.slick.Input;
@@ -14,7 +16,7 @@ import screen.GameScreen;
 public class MenuItemListener implements MouseListener, KeyListener {
 
 	private GameScreen parent;
-	private MenuMainWindow window;
+	private SlickEventHandler window;
 	
 	private final int MENU = Input.KEY_W;
 	private final int QUIT = Input.KEY_ESCAPE;
@@ -26,7 +28,7 @@ public class MenuItemListener implements MouseListener, KeyListener {
 	private final int SAVE = Input.KEY_S; //s
 	private final int LOAD = Input.KEY_L; //l
 	
-	public MenuItemListener(GameScreen parent, MenuMainWindow window){
+	public MenuItemListener(GameScreen parent, SlickEventHandler window){
 		
 		this.parent = parent;
 		this.window = window;
