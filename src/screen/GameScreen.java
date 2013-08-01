@@ -1,14 +1,9 @@
 package screen;
 
+import interfaces.SlickDrawableFrame;
 import interfaces.SlickEventHandler;
 
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
@@ -28,18 +23,9 @@ import com.japanzai.skr.Driver;
 import com.japanzai.skr.MapScreen;
 import com.japanzai.skr.SlickSKR;
 
-import java.awt.Component;
 import java.util.ArrayList;
 
 public class GameScreen extends AppGameContainer{
-	
-	private JPanel panel;
-	//private JPanel layer;
-	
-	private static JCheckBoxMenuItem always;
-	private static JCheckBoxMenuItem never;
-	
-	private static JFrame frame;
 	
 	public GameScreen(SlickSKR skr) throws SlickException{
 		
@@ -58,22 +44,6 @@ public class GameScreen extends AppGameContainer{
 			ex.printStackTrace();
 		}
 		
-		try{			
-			
-			
-			panel = new JPanel();
-			panel.setDoubleBuffered(true);
-			//panel.setLayout(cards);
-			
-
-			//instantiateMenuBar();
-			//frame.pack(); //add insets
-			//setResizable(false);
-			
-		}catch (Exception ex){
-			MessageBox.ErrorBox(ex, "Driver error 1", null);
-		}
-		
 	}
 	
 	public void setSKR(SlickSKR skr){
@@ -82,14 +52,16 @@ public class GameScreen extends AppGameContainer{
 			
 	public void swapToBattle() throws SlickException{
 		
-		Battle battle = (Battle)panel.getComponent(1);
-		battle.start();
+		swapView(SlickSKR.BATTLE);
+		//MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
+		//this.getInput().addKeyListener(ml);
+		//this.getInput().addMouseListener(ml);
 		
 	}
 	
 	public void swapToMenu(){
 		
-		swapView(2);
+		swapView(SlickSKR.MENU);
 		MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
 		this.getInput().addKeyListener(ml);
 		this.getInput().addMouseListener(ml);
@@ -98,7 +70,7 @@ public class GameScreen extends AppGameContainer{
 	
 	public void swapToMap(){
 		
-		swapView(0);
+		swapView(SlickSKR.MAP);
 		
 		MovementListener ml = new MovementListener((MapScreen) getState(0));
 		
@@ -108,7 +80,7 @@ public class GameScreen extends AppGameContainer{
 	}
 	
 	public void swapToCharacterWindow(){
-		swapView(4);
+		swapView(SlickSKR.CHARACTER);
 		MenuItemListener ml = new MenuItemListener(this, (SlickEventHandler) getState(4));
 		
 		getInput().addKeyListener(ml);
@@ -117,7 +89,7 @@ public class GameScreen extends AppGameContainer{
 	
 	public void swapToInventory(){
 		
-		swapView(3);
+		swapView(SlickSKR.INVENTORY);
 		MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
 		
 		getInput().addKeyListener(ml);
@@ -145,11 +117,7 @@ public class GameScreen extends AppGameContainer{
 		return ((StateBasedGame)super.game).getState(i);
 		
 	}
-	
-	public void addContent(JComponent comp){
-		this.panel.add(comp);
-	}
-		
+			
 	public void setBattle(ArrayList<EnemyCharacter> arrayList){
 		
 		((StateBasedGame)super.game).addState(new Battle(arrayList, this));
@@ -159,11 +127,11 @@ public class GameScreen extends AppGameContainer{
 	}
 	
 	public static void WriteOnScreen(String message, String title){
-		MessageBox.InfoBox(message, title, frame);
+		MessageBox.InfoBox(message, title, null);
 	}
 
 	public static void WriteOnScreen(StringBuffer itemList, String title) {
-		MessageBox.InfoBox(itemList, title, frame);
+		MessageBox.InfoBox(itemList, title, null);
 	}
 		
 	public void setFullScreen(){
@@ -180,44 +148,20 @@ public class GameScreen extends AppGameContainer{
 		return getState() instanceof Battle;
 	}
 	
-	public static void setAlwaysEncounter(boolean encounter){
-		always.setSelected(encounter);
-		never.setSelected(false);		
-	}
-	
-	public static void setNeverEncounter(boolean encounter){
-		never.setSelected(encounter);
-		always.setSelected(false);	
-	}
-		
 	public void WriteOnMap(Dialogue dialogue) throws SlickException{
 		
-		int mapHeight = 0;
 		GameState comp = ((StateBasedGame)super.game).getCurrentState();
 		
 		if (comp instanceof MapScreen){
 						
-			MapScreen map = (MapScreen) comp;
-			mapHeight = map.getParentMap().getYBoundary();
-		
-		}else if (panel.getComponents().length > 0){
-			//Component comp2 = panel.getComponent(1);
-			if (isInBattle()){
-					
-				//Battle map = (Battle) comp2;
-				mapHeight = 800;
-				//mapHeight = map.getHeight();
-				
-			}
-		}
-		
-		if (mapHeight != 0){
-			
 			removeListeners();
 			MapConsole console = new MapConsole(null, dialogue, this);
-				
-			console.start();
+			
+			((MapScreen)comp).setMapConsole(console);
+			getInput().addMouseListener(console);
 			console.converse();
+			
+		
 		}
 		
 	}
@@ -280,6 +224,18 @@ public class GameScreen extends AppGameContainer{
 		((MapScreen) getState(0)).setMap(map);
 	}
 
+	
+	public void removeMapConsole(){
+		
+		GameState comp = ((StateBasedGame)super.game).getCurrentState();
+		
+		if (comp instanceof MapScreen){
+			
+			((MapScreen) comp).removeMapConsole();
+			//TODO: re-implement handlersa
+		
+		}
+	}
 	
 
 	

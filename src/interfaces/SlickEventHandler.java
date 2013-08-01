@@ -2,8 +2,10 @@ package interfaces;
 
 import java.io.IOException;
 
-public interface SlickEventHandler {
+import org.newdawn.slick.MouseListener;
+
+public interface SlickEventHandler extends MouseListener{
 	
-	public abstract void processMouseClick(int arg0, int x, int y) throws IOException, ClassNotFoundException;
+	public abstract void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException;
 	
 }

@@ -1,5 +1,6 @@
 package com.japanzai.skr;
 
+import interfaces.SlickDrawableFrame;
 import map.MovementListener;
 import map.ParentMap;
 import map.Tile;
@@ -28,6 +29,8 @@ public class MapScreen extends BasicGameState implements KeyListener{
 	private ParentMap map;
 	
 	public static int ICON_SIZE = 48;
+	
+	private SlickDrawableFrame activeDialog = null;
 	 //TODO: turn into constructor
 	//TODO: enemy or battle arraylist
 	//TODO: dynamically create battle depending on enemy arraylist? mix and match
@@ -91,8 +94,8 @@ public class MapScreen extends BasicGameState implements KeyListener{
 			//ex.printStackTrace();
 		}
 		
-		if (dialog != null){
-			
+		if (this.activeDialog != null){
+			this.activeDialog.paint(g);
 		}
 		
 	}
@@ -126,7 +129,14 @@ public class MapScreen extends BasicGameState implements KeyListener{
 		this.dialog = dialog;
 		//TODO: set listener for dialog
 	}
+
+	public void removeMapConsole() {
+		activeDialog = null;
+	}
 	
+	public void setMapConsole(SlickDrawableFrame activeDialog){
+		this.activeDialog = activeDialog;
+	}
 	
 
 }

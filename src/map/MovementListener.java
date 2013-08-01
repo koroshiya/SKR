@@ -18,8 +18,8 @@ public class MovementListener implements KeyListener, MouseListener {
 
 	private MapScreen map;
 	
-	private final int INTERACT = Input.KEY_A; //keycode to interact //65 = A
-	private final int MENU = Input.KEY_W; //keycode to open menu //87 = W
+	private final int INTERACT = Input.KEY_A;
+	private final int MENU = Input.KEY_W;
 	private final int QUIT = Input.KEY_ESCAPE;
 	private final int FULLSCREEN = Input.KEY_F;
 	
@@ -37,7 +37,6 @@ public class MovementListener implements KeyListener, MouseListener {
 		map.getParentMap().tryMoveToTile(x, y);
 		
 	}
-	
 	
 	private void interact() throws SlickException{
 		
@@ -72,22 +71,13 @@ public class MovementListener implements KeyListener, MouseListener {
 	}
 	
 	@Override
-	public void inputEnded() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void inputEnded() {}
 
 	@Override
-	public void inputStarted() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void inputStarted() {}
 
 	@Override
-	public boolean isAcceptingInput() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+	public boolean isAcceptingInput() {return true;}
 
 	@Override
 	public void setInput(Input arg0) {}
