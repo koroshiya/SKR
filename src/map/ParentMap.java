@@ -10,6 +10,8 @@ import org.newdawn.slick.util.pathfinding.Path.Step;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
+import com.japanzai.skr.MapScreen;
+
 import screen.GameScreen;
 
 import animation.AnimatedSprite;
@@ -38,7 +40,6 @@ public class ParentMap {
 	public static final int UP = 38;
 	public static final int DOWN = 40;
 	
-	public static int ICON_SIZE = 48;
 	private boolean locked;
 	private int encounterRate; //TODO: turn into constructor
 	//TODO: enemy or battle arraylist
@@ -94,8 +95,8 @@ public class ParentMap {
 	
 	public boolean canMoveToPosition(double d, double currentPositiony2){
 		
-		double x = d / ICON_SIZE + this.getCharacterPositionX();
-		double y = currentPositiony2 / ICON_SIZE + this.getCharacterPositionY();
+		double x = d / MapScreen.ICON_SIZE + this.getCharacterPositionX();
+		double y = currentPositiony2 / MapScreen.ICON_SIZE + this.getCharacterPositionY();
 		
 		if (!tileExists(x, y)){return false;}
 		
@@ -111,11 +112,11 @@ public class ParentMap {
 	
 	public void tryMoveToTile(int x, int y) throws SlickException{
 		
-		int a = (int) (Math.floor(this.currentPositionx / ICON_SIZE) + this.getCharacterPositionX());
-		int b = (int) (Math.floor(this.currentPositiony / ICON_SIZE) + this.getCharacterPositionY());
+		int a = (int) (Math.floor(this.currentPositionx / MapScreen.ICON_SIZE) + this.getCharacterPositionX());
+		int b = (int) (Math.floor(this.currentPositiony / MapScreen.ICON_SIZE) + this.getCharacterPositionY());
 		
-		x += this.currentPositionx / ICON_SIZE;
-		y += this.currentPositiony / ICON_SIZE;
+		x += this.currentPositionx / MapScreen.ICON_SIZE;
+		y += this.currentPositiony / MapScreen.ICON_SIZE;
 
 		Point start = new Point(a, b);
 		Point finish = new Point(x, y);
@@ -141,8 +142,8 @@ public class ParentMap {
 	
 	public boolean relativeTileExists(int a, int b){
 		
-		int x = a / ICON_SIZE + this.getCharacterPositionX();
-		int y = b / ICON_SIZE + this.getCharacterPositionY();
+		int x = a / MapScreen.ICON_SIZE + this.getCharacterPositionX();
+		int y = b / MapScreen.ICON_SIZE + this.getCharacterPositionY();
 		
 		return tileExists(x, y);
 		
@@ -156,8 +157,8 @@ public class ParentMap {
 	
 	public Tile getTileByPosition(double x2, double y2){
 		
-		double x = x2 / ICON_SIZE;
-		double y = y2 / ICON_SIZE;
+		double x = x2 / MapScreen.ICON_SIZE;
+		double y = y2 / MapScreen.ICON_SIZE;
 		
 		return getTileByIndex(x, y);
 		
@@ -169,9 +170,9 @@ public class ParentMap {
 		
 	}
 	
-	public int getHeight(){return this.tileMap.getHeightInTiles() * ICON_SIZE;}
+	public int getHeight(){return this.tileMap.getHeightInTiles() * MapScreen.ICON_SIZE;}
 	
-	public int getWidth(){return this.tileMap.getWidthInTiles() * ICON_SIZE;}
+	public int getWidth(){return this.tileMap.getWidthInTiles() * MapScreen.ICON_SIZE;}
 	
 	public double getPositionX(){
 		return this.currentPositionx;
@@ -190,19 +191,19 @@ public class ParentMap {
 	}
 	
 	public synchronized int getCharacterPositionX(){
-		return (int) Math.ceil(this.coordinates.getX() / 4 / ICON_SIZE);
+		return (int) Math.ceil(this.coordinates.getX() / 4 / MapScreen.ICON_SIZE);
 	}
 	
 	public synchronized int getCharacterPositionY(){
-		return (int) Math.ceil(this.coordinates.getY() / 4 / ICON_SIZE);
+		return (int) Math.ceil(this.coordinates.getY() / 4 / MapScreen.ICON_SIZE);
 	}
 	
 	public synchronized double getRelativeX(){
-		return (this.currentPositionx / ICON_SIZE) + this.getCharacterPositionX();
+		return (this.currentPositionx / MapScreen.ICON_SIZE) + this.getCharacterPositionX();
 	}
 	
 	public synchronized double getRelativeY(){
-		return (this.currentPositiony / ICON_SIZE) + this.getCharacterPositionY();
+		return (this.currentPositiony / MapScreen.ICON_SIZE) + this.getCharacterPositionY();
 	}
 	
 	public void setDirection(int dir){
@@ -222,25 +223,25 @@ public class ParentMap {
 	
 	public void moveDown() throws SlickException{
 		
-		move(this.currentPositionx, this.currentPositiony + ICON_SIZE, DOWN);
+		move(this.currentPositionx, this.currentPositiony + MapScreen.ICON_SIZE, DOWN);
 		
 	}
 	
 	public void moveUp() throws SlickException{
 		
-		move(this.currentPositionx, this.currentPositiony - ICON_SIZE, UP);
+		move(this.currentPositionx, this.currentPositiony - MapScreen.ICON_SIZE, UP);
 		
 	}
 	
 	public void moveLeft() throws SlickException{
 		
-		move(this.currentPositionx - ICON_SIZE, this.currentPositiony, LEFT);
+		move(this.currentPositionx - MapScreen.ICON_SIZE, this.currentPositiony, LEFT);
 		
 	}
 	 
 	public void moveRight() throws SlickException{
 		
-		move(this.currentPositionx + ICON_SIZE, this.currentPositiony, RIGHT);
+		move(this.currentPositionx + MapScreen.ICON_SIZE, this.currentPositiony, RIGHT);
 		
 	}
 	
@@ -285,8 +286,8 @@ public class ParentMap {
 				Thread thread = new Thread(new spriteThread(this, this.walkingSprite, d, currentPositiony2));
 				thread.start();
 
-				Tile tile = getTileByPosition(d + (this.getCharacterPositionX() * ICON_SIZE), 
-												currentPositiony2 + (this.getCharacterPositionY() * ICON_SIZE));
+				Tile tile = getTileByPosition(d + (this.getCharacterPositionX() * MapScreen.ICON_SIZE), 
+												currentPositiony2 + (this.getCharacterPositionY() * MapScreen.ICON_SIZE));
 				if (tile instanceof TransitionTile){
 					TransitionTile t = (TransitionTile) tile;
 					t.interact(this.getFrame());
@@ -344,8 +345,8 @@ public class ParentMap {
 					if (p.x == this.map.getRelativeX() && p.y == this.map.getRelativeY()){
 						continue;
 					}
-					int px = p.x * ICON_SIZE - getCharacterPositionX() * ICON_SIZE;
-					int py = p.y * ICON_SIZE - getCharacterPositionY() * ICON_SIZE;
+					int px = p.x * MapScreen.ICON_SIZE - getCharacterPositionX() * MapScreen.ICON_SIZE;
+					int py = p.y * MapScreen.ICON_SIZE - getCharacterPositionY() * MapScreen.ICON_SIZE;
 					findDirection(p);
 					
 					try {
@@ -359,18 +360,16 @@ public class ParentMap {
 					try {
 						takeStep(px, py);
 					} catch (SlickException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					Tile tile = getTileByPosition(px + (getCharacterPositionX() * ICON_SIZE), 
-							py + (getCharacterPositionY() * ICON_SIZE));
+					Tile tile = getTileByPosition(px + (getCharacterPositionX() * MapScreen.ICON_SIZE), 
+							py + (getCharacterPositionY() * MapScreen.ICON_SIZE));
 					
 					if (tile instanceof TransitionTile){
 						TransitionTile t = (TransitionTile) tile;
 						try {
 							t.interact(getFrame());
 						} catch (SlickException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						break;
@@ -383,7 +382,6 @@ public class ParentMap {
 				try {
 					takeStep(this.x, this.y);
 				} catch (SlickException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -401,7 +399,7 @@ public class ParentMap {
 			double diffX = 0;
 			double diffY = 0;
 			
-			double diff = (double)ICON_SIZE / (double)60;
+			double diff = (double)MapScreen.ICON_SIZE / (double)60;
 			
 			if (x2 > this.map.currentPositionx){
 				diffX = diff;

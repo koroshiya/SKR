@@ -2,16 +2,14 @@ package menu.character;
 
 import java.io.IOException;
 
-import interfaces.SlickEventHandler;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameScreen;
+import screen.SlickGameState;
 
 import com.japanzai.skr.Party;
 
@@ -19,16 +17,15 @@ import controls.SlickRectangle;
 
 import character.PlayableCharacter;
 
-public class CharacterProfileWindow extends BasicGameState implements SlickEventHandler{
+public class CharacterProfileWindow extends SlickGameState{
 	
-	private final int state;
 	private PlayableCharacter character;
 	private Image lblAvatar;
 	private SlickRectangle[] partyMembers;
 	
 	public CharacterProfileWindow(int state, GameScreen gameScreen) throws SlickException{
 		
-		this.state = state;
+		super(state, gameScreen);
 		
 	}
 	
@@ -113,8 +110,7 @@ public class CharacterProfileWindow extends BasicGameState implements SlickEvent
 	}
 	
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
-			throws SlickException {
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		
 		this.setCharacter(Party.getCharacterByIndex(0));
 		partyMembers = new SlickRectangle[Party.getCharacters().size()];
@@ -131,27 +127,13 @@ public class CharacterProfileWindow extends BasicGameState implements SlickEvent
 	}
 
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
-			throws SlickException {
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
 		drawCharacterInfoPanel(g);
 		drawCharacterPanel(g);
 		g.drawImage(lblAvatar, 0, 0);
 		
 	}
-
-	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
-			throws SlickException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getID() {
-		return this.state;
-	}
-
 	
 	@Override
 	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {

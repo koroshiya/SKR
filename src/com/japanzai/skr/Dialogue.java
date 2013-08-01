@@ -20,7 +20,7 @@ public class Dialogue implements Serializable{
 	
 	public Dialogue(ArrayList<Line> dialogue){
 
-		this.counter = 0;
+		this.counter = -1;
 		this.dialogue = dialogue;
 		this.max = this.dialogue.size();
 		
@@ -28,28 +28,28 @@ public class Dialogue implements Serializable{
 	
 	public Dialogue(ArrayList<String> text, Character c){
 
-		this.counter = 0;
-		this.max = 0;
+		this.counter = -1;
 		this.dialogue = new ArrayList<Line>();
+		this.max = dialogue.size();
 		this.addLines(text, c);
 		
 	}
 	
 	public Dialogue(Line dialogue){
 		
-		this.counter = 0;
+		this.counter = -1;
 		ArrayList<Line> dialogues = new ArrayList<Line>();
 		dialogues.add(dialogue);
 		this.dialogue = dialogues;
-		this.max = 1;
+		this.max = dialogues.size();
 		
 	}
 	
 	public Dialogue(){
 		
-		this.counter = 0;
-		this.max = 0;
+		this.counter = -1;
 		this.dialogue = new ArrayList<Line>();
+		this.max = this.dialogue.size();
 		
 	}
 	
@@ -86,12 +86,15 @@ public class Dialogue implements Serializable{
 	}
 	
 	public boolean isQuestion(){
+		if (this.counter >= this.max){return false;}
 		return this.dialogue.get(this.counter).isQuestion();
 	}
 		
 	public boolean moreDialogue(){
-		
-		return this.counter != this.max;
+
+		System.out.println("Max: " + this.max);
+		System.out.println("Count: " + counter);
+		return this.counter < this.max - 1;
 		
 	}
 	
@@ -105,7 +108,7 @@ public class Dialogue implements Serializable{
 	
 	public void increment(){
 		
-		setCounter(counter == max ? 0 : counter + 1);
+		setCounter(counter == max ? max : counter + 1);
 		
 	}
 	
@@ -120,18 +123,21 @@ public class Dialogue implements Serializable{
 	}
 	
 	public void reset(){
-		setCounter(0);
+		setCounter(-1);
 	}
 	
 	private void setCounter(int count){
-		Line line = this.dialogue.get(this.counter);
-		dialogLine = line.getText();
-		try {
-			this.cache = new Image(line.getAvatar());
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
 		this.counter = count;
+		if (this.counter >= 0 && this.counter < this.max){
+			Line line = this.dialogue.get(this.counter);
+			dialogLine = line.getText();
+			
+			try {
+				this.cache = new Image(line.getAvatar());
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public int getCounter() {
@@ -143,7 +149,5 @@ public class Dialogue implements Serializable{
 			addLine(l);
 		}
 	}
-	
-
 	
 }

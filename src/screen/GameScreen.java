@@ -116,8 +116,8 @@ public class GameScreen extends AppGameContainer{
 			
 	public void setBattle(ArrayList<EnemyCharacter> arrayList){
 		
-		((StateBasedGame)super.game).addState(new Battle(arrayList, this));
-		((StateBasedGame)super.game).enterState(6);
+		//((StateBasedGame)super.game).addState(new Battle(arrayList, this));
+		((StateBasedGame)super.game).enterState(SlickSKR.BATTLE);
 		removeListeners();
 		
 	}
@@ -149,13 +149,12 @@ public class GameScreen extends AppGameContainer{
 		GameState comp = getState();
 		
 		if (comp instanceof MapScreen){
-						
-			removeListeners();
+			
+			//removeListeners();
 			MapConsole console = new MapConsole(null, dialogue, this);
-			ConsoleMenuListener list = new ConsoleMenuListener(console, this);
 
-			getInput().addMouseListener(list);
-			getInput().addKeyListener(list);
+			//getInput().addMouseListener(console);
+			//getInput().addKeyListener(console);
 			((MapScreen)comp).setMapConsole(console);
 			console.converse();
 			
@@ -216,24 +215,18 @@ public class GameScreen extends AppGameContainer{
 		}
 	}
 
-	
 	public void setMap(ParentMap map) throws SlickException {
 		((MapScreen) getState(0)).setMap(map);
 	}
 
-	
 	public void removeMapConsole(){
 		
 		GameState comp = getState();
 		
 		if (comp instanceof MapScreen){
-			removeListeners();
 			((MapScreen) comp).removeMapConsole();
-			swapToMap();
 		
 		}
 	}
-	
-
-	
+		
 }

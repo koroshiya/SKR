@@ -1,7 +1,5 @@
 package menu;
 
-import interfaces.SlickEventHandler;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -9,19 +7,18 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameScreen;
+import screen.SlickGameState;
 
 import character.PlayableCharacter;
 
 import com.japanzai.skr.Driver;
-import com.japanzai.skr.Party;
 
 import controls.SlickRectangle;
 
-public class MenuMainWindow extends BasicGameState implements SlickEventHandler{
+public class MenuMainWindow extends SlickGameState{
 	
 	public static final String INVENTORY = "Inventory [I]";
 	public static final String EQUIPMENT = "Equipment [E]";
@@ -41,14 +38,10 @@ public class MenuMainWindow extends BasicGameState implements SlickEventHandler{
 	private SlickRectangle[] menuCharacters;
 	
 	ArrayList<PlayableCharacter> characters;
-	
-	private final int state;
-	private final GameScreen parent;
 
 	public MenuMainWindow(int state, GameScreen parent){
 		
-		this.state = state;
-		this.parent = parent;
+		super(state, parent);
 		
 	}
 	
@@ -104,45 +97,12 @@ public class MenuMainWindow extends BasicGameState implements SlickEventHandler{
 	}	
 
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
-		
-		Party.initialize();
-		characters = Party.getCharacters();
-		
-		float x = 350;
-		float y = 0;
-		
-		menuItems = new SlickRectangle[MENU_ITEMS.length];
-		for (int i = 0; i < menuItems.length; i++){
-			menuItems[i] = new SlickRectangle(x, y, 450f, 50f, MENU_ITEMS[i][0].toString());
-			y += 50f;
-		}
-		
-		y = 0;
-		
-		menuCharacters = new SlickRectangle[Party.getCharacters().size()];
-		for (int i = 0; i < menuCharacters.length; i++){
-			menuCharacters[i] = new SlickRectangle(0, y, 350f, 150f, Integer.toString(i));
-			y += 150f;
-		}
-		
-	}
-
-	@Override
 	public void render(GameContainer gc, StateBasedGame arg1, Graphics g)
 			throws SlickException {
 		
 		menuItemPane(g);
 		characterPane(g);
 		
-	}
-
-	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {}
-
-	@Override
-	public int getID() {
-		return this.state;
 	}
 
 	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {

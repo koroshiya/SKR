@@ -35,7 +35,6 @@ public class Tile implements Photogenic{
 		this.open = reachable && open;
 		this.reachable = reachable;
 		this.sprite = sprite;
-		//this.setPreferredSize(new Dimension(48, 48));
 		
 	}
 	
@@ -80,6 +79,11 @@ public class Tile implements Photogenic{
 	
 	public void setSprite(String icon){
 		this.sprite = icon;
+		try {
+			this.setCache(new Image(this.sprite));
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

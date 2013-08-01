@@ -1,10 +1,8 @@
 package com.japanzai.skr;
 
-import java.awt.Point;
 import java.io.IOException;
 
 import interfaces.SlickDrawableFrame;
-import interfaces.SlickEventHandler;
 import map.CharacterTile;
 import map.InteractiveTile;
 import map.ParentMap;
@@ -15,16 +13,15 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameScreen;
+import screen.MapConsole;
+import screen.SlickGameState;
 
 import character.NonPlayableCharacter;
 
-public class MapScreen extends BasicGameState implements SlickEventHandler{
-	
-	 //character whose sprite we'll show
+public class MapScreen extends SlickGameState{
 	
 	private Image sprite;
 	
@@ -38,10 +35,9 @@ public class MapScreen extends BasicGameState implements SlickEventHandler{
 	private final int QUIT = Input.KEY_ESCAPE;
 	private final int FULLSCREEN = Input.KEY_F;
 	
-	private final int state;
 	private ParentMap map;
 	
-	public static int ICON_SIZE = 48;
+	public static int ICON_SIZE = 47;
 	
 	private SlickDrawableFrame activeDialog = null;
 	 //TODO: turn into constructor
@@ -51,25 +47,21 @@ public class MapScreen extends BasicGameState implements SlickEventHandler{
 	
 	public MapScreen(int state, ParentMap map){
 		
-		this.state = state;
+		super(state, map.getFrame());
 		this.map = map;
-
-		//Dimension size = new Dimension((int)mapSize.getX(), (int)mapSize.getY());
+		
 	}
 	
 	@Override
-	public void init(GameContainer gc, StateBasedGame arg1)
-			throws SlickException {
-		// TODO Auto-generated method stub
+	public void init(GameContainer gc, StateBasedGame arg1) throws SlickException {
+		
 		sprite = new Image(map.getDefaultTile());
 		map.instantiateImages();
-		
 		
 	}
 
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
-			throws SlickException {
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 
 		try{
 			
@@ -85,9 +77,9 @@ public class MapScreen extends BasicGameState implements SlickEventHandler{
 						
 						tile = map.getTileByIndex(i + posX, j + posY);
 						
-						g.drawImage(sprite, (float)(i * 48 - map.getXDiff()), (float)(j * 48 - map.getYDiff()), null);	
+						g.drawImage(sprite, (float)(i * ICON_SIZE - map.getXDiff()), (float)(j * ICON_SIZE - map.getYDiff()), null);	
 						if (tile.getAvatar() != map.getDefaultTile()){
-							g.drawImage(tile.getCache(), (float)(i * 48 - map.getXDiff()), (float)(j * 48 - map.getYDiff()), null);
+							g.drawImage(tile.getCache(), (float)(i * ICON_SIZE - map.getXDiff()), (float)(j * ICON_SIZE - map.getYDiff()), null);
 						}
 						//System.out.println("success");
 					}catch (Exception ex){
@@ -107,25 +99,8 @@ public class MapScreen extends BasicGameState implements SlickEventHandler{
 		}
 		
 	}
-
-	@Override
-	public void update(GameContainer gc, StateBasedGame arg1, int arg2)
-			throws SlickException {
-		
-		
-	}
-
-	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return this.state;
-	}
-
 	
-	public ParentMap getParentMap() {
-		return map;
-	}
-
+	public ParentMap getParentMap() {return map;}
 	
 	public void setMap(ParentMap map2) throws SlickException {
 		this.map = map2;
@@ -133,18 +108,14 @@ public class MapScreen extends BasicGameState implements SlickEventHandler{
 		map.instantiateImages();
 	}
 
-	public void removeMapConsole() {
-		activeDialog = null;
-	}
+	public void removeMapConsole() {activeDialog = null;}
 	
-	public void setMapConsole(SlickDrawableFrame activeDialog){
-		this.activeDialog = activeDialog;
-	}
+	public void setMapConsole(SlickDrawableFrame activeDialog){this.activeDialog = activeDialog;}
 
 	@Override
 	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
-		int px = (int) Math.floor(x / ParentMap.ICON_SIZE);
-		int py = (int) Math.floor(y / ParentMap.ICON_SIZE);
+		int px = (int) Math.floor(x / MapScreen.ICON_SIZE);
+		int py = (int) Math.floor(y / MapScreen.ICON_SIZE);
 		
 		try {
 			getParentMap().tryMoveToTile(px, py);
@@ -157,11 +128,16 @@ public class MapScreen extends BasicGameState implements SlickEventHandler{
 	@Override
 	public void mouseReleased(int arg0, int x, int y) {
 		
-		try{
-			processMouseClick(1, x, y);
-		}catch (Exception ex){
-			System.out.println("Can't move there");
-			ex.printStackTrace();
+		if (activeDialog != null){
+			MapConsole console = (MapConsole)activeDialog;
+			console.mouseReleased(arg0, x, y);
+		}else{
+			try{
+				processMouseClick(1, x, y);
+			}catch (Exception ex){
+				System.out.println("Can't move there");
+				ex.printStackTrace();
+			}
 		}
 		
 	}
@@ -169,17 +145,17 @@ public class MapScreen extends BasicGameState implements SlickEventHandler{
 	private void interact() throws SlickException{
 		
 		int dir = getParentMap().getDirection();
-		int x = (int)getParentMap().getCurrentPositionX() + getParentMap().getCharacterPositionX() * ParentMap.ICON_SIZE;
-		int y = (int)getParentMap().getCurrentPositionY() + getParentMap().getCharacterPositionY() * ParentMap.ICON_SIZE;
+		int x = (int)getParentMap().getCurrentPositionX() + getParentMap().getCharacterPositionX() * MapScreen.ICON_SIZE;
+		int y = (int)getParentMap().getCurrentPositionY() + getParentMap().getCharacterPositionY() * MapScreen.ICON_SIZE;
 		
 		if (dir == ParentMap.UP){
-			y -= ParentMap.ICON_SIZE;
+			y -= MapScreen.ICON_SIZE;
 		}else if (dir == ParentMap.RIGHT){
-			x += ParentMap.ICON_SIZE;
+			x += MapScreen.ICON_SIZE;
 		}else if (dir == ParentMap.LEFT){
-			x -= ParentMap.ICON_SIZE;
+			x -= MapScreen.ICON_SIZE;
 		}else if (dir == ParentMap.DOWN){
-			y += ParentMap.ICON_SIZE;
+			y += MapScreen.ICON_SIZE;
 		}
 		
 		if (getParentMap().tileExists(x, y)){
@@ -198,50 +174,59 @@ public class MapScreen extends BasicGameState implements SlickEventHandler{
 	}
 
 	@Override
-	public void keyPressed(int arg0, char arg1) {
-		int code = arg0;
+	public void keyPressed(int code, char arg1) {
 		
-		try{
-			if (code == Input.KEY_UP){
-				getParentMap().moveUp();
-			}else if (code == Input.KEY_RIGHT){
-				getParentMap().moveRight();
-			}else if (code == Input.KEY_LEFT){
-				getParentMap().moveLeft();
-			}else if (code == Input.KEY_DOWN){
-				getParentMap().moveDown();
-			}else {
-				System.out.println(code);
+		if (activeDialog != null){
+			MapConsole console = (MapConsole)activeDialog;
+			console.keyPressed(code, arg1);
+		}else{
+			try{
+				if (code == Input.KEY_UP){
+					getParentMap().moveUp();
+				}else if (code == Input.KEY_RIGHT){
+					getParentMap().moveRight();
+				}else if (code == Input.KEY_LEFT){
+					getParentMap().moveLeft();
+				}else if (code == Input.KEY_DOWN){
+					getParentMap().moveDown();
+				}else {
+					System.out.println(code);
+				}
+			}catch (Exception ex){
+				ex.printStackTrace();
 			}
-		}catch (Exception ex){
-			
 		}
+		
 	}
 
 	@Override
 	public void keyReleased(int code, char arg1) {
 		
-		if (code == MENU){
-			getParentMap().getFrame().swapToMenu();
-		}else if (code == QUIT){
-			//exit
-			//TODO: make exit prompt
-			System.exit(0);
-		}else if (code == INTERACT){
-			try {
-				interact();
-			} catch (SlickException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}else if (code == FULLSCREEN){
-			GameScreen parent = getParentMap().getFrame();
-			parent.setFullScreen();
+		if (activeDialog != null){
+			MapConsole console = (MapConsole)activeDialog;
+			console.keyReleased(code, arg1);
 		}else {
-			//System.out.println(code);
+			if (code == MENU){
+				getParentMap().getFrame().swapToMenu();
+			}else if (code == QUIT){
+				//exit
+				//TODO: make exit prompt
+				System.exit(0);
+			}else if (code == INTERACT){
+				try {
+					interact();
+				} catch (SlickException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else if (code == FULLSCREEN){
+				GameScreen parent = getParentMap().getFrame();
+				parent.setFullScreen();
+			}else {
+				//System.out.println(code);
+			}
 		}
 		
 	}
-	
 
 }

@@ -1,19 +1,21 @@
 package battle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import screen.SlickGameState;
 
 import com.japanzai.skr.Party;
 
 import character.EnemyCharacter;
 import character.PlayableCharacter;
 
-public class BattlePane extends BasicGameState {
+public class BattlePane extends SlickGameState {
 	
 	private ArrayList<EnemyCharacter> enemies;
 	private ArrayList<PlayableCharacter> party;
@@ -27,12 +29,6 @@ public class BattlePane extends BasicGameState {
 		
 		this.enemies = enemies;
 		this.party = Party.getCharactersInParty();
-		
-	}
-	
-
-	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {		
 		
 	}
 
@@ -57,13 +53,16 @@ public class BattlePane extends BasicGameState {
 	}
 
 	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {}
-	
-
-	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void processMouseClick(int clickCount, int x, int y)
+			throws IOException, ClassNotFoundException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

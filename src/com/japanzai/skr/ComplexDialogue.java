@@ -46,7 +46,7 @@ public class ComplexDialogue extends Dialogue{
 	public void instantiate(){
 		this.dialogueList = new ArrayList<Dialogue>();
 		this.dialogueIndex = 0;
-		this.max = this.dialogueList.size();
+		this.max = this.dialogueList.size() - 1;
 	}
 	
 	public void addDialogue(Dialogue d){

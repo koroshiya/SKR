@@ -1,5 +1,6 @@
 package battle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -13,6 +14,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import screen.BattleConsole;
 import screen.GameScreen;
 import screen.MessageBox;
+import screen.SlickGameState;
 
 import character.CombatCapableCharacter;
 import character.EnemyCharacter;
@@ -20,7 +22,7 @@ import character.PlayableCharacter;
 
 import com.japanzai.skr.Party;
 
-public class Battle extends BasicGameState{
+public class Battle extends SlickGameState{
 	
 	private ArrayList<EnemyCharacter> enemies;
 	private GameScreen parent;
@@ -34,8 +36,9 @@ public class Battle extends BasicGameState{
 	 * TODO: test furybreak
 	 * */
 	
-	public Battle(ArrayList<EnemyCharacter> enemies, GameScreen parent){
+	public Battle(ArrayList<EnemyCharacter> enemies, GameScreen parent, int state){
 		
+		super(state);
 		this.enemies = enemies;
 		this.parent = parent;
 		
@@ -170,14 +173,6 @@ public class Battle extends BasicGameState{
 		}
 	}
 	
-
-	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
-			throws SlickException {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
@@ -185,17 +180,12 @@ public class Battle extends BasicGameState{
 		
 	}
 
-	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
-			throws SlickException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
-	public int getID() {
+	public void processMouseClick(int clickCount, int x, int y)
+			throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method stub
-		return 0;
+		
 	}
 		
 }

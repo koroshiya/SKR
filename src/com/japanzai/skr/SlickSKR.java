@@ -28,12 +28,12 @@ public class SlickSKR extends StateBasedGame {
 	public SlickSKR(ParentMap current) throws SlickException{
 
 		super(GAME_NAME);
-		this.addState(new BattleScreen(BATTLE));
+		this.addState(new BattleScreen(BATTLE, current.getFrame()));
 		this.addState(new MapScreen(MAP, current));
 		this.addState(new MenuMainWindow(MENU, current.getFrame()));
-		this.addState(new InventoryWindow(INVENTORY));
+		this.addState(new InventoryWindow(INVENTORY, current.getFrame()));
 		this.addState(new CharacterProfileWindow(CHARACTER, current.getFrame()));
-		this.addState(new GameOver(GAMEOVER));
+		this.addState(new GameOver(GAMEOVER, current.getFrame()));
 		
 	}
 	
@@ -45,7 +45,7 @@ public class SlickSKR extends StateBasedGame {
 	
 	public void setSKR(GameScreen gs, ParentMap current){
 
-		this.addState(new BattleScreen(BATTLE));
+		//this.addState(new BattleScreen(BATTLE));
 		MapScreen ms = new MapScreen(MAP, current);
 		this.addState(ms);
 		

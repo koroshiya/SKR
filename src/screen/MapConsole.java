@@ -1,25 +1,20 @@
 package screen;
 
 import interfaces.SlickDrawableFrame;
-import interfaces.SlickEventHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.KeyListener;
-import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
-
-
 
 import com.japanzai.skr.ComplexDialogue;
 import com.japanzai.skr.Dialogue;
 
 import controls.SlickRectangle;
 
-public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseListener, KeyListener{
+public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	
 	private SlickRectangle background;
 	private SlickRectangle[] rects = new SlickRectangle[4];
@@ -27,8 +22,11 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 	private Dialogue dialogue;
 	
 	private GameScreen parent;
-	
-	private ConsoleMenuListener listener;
+
+	private final int INTERACT = Input.KEY_A;
+	private final int BACK = Input.KEY_W;
+	private final int YES = Input.KEY_S;
+	private final int NO = Input.KEY_D;
 	
 	private final String[] tags = {"Back [W]", "Next [A]", "Yes [S]", "No [D]"};
 	
@@ -44,8 +42,6 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 
 		background = new SlickRectangle(0, 480, 801, 120, "");
 		
-		this.listener = new ConsoleMenuListener(this, parent);
-		
 		final int buttonWidth = 150;
 		final int buttonHeight = 25;
 		final int startX = 650;
@@ -55,9 +51,6 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 			startY += buttonHeight + 2;
 		}
 		rects[1].setEnabled(true);
-		
-		//this.add(dialogueBox); //TODO: implement
-		
 			
 	}
 	
@@ -70,13 +63,7 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 		g.drawString(this.dialogue.speak(), 140, 490);
 	}
 		
-	public void speak(Dialogue d) throws SlickException{
-		
-		d.increment();
-		
-	}
-
-
+	public void speak(Dialogue d) throws SlickException{d.increment();}
 
 	private int converse(Dialogue d) throws SlickException {
 		
@@ -84,25 +71,17 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 		rects[0].setEnabled(this.dialogue.canGoBack());
 		
 		if (!moreDialogue){
+			System.out.println("Out of text");
 			d.reset();
 			return -1;
-		}else if (isQuestion()){
-			speak(d);
-			return -2;
 		}
 			
 		speak(d);
-		return 0;
+		return isQuestion() ? -2 : 0;
 		
 	}
 	
-	public int converse() throws SlickException{
-		return converse(this.dialogue);
-	}
-	
-	public ConsoleMenuListener getListener(){
-		return this.listener;
-	}
+	public int converse() throws SlickException{return converse(this.dialogue);}
 		
 	public void setQuestion(boolean question){
 		rects[0].setEnabled(this.dialogue.canGoBack());
@@ -112,9 +91,7 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 	}
 	
 	//If currently talking normally, return true. If asking a question, return false
-	public boolean isTalking(){
-		return rects[1].isEnabled();
-	}
+	public boolean isTalking(){return rects[1].isEnabled();}
 	
 	public void answerQuestion(boolean answer){
 		if (this.dialogue instanceof ComplexDialogue){
@@ -123,29 +100,21 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 			d.answer(answer);
 			this.dialogue = d.getDialogue();
 			setQuestion(false);
-			//this.parent.requestFocus();
 		}
 	}
 	
-	public boolean isQuestion(){
-		return this.dialogue.isQuestion();
-	}
+	public boolean isQuestion(){return this.dialogue.isQuestion();}
 	
-	public Dialogue getDialogue(){
-		return this.dialogue;
-	}
+	public Dialogue getDialogue(){return this.dialogue;}
 	
-	public void setDialogue(Dialogue dialogue){
-		this.dialogue = dialogue;
-	}
-
+	public void setDialogue(Dialogue dialogue){this.dialogue = dialogue;}
 	
 	@Override
 	public void processMouseClick(int arg0, int x, int y) throws IOException, ClassNotFoundException {
 
 		for (SlickRectangle rect : rects){
 			if (rect.isWithinBounds(x, y)){
-				System.out.println(rect.getTag());
+				process(rect.getTag());
 				break;
 			}
 		}
@@ -153,26 +122,8 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 	}
 
 	@Override
-	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
-
-		System.out.println("test");
-	}
-
-	@Override
-	public void mouseDragged(int arg0, int arg1, int arg2, int arg3) {}
-
-	@Override
-	public void mouseMoved(int arg0, int arg1, int arg2, int arg3) {
-		System.out.println("test");}
-
-	@Override
-	public void mousePressed(int arg0, int arg1, int arg2) {
-		
-	}
-
-	@Override
 	public void mouseReleased(int arg0, int arg1, int arg2) {
-		System.out.println("test");
+		System.out.println("MapConsole: mouseReleased");
 		try {
 			this.processMouseClick(1, arg1, arg2);
 		} catch (ClassNotFoundException e) {
@@ -181,31 +132,73 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public void mouseWheelMoved(int arg0) {}
-
-	@Override
-	public void inputEnded() {}
-
-	@Override
-	public void inputStarted() {}
-
-	@Override
-	public boolean isAcceptingInput() {return false;}
-
-	@Override
-	public void setInput(Input arg0) {}
-
-	@Override
-	public void keyPressed(int arg0, char arg1) {
-		System.out.println("KeyPressed");
+	
+	public void process(String tag) {
+		System.out.println("MapConsole: process");
+		try{
+			if (tag.equals(tags[0])){
+				back();
+			}else if (tag.equals(tags[1])){
+				next();
+			}else if (tag.equals(tags[2])){
+				answer(true);
+			} else if (tag.equals(tags[3])){
+				answer(false);
+			}			
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+		
 	}
-
+	
 	@Override
 	public void keyReleased(int arg0, char arg1) {
-		System.out.println("KeyReleased");
+		int code = arg0;
+		System.out.println(code);
+		try{
+			if (code == INTERACT){
+				next();
+			}else if (code == BACK){
+				back();
+			}else if (code == YES){
+				answer(true);
+			}else if (code == NO){
+				answer(false);
+			}
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void answer(boolean answer) throws SlickException{
 		
+		if (!isTalking()){
+			answerQuestion(answer);
+			next();
+		}
+		
+	}
+	
+	private void next() throws SlickException{
+		
+		if (!isTalking()){return;}
+		
+		int state = converse();
+		
+		if (state == -1){
+			parent.removeMapConsole();
+		}else if (state == -2){
+			setQuestion(true);
+		}
+	}
+	
+	private void back() throws SlickException{
+		Dialogue d = getDialogue();
+		if (d.canGoBack()){
+			d.back();
+			setQuestion(false);
+			next();
+		}
 	}
 	
 }

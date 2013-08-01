@@ -284,9 +284,9 @@ public class Driver implements Serializable{
 		ParentMap destination = null;
 		
 		
-		Point mapSize = new Point(16 * ParentMap.ICON_SIZE, 13 * ParentMap.ICON_SIZE);
-		Point coordinates = new Point(32 * ParentMap.ICON_SIZE, 24 * ParentMap.ICON_SIZE); //Multiple base by pix size?
-		Point currentPosition = new Point(8 * ParentMap.ICON_SIZE, 6 * ParentMap.ICON_SIZE);
+		Point mapSize = new Point(16 * MapScreen.ICON_SIZE, 13 * MapScreen.ICON_SIZE);
+		Point coordinates = new Point(32 * MapScreen.ICON_SIZE, 24 * MapScreen.ICON_SIZE); //Multiple base by pix size?
+		Point currentPosition = new Point(8 * MapScreen.ICON_SIZE, 6 * MapScreen.ICON_SIZE);
 		AnimatedSprite animatedSprite = new AnimatedSprite(Party.getCharacterByIndex(0));
 		
 
@@ -300,8 +300,8 @@ public class Driver implements Serializable{
 		MapGenerator generator = new MapGenerator(basicPresetTiles(current, destination), tGenerator, 32, 26, "/res/terrain/border/");		
 		current.setTiles(generator.generateMap());
 		
-		Tile[][] deadTile = createDeadMap(32 * ParentMap.ICON_SIZE, 26 * ParentMap.ICON_SIZE);
-		Point newCurPos = new Point(20 * ParentMap.ICON_SIZE, 0);
+		Tile[][] deadTile = createDeadMap(32 * MapScreen.ICON_SIZE, 26 * MapScreen.ICON_SIZE);
+		Point newCurPos = new Point(20 * MapScreen.ICON_SIZE, 0);
 		
 		bs.setSKR(new SlickSKR(current));
 		//bs.setSKR(sk);
@@ -382,8 +382,8 @@ public class Driver implements Serializable{
 	
 	private Tile[][] createDeadMap(int a, int b) throws SlickException{
 		
-		int x = (int)Math.floor((double)a / ParentMap.ICON_SIZE);
-		int y = (int)Math.floor((double)b / ParentMap.ICON_SIZE);
+		int x = (int)Math.floor((double)a / MapScreen.ICON_SIZE);
+		int y = (int)Math.floor((double)b / MapScreen.ICON_SIZE);
 		
 		Tile[][] tile = new Tile[x][y];
 		String mud = ("/res/terrain/mud.png");

@@ -1,26 +1,25 @@
 package screen;
 
+import java.io.IOException;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class GameOver extends BasicGameState {
+public class GameOver extends SlickGameState {
 
 	private Image label;
-	private final int state;
 	
-	public GameOver(int state) throws SlickException{
+	public GameOver(int state, GameScreen parent) throws SlickException{
 		
-		this.state = state;
+		super(state, parent);
 		
 	}
 
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
-			throws SlickException {
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		
 		label = new Image("/res/gameover.png");
 		
@@ -31,16 +30,10 @@ public class GameOver extends BasicGameState {
 		g.drawImage(label, 0, 0);
 	}
 
+	
 	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
-			throws SlickException {
+	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getID() {
-		return this.state;
 	}
 
 }

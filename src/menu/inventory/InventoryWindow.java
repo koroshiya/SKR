@@ -1,5 +1,6 @@
 package menu.inventory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import item.ConsumableItem;
@@ -9,13 +10,15 @@ import item.Weapon;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.geom.Rectangle;
 
+import screen.GameScreen;
+import screen.SlickGameState;
+
 import com.japanzai.skr.Inventory;
 
-public class InventoryWindow extends BasicGameState {
+public class InventoryWindow extends SlickGameState {
 
 	private String lblName;
 	private String lblType;
@@ -38,13 +41,11 @@ public class InventoryWindow extends BasicGameState {
 													{WEAPONS, 3 * MENU_ITEM_HEIGHT},
 													{MISC, 4 * MENU_ITEM_HEIGHT}};
 	
-	
-	private final int state;
 	private Item item;
 	
-	public InventoryWindow(int state){
+	public InventoryWindow(int state, GameScreen parent){
 		
-		this.state = state;
+		super(state, parent);
 		setFilter(ALL);
 		lblMoney = "Funds: " + Inventory.getMoney() + " yen";
 		
@@ -66,7 +67,6 @@ public class InventoryWindow extends BasicGameState {
 		}
 		
 	}
-	
 	
 	//TODO: setFilter
 	private void getInventoryFilterPane(Graphics g){
@@ -169,8 +169,7 @@ public class InventoryWindow extends BasicGameState {
 	}
 
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
-			throws SlickException {
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		
 		setItem(0);
 		Inventory.initialize();
@@ -178,26 +177,13 @@ public class InventoryWindow extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer gc, StateBasedGame arg1, Graphics g)
-			throws SlickException {
+	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
 		
 		getInventoryFilterPane(g);
 		getInventorySelectedItem(g);
 		getMoneyPane(g);
 		displayResults(g);
 		
-	}
-
-	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
-			throws SlickException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getID() {
-		return this.state;
 	}
 	
 	public void setItem(String itemName){
@@ -296,6 +282,14 @@ public class InventoryWindow extends BasicGameState {
 			}
 			
 		}*/
+		
+	}
+
+	
+	@Override
+	public void processMouseClick(int clickCount, int x, int y)
+			throws IOException, ClassNotFoundException {
+		// TODO Auto-generated method stub
 		
 	}
 	
