@@ -1,17 +1,15 @@
 package screen;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import javax.swing.JButton;
 
+import org.newdawn.slick.Input;
+import org.newdawn.slick.KeyListener;
+import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 
 import com.japanzai.skr.Dialogue;
 
-public class ConsoleMenuListener implements ActionListener, KeyListener {
+public class ConsoleMenuListener implements MouseListener, KeyListener {
 
 	private MapConsole console;
 	private GameScreen parent;	
@@ -29,24 +27,7 @@ public class ConsoleMenuListener implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		
-		if (arg0.getSource() instanceof JButton){
-			
-			String code = arg0.getActionCommand();
-			try{
-				if (code.equals("Back")){
-					back();
-				}else if (code.equals("Next")){
-					next();
-				}else if (code.equals("Yes")){
-					answer(true);
-				} else if (code.equals("No")){
-					answer(false);
-				}			
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
-			
-		}
+
 		
 	}
 	
@@ -68,7 +49,6 @@ public class ConsoleMenuListener implements ActionListener, KeyListener {
 		if (d.canGoBack()){
 			d.back();
 			console.setQuestion(false);
-			console.speak();
 			next();
 		}
 	}
@@ -83,13 +63,39 @@ public class ConsoleMenuListener implements ActionListener, KeyListener {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent arg0) {}
+	public void inputEnded() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
+	public void inputStarted() {
+		// TODO Auto-generated method stub
 		
-		int code = arg0.getKeyCode();
-		//System.out.println(code);
+	}
+
+	@Override
+	public boolean isAcceptingInput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setInput(Input arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(int arg0, char arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(int arg0, char arg1) {
+		int code = arg0;
+		System.out.println(code);
 		try{
 			if (code == INTERACT){
 				next();
@@ -103,11 +109,43 @@ public class ConsoleMenuListener implements ActionListener, KeyListener {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {}
+	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
+		if (arg0.getSource() instanceof JButton){
+			
+			String code = arg0.getActionCommand();
+			try{
+				if (code.equals("Back")){
+					back();
+				}else if (code.equals("Next")){
+					next();
+				}else if (code.equals("Yes")){
+					answer(true);
+				} else if (code.equals("No")){
+					answer(false);
+				}			
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+
+	@Override
+	public void mouseDragged(int arg0, int arg1, int arg2, int arg3) {}
+
+	@Override
+	public void mouseMoved(int arg0, int arg1, int arg2, int arg3) {}
+
+	@Override
+	public void mousePressed(int arg0, int arg1, int arg2) {}
+
+	@Override
+	public void mouseReleased(int arg0, int arg1, int arg2) {}
+
+	@Override
+	public void mouseWheelMoved(int arg0) {}
 
 }

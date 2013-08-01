@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 
@@ -19,17 +19,15 @@ import com.japanzai.skr.Dialogue;
 
 import controls.SlickRectangle;
 
-public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseListener{
+public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseListener, KeyListener{
 	
 	private SlickRectangle background;
 	private SlickRectangle[] rects = new SlickRectangle[4];
 	
 	private Dialogue dialogue;
-	private Image cache;
 	
 	private GameScreen parent;
 	
-	private DialogueBox dialogueBox;
 	private ConsoleMenuListener listener;
 	
 	private final String[] tags = {"Back [W]", "Next [A]", "Yes [S]", "No [D]"};
@@ -44,7 +42,6 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 		//TODO: set aside space at bottom for char info, map, etc.
 		//BattleMenuListener listener = new BattleMenuListener();
 
-		dialogueBox = new DialogueBox();
 		background = new SlickRectangle(0, 480, 801, 120, "");
 		
 		this.listener = new ConsoleMenuListener(this, parent);
@@ -69,28 +66,17 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 		for (SlickRectangle rect : rects){
 			rect.paint(g);
 		}
-		g.drawImage(cache, 20f, 600f);
+		g.drawImage(this.dialogue.getCache(), 10, 495);
+		g.drawString(this.dialogue.speak(), 140, 490);
 	}
 		
 	public void speak(Dialogue d) throws SlickException{
 		
-		System.out.println(d.getAvatar());
-		cache = new Image(d.getAvatar());
-		display(cache, d.speak());
 		d.increment();
 		
 	}
-	
-	public void speak() throws SlickException{
-		cache = new Image(this.dialogue.getAvatar());
-		display(cache, this.dialogue.speak());
-	}
 
-	private void display(Image avatar, String speak) {
-		
-		dialogueBox.displayText(avatar, speak);
-		
-	}
+
 
 	private int converse(Dialogue d) throws SlickException {
 		
@@ -168,14 +154,16 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 
 	@Override
 	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
-		
+
+		System.out.println("test");
 	}
 
 	@Override
 	public void mouseDragged(int arg0, int arg1, int arg2, int arg3) {}
 
 	@Override
-	public void mouseMoved(int arg0, int arg1, int arg2, int arg3) {}
+	public void mouseMoved(int arg0, int arg1, int arg2, int arg3) {
+		System.out.println("test");}
 
 	@Override
 	public void mousePressed(int arg0, int arg1, int arg2) {
@@ -208,5 +196,16 @@ public class MapConsole implements SlickDrawableFrame, SlickEventHandler, MouseL
 
 	@Override
 	public void setInput(Input arg0) {}
+
+	@Override
+	public void keyPressed(int arg0, char arg1) {
+		System.out.println("KeyPressed");
+	}
+
+	@Override
+	public void keyReleased(int arg0, char arg1) {
+		System.out.println("KeyReleased");
+		
+	}
 	
 }

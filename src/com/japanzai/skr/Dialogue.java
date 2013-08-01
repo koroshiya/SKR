@@ -3,6 +3,7 @@ package com.japanzai.skr;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import character.Character;
@@ -12,8 +13,10 @@ public class Dialogue implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private ArrayList<Line> dialogue;
+	private String dialogLine;
 	private int counter;
 	private int max;
+	private Image cache;
 	
 	public Dialogue(ArrayList<Line> dialogue){
 
@@ -78,8 +81,7 @@ public class Dialogue implements Serializable{
 	
 	public String speak(){
 		
-		//System.out.println(this.counter);
-		return this.dialogue.get(this.counter).getText();
+		return dialogLine;
 		
 	}
 	
@@ -97,10 +99,13 @@ public class Dialogue implements Serializable{
 		return this.dialogue.get(this.counter).getAvatar();
 	}
 	
+	public Image getCache(){
+		return this.cache;
+	}
+	
 	public void increment(){
 		
-		if (this.counter == this.max){this.counter = 0;}
-		else {this.counter++;}
+		setCounter(counter == max ? 0 : counter + 1);
 		
 	}
 	
@@ -110,14 +115,24 @@ public class Dialogue implements Serializable{
 	
 	public void back(){
 		if (this.counter > 0){
-			this.counter-= 2;
+			setCounter(this.counter - 2);
 		}
 	}
 	
 	public void reset(){
-		this.counter = 0;
+		setCounter(0);
 	}
-
+	
+	private void setCounter(int count){
+		Line line = this.dialogue.get(this.counter);
+		dialogLine = line.getText();
+		try {
+			this.cache = new Image(line.getAvatar());
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+		this.counter = count;
+	}
 	
 	public int getCounter() {
 		return this.counter;

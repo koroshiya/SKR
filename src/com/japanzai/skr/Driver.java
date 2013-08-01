@@ -409,7 +409,7 @@ public class Driver implements Serializable{
 		
 		ComplexDialogue cd = new ComplexDialogue();
 		String str1 = "Greetings, Ken. I am your programmer.";
-		String str2 = "<html>How does it feel to meet your creator? <br />You aren't scared, are you?</html>";
+		String str2 = "How does it feel to meet your creator? \nYou aren't scared, are you?";
 		cd.addLine(new Line(npc, str1, 0, false));
 		cd.addLine(new Line(npc, str2, 1, true));
 		

@@ -1,29 +1,42 @@
 package com.japanzai.skr;
 
+import java.awt.Point;
+import java.io.IOException;
+
 import interfaces.SlickDrawableFrame;
-import map.MovementListener;
+import interfaces.SlickEventHandler;
+import map.CharacterTile;
+import map.InteractiveTile;
 import map.ParentMap;
 import map.Tile;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.KeyListener;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class MapScreen extends BasicGameState implements KeyListener{
+import screen.GameScreen;
+
+import character.NonPlayableCharacter;
+
+public class MapScreen extends BasicGameState implements SlickEventHandler{
 	
 	 //character whose sprite we'll show
 	
 	private Image sprite;
-	private Dialogue dialog = null;
 	
 	public static final int LEFT = 37;
 	public static final int RIGHT = 39;
 	public static final int UP = 38;
 	public static final int DOWN = 40;
+	
+	private final int INTERACT = Input.KEY_A;
+	private final int MENU = Input.KEY_W;
+	private final int QUIT = Input.KEY_ESCAPE;
+	private final int FULLSCREEN = Input.KEY_F;
 	
 	private final int state;
 	private ParentMap map;
@@ -51,11 +64,6 @@ public class MapScreen extends BasicGameState implements KeyListener{
 		sprite = new Image(map.getDefaultTile());
 		map.instantiateImages();
 		
-		MovementListener ml = new MovementListener(this);
-		ml.setInput(gc.getInput());
-		
-		gc.getInput().addKeyListener(ml);
-		gc.getInput().addMouseListener(ml);
 		
 	}
 
@@ -125,17 +133,114 @@ public class MapScreen extends BasicGameState implements KeyListener{
 		map.instantiateImages();
 	}
 
-	public void startDialog(Dialogue dialog){
-		this.dialog = dialog;
-		//TODO: set listener for dialog
-	}
-
 	public void removeMapConsole() {
 		activeDialog = null;
 	}
 	
 	public void setMapConsole(SlickDrawableFrame activeDialog){
 		this.activeDialog = activeDialog;
+	}
+
+	@Override
+	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
+		int px = (int) Math.floor(x / ParentMap.ICON_SIZE);
+		int py = (int) Math.floor(y / ParentMap.ICON_SIZE);
+		
+		try {
+			getParentMap().tryMoveToTile(px, py);
+		} catch (SlickException e) {
+			System.out.println("Can't move there");
+			e.printStackTrace();
+		}
+	}	
+	
+	@Override
+	public void mouseReleased(int arg0, int x, int y) {
+		
+		try{
+			processMouseClick(1, x, y);
+		}catch (Exception ex){
+			System.out.println("Can't move there");
+			ex.printStackTrace();
+		}
+		
+	}
+	
+	private void interact() throws SlickException{
+		
+		int dir = getParentMap().getDirection();
+		int x = (int)getParentMap().getCurrentPositionX() + getParentMap().getCharacterPositionX() * ParentMap.ICON_SIZE;
+		int y = (int)getParentMap().getCurrentPositionY() + getParentMap().getCharacterPositionY() * ParentMap.ICON_SIZE;
+		
+		if (dir == ParentMap.UP){
+			y -= ParentMap.ICON_SIZE;
+		}else if (dir == ParentMap.RIGHT){
+			x += ParentMap.ICON_SIZE;
+		}else if (dir == ParentMap.LEFT){
+			x -= ParentMap.ICON_SIZE;
+		}else if (dir == ParentMap.DOWN){
+			y += ParentMap.ICON_SIZE;
+		}
+		
+		if (getParentMap().tileExists(x, y)){
+			Tile t = getParentMap().getTileByPosition(x, y);
+			if (t instanceof InteractiveTile){
+				InteractiveTile tile = (InteractiveTile)t;
+				tile.interact(getParentMap().getFrame());
+			}else if (t instanceof CharacterTile){
+				CharacterTile tile = (CharacterTile)t;
+				tile.face(dir);
+				NonPlayableCharacter c = tile.getCharacter();				
+				getParentMap().getFrame().WriteOnMap(c.getDialogue());
+			}
+		}
+		
+	}
+
+	@Override
+	public void keyPressed(int arg0, char arg1) {
+		int code = arg0;
+		
+		try{
+			if (code == Input.KEY_UP){
+				getParentMap().moveUp();
+			}else if (code == Input.KEY_RIGHT){
+				getParentMap().moveRight();
+			}else if (code == Input.KEY_LEFT){
+				getParentMap().moveLeft();
+			}else if (code == Input.KEY_DOWN){
+				getParentMap().moveDown();
+			}else {
+				System.out.println(code);
+			}
+		}catch (Exception ex){
+			
+		}
+	}
+
+	@Override
+	public void keyReleased(int code, char arg1) {
+		
+		if (code == MENU){
+			getParentMap().getFrame().swapToMenu();
+		}else if (code == QUIT){
+			//exit
+			//TODO: make exit prompt
+			System.exit(0);
+		}else if (code == INTERACT){
+			try {
+				interact();
+			} catch (SlickException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if (code == FULLSCREEN){
+			GameScreen parent = getParentMap().getFrame();
+			parent.setFullScreen();
+		}else {
+			//System.out.println(code);
+		}
+		
 	}
 	
 

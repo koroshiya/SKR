@@ -1,6 +1,5 @@
 package screen;
 
-import interfaces.SlickDrawableFrame;
 import interfaces.SlickEventHandler;
 
 import javax.swing.JOptionPane;
@@ -10,7 +9,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import map.MovementListener;
 import map.ParentMap;
 import menu.MenuItemListener;
 import menu.MenuMainWindow;
@@ -33,13 +31,13 @@ public class GameScreen extends AppGameContainer{
 		this.setVSync(true);
 		this.setSmoothDeltas(true);
 		this.setUpdateOnlyWhenVisible(true);
+		this.setAlwaysRender(true);
 		//this.setShowFPS(false);
 		//TODO: Set animated cursor
 		//TODO: Set icon
 		
 		try{
 			this.setDisplayMode(800, 600, false); //TODO: Change to true for fullscreen
-			//this.start();
 		}catch (SlickException ex){
 			ex.printStackTrace();
 		}
@@ -72,10 +70,8 @@ public class GameScreen extends AppGameContainer{
 		
 		swapView(SlickSKR.MAP);
 		
-		MovementListener ml = new MovementListener((MapScreen) getState(0));
-		
-		getInput().addKeyListener(ml);
-		getInput().addMouseListener(ml);
+		getInput().addKeyListener(getState());
+		getInput().addMouseListener(getState());
 		
 	}
 	
@@ -150,18 +146,19 @@ public class GameScreen extends AppGameContainer{
 	
 	public void WriteOnMap(Dialogue dialogue) throws SlickException{
 		
-		GameState comp = ((StateBasedGame)super.game).getCurrentState();
+		GameState comp = getState();
 		
 		if (comp instanceof MapScreen){
 						
 			removeListeners();
 			MapConsole console = new MapConsole(null, dialogue, this);
-			
+			ConsoleMenuListener list = new ConsoleMenuListener(console, this);
+
+			getInput().addMouseListener(list);
+			getInput().addKeyListener(list);
 			((MapScreen)comp).setMapConsole(console);
-			getInput().addMouseListener(console);
 			console.converse();
 			
-		
 		}
 		
 	}
@@ -227,12 +224,12 @@ public class GameScreen extends AppGameContainer{
 	
 	public void removeMapConsole(){
 		
-		GameState comp = ((StateBasedGame)super.game).getCurrentState();
+		GameState comp = getState();
 		
 		if (comp instanceof MapScreen){
-			
+			removeListeners();
 			((MapScreen) comp).removeMapConsole();
-			//TODO: re-implement handlersa
+			swapToMap();
 		
 		}
 	}
