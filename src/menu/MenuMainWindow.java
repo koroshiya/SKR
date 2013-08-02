@@ -17,6 +17,7 @@ import character.PlayableCharacter;
 
 import com.japanzai.skr.Driver;
 import com.japanzai.skr.Party;
+import com.japanzai.skr.SlickSKR;
 
 import controls.SlickRectangle;
 
@@ -139,17 +140,33 @@ public class MenuMainWindow extends SlickGameState{
 			try{
 				int i = Integer.parseInt(s);
 				if (i >= 0 && i < characters.size()){
+					PlayableCharacter c = characters.get(i);
+					if (c.isInParty()){
+						boolean charAlive = false;
+						for (PlayableCharacter ch : characters){
+							if (!c.getName().equals(ch.getName())){
+								if (ch.isAlive() && ch.isInParty()){
+									charAlive = true;
+									break;
+								}
+							}
+						}
+						if (!charAlive){
+							GameScreen.WriteOnScreen("Can't remove last living member from party", "Operation not allowed");
+							return;
+						}
+					}
 					characters.get(i).toggleInParty();
 				}
 			}catch (NumberFormatException nfe){
 				nfe.printStackTrace();
 			}
 		}else if (s.equals(commands[6])){
-			parent.swapToMap();
+			parent.swapView(SlickSKR.MAP);
 		}else if (s.equals(commands[2])){
-			parent.swapToCharacterWindow();
+			parent.swapView(SlickSKR.CHARACTER);
 		}else if (s.equals(commands[0])){
-			parent.swapToInventory();
+			parent.swapView(SlickSKR.INVENTORY);
 		}else if (s.equals(commands[7])){
 			Driver.quit();
 		}else if (s.equals(commands[4])){
@@ -178,11 +195,11 @@ public class MenuMainWindow extends SlickGameState{
 		System.out.println("MainMenuWindow: " + code);
 		try {
 			if (code == (keys[6])){
-				parent.swapToMap();
+				parent.swapView(SlickSKR.MAP);
 			}else if (code == (keys[2])){
-				parent.swapToCharacterWindow();
+				parent.swapView(SlickSKR.CHARACTER);
 			}else if (code == (keys[0])){
-				parent.swapToInventory();
+				parent.swapView(SlickSKR.INVENTORY);
 			}else if (code == (keys[7])){
 				Driver.quit();
 			}else if (code == (keys[4])){

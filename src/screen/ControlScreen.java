@@ -1,20 +1,20 @@
 package screen;
 
+import java.io.IOException;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import com.japanzai.skr.SlickSKR;
 
-public class ControlScreen extends BasicGameState{
-
-	private final GameScreen parent;
+public class ControlScreen extends SlickGameState{
 	
 	public ControlScreen(GameScreen battleScreen) {
 		
-		this.parent = battleScreen;
+		super(SlickSKR.CONTROLSCREEN, battleScreen);
 		
 	}	
 	
@@ -44,7 +44,21 @@ public class ControlScreen extends BasicGameState{
 	}
 	
 	public void returnToMainMenu(){
-		//this.parent.swapToMap() //TODO: implement when start screen has been created
+		this.parent.swapView(SlickSKR.MAINMENU); //TODO: implement when start screen has been created
+	}
+
+	@Override
+	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
+		
+		
+		
+	}
+	
+	@Override
+	public void keyReleased(int code, char arg1) {
+		if (code == Input.KEY_W){
+			returnToMainMenu();
+		}
 	}
 
 }

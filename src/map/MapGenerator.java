@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.SlickException;
 
+import tile.BorderTile;
+import tile.PresetTile;
+import tile.Tile;
+
 public class MapGenerator {
 	
 	private ArrayList<PresetTile> presets;

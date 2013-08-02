@@ -2,6 +2,8 @@ package map;
 
 import java.util.ArrayList;
 
+import tile.Tile;
+
 public class TileGenerator {
 	
 	private ArrayList<RandomTile> tiles;

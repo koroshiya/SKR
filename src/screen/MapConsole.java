@@ -1,5 +1,6 @@
 package screen;
 
+import interfaces.InteractableObject;
 import interfaces.SlickDrawableFrame;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	private SlickRectangle[] rects = new SlickRectangle[4];
 	
 	private Dialogue dialogue;
+	private InteractableObject npc = null;
 	
 	private GameScreen parent;
 
@@ -71,7 +73,6 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		rects[0].setEnabled(this.dialogue.canGoBack());
 		
 		if (!moreDialogue){
-			System.out.println("Out of text");
 			d.reset();
 			return -1;
 		}
@@ -82,6 +83,8 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	}
 	
 	public int converse() throws SlickException{return converse(this.dialogue);}
+	
+	public void setInteractiveTile(InteractableObject npc){this.npc = npc;}
 		
 	public void setQuestion(boolean question){
 		rects[0].setEnabled(this.dialogue.canGoBack());
@@ -184,6 +187,8 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		
 		if (state == -1){
 			parent.removeMapConsole();
+			npc.finishInteraction(parent);
+			npc = null;
 		}else if (state == -2){
 			setQuestion(true);
 		}

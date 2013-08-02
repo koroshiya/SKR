@@ -1,5 +1,7 @@
 package screen;
 
+import interfaces.InteractableObject;
+
 import javax.swing.JOptionPane;
 
 import org.newdawn.slick.AppGameContainer;
@@ -43,16 +45,6 @@ public class GameScreen extends AppGameContainer{
 			ex.printStackTrace();
 		}
 	}
-			
-	public void swapToBattle(){swapView(SlickSKR.BATTLE);}
-	
-	public void swapToMenu(){swapView(SlickSKR.MENU);}
-	
-	public void swapToMap(){swapView(SlickSKR.MAP);}
-	
-	public void swapToCharacterWindow(){swapView(SlickSKR.CHARACTER);}
-	
-	public void swapToInventory(){swapView(SlickSKR.INVENTORY);}
 	
 	public void swapView(int i){((StateBasedGame)super.game).enterState(i);}
 	
@@ -61,7 +53,7 @@ public class GameScreen extends AppGameContainer{
 	public GameState getState(){return ((StateBasedGame)super.game).getCurrentState();}
 	
 	public GameState getState(int i){return ((StateBasedGame)super.game).getState(i);}
-			
+	
 	public void setBattle(ArrayList<EnemyCharacter> arrayList){
 		
 		//((StateBasedGame)super.game).addState(new Battle(arrayList, this));
@@ -69,14 +61,6 @@ public class GameScreen extends AppGameContainer{
 		
 	}
 	
-	public static void WriteOnScreen(String message, String title){
-		MessageBox.InfoBox(message, title, null);
-	}
-
-	public static void WriteOnScreen(StringBuffer itemList, String title) {
-		MessageBox.InfoBox(itemList, title, null);
-	}
-		
 	public void setFullScreen(){
 				
 		try {
@@ -89,7 +73,7 @@ public class GameScreen extends AppGameContainer{
 		
 	public boolean isInBattle(){return getState() instanceof Battle;}
 	
-	public void WriteOnMap(Dialogue dialogue) throws SlickException{
+	public void WriteOnMap(Dialogue dialogue, InteractableObject npc) throws SlickException{
 		
 		GameState comp = getState();
 		
@@ -97,12 +81,12 @@ public class GameScreen extends AppGameContainer{
 			
 			MapConsole console = new MapConsole(null, dialogue, this);
 			((MapScreen)comp).setMapConsole(console);
+			console.setInteractiveTile(npc);
 			console.converse();
 			
 		}
 		
 	}
-	
 	
 	public boolean isEncounter(ParentMap map){
 		
@@ -151,7 +135,7 @@ public class GameScreen extends AppGameContainer{
 	}
 
 	public void setMap(ParentMap map) throws SlickException {
-		((MapScreen) getState(0)).setMap(map);
+		((MapScreen) getState(SlickSKR.MENU)).setMap(map);
 	}
 	
 	public void removeMapConsole(){
@@ -162,6 +146,11 @@ public class GameScreen extends AppGameContainer{
 			((MapScreen) comp).removeMapConsole();
 		
 		}
+	}
+
+	
+	public static void WriteOnScreen(String message, String title) {
+		MessageBox.InfoBox(message, title);
 	}
 		
 }

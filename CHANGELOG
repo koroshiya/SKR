@@ -1,3 +1,46 @@
+v0.20
+Added selection of items in menu
+General back-end improvements to InventoryWindow
+Implemented EventTile for misc events, such as entering a store
+Modified NPC and associated classes to remove legacy MessageBox functions
+Removed other deprecated classes & methods
+Fixed party character removal bug #1 (#2 can't be implemented until battles work)
+
+v0.19
+Further reduction of legacy Swing/AWT
+Basic implementation of MapConsole
+Improvements made to SlickRectangle and associated classes
+Implemented basic Battle structure in Slick
+Ported Dialog to Slick
+Improved MapConsole implementation
+Phased out DialogBox and MovementListener
+Fixed Slick Dialog/ComplexDialog
+Fixed open chest image swapping
+Fixed tearing on remaining map movements
+Implemented additional interfaces and abstract classes to reduce repeat code
+Fixed CharacterTile direction during interactions
+Multiple fixes for ComplexDialog
+Disabled Dialog buttons are now hidden
+Further MainMenuWindow fixes
+Fixes made to listener handling and state swapping
+Improved InventoryWindow and furthered its Slick porting
+
+v0.18
+Further Slick porting
+Initial Battle implementation
+Skeleton for MapConsole
+Removed cause of MainMenuWindow slowdown
+Implemented basic mouse handling for SlickRectangle and appropriate interfaces
+Implemented character swapping in menu
+Multiple MainMenuWindow and other menu fixes
+
+v0.17
+Numerous porting fixes
+Removed MenuBar
+Further image fixing
+Skeleton of ControlScreen and StartScreen
+
+
 		v0.16
 		Migrated to Git
 		Fixes for port from Swing to Slick

@@ -13,6 +13,8 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
 import com.japanzai.skr.MapScreen;
 
 import screen.GameScreen;
+import tile.Tile;
+import tile.TransitionTile;
 
 import animation.AnimatedSprite;
 import animation.WalkingSprite;

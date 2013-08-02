@@ -4,6 +4,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.pathfinding.PathFindingContext;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
+import tile.Tile;
+
 public class TileMap implements TileBasedMap {
 
 	private Tile[][] tiles;

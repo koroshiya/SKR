@@ -11,8 +11,8 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final String tag;
-	private final String displayText;
+	private String tag;
+	private String displayText;
 	
 	private final float x;
 	private final float y;
@@ -63,7 +63,11 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	public void setEnabled(boolean enabled){
 		this.enabled = enabled;
 	}
-
+	
+	public void setText(String text){
+		this.tag = text;
+		this.displayText = text;
+	}
 	
 	@Override
 	public void paint(Graphics g) {

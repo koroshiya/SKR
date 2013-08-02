@@ -1,11 +1,12 @@
 **Replace MenuBar with Instruction/Control screen
 *Implement Start screen with load, instructions, etc.
+*On battle loss, check for remaining members; force at least one to enter party if alive, otherwise gameover
+*In boss battle, force everyone to participate
 
-Finish InventoryPane stuff
+Finish InventoryPane items
 Add wait between attacks
 Add animation to attacks
 Memo: isKeyDown can be used to check for ctrl in hotkeys
-
 
 Implement adjacent maps and boundaries expressed by fences and gates; entry/exit points coded in
 Code in arraylist of enemies to randomly generate, as well as items to give, pairings, size of party, etc.

@@ -2,6 +2,8 @@ package map;
 
 import java.awt.Point;
 
+import tile.TransitionTile;
+
 public class Transition {
 
 	private String sprite;

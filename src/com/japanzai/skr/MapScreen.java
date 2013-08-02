@@ -3,10 +3,7 @@ package com.japanzai.skr;
 import java.io.IOException;
 
 import interfaces.SlickDrawableFrame;
-import map.CharacterTile;
-import map.InteractiveTile;
 import map.ParentMap;
-import map.Tile;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.GameContainer;
@@ -18,8 +15,11 @@ import org.newdawn.slick.state.StateBasedGame;
 import screen.GameScreen;
 import screen.MapConsole;
 import screen.SlickGameState;
-
-import character.NonPlayableCharacter;
+import tile.CharacterEventTile;
+import tile.CharacterTile;
+import tile.EventTile;
+import tile.InteractiveTile;
+import tile.Tile;
 
 public class MapScreen extends SlickGameState{
 	
@@ -160,14 +160,13 @@ public class MapScreen extends SlickGameState{
 		
 		if (getParentMap().tileExists(x, y)){
 			Tile t = getParentMap().getTileByPosition(x, y);
-			if (t instanceof InteractiveTile){
-				InteractiveTile tile = (InteractiveTile)t;
-				tile.interact(getParentMap().getFrame());
-			}else if (t instanceof CharacterTile){
+			if (t instanceof CharacterTile || t instanceof CharacterEventTile){
 				CharacterTile tile = (CharacterTile)t;
 				tile.face(dir);
-				NonPlayableCharacter c = tile.getCharacter();				
-				getParentMap().getFrame().WriteOnMap(c.getDialogue());
+				tile.interact(parent);
+			}else if (t instanceof InteractiveTile || t instanceof EventTile){
+				InteractiveTile tile = (InteractiveTile)t;
+				tile.interact(getParentMap().getFrame());
 			}
 		}
 		
@@ -207,7 +206,7 @@ public class MapScreen extends SlickGameState{
 			console.keyReleased(code, arg1);
 		}else {
 			if (code == MENU){
-				super.parent.swapToMenu();
+				super.parent.swapView(SlickSKR.MENU);
 			}else if (code == QUIT){
 				//TODO: make exit prompt
 				System.exit(0);

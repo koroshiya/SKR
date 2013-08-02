@@ -1,5 +1,8 @@
 package map;
 
+import tile.ChestTile;
+import tile.Tile;
+
 public class RandomTile {
 	
 	private Tile t;

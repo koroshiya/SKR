@@ -3,9 +3,6 @@ import java.io.Serializable;
 
 import interfaces.NPC;
 
-import screen.GameScreen;
-
-
 import com.japanzai.skr.Dialogue;
 import com.japanzai.skr.Gender;
 
@@ -30,21 +27,7 @@ public class NonPlayableCharacter extends Character implements NPC, Serializable
 		}
 		
 	}
-	
-	public void getDialogueLine(int lineNumber){
-		if (canGetNextLine()){printText();}
-	}
-	
-	public boolean getDialogueNextLine(){
 		
-		if (canGetNextLine()){
-			printText();
-			return true;
-		}
-		return false;
-		
-	}
-	
 	public boolean canGetNextLine(){
 		return dialogue.moreDialogue();
 	}
@@ -52,12 +35,6 @@ public class NonPlayableCharacter extends Character implements NPC, Serializable
 	public void resetDialogue(){
 		this.dialogue.reset();
 	}
-	
-	private void printText(){
-		GameScreen.WriteOnScreen(dialogue.speak(), this.getFirstName());
-		dialogue.increment();
-	}
-
 	
 	public Dialogue getDialogue() {
 		return this.dialogue;

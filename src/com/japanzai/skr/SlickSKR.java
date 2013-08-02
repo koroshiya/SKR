@@ -1,9 +1,9 @@
 package com.japanzai.skr;
 
 import map.ParentMap;
+import menu.CharacterProfileWindow;
+import menu.InventoryWindow;
 import menu.MenuMainWindow;
-import menu.character.CharacterProfileWindow;
-import menu.inventory.InventoryWindow;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -19,6 +19,7 @@ public class SlickSKR extends StateBasedGame {
 	public static final int MENU = 2;
 	public static final int INVENTORY = 3;
 	public static final int CHARACTER = 4;
+	public static final int MAINMENU = 664;
 	public static final int CONTROLSCREEN = 665;
 	public static final int GAMEOVER = 666;
 	

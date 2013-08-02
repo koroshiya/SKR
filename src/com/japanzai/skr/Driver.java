@@ -23,15 +23,10 @@ import org.newdawn.slick.SlickException;
 import com.japanzai.jreader.Pairing;
 import com.japanzai.jreader.dialog.JxDialog;
 
-import map.CharacterTile;
-import map.ChestTile;
 import map.MapGenerator;
 import map.ParentMap;
-import map.PresetTile;
 import map.RandomTile;
-import map.Tile;
 import map.TileGenerator;
-import map.TransitionTile;
 
 import character.BossCharacter;
 import character.EnemyCharacter;
@@ -43,6 +38,13 @@ import screen.MessageBox;
 import technique.CombatTechnique;
 import technique.HealingTechnique;
 import technique.Technique;
+import tile.CharacterEventTile;
+import tile.CharacterTile;
+import tile.ChestTile;
+import tile.EventTile;
+import tile.PresetTile;
+import tile.Tile;
+import tile.TransitionTile;
 
 import animation.AnimatedSprite;
 
@@ -309,14 +311,8 @@ public class Driver implements Serializable{
 		destination = new ParentMap(coordinates, newCurPos, Party.getCharacterByIndex(0),
 				animatedSprite, bossEnemies, bs, mapSize, 5, mud);	
 		destination.setTiles(deadTile);
-
 		
-		//bs.setFocusable(true);
-		//bs.setMap(current);
 		bs.start();
-		//bs.setBattle(enemies);
-		//bs.start();
-		//SlickSKR skr = new SlickSKR();
 		
 	}
 	
@@ -349,8 +345,9 @@ public class Driver implements Serializable{
 	}
 	
 	private ArrayList<PresetTile> basicPresetTiles(ParentMap current, ParentMap destination) throws IOException, SlickException{
-				
+
 		String imgNPC = ("/res/enemy/militia/");
+		//String imgNPC = ("/res/enemy/militia/right2.png");
 		String imgKoro = ("/res/enemy/koro/");
 		String tilePic = ("/res/terrain/border/borderExitTop.png");
 		String grassPic = ("/res/terrain/grass.png");
@@ -358,7 +355,8 @@ public class Driver implements Serializable{
 		ArrayList<String> dialogue = new ArrayList<String>();
 		dialogue.add("Hello there, Ken.");
 		dialogue.add("This game really lacks content, doesn't it?");
-		Tile tileNPC = NPC(imgNPC, dialogue);
+		//Tile tileNPC = NPC(imgNPC, dialogue);
+		CharacterEventTile tileNPC = new CharacterEventTile(imgNPC, InteractiveNPC(imgNPC, dialogue), SlickSKR.MENU);
 		PresetTile preTile1 = new PresetTile(tileNPC, 1, 5);
 		
 		Tile basicTile = new Tile(true, true, grassPic, 16, 12);
@@ -439,6 +437,16 @@ public class Driver implements Serializable{
 		npc.getDialogue().addLines(d, npc);
 		
 		return new CharacterTile(imgNPC, npc);
+		
+	}
+	
+	private NonPlayableCharacter InteractiveNPC(String imgNPC, ArrayList<String> d) throws SlickException{
+		
+		NonPlayableCharacter npc = new NonPlayableCharacter("Random", "NPC", genders.get(0), null, "NPC", "/res/");
+		//Dialogue dialogue = new Dialogue(d, npc); //Character hasn't been created yet
+		npc.getDialogue().addLines(d, npc);
+		
+		return npc;
 		
 	}
 	
