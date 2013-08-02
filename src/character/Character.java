@@ -61,7 +61,6 @@ public class Character implements Photogenic, Serializable{
 	public String getAvatar() throws SlickException{
 		return (this.spriteDirectory + "avatar.png");
 	}
-
 	
 	@Override
 	public Image getCache() {

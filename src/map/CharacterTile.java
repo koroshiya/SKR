@@ -27,7 +27,7 @@ public class CharacterTile extends Tile implements InteractableObject {
 
 		this.forward = (spritePath + "forward2.png");
 		this.backward = (spritePath + "backward2.png");
-		this.left = (spritePath + "left2.png");
+		this.left = (spritePath + "right2.png");
 		this.right = (spritePath + "left2.png");
 		
 	}

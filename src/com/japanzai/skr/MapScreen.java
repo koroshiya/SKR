@@ -190,7 +190,7 @@ public class MapScreen extends SlickGameState{
 				}else if (code == Input.KEY_DOWN){
 					getParentMap().moveDown();
 				}else {
-					System.out.println(code);
+					//System.out.println("MapScreen KeyPressed: " + code);
 				}
 			}catch (Exception ex){
 				ex.printStackTrace();
@@ -207,23 +207,21 @@ public class MapScreen extends SlickGameState{
 			console.keyReleased(code, arg1);
 		}else {
 			if (code == MENU){
-				getParentMap().getFrame().swapToMenu();
+				super.parent.swapToMenu();
 			}else if (code == QUIT){
-				//exit
 				//TODO: make exit prompt
 				System.exit(0);
 			}else if (code == INTERACT){
 				try {
 					interact();
 				} catch (SlickException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}else if (code == FULLSCREEN){
 				GameScreen parent = getParentMap().getFrame();
 				parent.setFullScreen();
 			}else {
-				//System.out.println(code);
+				System.out.println("MapScreen KeyReleased: " + code);
 			}
 		}
 		

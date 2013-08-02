@@ -124,6 +124,8 @@ public class CharacterProfileWindow extends SlickGameState{
 			startY += y;
 		}
 		
+		super.init(arg0, arg1);
+		
 	}
 
 	@Override

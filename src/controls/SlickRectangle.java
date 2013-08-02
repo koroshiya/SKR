@@ -67,12 +67,14 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	
 	@Override
 	public void paint(Graphics g) {
-		Color temp = g.getColor();
-		g.setColor(Color.black);
-		g.fill(this);
-		g.setColor(temp);
-		g.draw(this);
-		g.drawString(displayText, x, y);
+		if (enabled){
+			Color temp = g.getColor();
+			g.setColor(Color.black);
+			g.fill(this);
+			g.setColor(temp);
+			g.draw(this);
+			g.drawString(displayText, x, y);
+		}
 	}
 	
 }

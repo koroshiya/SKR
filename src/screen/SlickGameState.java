@@ -18,15 +18,12 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	}
 	
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
-		this.parent.getInput().addKeyListener(this);
-		this.parent.getInput().addMouseListener(this);
-	}
-
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {}
+	
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {}
-
+	
 	@Override
 	public int getID() {return state;}
-
+		
 }

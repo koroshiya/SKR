@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -15,27 +16,18 @@ import screen.SlickGameState;
 import character.PlayableCharacter;
 
 import com.japanzai.skr.Driver;
+import com.japanzai.skr.Party;
 
 import controls.SlickRectangle;
 
 public class MenuMainWindow extends SlickGameState{
-	
-	public static final String INVENTORY = "Inventory [I]";
-	public static final String EQUIPMENT = "Equipment [E]";
-	public static final String CHARACTERS = "Characters [C]";
-	public static final String BACKLOG = "Backlog";
-	public static final String SAVE = "Save [S]";
-	public static final String LOAD = "Load [L]";
-	public static final String EXIT = "Exit [W]";
-	public static final String QUIT = "Quit [Esc]";
-	public static final int MENU_ITEM_HEIGHT = 50;
-	
-	Object[][] MENU_ITEMS = {{INVENTORY, 1 * MENU_ITEM_HEIGHT}, {EQUIPMENT, 2 * MENU_ITEM_HEIGHT}, 
-			{CHARACTERS, 3 * MENU_ITEM_HEIGHT}, {BACKLOG, 4 * MENU_ITEM_HEIGHT},
-			{SAVE, 5 * MENU_ITEM_HEIGHT}, {LOAD, 6 * MENU_ITEM_HEIGHT}, 
-			{EXIT, 7 * MENU_ITEM_HEIGHT}, {QUIT, 8 * MENU_ITEM_HEIGHT}};
+		
 	private SlickRectangle[] menuItems;
 	private SlickRectangle[] menuCharacters;
+	private String[] commands = {"Inventory [I]", "Equipment [E]", "Characters [C]", 
+									"Backlog [B]", "Save [S]", "Load [L]", "Exit [W]", "Quit [Esc]"};
+	private int[] keys = {Input.KEY_I, Input.KEY_E, Input.KEY_C, Input.KEY_B, 
+							Input.KEY_S, Input.KEY_L, Input.KEY_W, Input.KEY_ESCAPE};
 	
 	ArrayList<PlayableCharacter> characters;
 
@@ -47,20 +39,19 @@ public class MenuMainWindow extends SlickGameState{
 	
 	public void menuItemPane(Graphics g) throws SlickException{
 			
-		float x = 350;
-		float y = 0;
+		final float x = 350;
+		final float y = 50;
 				
 		int textx;		
 		int texty;
 		
 		String s = "";
-		for (int i = 0; i < MENU_ITEMS.length; i++){
-			s = (String) MENU_ITEMS[i][0];
+		for (int i = 0; i < menuItems.length; i++){
+			s = (String) menuItems[i].getTag();
 			g.draw(menuItems[i]);
 			textx = g.getFont().getWidth(s);
 			texty = g.getFont().getHeight(s);
-			g.drawString(s, x + (450 - textx) / 2, y + texty);
-			y += 50f;
+			g.drawString(s, x + (450 - textx) / 2, i * y + texty);
 		}
 					
 	}
@@ -95,10 +86,30 @@ public class MenuMainWindow extends SlickGameState{
 			y += 150f;
 		}
 	}	
-
+	
 	@Override
-	public void render(GameContainer gc, StateBasedGame arg1, Graphics g)
-			throws SlickException {
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
+		
+		final float x = 350;
+		final float y = 50;
+
+		String s = "";
+		menuItems = new SlickRectangle[commands.length];
+		for (int i = 0; i < commands.length; i++){
+			s = (String) commands[i];
+			menuItems[i] = new SlickRectangle(x, i * y, 450, y, s);
+		}
+		
+		characters = Party.getCharacters();
+		menuCharacters = new SlickRectangle[characters.size()];
+		for (int i = 0; i < menuCharacters.length; i++){
+			characters.get(i).instantiate();
+			menuCharacters[i] = new SlickRectangle(0, 150 * i, x, 150, Integer.toString(i));
+		}
+	}
+	
+	@Override
+	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
 		
 		menuItemPane(g);
 		characterPane(g);
@@ -133,20 +144,57 @@ public class MenuMainWindow extends SlickGameState{
 			}catch (NumberFormatException nfe){
 				nfe.printStackTrace();
 			}
-		}else if (s.equals(EXIT)){
+		}else if (s.equals(commands[6])){
 			parent.swapToMap();
-		}else if (s.equals(CHARACTERS)){
+		}else if (s.equals(commands[2])){
 			parent.swapToCharacterWindow();
-		}else if (s.equals(INVENTORY)){
+		}else if (s.equals(commands[0])){
 			parent.swapToInventory();
-		}else if (s.equals(QUIT)){
+		}else if (s.equals(commands[7])){
 			Driver.quit();
-		}else if (s.equals(SAVE)){
+		}else if (s.equals(commands[4])){
 			Driver.save();
-		}else if (s.equals(LOAD)){
+		}else if (s.equals(commands[5])){
 			Driver.load();
 		}
 		
 	}
-
+	
+	@Override
+	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
+		
+		try {
+			processMouseClick(arg3, arg1, arg2);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Override
+	public void keyReleased(int code, char arg1) {
+		System.out.println("MainMenuWindow: " + code);
+		try {
+			if (code == (keys[6])){
+				parent.swapToMap();
+			}else if (code == (keys[2])){
+				parent.swapToCharacterWindow();
+			}else if (code == (keys[0])){
+				parent.swapToInventory();
+			}else if (code == (keys[7])){
+				Driver.quit();
+			}else if (code == (keys[4])){
+				Driver.save();
+			}else if (code == (keys[5])){
+				Driver.load();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

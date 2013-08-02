@@ -79,52 +79,32 @@ public class Dialogue implements Serializable{
 		}
 	}
 	
-	public String speak(){
-		
-		return dialogLine;
-		
-	}
+	public String speak(){return dialogLine;}
 	
 	public boolean isQuestion(){
 		if (this.counter >= this.max){return false;}
 		return this.dialogue.get(this.counter).isQuestion();
 	}
 		
-	public boolean moreDialogue(){
-
-		System.out.println("Max: " + this.max);
-		System.out.println("Count: " + counter);
-		return this.counter < this.max - 1;
-		
-	}
+	public boolean moreDialogue(){return this.counter < this.max - 1;}
 	
-	public String getAvatar() throws SlickException{
-		return this.dialogue.get(this.counter).getAvatar();
-	}
+	public String getAvatar() throws SlickException{return this.dialogue.get(this.counter).getAvatar();}
 	
-	public Image getCache(){
-		return this.cache;
-	}
+	public Image getCache(){return this.cache;}
 	
-	public void increment(){
-		
-		setCounter(counter == max ? max : counter + 1);
-		
-	}
+	public void increment(){setCounter(counter == max ? max : counter + 1);}
 	
-	public boolean canGoBack(){
-		return this.counter > 0;
-	}
+	public boolean canGoBack(){return this.counter >= 0;}
 	
 	public void back(){
-		if (this.counter > 0){
+		if (this.counter == 0){
+			setCounter(this.counter - 1);
+		}else if (this.counter > 0){
 			setCounter(this.counter - 2);
 		}
 	}
 	
-	public void reset(){
-		setCounter(-1);
-	}
+	public void reset(){setCounter(-1);}
 	
 	private void setCounter(int count){
 		this.counter = count;
@@ -140,9 +120,7 @@ public class Dialogue implements Serializable{
 		}
 	}
 	
-	public int getCounter() {
-		return this.counter;
-	}
+	public int getCounter() {return this.counter;}
 	
 	public void addLines(ArrayList<Line> d) {
 		for (Line l : d){

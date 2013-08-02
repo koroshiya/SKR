@@ -10,7 +10,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameOver;
-import screen.GameScreen;
 
 public class SlickSKR extends StateBasedGame {
 
@@ -26,7 +25,7 @@ public class SlickSKR extends StateBasedGame {
 	public static final boolean DEBUG_MODE = true;
 	
 	public SlickSKR(ParentMap current) throws SlickException{
-
+		
 		super(GAME_NAME);
 		this.addState(new BattleScreen(BATTLE, current.getFrame()));
 		this.addState(new MapScreen(MAP, current));
@@ -37,20 +36,8 @@ public class SlickSKR extends StateBasedGame {
 		
 	}
 	
-	public SlickSKR(){
-
-		super(GAME_NAME);
+	public SlickSKR(){super(GAME_NAME);}
 		
-	}
-	
-	public void setSKR(GameScreen gs, ParentMap current){
-
-		//this.addState(new BattleScreen(BATTLE));
-		MapScreen ms = new MapScreen(MAP, current);
-		this.addState(ms);
-		
-	}
-	
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		

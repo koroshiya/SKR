@@ -123,7 +123,6 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 
 	@Override
 	public void mouseReleased(int arg0, int arg1, int arg2) {
-		System.out.println("MapConsole: mouseReleased");
 		try {
 			this.processMouseClick(1, arg1, arg2);
 		} catch (ClassNotFoundException e) {
@@ -134,7 +133,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	}
 	
 	public void process(String tag) {
-		System.out.println("MapConsole: process");
+		
 		try{
 			if (tag.equals(tags[0])){
 				back();
@@ -152,9 +151,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	}
 	
 	@Override
-	public void keyReleased(int arg0, char arg1) {
-		int code = arg0;
-		System.out.println(code);
+	public void keyReleased(int code, char arg1) {
 		try{
 			if (code == INTERACT){
 				next();

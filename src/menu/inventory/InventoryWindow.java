@@ -9,6 +9,7 @@ import item.Weapon;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.geom.Rectangle;
@@ -17,6 +18,8 @@ import screen.GameScreen;
 import screen.SlickGameState;
 
 import com.japanzai.skr.Inventory;
+
+import controls.SlickRectangle;
 
 public class InventoryWindow extends SlickGameState {
 
@@ -31,36 +34,31 @@ public class InventoryWindow extends SlickGameState {
 
 	private ArrayList<Item> results = new ArrayList<Item>();
 
-	public static final String ALL = "All Items";
-	public static final String CONSUMABLES = "Consumables";
-	public static final String WEAPONS = "Weapons";
-	public static final String MISC = "Miscellaneous";
-	public static final int MENU_ITEM_HEIGHT = 50;
-	public static final Object[][] MENU_ITEMS = {{ALL, 1 * MENU_ITEM_HEIGHT},
-													{CONSUMABLES, 2 * MENU_ITEM_HEIGHT}, 
-													{WEAPONS, 3 * MENU_ITEM_HEIGHT},
-													{MISC, 4 * MENU_ITEM_HEIGHT}};
+	private String[] commands = {"All Items [A]", "Consumables [C]", "Weapons [W]", "Miscellaneous [M]", "Back to Menu [B]"};
+	private SlickRectangle[] menuItems;
 	
 	private Item item;
 	
 	public InventoryWindow(int state, GameScreen parent){
 		
 		super(state, parent);
-		setFilter(ALL);
+		setFilter(commands[0]);
 		lblMoney = "Funds: " + Inventory.getMoney() + " yen";
 		
 	}
 	
 	public void setFilter(String filter){
 		
-		if (filter.equals(ALL)){
+		if (filter.equals(commands[0])){
 			results = Inventory.getItemsInInventory();
-		}else if (filter.equals(CONSUMABLES)){
+		}else if (filter.equals(commands[1])){
 			results = Inventory.getConsumablesAsItems();
-		}else if (filter.equals(WEAPONS)){
+		}else if (filter.equals(commands[2])){
 			results = Inventory.getWeaponsAsItems();
-		}else if (filter.equals(MISC)){
+		}else if (filter.equals(commands[3])){
 			results = Inventory.getMiscAsItems();
+		}else if (filter.equals(commands[4])){
+			this.parent.swapToMenu();
 		}else {
 			System.out.println("Error: This code should never be reached.");
 			System.out.println("Unhandled filter type: " + filter);
@@ -74,7 +72,7 @@ public class InventoryWindow extends SlickGameState {
 		//Dimension size = new Dimension(300, 550);
 	
 		float x = 0;
-		float y = 0;
+		float y = 50;
 					
 		int textx;		
 		int texty;
@@ -83,15 +81,13 @@ public class InventoryWindow extends SlickGameState {
 		g.draw(pane);
 		
 		String s = "";
-		for (int i = 0; i < MENU_ITEMS.length; i++){
-			s = (String) MENU_ITEMS[i][0];
-			Rectangle rect = new Rectangle(x, y, 300f, 50f);
+		for (int i = 0; i < commands.length; i++){
+			s = commands[i];
+			Rectangle rect = new Rectangle(x, y * i, 300f, 50f);
 			g.draw(rect);
 			textx = g.getFont().getWidth(s);
 			texty = g.getFont().getHeight(s);
-			g.drawString(s, x + (300 - textx) / 2, y + texty);
-
-			y += MENU_ITEM_HEIGHT;
+			g.drawString(s, x + (300 - textx) / 2, y * i + texty);
 		}
 			
 	}
@@ -124,11 +120,11 @@ public class InventoryWindow extends SlickGameState {
 	
 	public void getMoneyPane(Graphics g){
 		
-		float x = 0f;
-		float y = 550f;
+		final float x = 0f;
+		final float y = 550f;
 		
-		float maxX = 300f;
-		float maxY = 600f;
+		final float maxX = 300f;
+		final float maxY = 600f;
 		
 		Rectangle pane = new Rectangle(x, y, maxX, maxY);
 		g.draw(pane);
@@ -138,8 +134,6 @@ public class InventoryWindow extends SlickGameState {
 	}
 	
 	public void getInventorySelectedItem(Graphics g){
-		
-		//500, 100
 		
 		float x = 410;
 		float y = 0;
@@ -157,8 +151,6 @@ public class InventoryWindow extends SlickGameState {
 		String s = "";
 		for (int i = 0; i < labels.length; i++){
 			s = labels[i];
-			//Rectangle rect = new Rectangle(x, y, 250f, baseX);
-			//g.draw(rect);
 			g.drawString(s, x + optX, y);
 
 			optX = optX == 0 ? baseX : 0;
@@ -173,6 +165,10 @@ public class InventoryWindow extends SlickGameState {
 		
 		setItem(0);
 		Inventory.initialize();
+		menuItems = new SlickRectangle[commands.length];
+		for (int i = 0; i < commands.length; i++){
+			menuItems[i] = new SlickRectangle(0, 50 * i, 300, 50, commands[i]);
+		}
 		
 	}
 
@@ -240,56 +236,46 @@ public class InventoryWindow extends SlickGameState {
 		this.lblPotency = ("Potency: " + strPotency);
 		
 	}
-	
-	public void process(int x, int y){
 		
-		if (x <= 300){
-			String command = null;
-			if (y <= 50){
-				command = InventoryWindow.ALL;
-			} else if (y <= 100){
-				command = InventoryWindow.CONSUMABLES;
-			} else if (y <= 150){
-				command = InventoryWindow.WEAPONS;
-			} else if (y <= 200){
-				command = InventoryWindow.MISC;
+	@Override
+	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
+		
+		for (SlickRectangle s : menuItems){
+			if (s.isWithinBounds(x, y)){
+				this.setFilter(s.getTag());
+				break;
 			}
-			if (command != null){
-				this.setFilter(command);
-			}
-			
 		}
 		
-		/*Object source = arg0.getSource();
-		
-		//TODO: separate into filters and menu items
-		
-		if (source instanceof JLabel){
-			
-			JLabel label = (JLabel) source;
-			String command = label.getName();
-			
-			
-			
-			if (command.equals(InventoryWindow.ALL) || 
-					command.equals(InventoryWindow.CONSUMABLES) || 
-					command.equals(InventoryWindow.WEAPONS) || 
-					command.equals(InventoryWindow.MISC)){
-				parent.setFilter(command);
-			}else {
-				System.out.println(label.getName());
-				parent.setItem(command);
-			}
-			
-		}*/
-		
 	}
-
 	
 	@Override
-	public void processMouseClick(int clickCount, int x, int y)
-			throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
+	public void keyReleased(int code, char arg1) {
+		
+		if (code == Input.KEY_A){
+			this.setFilter(commands[0]);
+		}else if (code == Input.KEY_C){
+			this.setFilter(commands[1]);
+		}else if (code == Input.KEY_W){
+			this.setFilter(commands[2]);
+		}else if (code == Input.KEY_M){
+			this.setFilter(commands[3]);
+		}else if (code == Input.KEY_B){
+			this.setFilter(commands[4]);
+		}
+		
+	}
+	
+	@Override
+	public void mouseReleased(int arg0, int x, int y) {
+		
+		try {
+			processMouseClick(1, x, y);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	

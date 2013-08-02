@@ -1,7 +1,5 @@
 package screen;
 
-import interfaces.SlickEventHandler;
-
 import javax.swing.JOptionPane;
 
 import org.newdawn.slick.AppGameContainer;
@@ -10,8 +8,6 @@ import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import map.ParentMap;
-import menu.MenuItemListener;
-import menu.MenuMainWindow;
 
 import battle.Battle;
 import character.EnemyCharacter;
@@ -28,6 +24,11 @@ public class GameScreen extends AppGameContainer{
 	public GameScreen(SlickSKR skr) throws SlickException{
 		
 		super(skr);
+		
+	}
+	
+	public void setSKR(SlickSKR skr){
+		super.game = skr;
 		this.setVSync(true);
 		this.setSmoothDeltas(true);
 		this.setUpdateOnlyWhenVisible(true);
@@ -41,84 +42,30 @@ public class GameScreen extends AppGameContainer{
 		}catch (SlickException ex){
 			ex.printStackTrace();
 		}
-		
-	}
-	
-	public void setSKR(SlickSKR skr){
-		super.game = skr;
 	}
 			
-	public void swapToBattle() throws SlickException{
-		
-		swapView(SlickSKR.BATTLE);
-		//MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
-		//this.getInput().addKeyListener(ml);
-		//this.getInput().addMouseListener(ml);
-		
-	}
+	public void swapToBattle(){swapView(SlickSKR.BATTLE);}
 	
-	public void swapToMenu(){
-		
-		swapView(SlickSKR.MENU);
-		MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
-		this.getInput().addKeyListener(ml);
-		this.getInput().addMouseListener(ml);
-		
-	}
+	public void swapToMenu(){swapView(SlickSKR.MENU);}
 	
-	public void swapToMap(){
-		
-		swapView(SlickSKR.MAP);
-		
-		getInput().addKeyListener(getState());
-		getInput().addMouseListener(getState());
-		
-	}
+	public void swapToMap(){swapView(SlickSKR.MAP);}
 	
-	public void swapToCharacterWindow(){
-		swapView(SlickSKR.CHARACTER);
-		MenuItemListener ml = new MenuItemListener(this, (SlickEventHandler) getState(4));
-		
-		getInput().addKeyListener(ml);
-		getInput().addMouseListener(ml);
-	}
+	public void swapToCharacterWindow(){swapView(SlickSKR.CHARACTER);}
 	
-	public void swapToInventory(){
-		
-		swapView(SlickSKR.INVENTORY);
-		MenuItemListener ml = new MenuItemListener(this, (MenuMainWindow) getState(2));
-		
-		getInput().addKeyListener(ml);
-		//getInput().addMouseListener(ml);
-		
-	}
+	public void swapToInventory(){swapView(SlickSKR.INVENTORY);}
 	
-	public void swapView(int i){
-
-		((StateBasedGame)super.game).enterState(i);
-		removeListeners();
-		
-	}
+	public void swapView(int i){((StateBasedGame)super.game).enterState(i);}
 	
-	public int getStateIndex(){
-		return ((StateBasedGame)super.game).getCurrentStateID();
-	}
+	public int getStateIndex(){return ((StateBasedGame)super.game).getCurrentStateID();}
 	
-	public GameState getState(){
-		return ((StateBasedGame)super.game).getCurrentState();
-	}
+	public GameState getState(){return ((StateBasedGame)super.game).getCurrentState();}
 	
-	public GameState getState(int i){
-		
-		return ((StateBasedGame)super.game).getState(i);
-		
-	}
+	public GameState getState(int i){return ((StateBasedGame)super.game).getState(i);}
 			
 	public void setBattle(ArrayList<EnemyCharacter> arrayList){
 		
 		//((StateBasedGame)super.game).addState(new Battle(arrayList, this));
 		((StateBasedGame)super.game).enterState(SlickSKR.BATTLE);
-		removeListeners();
 		
 	}
 	
@@ -140,9 +87,7 @@ public class GameScreen extends AppGameContainer{
 				
 	}
 		
-	public boolean isInBattle(){
-		return getState() instanceof Battle;
-	}
+	public boolean isInBattle(){return getState() instanceof Battle;}
 	
 	public void WriteOnMap(Dialogue dialogue) throws SlickException{
 		
@@ -150,21 +95,11 @@ public class GameScreen extends AppGameContainer{
 		
 		if (comp instanceof MapScreen){
 			
-			//removeListeners();
 			MapConsole console = new MapConsole(null, dialogue, this);
-
-			//getInput().addMouseListener(console);
-			//getInput().addKeyListener(console);
 			((MapScreen)comp).setMapConsole(console);
 			console.converse();
 			
 		}
-		
-	}
-	
-	public void removeListeners(){
-		
-		this.getInput().removeAllListeners();
 		
 	}
 	
@@ -218,7 +153,7 @@ public class GameScreen extends AppGameContainer{
 	public void setMap(ParentMap map) throws SlickException {
 		((MapScreen) getState(0)).setMap(map);
 	}
-
+	
 	public void removeMapConsole(){
 		
 		GameState comp = getState();
