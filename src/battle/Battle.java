@@ -41,7 +41,7 @@ public class Battle extends SlickGameState{
 	private PlayableCharacter currentCharacter;
 	
 	private SlickRectangle[] rects;
-	private SlickRectangle[] display; //TODO: change into two-column menu? eg. attack on left, targets on right
+	//private SlickRectangle[] display; //TODO: change into two-column menu? eg. attack on left, targets on right
 	private final String[] commands = {"Attack", "Techniques", "Inventory", "Run", "Back"};
 	
 	private final int ALLY_MODE = 222;
@@ -53,6 +53,11 @@ public class Battle extends SlickGameState{
 	
 	private Technique tech;
 	private Item item;
+
+	final int buttonWidth = 150;
+	final int buttonHeight = 25;
+	final int startX = 650;
+	final int startY = 484;
 	
 	/**
 	 * TODO: test furybreak
@@ -193,6 +198,11 @@ public class Battle extends SlickGameState{
 			c.startBattle();
 		}
 		
+		this.currentCharacter = Party.getCharacters().get(0);
+		
+		setMenu();
+		BattleConsole.cleanConsole();
+		
 	}
 	
 	@Override
@@ -201,6 +211,7 @@ public class Battle extends SlickGameState{
 		this.drawBattlePane(g);
 		this.drawBattleParticipants(g);
 		for (SlickRectangle rect : rects){rect.paint(g);}
+		BattleConsole.paint(g);
 		
 	}
 	
@@ -258,10 +269,14 @@ public class Battle extends SlickGameState{
 	@Override
 	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
 		
-		for (SlickRectangle rect : display){
+		for (SlickRectangle rect : rects){
 			if (rect.isWithinBounds(x, y)){
-				//TODO: implement
-				System.out.println("BattleMenu test click");
+				try {
+					process(rect.getTag());
+				} catch (SlickException e) {
+					e.printStackTrace();
+				}
+				break;
 			}
 		}
 	}
@@ -271,55 +286,48 @@ public class Battle extends SlickGameState{
 		this.currentCharacter = c;
 		//this.mode = this.MENU_MODE;
 		
-		final int buttonWidth = 150;
-		final int buttonHeight = 25;
-		final int startX = 650;
-		int startY = 484;
+		setMenu();
+		//display = rects.clone();
+		
+	}
+	
+	private void setMenu(){
 		
 		rects = new SlickRectangle[4];
-		String attackTag = c.getTemper() < 10 ? commands[0] : "Fury Break!";
+		String attackTag = this.currentCharacter.getTemper() < 10 ? commands[0] : "Fury Break!";
 		try {
 			rects[0] = new SlickRectangle(startX, startY, buttonWidth, buttonHeight, commands[0], false, attackTag);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 		for (int i = 1; i < rects.length; i++){
-			startY += 2;
 			try {
-				rects[i] = new SlickRectangle(startX, startY, buttonWidth, buttonHeight ,commands[i], false);
+				rects[i] = new SlickRectangle(startX, startY + buttonHeight * i, buttonWidth, buttonHeight, commands[i], false);
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}
 		}
-
-		rects[1].setEnabled(c.getUsableTechniques().size() > 0);
+		
+		rects[0].setEnabled(true);
+		rects[1].setEnabled(this.currentCharacter.getUsableTechniques().size() > 0);
 		rects[2].setEnabled(Inventory.getConsumables().size() > 0);
-		rects[3].setEnabled(!(this.enemies.get(0) instanceof BossCharacter));
-		
-		display = rects.clone();
-		
+		if (this.enemies.size() > 0){
+			rects[3].setEnabled(!(this.enemies.get(0) instanceof BossCharacter));
+		}
+	}
+	
+	private SlickRectangle setMenuItem(int i) throws SlickException{
+		return new SlickRectangle(startX, startY + buttonHeight * i, buttonWidth, buttonHeight, "");
 	}
 	
 	public void resetDefaultInterface(){
 		
 		//this.mode = this.MENU_MODE;
 		
-		final int buttonWidth = 150;
-		final int buttonHeight = 25;
-		final int startX = 650;
-		int startY = 484;
-		
-		rects = new SlickRectangle[4];
-		for (int i = 0; i < rects.length; i++){
-			try {
-				rects[i] = new SlickRectangle(startX, startY, buttonWidth, buttonHeight ,commands[i], false);
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
-			startY += 2;
+		if (this.currentCharacter != null){
+			setMenu();
 		}
-		
-		display = rects.clone();
+		//display = rects.clone();
 		
 	}
 	
@@ -345,87 +353,142 @@ public class Battle extends SlickGameState{
 		return false;
 	}
 	
-	public void process(String command){
+	public void process(String command) throws SlickException{
 		if (mode == this.ALLY_MODE){
-			for (PlayableCharacter c : Party.getCharactersInParty()){
-				if (c.getName().equals(command)){
-					if (test(c)){
-						this.currentCharacter.healAlly(c, (HealingTechnique)this.tech, (ConsumableItem)this.item, this.currentCharacter); //add check for appropriate type here
-					}else{
-						String type = this.tech != null ? "technique" : "item";
-						alert(c, type);
-					}
-				}
-			}
-			this.item = null;
-			this.tech = null;
-			resetDefaultInterface();
-			try {
-				start(); //TODO: check if needed
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
-			
+			processAllyMode(command);
 		}else if (mode == this.ATTACK_MODE){
-			for (EnemyCharacter e : this.enemies){
-				if (e.getName().equals(command)){
-					if (this.tech != null){
-						this.currentCharacter.attack(e, (CombatTechnique)this.tech);
-					}else if (this.currentCharacter.getTemper() == 10){
-						this.currentCharacter.attack(e, this.currentCharacter.getFuryBreak());
-					}else{
-						this.currentCharacter.attack(e);
-					}
-				}
-			}
-			resetDefaultInterface();
-			try {
-				start();
-			} catch (SlickException e1) {
-				e1.printStackTrace();
-			}
+			processAttackMode(command);
 		}else if (mode == this.TECHNIQUE_MODE){
-			for (Technique t : this.currentCharacter.getUsableTechniques()){
-				if (t.getName().equals(command)){
-					if (t instanceof CombatTechnique){
-						CombatTechnique ct = (CombatTechnique) t;
-						//setNewInterface(this.currentCharacter, new BattleAttackListener(enemies, currentCharacter, this.menu, ct));
-						this.tech = ct;
-						this.mode = this.ATTACK_MODE;
-					}else if (t instanceof HealingTechnique){
-						HealingTechnique heal = (HealingTechnique) t;
-						//setNewInterface(this.currentCharacter, new BattleAllyListener(currentCharacter, this.menu, heal, null));
-						this.tech = heal;
-						this.mode = this.ALLY_MODE;
+			processTechniqueMode(command);
+		}else if (mode == this.ITEM_MODE){
+			processItemMode(command);
+		}else{ //TODO: turn to else if MENU_MODE?
+			processMenuMode(command);
+		}
+	}
+	
+	private void processAttackMode(String command) {
+		for (EnemyCharacter e : this.enemies){
+			if (e.getName().equals(command)){
+				if (this.tech != null){
+					this.currentCharacter.attack(e, (CombatTechnique)this.tech);
+				}else if (this.currentCharacter.getTemper() == 10){
+					this.currentCharacter.attack(e, this.currentCharacter.getFuryBreak());
+				}else{
+					this.currentCharacter.attack(e);
+				}
+				break;
+			}
+		}
+		this.tech = null;
+		this.mode = this.MENU_MODE;
+		resetDefaultInterface();
+		/*try {
+			start();
+		} catch (SlickException e1) {
+			e1.printStackTrace();
+		}*/
+	}
+	
+	private void processAllyMode(String command) {
+		for (PlayableCharacter c : Party.getCharactersInParty()){
+			if (c.getName().equals(command)){
+				if (test(c)){
+					this.currentCharacter.healAlly(c, (HealingTechnique)this.tech, (ConsumableItem)this.item, this.currentCharacter); //add check for appropriate type here
+				}else{
+					String type = this.tech != null ? "technique" : "item";
+					alert(c, type);
+				}
+				break;
+			}
+		}
+		this.item = null;
+		this.tech = null;
+		this.mode = this.MENU_MODE;
+		resetDefaultInterface();
+		/*try {
+			start();
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}*/
+	}
+	
+	private void processTechniqueMode(String command) throws SlickException{
+		for (Technique t : this.currentCharacter.getUsableTechniques()){
+			if (t.getName().equals(command)){
+				if (t instanceof CombatTechnique){
+					this.tech = t;
+					this.mode = this.ATTACK_MODE;
+					rects = new SlickRectangle[this.enemies.size()];
+					for (int i = 0; i < this.enemies.size(); i++){
+						rects[i] = setMenuItem(i);
+						rects[i].setText(this.enemies.get(i).getName());
+					}
+				}else if (t instanceof HealingTechnique){
+					this.tech = t;
+					this.mode = this.ALLY_MODE;
+					rects = new SlickRectangle[party.size()];
+					for (int i = 0; i < party.size(); i++){
+						rects[i] = setMenuItem(i);
+						rects[i].setText(party.get(i).getName());
 					}
 				}
-			}
-		}else if (mode == this.ITEM_MODE){
-			for (ConsumableItem t : Inventory.getConsumables()){
-				if (t.getName().equals(command)){
-					//setNewInterface(this.currentCharacter, new BattleAllyListener(currentCharacter, this.menu, null, t));
-					this.mode = this.ALLY_MODE;
-					this.item = t;
-				}
-			}
-		}else{ //TODO: turn to else if MENU_MODE?
-			if (command.equals(commands[0])){
-				//this.battleMenu.setNewInterface(this.currentCharacter, new BattleAttackListener(enemies, currentCharacter, this.battleMenu, null));
-			}else if (command.equals(commands[1])){
-				//this.battleMenu.setNewInterface(this.currentCharacter, this.currentCharacter.getUsableTechniques(), new BattleTechniqueListener(enemies, currentCharacter, this.battleMenu));
-			}else if (command.equals(commands[2])){
-				//setNewInterface(this.currentCharacter, Inventory.getConsumables(), new BattleItemListener(currentCharacter, this.battleMenu));
-				this.mode = this.ITEM_MODE;
-			}else if (command.equals(commands[3])){
-				MessageBox.InfoBox("Loser", "Running away?");
-				end();
-				//System.exit(0);
-			}else if (command.equals(commands[4])){
-				setDefaultInterface(this.currentCharacter);
+				break;
 			}
 		}
 	}
-
+	
+	private void processItemMode(String command) throws SlickException{
+		for (ConsumableItem t : Inventory.getConsumables()){
+			if (t.getName().equals(command)){
+				this.mode = this.ALLY_MODE;
+				this.item = t;
+				rects = new SlickRectangle[party.size()];
+				for (int i = 0; i < party.size(); i++){
+					rects[i] = setMenuItem(i);
+					rects[i].setText(party.get(i).getName());
+				}
+				break;
+			}
+		}
+	}
+	
+	private void processMenuMode(String command) throws SlickException{
+		if (command.equals(commands[0])){
+			System.out.println("attack");
+			mode = this.ATTACK_MODE;
+			rects = new SlickRectangle[this.enemies.size()];
+			for (int i = 0; i < this.enemies.size(); i++){
+				rects[i] = setMenuItem(i);
+				rects[i].setText(this.enemies.get(i).getName());
+			}
+		}else if (command.equals(commands[1])){
+			System.out.println("techniques");
+			mode = this.TECHNIQUE_MODE;
+			ArrayList<Technique> techs = this.currentCharacter.getTechniques();
+			rects = new SlickRectangle[techs.size()];
+			for (int i = 0; i < techs.size(); i++){
+				rects[i] = setMenuItem(i);
+				rects[i].setText(techs.get(i).getName());
+			}
+		}else if (command.equals(commands[2])){
+			System.out.println("items");
+			//setNewInterface(this.currentCharacter, Inventory.getConsumables(), new BattleItemListener(currentCharacter, this.battleMenu));
+			this.mode = this.ITEM_MODE;
+			ArrayList<Item> items = Inventory.getConsumablesAsItems();
+			rects = new SlickRectangle[items.size()];
+			for (int i = 0; i < items.size(); i++){
+				rects[i] = setMenuItem(i);
+				rects[i].setText(items.get(i).getName());
+			}
+		}else if (command.equals(commands[3])){
+			MessageBox.InfoBox("Loser", "Running away?");
+			end();
+			//System.exit(0);
+		}else if (command.equals(commands[4])){
+			setDefaultInterface(this.currentCharacter);
+		}
+	}
 	
 	public void setEnemies(ArrayList<EnemyCharacter> enemies) {
 		this.enemies = enemies;

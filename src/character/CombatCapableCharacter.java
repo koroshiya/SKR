@@ -111,7 +111,7 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 		double accuracy = this.currentAccuracy * this.weapon.getAccuracy();
 		boolean hit = calcAccuracy(accuracy) && !opponent.calcEvade();
 		
-		BattleConsole.writeConsole("");
+		BattleConsole.writeConsole("CombatCapableCharacter: Attacking");
 		dealDamage(hit, this.weapon.attack(), opponent);
 		
 		if (this instanceof PlayableCharacter){resetGauge();}
@@ -261,9 +261,8 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	public void levelUp(){
 	
 		this.level++;
-		if (BattleConsole.isInstantiated()){
-			BattleConsole.writeConsole(getName() + " went up to level " + this.level);
-		}
+		BattleConsole.cleanConsole();
+		BattleConsole.writeConsole(getName() + " went up to level " + this.level);
 		
 		int curHP = this.statHP;
 		this.statHP += levelUpBonus() + getGender().getHPBonus() + style.getHPBonus(); //Bigger bonus for HP?

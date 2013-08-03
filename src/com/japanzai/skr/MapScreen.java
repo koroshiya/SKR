@@ -70,16 +70,16 @@ public class MapScreen extends SlickGameState{
 			Tile tile = null;
 						
 			for (int i = -1; i < this.map.getCharacterPositionX() * 2 + 2; i++){
-								
+				float iDiff = (float)(i * ICON_SIZE - map.getXDiff());
 				for (int j = -1; j < this.map.getCharacterPositionY() * 2 + 2; j++){
 					
 					try{
 						
 						tile = map.getTileByIndex(i + posX, j + posY);
 						
-						g.drawImage(sprite, (float)(i * ICON_SIZE - map.getXDiff()), (float)(j * ICON_SIZE - map.getYDiff()), null);	
+						g.drawImage(sprite, iDiff, (float)(j * ICON_SIZE - map.getYDiff()), null);	
 						if (tile.getAvatar() != map.getDefaultTile()){
-							g.drawImage(tile.getCache(), (float)(i * ICON_SIZE - map.getXDiff()), (float)(j * ICON_SIZE - map.getYDiff()), null);
+							g.drawImage(tile.getCache(), iDiff, (float)(j * ICON_SIZE - map.getYDiff()), null);
 						}
 						//System.out.println("success");
 					}catch (Exception ex){

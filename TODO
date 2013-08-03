@@ -2,6 +2,9 @@
 *Implement Start screen with load, instructions, etc.
 *On battle loss, check for remaining members; force at least one to enter party if alive, otherwise gameover
 *In boss battle, force everyone to participate
+*Restore battle iteration
+*Implement SlickProgressBars
+*Death icons on death in battle
 
 Finish InventoryPane items
 Add wait between attacks

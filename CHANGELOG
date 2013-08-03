@@ -4,6 +4,9 @@ Beginning of Battle implementation
 Significant Swing/AWT > Slick Battle porting
 Numerous fixes/changes to CombatCapableCharacter and derivatives
 Fixed initialization of battle
+Further reduction to screen tearing on map
+Implemented/ported BattleConsole
+Implemented battle choices and executable commands
 
 v0.20
 Added selection of items in menu

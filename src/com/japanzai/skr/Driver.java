@@ -329,7 +329,7 @@ public class Driver implements Serializable{
 		Tile rockTile = new Tile(false, false, rock);
 		
 		RandomTile rt1 = new RandomTile(chestTile, 99);
-		RandomTile rt2 = new RandomTile(rockTile, 85);
+		RandomTile rt2 = new RandomTile(rockTile, 95);
 		RandomTile rt3 = new RandomTile(grassTile, 0);
 		
 		ArrayList<RandomTile> rTiles = new ArrayList<RandomTile>();
