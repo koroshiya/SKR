@@ -54,9 +54,15 @@ public class GameScreen extends AppGameContainer{
 	
 	public GameState getState(int i){return ((StateBasedGame)super.game).getState(i);}
 	
-	public void setBattle(ArrayList<EnemyCharacter> arrayList){
+	public void setBattle(ArrayList<EnemyCharacter> enemies){
 		
-		//((StateBasedGame)super.game).addState(new Battle(arrayList, this));
+		//try {
+			//((StateBasedGame)this.game).addState(new Battle(this, enemies));
+			//((Battle)this.getState(SlickSKR.BATTLE)) = new Battle();
+			((Battle)this.getState(SlickSKR.BATTLE)).setEnemies(enemies);
+		//} catch (SlickException e) {
+		//	e.printStackTrace();
+		//}
 		((StateBasedGame)super.game).enterState(SlickSKR.BATTLE);
 		
 	}
@@ -109,12 +115,8 @@ public class GameScreen extends AppGameContainer{
 	
 	public void encounter(ArrayList<EnemyCharacter> enemies){
 		
-		//if (panel.getComponent(0).isVisible()){
-			setBattle(enemies);
-			swapView(1);
-		//}else {
-		//	System.out.println("Can only do this from the map");
-		//}
+		setBattle(enemies);
+		swapView(1);
 		
 	}
 			

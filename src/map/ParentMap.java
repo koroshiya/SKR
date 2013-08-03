@@ -323,7 +323,6 @@ public class ParentMap {
 					try {
 						showSprite();
 					} catch (SlickException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					this.sprite = this.map.getWalkingSprite();
@@ -477,7 +476,7 @@ public class ParentMap {
 				}
 			}
 			if (ex == null){
-				ex= this.enemies.get(0).create();
+				ex = this.enemies.get(0).create();
 			}else if (ex instanceof BossCharacter){
 				list.clear();
 				list.add(ex);

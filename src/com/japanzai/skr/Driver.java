@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import com.japanzai.jreader.Pairing;
@@ -228,7 +229,6 @@ public class Driver implements Serializable{
 		Opponents.addEnemy(henchman3);
 		Opponents.addEnemy(fatty);
 		
-		
 	}
 	
 	private void instantiateInventory(){
@@ -280,8 +280,6 @@ public class Driver implements Serializable{
 	
 	private void simulateMap() throws IOException, SlickException{
 		
-		
-		
 		ParentMap current = null;
 		ParentMap destination = null;
 		
@@ -310,9 +308,6 @@ public class Driver implements Serializable{
 		
 		
 		bs.setSKR(new SlickSKR(current));
-		//bs.setSKR(sk);
-		
-		
 		
 		bs.start();
 		

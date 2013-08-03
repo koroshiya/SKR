@@ -1,16 +1,14 @@
 package character;
+
 import item.Item;
 import item.Weapon;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.awt.Font;
-import java.awt.font.TextAttribute;
 import java.io.Serializable;
 import java.lang.Math;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import map.ParentMap;
 
@@ -23,9 +21,7 @@ import technique.CombatTechnique;
 import technique.HealingTechnique;
 import technique.Technique;
 
-
-
-public class CombatCapableCharacter extends Character implements Serializable{
+public abstract class CombatCapableCharacter extends Character implements Serializable{
 	
 	/**
 	 * 
@@ -35,16 +31,15 @@ public class CombatCapableCharacter extends Character implements Serializable{
 	private Weapon weapon; //Weapon type. eg. Fists, pickaxe, etc.   //Weapon leftHand and rightHand?
 	private ArrayList<Technique> techniques;
 	
-	private JLabel sprite;
-	private JLabel dead;
-	private JLabel alive;
+	private Image dead;
+	private Image alive;
 	/*
 	 * TODO: Add sprite imageicon
 	 * TODO: Add avatar imageicon
 	 * TODO: Add profile pic imageicon
 	 * */
 	
-	private JLabel status;
+	private String status;
 	private int level;
 	
 	private int statHP;
@@ -64,8 +59,6 @@ public class CombatCapableCharacter extends Character implements Serializable{
 	private int currentSpeed;
 	
 	private double gauge;
-	private Font strike;
-	private Font genericFont;
 	
 	public CombatCapableCharacter (String firstName, String lastName, FightingStyle style, 
 					Weapon weapon, Gender gender,
@@ -76,7 +69,6 @@ public class CombatCapableCharacter extends Character implements Serializable{
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	public CombatCapableCharacter (String firstName, String lastName, FightingStyle style, 
 					Weapon weapon, Gender gender, String nickName, String sprite){
 						
@@ -95,36 +87,20 @@ public class CombatCapableCharacter extends Character implements Serializable{
 		
 		this.currentHP = this.statHP;
 
-		this.status = new JLabel();
-		this.sprite = new JLabel();
+		this.status = "";
 		//this.sprite = new JLabel(this.getName());
-		try{
-			ImageIcon icon;
-			ImageIcon dead;
-			if (this instanceof EnemyCharacter){
-				icon = new ImageIcon(getClass().getResource(sprite + "right2.png")); //swap with left1,2,3, or put into Animation object
-			}else {
-				icon = new ImageIcon(getClass().getResource(sprite + "left2.png")); //swap with left1,2,3, or put into Animation object
-			}
-			dead = new ImageIcon(getClass().getResource("/images/dead.png"));
-			
-			this.alive = new JLabel(icon);
-			this.dead = new JLabel(dead);
-		}catch (Exception ex){
-			System.out.println(ex);
-			this.alive = new JLabel(this.getNickName());
-		}
+
 		//this.sprite = new JLabel(new ImageIcon("../images/ken/forward1.png"));
 		this.weapon = weapon;
 		this.techniques = new ArrayList<Technique>();
 		
-		@SuppressWarnings("rawtypes")
-		Map attributes = (new JLabel().getFont()).getAttributes();
-		attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
-		this.strike = new Font(attributes);
-		this.genericFont = new JLabel().getFont();
+		//@SuppressWarnings("rawtypes")
+		//Map attributes = (new JLabel().getFont()).getAttributes();
+		//attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+		//this.strike = new Font(attributes);
+		//this.genericFont = new JLabel().getFont();
 		
-		startBattle(); //Just used to set current stat values
+		//startBattle(); //Just used to set current stat values
 		
 		//this.status = new JLabel(getName() + "    " + getCurrentHP() + "/" + getHP());
 		
@@ -234,9 +210,8 @@ public class CombatCapableCharacter extends Character implements Serializable{
 		if (this.currentHP <= damageTaken){
 			this.currentHP = 0;
 
-			this.status.setFont(this.strike); //TODO: set this on start if dead?
-			this.sprite.setIcon(this.dead.getIcon());
-			this.sprite.updateUI();
+			//this.status.setFont(this.strike); //TODO: set this on start if dead?
+			
 			/**
 			 * TODO: fix strikethrough when reviving - same with sprite
 			 * TODO: when implementing real sprites, change with dead sprite
@@ -244,7 +219,7 @@ public class CombatCapableCharacter extends Character implements Serializable{
 		}else{
 			this.currentHP -= damageTaken;
 		}
-		this.status.setText(getNickName() + "    " + getCurrentHP() + "/" + getHP());
+		this.status = (getNickName() + "    " + getCurrentHP() + "/" + getHP());
 		
 		return damageTaken;
 		
@@ -263,19 +238,13 @@ public class CombatCapableCharacter extends Character implements Serializable{
 		this.currentSpeed = this.statSpeed;
 		this.gauge = 0;
 
-		this.status.setFont(this.currentHP == 0 ? this.strike : this.genericFont);
-		this.status.setText(getNickName() + "    " + getCurrentHP() + "/" + getHP());
+		//this.status.setFont(this.currentHP == 0 ? this.strike : this.genericFont);
+		this.status = (getNickName() + "    " + getCurrentHP() + "/" + getHP());
 		
 		if (this.techniques != null){
 			for (Technique t : techniques){
 				t.startBattle();
 			}
-		}
-		
-		if (this.isAlive()){
-			this.sprite.setIcon(this.alive.getIcon());
-		}else{
-			this.sprite.setIcon(this.dead.getIcon());
 		}
 		
 	}
@@ -314,7 +283,7 @@ public class CombatCapableCharacter extends Character implements Serializable{
 		}
 		
 		
-		this.status.setText(getNickName() + "    " + getCurrentHP() + "/" + getHP());
+		this.status = (getNickName() + "    " + getCurrentHP() + "/" + getHP());
 		
 	}
 	
@@ -355,10 +324,7 @@ public class CombatCapableCharacter extends Character implements Serializable{
 	
 	public void revive(int percentHP){
 		this.currentHP = (int) Math.ceil(this.statHP * ((double)percentHP / 100));
-		this.sprite.setIcon(this.alive.getIcon());
-		this.status.setFont(this.genericFont);
-		this.status.setText(getNickName() + "    " + getCurrentHP() + "/" + getHP());
-		this.sprite.updateUI();
+		this.status = (getNickName() + "    " + getCurrentHP() + "/" + getHP());
 	}
 	
 	public void heal(int amount){
@@ -485,34 +451,38 @@ public class CombatCapableCharacter extends Character implements Serializable{
 		
 	}
 	
-	public JLabel getSprite(){
-
-		return this.sprite;
-
-	}
+	public Image getSprite(){return this.isAlive() ? this.alive : this.dead;}
 	
-	public JLabel getSprite(int dir) {
+	public Image getSprite(int dir) {
 		
-		ImageIcon f = null;
+		Image f = null;
 		
-		if (dir == ParentMap.LEFT){
-			f = new ImageIcon(getClass().getResource(this.getSpriteDirectory() + "left2.png"));
-		}else if (dir == ParentMap.RIGHT){
-			f = new ImageIcon(getClass().getResource(this.getSpriteDirectory() + "right2.png"));
-		}else if (dir == ParentMap.UP){
-			//backwards sprite
-			f = new ImageIcon(getClass().getResource(this.getSpriteDirectory() + "backwards2.png"));
-		}else if (dir == ParentMap.DOWN){
-			//forwards sprite
-			f = new ImageIcon(getClass().getResource(this.getSpriteDirectory() + "forward2.png"));
+		try{
+			if (dir == ParentMap.LEFT){
+				f = new Image(this.getSpriteDirectory() + "left2.png");
+			}else if (dir == ParentMap.RIGHT){
+				f = new Image(this.getSpriteDirectory() + "right2.png");
+			}else if (dir == ParentMap.UP){
+				//backwards sprite
+				f = new Image(this.getSpriteDirectory() + "backwards2.png");
+			}else if (dir == ParentMap.DOWN){
+				//forwards sprite
+				f = new Image(this.getSpriteDirectory() + "forward2.png");
+			}
+		} catch (SlickException e) {
+			e.printStackTrace();
 		}
 		
-		return new JLabel(f);
+		return f;
 		
 	}
 	
-	public JLabel getStatus(){
-		return this.status;
-	}
+	public void setAliveIcon(Image icon){this.alive = icon;}
+	
+	public void setDeadIcon(Image icon){this.dead = icon;}
+	
+	public String getStatus(){return this.status;}
+	
+	public abstract void instantiateForBattle();
 	
 }

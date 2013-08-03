@@ -1,3 +1,10 @@
+v0.21
+Implemented SlickProgressBar
+Beginning of Battle implementation
+Significant Swing/AWT > Slick Battle porting
+Numerous fixes/changes to CombatCapableCharacter and derivatives
+Fixed initialization of battle
+
 v0.20
 Added selection of items in menu
 General back-end improvements to InventoryWindow

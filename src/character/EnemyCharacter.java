@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.io.Serializable;
 import java.lang.Math;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
 import com.japanzai.skr.Party;
@@ -97,6 +100,15 @@ public class EnemyCharacter extends CombatCapableCharacter implements Serializab
 	
 	public int getEncounterRate(){
 		return this.encounterRate;
+	}
+	
+	@Override
+	public void instantiateForBattle(){
+		try {
+			this.setAliveIcon(new Image(getSpriteDirectory() + "right2.png"));
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

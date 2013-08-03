@@ -49,6 +49,14 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 		return this.displayText;
 	}
 	
+	public float getX(){return this.x;}
+	
+	public float getY(){return this.y;}
+	
+	public float getWidth(){return this.width;}
+	
+	public float getHeight(){return this.height;}
+	
 	public boolean isWithinBounds(int x, int y){
 		if (enabled && x >= this.x && x < this.x + this.width && y >= this.y && y < this.y + this.height){
 			return true;

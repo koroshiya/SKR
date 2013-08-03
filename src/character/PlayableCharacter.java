@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.io.Serializable;
 import java.lang.Math;
 
-import javax.swing.ImageIcon;
-
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -191,4 +189,12 @@ public class PlayableCharacter extends CombatCapableCharacter implements Seriali
 		return this.getSpriteDirectory() + "profile.png";		
 	}
 	
+	@Override
+	public void instantiateForBattle(){
+		try {
+			this.setAliveIcon(new Image(getSpriteDirectory() + "left2.png"));
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
 }

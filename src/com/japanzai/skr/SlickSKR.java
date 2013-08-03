@@ -1,5 +1,7 @@
 package com.japanzai.skr;
 
+import java.util.ArrayList;
+
 import map.ParentMap;
 import menu.CharacterProfileWindow;
 import menu.InventoryWindow;
@@ -8,6 +10,10 @@ import menu.MenuMainWindow;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+
+import character.EnemyCharacter;
+
+import battle.Battle;
 
 import screen.GameOver;
 
@@ -23,12 +29,12 @@ public class SlickSKR extends StateBasedGame {
 	public static final int CONTROLSCREEN = 665;
 	public static final int GAMEOVER = 666;
 	
-	public static final boolean DEBUG_MODE = true;
+	public static final boolean DEBUG_MODE = false;
 	
 	public SlickSKR(ParentMap current) throws SlickException{
 		
 		super(GAME_NAME);
-		this.addState(new BattleScreen(BATTLE, current.getFrame()));
+		this.addState(new Battle(current.getFrame(), new ArrayList<EnemyCharacter>()));
 		this.addState(new MapScreen(MAP, current));
 		this.addState(new MenuMainWindow(MENU, current.getFrame()));
 		this.addState(new InventoryWindow(INVENTORY, current.getFrame()));

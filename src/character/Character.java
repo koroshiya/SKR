@@ -9,7 +9,7 @@ import org.newdawn.slick.SlickException;
 
 import com.japanzai.skr.Gender;
 
-public class Character implements Photogenic, Serializable{
+public abstract class Character implements Photogenic, Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -21,7 +21,7 @@ public class Character implements Photogenic, Serializable{
 	private String nationality;
 	
 	private String avatar;
-	private Image cache;
+	protected Image cache;
 	
 	private String spriteDirectory; //TODO: consider swapping with String; get resource dynamically to save resources
 	
