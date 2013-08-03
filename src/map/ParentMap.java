@@ -58,8 +58,6 @@ public class ParentMap {
 			AnimatedSprite animatedSprite, ArrayList<EnemyCharacter> enemies,
 			GameScreen parent, Point mapSize, int encounterRate, String grass) throws SlickException{
 
-
-
 		this.parent = parent;
 		this.coordinates = coordinates;
 		this.currentPositionx = currentPosition.x;
@@ -71,8 +69,6 @@ public class ParentMap {
 		this.enemies = enemies;
 		this.encounterRate = encounterRate;
 		this.defaultTile = grass;
-		
-		//Dimension size = new Dimension((int)mapSize.getX(), (int)mapSize.getY());
 	
 	}
 	
@@ -82,11 +78,7 @@ public class ParentMap {
 		this.showSprite();
 	}
 	
-	public void moveToPosition(Point p){
-		
-		moveToPosition((int)p.getX(), (int)p.getY());
-		
-	}
+	public void moveToPosition(Point p){moveToPosition(p.x, p.y);}
 	
 	public synchronized void moveToPosition(double x, double y){
 
@@ -141,7 +133,6 @@ public class ParentMap {
 		
 	}
 	
-	
 	public boolean relativeTileExists(int a, int b){
 		
 		int x = a / MapScreen.ICON_SIZE + this.getCharacterPositionX();
@@ -176,21 +167,13 @@ public class ParentMap {
 	
 	public int getWidth(){return this.tileMap.getWidthInTiles() * MapScreen.ICON_SIZE;}
 	
-	public double getPositionX(){
-		return this.currentPositionx;
-	}
+	public double getPositionX(){return this.currentPositionx;}
 	
-	public double getPositionY(){
-		return this.currentPositiony;
-	}
+	public double getPositionY(){return this.currentPositiony;}
 	
-	public int getXBoundary(){
-		return this.coordinates.x;
-	}
+	public int getXBoundary(){return this.coordinates.x;}
 	
-	public int getYBoundary(){
-		return this.coordinates.y;
-	}
+	public int getYBoundary(){return this.coordinates.y;}
 	
 	public synchronized int getCharacterPositionX(){
 		return (int) Math.ceil(this.coordinates.getX() / 4 / MapScreen.ICON_SIZE);
@@ -217,11 +200,7 @@ public class ParentMap {
 		
 	}
 	
-	public int getDirection(){
-		
-		return this.direction;
-		
-	}
+	public int getDirection(){return this.direction;}
 	
 	public void moveDown() throws SlickException{
 		
@@ -266,8 +245,6 @@ public class ParentMap {
 		if (!isLocked()){
 			
 			lock();
-			//this.direction = dir;
-			//showSprite();
 				
 			Thread thread = new Thread(new spriteThread(this, this.walkingSprite, pts));
 			thread.start();
@@ -303,19 +280,11 @@ public class ParentMap {
 				
 	}
 	
-	public void lock(){
-		//System.out.println("locked");
-		this.locked = true;
-	}
+	public void lock(){this.locked = true;}
 	
-	public void unlock(){
-		//System.out.println("unlocked");
-		this.locked = false;
-	}
+	public void unlock(){this.locked = false;}
 	
-	public boolean isLocked(){
-		return this.locked;
-	}
+	public boolean isLocked(){return this.locked;}
 	
 	public class spriteThread implements Runnable{
 		
@@ -481,21 +450,13 @@ public class ParentMap {
 		
 	}
 		
-	public synchronized Image getCache(){
-		return this.cache;
-	}
+	public synchronized Image getCache(){return this.cache;}
 	
-	public synchronized WalkingSprite getWalkingSprite(){
-		return this.walkingSprite;
-	}
+	public synchronized WalkingSprite getWalkingSprite(){return this.walkingSprite;}
 		
-	public ArrayList<EnemyCharacter> getEnemies() {
-		return this.enemies;
-	}
+	public ArrayList<EnemyCharacter> getEnemies() {return this.enemies;}
 	
-	public GameScreen getFrame(){
-		return this.parent;
-	}
+	public GameScreen getFrame(){return this.parent;}
 	
 	public boolean randomEncounter(){
 		return Math.random() * 100 > this.encounterRate;
@@ -535,37 +496,21 @@ public class ParentMap {
 		this.tileMap = new TileMap(generatedMap);
 		
 	}
-
 	
 	public void setAnimatedSprite(AnimatedSprite animatedSprite2) {
 		this.animatedSprite = animatedSprite2;
 	}
+	
+	public String getDefaultTile() {return this.defaultTile;}
+	
+	public TileBasedMap getTiles() {return tileMap;}
+	
+	public double getXDiff(){return this.xDiff;}
+	
+	public double getYDiff(){return this.yDiff;}
+	
+	public double getCurrentPositionX() {return this.currentPositionx;}
 
-	
-	public String getDefaultTile() {
-		return this.defaultTile;
-	}
-
-	
-	public TileBasedMap getTiles() {
-		return tileMap;
-	}
-	
-	public double getXDiff(){
-		return this.xDiff;
-	}
-	
-	public double getYDiff(){
-		return this.yDiff;
-	}
-
-	
-	public double getCurrentPositionX() {
-		return this.currentPositionx;
-	}
-
-	public double getCurrentPositionY() {
-		return this.currentPositiony;
-	}
+	public double getCurrentPositionY() {return this.currentPositiony;}
 	
 }

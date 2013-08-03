@@ -97,11 +97,7 @@ public class GameScreen extends AppGameContainer{
 		
 	}
 	
-	public void encounter(ParentMap map){
-		
-		encounter(map.getEnemyFormation());
-		
-	}
+	public void encounter(ParentMap map){encounter(map.getEnemyFormation());}
 	
 	public void encounter(EnemyCharacter enemy){
 		
@@ -135,7 +131,7 @@ public class GameScreen extends AppGameContainer{
 	}
 
 	public void setMap(ParentMap map) throws SlickException {
-		((MapScreen) getState(SlickSKR.MENU)).setMap(map);
+		((MapScreen)this.getState()).setMap(map);
 	}
 	
 	public void removeMapConsole(){

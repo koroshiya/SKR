@@ -5,6 +5,11 @@ Implemented EventTile for misc events, such as entering a store
 Modified NPC and associated classes to remove legacy MessageBox functions
 Removed other deprecated classes & methods
 Fixed party character removal bug #1 (#2 can't be implemented until battles work)
+Improvements made to CharacterProfileWindow
+Implemented character switching method
+Removed unused image resources
+Fixed SetMap bug
+Partial fix for transitioning (not yet fully functional)
 
 v0.19
 Further reduction of legacy Swing/AWT

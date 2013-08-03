@@ -104,8 +104,8 @@ public class MapScreen extends SlickGameState{
 	
 	public void setMap(ParentMap map2) throws SlickException {
 		this.map = map2;
-		sprite = new Image(map.getDefaultTile());
-		map.instantiateImages();
+		//sprite = new Image(map.getDefaultTile());
+		//map.instantiateImages();
 	}
 
 	public void removeMapConsole() {activeDialog = null;}

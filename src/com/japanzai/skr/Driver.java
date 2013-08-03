@@ -149,10 +149,10 @@ public class Driver implements Serializable{
 		String taeSprite = "/res/party/taesoo/";
 		String pickSprite = "/res/party/pickaxe/";
 		
-		String kenUnique = "<html>Favourite weapon:" + "<br />" + "Metal baseball bat" + "<br />" + "<br />" + 
-								"Ken's family was killed by the Hakuryu-Kai when he was 13 years old.</html>";
-		String yuminUnique = "<html>Favourite weapon:" + "<br />" + "Dual wielding handgun & katana" + "<br />" + "<br />" + 
-								"Yumin's father branded her with a Oshiroi-Bori tatoo on her back.</html>";
+		String kenUnique = "Favourite weapon:" + "\n" + "Metal baseball bat" + "\n" + "\n" + 
+								"Ken's family was killed by the \nHakuryu-Kai when he was 13 years old.";
+		String yuminUnique = "Favourite weapon:" + "\n" + "Dual wielding handgun & katana" + "\n" + "\n" + 
+								"Yumin's father branded her with a \nOshiroi-Bori tatoo on her back.";
 		
 		PlayableCharacter ken = new PlayableCharacter("Ken", "Kitano", 
 				styles.get(0), weapons.get(0), genders.get(1), 
@@ -298,19 +298,21 @@ public class Driver implements Serializable{
 									animatedSprite, enemies, bs, mapSize, 97, 
 									grass);
 
+		Tile[][] deadTile = createDeadMap(32 * MapScreen.ICON_SIZE, 26 * MapScreen.ICON_SIZE);
+		Point newCurPos = new Point(20 * MapScreen.ICON_SIZE, 0);
+		destination = new ParentMap(coordinates, newCurPos, Party.getCharacterByIndex(0),
+				animatedSprite, bossEnemies, bs, mapSize, 5, mud);	
+		destination.setTiles(deadTile);
+		
 		TileGenerator tGenerator = new TileGenerator(basicRandomTiles());
 		MapGenerator generator = new MapGenerator(basicPresetTiles(current, destination), tGenerator, 32, 26, "/res/terrain/border/");		
 		current.setTiles(generator.generateMap());
 		
-		Tile[][] deadTile = createDeadMap(32 * MapScreen.ICON_SIZE, 26 * MapScreen.ICON_SIZE);
-		Point newCurPos = new Point(20 * MapScreen.ICON_SIZE, 0);
 		
 		bs.setSKR(new SlickSKR(current));
 		//bs.setSKR(sk);
 		
-		destination = new ParentMap(coordinates, newCurPos, Party.getCharacterByIndex(0),
-				animatedSprite, bossEnemies, bs, mapSize, 5, mud);	
-		destination.setTiles(deadTile);
+		
 		
 		bs.start();
 		
