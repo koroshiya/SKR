@@ -77,6 +77,11 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 		this.displayText = text;
 	}
 	
+	public void setText(String text, String displayText){
+		this.tag = text;
+		this.displayText = displayText;
+	}
+	
 	@Override
 	public void paint(Graphics g) {
 		if (enabled){

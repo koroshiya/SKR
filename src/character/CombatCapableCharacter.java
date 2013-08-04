@@ -39,7 +39,6 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	 * TODO: Add profile pic imageicon
 	 * */
 	
-	private String status;
 	private int level;
 	
 	private int statHP;
@@ -86,8 +85,7 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 		this.statSpeed = style.getBaseSpeed();
 		
 		this.currentHP = this.statHP;
-
-		this.status = "";
+		
 		//this.sprite = new JLabel(this.getName());
 
 		//this.sprite = new JLabel(new ImageIcon("../images/ken/forward1.png"));
@@ -206,10 +204,10 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 		double ratio = (double)attackPower / (double)this.currentDefence;
 		int damageTaken = (int) Math.ceil((double)damage * ratio);
 		
-
+		
 		if (this.currentHP <= damageTaken){
 			this.currentHP = 0;
-
+			
 			//this.status.setFont(this.strike); //TODO: set this on start if dead?
 			
 			/**
@@ -219,7 +217,6 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 		}else{
 			this.currentHP -= damageTaken;
 		}
-		this.status = (getNickName() + "    " + getCurrentHP() + "/" + getHP());
 		
 		return damageTaken;
 		
@@ -237,9 +234,6 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 		this.currentAccuracy = this.statAccuracy;
 		this.currentSpeed = this.statSpeed;
 		this.gauge = 0;
-
-		//this.status.setFont(this.currentHP == 0 ? this.strike : this.genericFont);
-		this.status = (getNickName() + "    " + getCurrentHP() + "/" + getHP());
 		
 		if (this.techniques != null){
 			for (Technique t : techniques){
@@ -281,9 +275,6 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 			learnTechnique(t);
 		}
 		
-		
-		this.status = (getNickName() + "    " + getCurrentHP() + "/" + getHP());
-		
 	}
 	
 	/**
@@ -313,9 +304,7 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 	//Getters/Setters/Is
 	
-	public boolean isAlive(){
-		return this.currentHP != 0;
-	}
+	public boolean isAlive(){return this.currentHP != 0;}
 	
 	public void revive(){
 		revive(50);
@@ -323,7 +312,6 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 	public void revive(int percentHP){
 		this.currentHP = (int) Math.ceil(this.statHP * ((double)percentHP / 100));
-		this.status = (getNickName() + "    " + getCurrentHP() + "/" + getHP());
 	}
 	
 	public void heal(int amount){
@@ -480,7 +468,8 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 	public void setDeadIcon(Image icon){this.dead = icon;}
 	
-	public String getStatus(){return this.status;}
+	public String getStatus(){return getCurrentHP() + "/" + getHP();}
+	//this.status.setFont(this.currentHP == 0 ? this.strike : this.genericFont);
 	
 	public abstract void instantiateForBattle();
 	

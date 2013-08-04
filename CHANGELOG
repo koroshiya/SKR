@@ -7,6 +7,10 @@ Fixed initialization of battle
 Further reduction to screen tearing on map
 Implemented/ported BattleConsole
 Implemented battle choices and executable commands
+Implemented death icons on death in battle
+Fixed death in battle
+Fixed CombatCapableCharacter status rendering
+Fixed enemy targeting in battle
 
 v0.20
 Added selection of items in menu

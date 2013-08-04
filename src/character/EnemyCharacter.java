@@ -106,6 +106,7 @@ public class EnemyCharacter extends CombatCapableCharacter implements Serializab
 	public void instantiateForBattle(){
 		try {
 			this.setAliveIcon(new Image(getSpriteDirectory() + "right2.png"));
+			this.setDeadIcon(new Image("/res/dead.png"));
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
