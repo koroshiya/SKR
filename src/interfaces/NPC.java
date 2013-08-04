@@ -1,6 +1,6 @@
 package interfaces;
 
-import com.japanzai.skr.Dialogue;
+import console.dialogue.Dialogue;
 
 public interface NPC {
 	

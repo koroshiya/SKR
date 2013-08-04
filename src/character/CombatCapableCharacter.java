@@ -16,7 +16,8 @@ import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
 import com.japanzai.skr.Inventory;
 
-import screen.BattleConsole;
+import console.BattleConsole;
+
 import technique.CombatTechnique;
 import technique.HealingTechnique;
 import technique.Technique;
@@ -105,11 +106,10 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	}
 	
 	public void attack(CombatCapableCharacter opponent){
-			
+		
 		double accuracy = this.currentAccuracy * this.weapon.getAccuracy();
 		boolean hit = calcAccuracy(accuracy) && !opponent.calcEvade();
 		
-		BattleConsole.writeConsole("CombatCapableCharacter: Attacking");
 		dealDamage(hit, this.weapon.attack(), opponent);
 		
 		if (this instanceof PlayableCharacter){resetGauge();}

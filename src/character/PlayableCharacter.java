@@ -13,7 +13,8 @@ import org.newdawn.slick.SlickException;
 import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
 
-import screen.BattleConsole;
+import console.BattleConsole;
+
 import technique.FuryBreak;
 import technique.HealingTechnique;
 
@@ -191,10 +192,13 @@ public class PlayableCharacter extends CombatCapableCharacter implements Seriali
 	
 	@Override
 	public void instantiateForBattle(){
+		super.resetGauge();
 		try {
 			this.setAliveIcon(new Image(getSpriteDirectory() + "left2.png"));
+			this.setDeadIcon(new Image("/res/dead.png"));
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 	}
+	
 }

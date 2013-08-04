@@ -6,9 +6,10 @@ import org.newdawn.slick.SlickException;
 
 import screen.GameScreen;
 
-import com.japanzai.skr.Dialogue;
 import com.japanzai.skr.Inventory;
-import com.japanzai.skr.Line;
+
+import console.dialogue.Dialogue;
+import console.dialogue.Line;
 
 import interfaces.InteractableObject;
 import item.Item;

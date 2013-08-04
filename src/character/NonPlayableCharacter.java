@@ -3,8 +3,9 @@ import java.io.Serializable;
 
 import interfaces.NPC;
 
-import com.japanzai.skr.Dialogue;
 import com.japanzai.skr.Gender;
+
+import console.dialogue.Dialogue;
 
 public class NonPlayableCharacter extends Character implements NPC, Serializable{
 

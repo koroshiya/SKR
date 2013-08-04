@@ -9,15 +9,18 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import slickgamestate.Battle;
+import slickgamestate.MapScreen;
+
 import map.ParentMap;
 
-import battle.Battle;
 import character.EnemyCharacter;
 
-import com.japanzai.skr.Dialogue;
 import com.japanzai.skr.Driver;
-import com.japanzai.skr.MapScreen;
 import com.japanzai.skr.SlickSKR;
+
+import console.MapConsole;
+import console.dialogue.Dialogue;
 
 import java.util.ArrayList;
 

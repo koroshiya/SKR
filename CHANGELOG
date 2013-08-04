@@ -1,3 +1,10 @@
+v0.22
+Confirmed ComplexDialogue of greater than two levels
+Created and confirmed CharacterEventBattleTile to be working
+Fixed character death icons in battle
+Fixed BattleConsole display
+Rearranged package structure
+
 v0.21
 Implemented SlickProgressBar
 Beginning of Battle implementation

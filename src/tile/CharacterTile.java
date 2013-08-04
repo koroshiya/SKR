@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 
 import interfaces.InteractableObject;
 
-import com.japanzai.skr.Dialogue;
+import console.dialogue.Dialogue;
 
 import screen.GameScreen;
 

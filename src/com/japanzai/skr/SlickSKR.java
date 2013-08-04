@@ -3,9 +3,6 @@ package com.japanzai.skr;
 import java.util.ArrayList;
 
 import map.ParentMap;
-import menu.CharacterProfileWindow;
-import menu.InventoryWindow;
-import menu.MenuMainWindow;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -13,9 +10,13 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import character.EnemyCharacter;
 
-import battle.Battle;
 
-import screen.GameOver;
+import slickgamestate.Battle;
+import slickgamestate.GameOver;
+import slickgamestate.MapScreen;
+import slickgamestate.menu.CharacterProfileWindow;
+import slickgamestate.menu.InventoryWindow;
+import slickgamestate.menu.MenuMainWindow;
 
 public class SlickSKR extends StateBasedGame {
 

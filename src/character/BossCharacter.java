@@ -6,9 +6,10 @@ import interfaces.NPC;
 import item.Item;
 import item.Weapon;
 
-import com.japanzai.skr.Dialogue;
 import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
+
+import console.dialogue.Dialogue;
 
 import screen.GameScreen;
 

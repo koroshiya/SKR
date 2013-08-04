@@ -18,16 +18,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import com.japanzai.jreader.Pairing;
 import com.japanzai.jreader.dialog.JxDialog;
 
-import map.MapGenerator;
+import console.dialogue.ComplexDialogue;
+import console.dialogue.Dialogue;
+import console.dialogue.Line;
+
 import map.ParentMap;
-import map.RandomTile;
-import map.TileGenerator;
+import map.generator.MapGenerator;
+import map.generator.TileGenerator;
 
 import character.BossCharacter;
 import character.EnemyCharacter;
@@ -36,16 +38,18 @@ import character.PlayableCharacter;
 
 import screen.GameScreen;
 import screen.MessageBox;
+import slickgamestate.MapScreen;
 import technique.CombatTechnique;
 import technique.HealingTechnique;
 import technique.Technique;
-import tile.CharacterEventTile;
 import tile.CharacterTile;
 import tile.ChestTile;
-import tile.EventTile;
 import tile.PresetTile;
+import tile.RandomTile;
 import tile.Tile;
 import tile.TransitionTile;
+import tile.event.CharacterEventBattleTile;
+import tile.event.CharacterEventTile;
 
 import animation.AnimatedSprite;
 
@@ -356,6 +360,12 @@ public class Driver implements Serializable{
 		CharacterEventTile tileNPC = new CharacterEventTile(imgNPC, InteractiveNPC(imgNPC, dialogue), SlickSKR.MENU);
 		PresetTile preTile1 = new PresetTile(tileNPC, 1, 5);
 		
+		ArrayList<String> dialogue2 = new ArrayList<String>();
+		dialogue2.add("PREPARE TO FACE YOUR DEATH, MAGGOT!");
+		
+		CharacterEventTile tileEnemy = new CharacterEventBattleTile(imgNPC, InteractiveNPC(imgNPC, dialogue2), this.enemies.get(2).create());
+		PresetTile preTile5 = new PresetTile(tileEnemy, 3, 17);
+		
 		Tile basicTile = new Tile(true, true, grassPic, 16, 12);
 		PresetTile preTile2 = new PresetTile(basicTile, 16, 12);
 		
@@ -370,6 +380,7 @@ public class Driver implements Serializable{
 		basicPresetTiles.add(preTile2);
 		basicPresetTiles.add(preTile3);
 		basicPresetTiles.add(preTile4);
+		basicPresetTiles.add(preTile5);
 		
 		return basicPresetTiles;
 		
@@ -412,12 +423,21 @@ public class Driver implements Serializable{
 		String str3 = "That's okay. Fear is nothing to be ashamed of.";
 		d1.addLine(new Line(npc, str3, 0, false));
 		
-		Dialogue d2 = new Dialogue();
+		ComplexDialogue d2 = new ComplexDialogue();
 		String str4 = "The fearless type, huh?";
+		d2.addLine(new Line(npc, str4, 0, true));
+		
+		Dialogue d3 = new Dialogue();
 		String str5 = "Boichi-sama taught you well.";
-		d2.addLine(new Line(npc, str4, 0, false));
-		d2.addLine(new Line(npc, str5, 1, false));
+		d3.addLine(new Line(npc, str5, 0, false));
 
+		Dialogue d4 = new Dialogue();
+		String str6 = "Modesty is a good trait to possess.";
+		d4.addLine(new Line(npc, str6, 0, false));
+		
+		d2.addDialogue(d3);
+		d2.addDialogue(d4);
+		
 		cd.addDialogue(d1);
 		cd.addDialogue(d2);
 		
@@ -427,9 +447,9 @@ public class Driver implements Serializable{
 		
 	}
 	
-	private CharacterTile NPC(String imgNPC, ArrayList<String> d) throws SlickException{
+	private static CharacterTile NPC(String imgNPC, ArrayList<String> d, Gender gender) throws SlickException{
 		
-		NonPlayableCharacter npc = new NonPlayableCharacter("Random", "NPC", genders.get(0), null, "NPC", "/res/");
+		NonPlayableCharacter npc = new NonPlayableCharacter("Random", "NPC", gender, null, "NPC", "/res/");
 		//Dialogue dialogue = new Dialogue(d, npc); //Character hasn't been created yet
 		npc.getDialogue().addLines(d, npc);
 		

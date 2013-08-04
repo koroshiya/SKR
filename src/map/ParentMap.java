@@ -10,9 +10,9 @@ import org.newdawn.slick.util.pathfinding.Path.Step;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
-import com.japanzai.skr.MapScreen;
 
 import screen.GameScreen;
+import slickgamestate.MapScreen;
 import tile.Tile;
 import tile.TransitionTile;
 
