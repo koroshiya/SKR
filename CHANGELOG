@@ -1,3 +1,5 @@
+v.023
+
 v0.22
 Confirmed ComplexDialogue of greater than two levels
 Created and confirmed CharacterEventBattleTile to be working
@@ -5,13 +7,13 @@ Fixed character death icons in battle
 Fixed BattleConsole display
 Rearranged package structure
 Implemented basic StartScreen
--Battle end now uses Slick messages/prompts instead of AWT/Swing
--Fixed menu reset on battle start
--Fixed "in party" functionality within battle
--Phased out MessageBox
--Implemented passive alerts, starting with MenuMainWindow
--Fixed leveling alert in main menu
--Fixed double attack "start" bug
+Battle end now uses Slick messages/prompts instead of AWT/Swing
+Fixed menu reset on battle start
+Fixed "in party" functionality within battle
+Phased out MessageBox
+Implemented passive alerts, starting with MenuMainWindow
+Fixed leveling alert in main menu
+Fixed double attack "start" bug
 
 v0.21
 Implemented SlickProgressBar
