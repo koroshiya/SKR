@@ -4,20 +4,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameScreen;
 import slickgamestate.SlickGameState;
-
+import slickgamestate.SlickSKR;
 import character.PlayableCharacter;
 
 import com.japanzai.skr.Driver;
 import com.japanzai.skr.Party;
-import com.japanzai.skr.SlickSKR;
 
 import controls.SlickRectangle;
 
@@ -29,40 +30,34 @@ public class MenuMainWindow extends SlickGameState{
 									"Backlog [B]", "Save [S]", "Load [L]", "Exit [W]", "Quit [Esc]"};
 	private int[] keys = {Input.KEY_I, Input.KEY_E, Input.KEY_C, Input.KEY_B, 
 							Input.KEY_S, Input.KEY_L, Input.KEY_W, Input.KEY_ESCAPE};
+	private int timer = 0;
+	private String message = "";
+	private SlickRectangle alert;
+	private Font VICTORY_FONT;
+	private Font DEFAULT_FONT;
 	
 	ArrayList<PlayableCharacter> characters;
 
-	public MenuMainWindow(int state, GameScreen parent){
+	public MenuMainWindow(GameScreen parent){
 		
-		super(state, parent);
+		super(SlickSKR.MENU, parent);
 		
 	}
 	
 	public void menuItemPane(Graphics g) throws SlickException{
-			
-		final float x = 350;
-		final float y = 50;
-				
-		int textx;		
-		int texty;
 		
-		String s = "";
 		for (int i = 0; i < menuItems.length; i++){
-			s = (String) menuItems[i].getTag();
-			g.draw(menuItems[i]);
-			textx = g.getFont().getWidth(s);
-			texty = g.getFont().getHeight(s);
-			g.drawString(s, x + (450 - textx) / 2, i * y + texty);
+			menuItems[i].paintCenter(g);
 		}
 					
 	}
 	
 	public void characterPane(Graphics g){
 		
-		float x = 160;
+		final float x = 160;
 		float y = 0;
 		int inc;
-		int baseInc = 13;
+		final int baseInc = 13;
 		for (int i = 0; i < menuCharacters.length; i++){
 			PlayableCharacter c = characters.get(i);
 			inc = baseInc;
@@ -77,13 +72,10 @@ public class MenuMainWindow extends SlickGameState{
 			inc += baseInc;
 			g.drawString("Level " + c.getLevel(), x, y + inc);
 			inc += baseInc;
-			g.drawString(c.getExperienceToNextLevel() + "xp until next level", x, y + inc);
+			g.drawString((c.getExperienceToNextLevel() - c.getExperience()) + "xp until next level", x, y + inc);
 			inc += baseInc;
 			g.drawString(c.isInParty() ? "In party" : "Not in party", x, y + inc);
 			inc += baseInc;
-			//JLabel label = new MenuItemLabel(tag);
-			//			window.addMouseListener(ml);
-			//this.panel.add(window);
 			y += 150f;
 		}
 	}	
@@ -107,6 +99,9 @@ public class MenuMainWindow extends SlickGameState{
 			characters.get(i).instantiate();
 			menuCharacters[i] = new SlickRectangle(0, 150 * i, x, 150, Integer.toString(i));
 		}
+		VICTORY_FONT = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 24), false);
+		DEFAULT_FONT = arg0.getDefaultFont();
+		alert = new SlickRectangle(150, 200, 550, 40, "");
 	}
 	
 	@Override
@@ -114,6 +109,13 @@ public class MenuMainWindow extends SlickGameState{
 		
 		menuItemPane(g);
 		characterPane(g);
+		if (timer > 0){
+			g.setFont(VICTORY_FONT);
+			alert.setText(message);
+			alert.paintCenter(g);
+			g.setFont(DEFAULT_FONT);
+			timer--;
+		}
 		
 	}
 
@@ -136,6 +138,7 @@ public class MenuMainWindow extends SlickGameState{
 	
 	private void processMenuItem(String s, int clickCount) throws IOException, ClassNotFoundException{
 		
+		timer = 0;
 		if (clickCount == 2){
 			try{
 				int i = Integer.parseInt(s);
@@ -152,7 +155,8 @@ public class MenuMainWindow extends SlickGameState{
 							}
 						}
 						if (!charAlive){
-							GameScreen.WriteOnScreen("Can't remove last living member from party", "Operation not allowed");
+							timer = 120;
+							message = "Can't remove last living member from party";
 							return;
 						}
 					}

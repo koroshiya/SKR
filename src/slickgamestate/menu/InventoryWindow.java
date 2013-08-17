@@ -17,9 +17,9 @@ import org.newdawn.slick.geom.Rectangle;
 
 import screen.GameScreen;
 import slickgamestate.SlickGameState;
+import slickgamestate.SlickSKR;
 
 import com.japanzai.skr.Inventory;
-import com.japanzai.skr.SlickSKR;
 
 import controls.SlickRectangle;
 
@@ -37,17 +37,17 @@ public class InventoryWindow extends SlickGameState {
 	private Item item;
 	private SlickRectangle[] items;
 	
-	public InventoryWindow(int state, GameScreen parent){
+	public InventoryWindow(GameScreen parent){
 		
-		super(state, parent);
+		super(SlickSKR.INVENTORY, parent);
 		
-		float x = 410;
+		final float x = 410;
 		float y = 0;
 		float optX = 0;
 		float optY = 0;
 		
-		int baseX = 200;
-		int baseY = 12;
+		final int baseX = 200;
+		final int baseY = 12;
 		
 		itemParams = new SlickRectangle[7];
 		for (int i = 0; i < itemParams.length; i++){

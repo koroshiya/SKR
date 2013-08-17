@@ -11,8 +11,6 @@ import com.japanzai.skr.Gender;
 
 import console.dialogue.Dialogue;
 
-import screen.GameScreen;
-
 public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 
 	/**
@@ -43,20 +41,6 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 		ex.setLevel(getLevel(), null);
 		return ex;
 	}
-
-	public void getDialogueLine(int lineNumber){
-		if (canGetNextLine()){printText();}
-	}
-	
-	public boolean getDialogueNextLine(){
-		
-		if (canGetNextLine()){
-			printText();
-			return true;
-		}
-		return false;
-		
-	}
 	
 	public boolean canGetNextLine(){
 		return dialogue.moreDialogue();
@@ -65,12 +49,7 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 	public void resetDialogue(){
 		this.dialogue.reset();
 	}
-	
-	private void printText(){
-		GameScreen.WriteOnScreen(dialogue.speak(), this.getFirstName());
-		dialogue.increment();
-	}
-	
+		
 	public Dialogue getDialogue() {
 		return this.dialogue;
 	}
@@ -79,5 +58,6 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 		this.dialogue = dialogue;
 	}
 
+	//TODO: implement boss dialog
 	
 }

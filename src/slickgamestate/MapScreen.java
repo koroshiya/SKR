@@ -12,7 +12,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import com.japanzai.skr.SlickSKR;
 
 import console.MapConsole;
 
@@ -47,9 +46,9 @@ public class MapScreen extends SlickGameState{
 	//TODO: dynamically create battle depending on enemy arraylist? mix and match
 	
 	
-	public MapScreen(int state, ParentMap map){
+	public MapScreen(ParentMap map){
 		
-		super(state, map.getFrame());
+		super(SlickSKR.MAP, map.getFrame());
 		this.map = map;
 		
 	}

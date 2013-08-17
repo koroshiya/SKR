@@ -10,6 +10,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameScreen;
 import slickgamestate.SlickGameState;
+import slickgamestate.SlickSKR;
 
 import com.japanzai.skr.Party;
 
@@ -24,9 +25,9 @@ public class CharacterProfileWindow extends SlickGameState{
 	private SlickRectangle[] partyMembers;
 	String[] labels;
 	
-	public CharacterProfileWindow(int state, GameScreen gameScreen) throws SlickException{
+	public CharacterProfileWindow(GameScreen gameScreen) throws SlickException{
 		
-		super(state, gameScreen);
+		super(SlickSKR.CHARACTER, gameScreen);
 		
 	}
 	

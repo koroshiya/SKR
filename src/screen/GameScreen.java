@@ -11,13 +11,13 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import slickgamestate.Battle;
 import slickgamestate.MapScreen;
+import slickgamestate.SlickSKR;
 
 import map.ParentMap;
 
 import character.EnemyCharacter;
 
 import com.japanzai.skr.Driver;
-import com.japanzai.skr.SlickSKR;
 
 import console.MapConsole;
 import console.dialogue.Dialogue;
@@ -125,14 +125,14 @@ public class GameScreen extends AppGameContainer{
 			
 	public void gameover() throws SlickException{
 
-		swapView(666);
+		swapView(SlickSKR.GAMEOVER);
 				
-		int choice = MessageBox.ChoiceBox("Resume from last save point?", "Game Over", null);
+		/*int choice = MessageBox.ChoiceBox("Resume from last save point?", "Game Over", null);
 		if (choice == JOptionPane.YES_OPTION){
 			Driver.restart();
 		}else{
 			System.exit(0);
-		}
+		}*/
 	}
 
 	public void setMap(ParentMap map) throws SlickException {
@@ -147,11 +147,6 @@ public class GameScreen extends AppGameContainer{
 			((MapScreen) comp).removeMapConsole();
 		
 		}
-	}
-
-	
-	public static void WriteOnScreen(String message, String title) {
-		MessageBox.InfoBox(message, title);
 	}
 		
 }

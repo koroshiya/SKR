@@ -37,8 +37,8 @@ import character.NonPlayableCharacter;
 import character.PlayableCharacter;
 
 import screen.GameScreen;
-import screen.MessageBox;
 import slickgamestate.MapScreen;
+import slickgamestate.SlickSKR;
 import technique.CombatTechnique;
 import technique.HealingTechnique;
 import technique.Technique;
@@ -538,12 +538,14 @@ public class Driver implements Serializable{
 	
 	public static void quit(){
 		
-		int choice = MessageBox.ChoiceBox("Any unsaved progress will be lost." + 
+		/*int choice = MessageBox.ChoiceBox("Any unsaved progress will be lost." + 
 											"\n" + "Are you sure you want to quit?", "Quit", null);
 		
 		if (choice == JOptionPane.YES_OPTION){
 			System.exit(0);
-		}
+		}*/
+		//TODO: implement check of some kind
+		System.exit(0);
 		
 	}
 	

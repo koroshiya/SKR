@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import org.newdawn.slick.SlickException;
 
 
-import com.japanzai.skr.SlickSKR;
 
 import screen.GameScreen;
 import slickgamestate.Battle;
+import slickgamestate.SlickSKR;
 
 import character.EnemyCharacter;
 import character.NonPlayableCharacter;

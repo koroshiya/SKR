@@ -94,4 +94,17 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 		}
 	}
 	
+	public void paintCenter(Graphics g){
+		if (enabled){
+			Color temp = g.getColor();
+			g.setColor(Color.black);
+			g.fill(this);
+			g.setColor(temp);
+			g.draw(this);
+			final int textx = g.getFont().getWidth(displayText);
+			final int texty = g.getFont().getHeight(displayText);
+			g.drawString(displayText, x + (width - textx) / 2, y + (height - texty) / 2);
+		}
+	}
+	
 }

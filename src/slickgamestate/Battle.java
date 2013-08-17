@@ -6,17 +6,17 @@ import item.Item;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameScreen;
-import screen.MessageBox;
 import technique.CombatTechnique;
 import technique.HealingTechnique;
 import technique.Technique;
-
 import character.BossCharacter;
 import character.CombatCapableCharacter;
 import character.EnemyCharacter;
@@ -24,7 +24,6 @@ import character.PlayableCharacter;
 
 import com.japanzai.skr.Inventory;
 import com.japanzai.skr.Party;
-import com.japanzai.skr.SlickSKR;
 
 import console.BattleConsole;
 import controls.SlickRectangle;
@@ -48,6 +47,12 @@ public class Battle extends SlickGameState{
 	private final int ITEM_MODE = 224;
 	private final int TECHNIQUE_MODE = 225;
 	private final int MENU_MODE = 226;
+	private final int VICTORY_MODE = 228;
+	private final int LOSS_MODE = 229;
+	private final int RUN_MODE = 230;
+	private final String VICTORY = "End battle";
+	private Font VICTORY_FONT;
+	private Font DEFAULT_FONT;
 	private int mode = MENU_MODE;
 	
 	private Technique tech;
@@ -89,7 +94,7 @@ public class Battle extends SlickGameState{
 			BossCharacter bc = (BossCharacter) enemies.get(0);
 			parent.WriteOnMap(bc.getDialogue());
 		}*/
-		
+		mode = this.MENU_MODE;
 		if (running){
 			resetDefaultInterface();
 		}else{
@@ -119,22 +124,16 @@ public class Battle extends SlickGameState{
 		}while (!(partyWon() || partyLost()));
 		
 		if (partyWon()){
-			MessageBox.InfoBox("Victory", "Winner!");
+			mode = VICTORY_MODE;
 		}else if (partyLost()){
-			MessageBox.InfoBox("You lose...", "What a shame...");
-			//TODO: if party member not participating still alive, return to map and swap character in/out party
-			//TODO: else, end program //TODO: implement game over screen
+			mode = LOSS_MODE;
 			if (Party.getCharactersAlive(true).size() == 0){
 				parent.gameover();
 			}else {
 				Party.formValidParty();
 			}
-		}else {
-			MessageBox.InfoBox("Loser", "Pfft");
 		}
-		
-		end();
-		//System.exit(0);
+		setTargetBattleEnd();
 		
 	}
 	
@@ -204,6 +203,8 @@ public class Battle extends SlickGameState{
 		
 		setMenu();
 		BattleConsole.cleanConsole();
+		VICTORY_FONT = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 48), false);
+		DEFAULT_FONT = arg0.getDefaultFont();
 		
 	}
 	
@@ -214,6 +215,19 @@ public class Battle extends SlickGameState{
 		this.drawBattleParticipants(g);
 		for (SlickRectangle rect : rects){rect.paint(g);}
 		BattleConsole.paint(g);
+		String message = "";
+		if (mode == VICTORY_MODE){
+			message = "Victory";
+		}else if (mode == LOSS_MODE){
+			message = "Defeated";
+		}else if (mode == RUN_MODE){
+			message = "Coward";
+		}
+		if (!message.equals("")){
+			g.setFont(VICTORY_FONT);
+			g.drawString(message, 300, 250);
+			g.setFont(DEFAULT_FONT);
+		}
 		
 	}
 	
@@ -322,12 +336,9 @@ public class Battle extends SlickGameState{
 	
 	public void resetDefaultInterface(){
 		
-		//this.mode = this.MENU_MODE;
-		
 		if (this.currentCharacter != null){
 			setMenu();
 		}
-		//display = rects.clone();
 		
 	}
 	
@@ -343,7 +354,7 @@ public class Battle extends SlickGameState{
 		}
 	}
 	
-	private boolean test(PlayableCharacter c){
+	private boolean isItemApplicable(PlayableCharacter c){
 		if (mode == this.ALLY_MODE){
 			if (this.tech != null){
 				return c.isAlive() != ((HealingTechnique)this.tech).usedOnDead();
@@ -354,20 +365,29 @@ public class Battle extends SlickGameState{
 	}
 	
 	public void process(String command) throws SlickException{
+		System.out.println(command);
 		if (mode == this.ALLY_MODE){
+			System.out.println("ALLY MODE");
 			processAllyMode(command);
 		}else if (mode == this.ATTACK_MODE){
+			System.out.println("ATTACK MODE");
 			processAttackMode(command);
 		}else if (mode == this.TECHNIQUE_MODE){
+			System.out.println("TECHNIQUE MODE");
 			processTechniqueMode(command);
 		}else if (mode == this.ITEM_MODE){
+			System.out.println("ITEM MODE");
 			processItemMode(command);
+		}else if (mode == this.VICTORY_MODE || mode == this.RUN_MODE || mode == this.LOSS_MODE){
+			System.out.println("VICTORY MODE");
+			end();
 		}else{ //TODO: turn to else if MENU_MODE?
 			processMenuMode(command);
 		}
 	}
 	
 	private void processAttackMode(String command) {
+		if (command.equals("")){return;}
 		int i;
 		try{
 			i = Integer.parseInt(command);
@@ -376,7 +396,8 @@ public class Battle extends SlickGameState{
 			return;
 		}
 		EnemyCharacter e = this.enemies.get(i);
-		if (!e.isAlive()){
+		boolean alive = e.isAlive();
+		if (!alive){
 			BattleConsole.writeConsole("Can't attack deceased opponents");
 		}else{
 			if (this.tech != null){
@@ -389,23 +410,26 @@ public class Battle extends SlickGameState{
 		}
 		this.tech = null;
 		this.mode = this.MENU_MODE;
-		//resetDefaultInterface(); //TODO: make blank?
-		try {
-			start();
-		} catch (SlickException e1) {
-			e1.printStackTrace();
+		if (alive){
+			try {
+				start();
+			} catch (SlickException e1) {
+				e1.printStackTrace();
+			}
 		}
+		//resetDefaultInterface(); //TODO: make blank?
+		
 	}
 	
 	private void processAllyMode(String command) {
 		for (PlayableCharacter c : Party.getCharactersInParty()){
 			if (c.getName().equals(command)){
-				if (test(c)){
+				if (isItemApplicable(c)){
 					this.currentCharacter.healAlly(c, (HealingTechnique)this.tech, (ConsumableItem)this.item, this.currentCharacter); //add check for appropriate type here
 					try {
 						start();
-					} catch (SlickException e1) {
-						e1.printStackTrace();
+					} catch (SlickException e) {
+						e.printStackTrace();
 					}
 				}else{
 					String type = this.tech != null ? "technique" : "item";
@@ -430,20 +454,12 @@ public class Battle extends SlickGameState{
 			if (t.getName().equals(command)){
 				if (t instanceof CombatTechnique){
 					this.tech = t;
-					this.mode = this.ATTACK_MODE;
-					rects = new SlickRectangle[this.enemies.size()];
-					for (int i = 0; i < this.enemies.size(); i++){
-						rects[i] = setMenuItem(i);
-						rects[i].setText(Integer.toString(i), this.enemies.get(i).getName());
-					}
+					setTargetEnemies();
 				}else if (t instanceof HealingTechnique){
 					this.tech = t;
-					this.mode = this.ALLY_MODE;
-					rects = new SlickRectangle[party.size()];
-					for (int i = 0; i < party.size(); i++){
-						rects[i] = setMenuItem(i);
-						rects[i].setText(party.get(i).getName());
-					}
+					setTargetAllies();
+				}else{
+					System.out.println("This technique cannot be used during battle");
 				}
 				break;
 			}
@@ -453,13 +469,8 @@ public class Battle extends SlickGameState{
 	private void processItemMode(String command) throws SlickException{
 		for (ConsumableItem t : Inventory.getConsumables()){
 			if (t.getName().equals(command)){
-				this.mode = this.ALLY_MODE;
 				this.item = t;
-				rects = new SlickRectangle[party.size()];
-				for (int i = 0; i < party.size(); i++){
-					rects[i] = setMenuItem(i);
-					rects[i].setText(party.get(i).getName());
-				}
+				setTargetAllies();
 				break;
 			}
 		}
@@ -468,34 +479,16 @@ public class Battle extends SlickGameState{
 	private void processMenuMode(String command) throws SlickException{
 		if (command.equals(commands[0])){
 			System.out.println("attack");
-			mode = this.ATTACK_MODE;
-			rects = new SlickRectangle[this.enemies.size()];
-			for (int i = 0; i < this.enemies.size(); i++){
-				rects[i] = setMenuItem(i);
-				rects[i].setText(Integer.toString(i), this.enemies.get(i).getName());
-			}
+			setTargetEnemies();
 		}else if (command.equals(commands[1])){
 			System.out.println("techniques");
-			mode = this.TECHNIQUE_MODE;
-			ArrayList<Technique> techs = this.currentCharacter.getTechniques();
-			rects = new SlickRectangle[techs.size()];
-			for (int i = 0; i < techs.size(); i++){
-				rects[i] = setMenuItem(i);
-				rects[i].setText(techs.get(i).getName());
-			}
+			setTargetTechniques();
 		}else if (command.equals(commands[2])){
 			System.out.println("items");
-			this.mode = this.ITEM_MODE;
-			ArrayList<Item> items = Inventory.getConsumablesAsItems();
-			rects = new SlickRectangle[items.size()];
-			for (int i = 0; i < items.size(); i++){
-				rects[i] = setMenuItem(i);
-				rects[i].setText(items.get(i).getName());
-			}
+			setTargetItems();
 		}else if (command.equals(commands[3])){
-			MessageBox.InfoBox("Loser", "Running away?");
-			end();
-			//System.exit(0);
+			mode = RUN_MODE;
+			setTargetBattleEnd();
 		}else if (command.equals(commands[4])){
 			setDefaultInterface(this.currentCharacter);
 		}
@@ -503,6 +496,62 @@ public class Battle extends SlickGameState{
 	
 	public void setEnemies(ArrayList<EnemyCharacter> enemies) {
 		this.enemies = enemies;
+		this.party = Party.getCharactersInParty();
+		resetDefaultInterface();
+		try {
+			this.start();
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void setTargetEnemies() throws SlickException{
+		this.mode = this.ATTACK_MODE;
+		rects = new SlickRectangle[this.enemies.size()];
+		for (int i = 0; i < this.enemies.size(); i++){
+			rects[i] = setMenuItem(i);
+			if (this.enemies.get(i).isAlive()){
+				rects[i].setText(Integer.toString(i), this.enemies.get(i).getName());
+			}else{
+				rects[i].setText("");
+			}
+		}
+	}
+	
+	private void setTargetAllies() throws SlickException{
+		this.mode = this.ALLY_MODE;
+		rects = new SlickRectangle[party.size()];
+		for (int i = 0; i < party.size(); i++){
+			rects[i] = setMenuItem(i);
+			rects[i].setText(party.get(i).getName());
+		}
+	}
+
+	private void setTargetBattleEnd() throws SlickException{
+		rects = new SlickRectangle[4];
+		for (int i = 0; i < rects.length; i++){
+			rects[i] = this.setMenuItem(i);
+		}
+		rects[0].setText(VICTORY);
+	}
+
+	private void setTargetTechniques() throws SlickException{mode = this.TECHNIQUE_MODE;
+		ArrayList<Technique> techs = this.currentCharacter.getTechniques();
+		rects = new SlickRectangle[techs.size()];
+		for (int i = 0; i < techs.size(); i++){
+			rects[i] = setMenuItem(i);
+			rects[i].setText(techs.get(i).getName());
+		}
+	}
+	
+	private void setTargetItems() throws SlickException{
+		this.mode = this.ITEM_MODE;
+		ArrayList<Item> items = Inventory.getConsumablesAsItems();
+		rects = new SlickRectangle[items.size()];
+		for (int i = 0; i < items.size(); i++){
+			rects[i] = setMenuItem(i);
+			rects[i].setText(items.get(i).getName());
+		}
 	}
 	
 }

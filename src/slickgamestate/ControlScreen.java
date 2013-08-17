@@ -10,7 +10,6 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameScreen;
 
-import com.japanzai.skr.SlickSKR;
 
 public class ControlScreen extends SlickGameState{
 	
