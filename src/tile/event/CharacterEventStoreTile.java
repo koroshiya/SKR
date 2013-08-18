@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 
 import screen.GameScreen;
 import slickgamestate.SlickSKR;
-import slickgamestate.Store;
+import slickgamestate.menu.Store;
 import character.NonPlayableCharacter;
 
 public class CharacterEventStoreTile extends CharacterEventTile{

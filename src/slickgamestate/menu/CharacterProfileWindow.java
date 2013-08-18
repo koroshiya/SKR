@@ -92,7 +92,7 @@ public class CharacterProfileWindow extends SlickGameState{
 	public PlayableCharacter getCharacter(){return this.character;}
 	
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+	public void enter(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		
 		this.setCharacter(Party.getCharacterByIndex(0));
 		partyMembers = new SlickRectangle[Party.getCharacters().size()];
@@ -108,13 +108,12 @@ public class CharacterProfileWindow extends SlickGameState{
 			col = i > 1 ? 1 : 0;
 		}
 		
-		super.init(arg0, arg1);
-		
 	}
 
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
+		g.setFont(SlickSKR.DEFAULT_FONT);
 		drawCharacterInfoPanel(g);
 		drawCharacterPanel(g);
 		g.drawImage(lblAvatar, 0, 0);

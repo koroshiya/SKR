@@ -327,7 +327,6 @@ public class Inventory {
 		return itemList;
 		
 	}
-
 	
 	public static void initialize() throws SlickException {
 		

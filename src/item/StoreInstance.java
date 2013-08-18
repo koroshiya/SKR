@@ -2,6 +2,8 @@ package item;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.SlickException;
+
 import com.japanzai.skr.Inventory;
 
 public class StoreInstance {
@@ -57,6 +59,14 @@ public class StoreInstance {
 
 	public ArrayList<Item> getWeaponsAsItems() {
 		return Inventory.getWeaponsAsItems(stock);
+	}
+	
+	public void initialize() throws SlickException {
+		
+		for (Item i : stock){
+			i.instantiate();
+		}
+		
 	}
 
 }

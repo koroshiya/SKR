@@ -44,7 +44,9 @@ public class ConsumableItem extends Item implements Serializable{
 	@Override
 	public Item create(int quantity) {
 		try {
-			return new ConsumableItem(getName(), getValue(), getRarity(), potency, getAvatar());
+			Item i = new ConsumableItem(getName(), getValue(), getRarity(), potency, getAvatar());
+			i.increaseQuantity(quantity);
+			return i;
 		} catch (SlickException e) {
 			e.printStackTrace();
 			return null;

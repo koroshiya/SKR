@@ -52,7 +52,6 @@ public class Battle extends SlickGameState{
 	private final int RUN_MODE = 230;
 	private final String VICTORY = "End battle";
 	private Font VICTORY_FONT;
-	private Font DEFAULT_FONT;
 	private int mode = MENU_MODE;
 	
 	private Technique tech;
@@ -188,8 +187,7 @@ public class Battle extends SlickGameState{
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
-		VICTORY_FONT = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 48), false);
-		DEFAULT_FONT = arg0.getDefaultFont();
+		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 48);
 	}
 	
 	public void enter(GameContainer arg0, StateBasedGame arg1){
@@ -221,6 +219,8 @@ public class Battle extends SlickGameState{
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
+		g.setFont(SlickSKR.DEFAULT_FONT);
+		
 		this.drawBattlePane(g);
 		this.drawBattleParticipants(g);
 		for (SlickRectangle rect : rects){rect.paint(g);}
@@ -234,9 +234,7 @@ public class Battle extends SlickGameState{
 			message = "Coward";
 		}
 		if (!message.equals("")){
-			g.setFont(VICTORY_FONT);
-			g.drawString(message, 300, 250);
-			g.setFont(DEFAULT_FONT);
+			VICTORY_FONT.drawString(300, 250, message);
 		}
 		
 	}

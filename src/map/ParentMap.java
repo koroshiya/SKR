@@ -49,8 +49,8 @@ public class ParentMap {
 	private String defaultTile;
 	private Image cache;
 	
-	private double xDiff;
-	private double yDiff;
+	private float xDiff;
+	private float yDiff;
 	
 	//TODO: add random encounters
 	
@@ -84,6 +84,8 @@ public class ParentMap {
 
 		this.currentPositionx = x;
 		this.currentPositiony = y;
+		xDiff = 0;
+		yDiff = 0;
 		
 	}
 	
@@ -403,8 +405,6 @@ public class ParentMap {
 			}
 
 			this.map.moveToPosition(this.map.currentPositionx + 60 * diffX, this.map.currentPositiony + 60 * diffY);
-			xDiff = 0;
-			yDiff = 0;
 			
 		}
 		
@@ -504,9 +504,9 @@ public class ParentMap {
 	
 	public TileBasedMap getTiles() {return tileMap;}
 	
-	public double getXDiff(){return this.xDiff;}
+	public float getXDiff(){return this.xDiff;}
 	
-	public double getYDiff(){return this.yDiff;}
+	public float getYDiff(){return this.yDiff;}
 	
 	public double getCurrentPositionX() {return this.currentPositionx;}
 

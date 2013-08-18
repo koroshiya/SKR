@@ -5,7 +5,10 @@ import interfaces.SlickDrawableFrame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
+
+import slickgamestate.SlickSKR;
 
 public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	
@@ -93,17 +96,21 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 			g.drawString(displayText, x, y);
 		}
 	}
-	
+
 	public void paintCenter(Graphics g){
+		paintCenter(g, SlickSKR.DEFAULT_FONT);
+	}
+
+	public void paintCenter(Graphics g, TrueTypeFont f){
 		if (enabled){
 			Color temp = g.getColor();
 			g.setColor(Color.black);
 			g.fill(this);
 			g.setColor(temp);
 			g.draw(this);
-			final int textx = g.getFont().getWidth(displayText);
-			final int texty = g.getFont().getHeight(displayText);
-			g.drawString(displayText, x + (width - textx) / 2, y + (height - texty) / 2);
+			final int textx = f.getWidth(displayText);
+			final int texty = f.getHeight(displayText);
+			f.drawString(x + (width - textx) / 2, y + (height - texty) / 2, displayText, Color.white);
 		}
 	}
 	

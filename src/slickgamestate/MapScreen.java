@@ -12,9 +12,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-
 import console.MapConsole;
-
 import screen.GameScreen;
 import tile.CharacterTile;
 import tile.InteractiveTile;
@@ -54,8 +52,9 @@ public class MapScreen extends SlickGameState{
 	}
 	
 	@Override
-	public void init(GameContainer gc, StateBasedGame arg1) throws SlickException {
+	public void enter(GameContainer gc, StateBasedGame arg1) throws SlickException {
 		
+		//super.parent.setTargetFrameRate(60);
 		sprite = new Image(map.getDefaultTile());
 		map.instantiateImages();
 		
@@ -64,23 +63,29 @@ public class MapScreen extends SlickGameState{
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 
+		g.setFont(SlickSKR.DEFAULT_FONT);
+		
 		try{
 			
 			double posX = this.map.getCurrentPositionX() / ICON_SIZE;
 			double posY = this.map.getCurrentPositionY() / ICON_SIZE;
+			float y;
 			Tile tile = null;
-						
+			
+			float yDiff = map.getYDiff();
+			float xDiff = map.getXDiff();
+			
 			for (int i = -1; i < this.map.getCharacterPositionX() * 2 + 2; i++){
-				float iDiff = (float)(i * ICON_SIZE - map.getXDiff());
+				float iDiff = i * ICON_SIZE - xDiff;
 				for (int j = -1; j < this.map.getCharacterPositionY() * 2 + 2; j++){
 					
 					try{
 						
 						tile = map.getTileByIndex(i + posX, j + posY);
-						
-						g.drawImage(sprite, iDiff, (float)(j * ICON_SIZE - map.getYDiff()), null);	
+						y = j * ICON_SIZE - yDiff;
+						g.drawImage(sprite, iDiff, y, null);	
 						if (tile.getAvatar() != map.getDefaultTile()){
-							g.drawImage(tile.getCache(), iDiff, (float)(j * ICON_SIZE - map.getYDiff()), null);
+							g.drawImage(tile.getCache(), iDiff, y, null);
 						}
 						//System.out.println("success");
 					}catch (Exception ex){
@@ -92,7 +97,7 @@ public class MapScreen extends SlickGameState{
 			g.drawImage(this.map.getCache(), this.map.getCharacterPositionX() * ICON_SIZE, this.map.getCharacterPositionY() * ICON_SIZE, null);
 			
 		}catch (Exception ex){
-			//ex.printStackTrace();
+			ex.printStackTrace();
 		}
 		
 		if (this.activeDialog != null){

@@ -1,12 +1,9 @@
 **Replace MenuBar with Instruction/Control screen
 *Implement Start screen with load, instructions, etc.
-*On battle loss, check for remaining members; force at least one to enter party if alive, otherwise gameover
 *In boss battle, force everyone to participate
 *Restore battle iteration
 *Implement SlickProgressBars
-*Death icons on death in battle
 
-Finish InventoryPane items
 Add wait between attacks
 Add animation to attacks
 Memo: isKeyDown can be used to check for ctrl in hotkeys
@@ -21,6 +18,5 @@ Code in one-time conversations, items, etc.; two Dialogue classes per certain NP
 -Level up learn technique? //public void levelUp(Character c){c.getTechniques().add} //+message on screen
 -Background image for map dialogue
 -Image for outside of map, or use base tile repeated? eg. grass for map, stone for town, etc.
--Shop interface?
 
 **Make single instance

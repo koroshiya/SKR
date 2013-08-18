@@ -12,11 +12,9 @@ import com.japanzai.skr.Gender;
 import console.dialogue.Dialogue;
 
 public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
+	
 	private Dialogue dialogue;
 
 	public BossCharacter (String firstName, String lastName, FightingStyle style, 

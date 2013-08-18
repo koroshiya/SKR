@@ -9,7 +9,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import controls.SlickRectangle;
-
 import screen.GameScreen;
 
 public class StartScreen extends SlickGameState{
@@ -61,21 +60,13 @@ public class StartScreen extends SlickGameState{
 
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
-		
+
+		g.setFont(SlickSKR.DEFAULT_FONT);
 		g.drawImage(backgroundImage, 0, 0);
 		
-		int textx;
-		int texty;
-		String s;
-		
 		for (int i = 0; i < commands.length; i++){
-			s = commands[i];
-			textx = buttonWidth - g.getFont().getWidth(s);
-			texty = 200 + g.getFont().getHeight(s);
-			g.drawString(s, 250 + (textx / 2), texty + (i * 100));
-			g.draw(rects[i]);
+			rects[i].paintCenter(g);
 		}
-		
 		
 	}
 	

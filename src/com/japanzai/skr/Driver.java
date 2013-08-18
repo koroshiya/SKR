@@ -353,10 +353,8 @@ public class Driver implements Serializable{
 		dialogue.add("This game really lacks content, doesn't it?");
 		//Tile tileNPC = NPC(imgNPC, dialogue);
 		ArrayList<Item> storeItems = new ArrayList<Item>();
-		storeItems.add(weapons.get(0));
-		storeItems.add(weapons.get(1));
-		storeItems.add(weapons.get(2));
-		storeItems.add(Inventory.getItemByIndex(0));
+		storeItems.add(Inventory.getConsumables().get(0).create(5));
+		storeItems.add(Inventory.getConsumables().get(1).create(2));
 		StoreInstance store = new StoreInstance(storeItems);
 		CharacterEventTile tileNPC = new CharacterEventStoreTile(imgNPC, InteractiveNPC(imgNPC, dialogue), store);
 		PresetTile preTile1 = new PresetTile(tileNPC, 1, 5);

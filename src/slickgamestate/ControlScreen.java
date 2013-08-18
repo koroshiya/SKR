@@ -20,11 +20,9 @@ public class ControlScreen extends SlickGameState{
 	}	
 	
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {}
-
-	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
-		
+
+		g.setFont(SlickSKR.DEFAULT_FONT);
 		g.drawString("Controls:", 20, 100);
 		g.drawString("A - Interact", 20, 120);
 		g.drawString("W - Menu", 20, 140);

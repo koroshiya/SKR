@@ -1,3 +1,10 @@
+v0.24
+Merged common Store and InventoryWindow params
+Fixed display for non-Inventory items in Store
+Fixed ConsumableItem creation
+Added/Implemented custom fonts & changed default font
+Further reduction to screen tearing on map
+
 v.023
 Added MapGenerator and DialogueGenerator applications
 Fixes to DialogueGenerator interface and file writing

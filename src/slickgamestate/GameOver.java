@@ -35,12 +35,12 @@ public class GameOver extends SlickGameState {
 
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
+		g.setFont(SlickSKR.DEFAULT_FONT);
 		g.drawImage(label, 0, 0);
 		for (SlickRectangle rect : rects){
 			rect.paint(g);
 		}
 	}
-
 	
 	@Override
 	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {

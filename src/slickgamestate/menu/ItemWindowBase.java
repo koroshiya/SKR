@@ -1,8 +1,7 @@
-package slickgamestate;
+package slickgamestate.menu;
 
 import item.ConsumableItem;
 import item.Item;
-import item.StoreInstance;
 import item.Weapon;
 
 import java.io.IOException;
@@ -12,6 +11,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -19,27 +19,26 @@ import com.japanzai.skr.Inventory;
 
 import controls.SlickRectangle;
 import screen.GameScreen;
+import slickgamestate.SlickGameState;
+import slickgamestate.SlickSKR;
 
-public class Store extends SlickGameState{
+public abstract class ItemWindowBase extends SlickGameState{
 	
 	private String lblMoney;
 	private final Rectangle filterPane = new Rectangle(0, 0, 300f, 550f);
-	private SlickRectangle[] filterItems;
-
-	private ArrayList<Item> results = new ArrayList<Item>();
-
-	private final String[] commands = {"All Items [A]", "Consumables [C]", "Weapons [W]", "Miscellaneous [M]", "Back to Map [B]", "Inventory [I]", "Store [S]"};
+	protected final String[] commands;
 	
+	protected SlickRectangle[] filterItems;
+
+	protected ArrayList<Item> results = new ArrayList<Item>();
 	private SlickRectangle[] itemParams;
 	
 	private Item item;
 	private SlickRectangle[] items;
-	
-	private StoreInstance store;
-	private boolean boolInventory = false;
-	
-	public Store(GameScreen parent) {
-		super(SlickSKR.STORE, parent);
+
+	public ItemWindowBase(int state, GameScreen parent, String[] commands) {
+		super(state, parent);
+		this.commands = commands;
 		
 		final float x = 410;
 		float y = 0;
@@ -61,87 +60,69 @@ public class Store extends SlickGameState{
 			y += optY;
 			optY = optY == 0 ? baseY : 0;
 		}
+	}
+	
+	@Override
+	public void enter(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+
+		setFilter(commands[0]);
+		setItem(0);
+		lblMoney = "Funds: " + Inventory.getMoney() + " yen";
+		Inventory.initialize();
 		
-		filterItems = new SlickRectangle[commands.length];
+	}
+	
+	@Override
+	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
+
+		g.setFont(SlickSKR.DEFAULT_FONT);
+		getInventoryFilterPane(g);
+		getInventorySelectedItem(g);
+		getMoneyPane(g);
+		displayResults(g);
 		
-		final float filterx = 0;
+	}
+
+	@Override
+	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
+		
+		for (SlickRectangle s : filterItems){
+			if (s.isWithinBounds(x, y)){
+				this.setFilter(s.getTag());
+				break;
+			}
+		}
+		
+		for (SlickRectangle s : items){
+			if (s.isWithinBounds(x, y)){
+				setItem(results.get(Integer.parseInt(s.getTag())));
+				break;
+			}
+		}
+		
+	}
+	
+	protected abstract void setFilter(String filter);
+	
+	protected abstract int getFilterY(int baseY, int i);
+	
+	protected void resetFilter(int length){
+		final int filterx = 0;
 		float filtery;
-		final float filterBaseY = 50;
-		final float paneWidth = 300;
+		final int filterBaseY = 50;
+		final int paneWidth = 300;
 		
-		for (int i = 0; i < commands.length - 2; i++){
-			filtery = filterBaseY + filterBaseY * i;
+		for (int i = 0; i < length; i++){
+			filtery = getFilterY(filterBaseY, i);
 			try {
 				filterItems[i] = new SlickRectangle(filterx, filtery, paneWidth, filterBaseY, commands[i]);
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		for (int i = commands.length - 2; i < commands.length; i++){
-			filtery = filterBaseY;
-			try {
-				filterItems[i] = new SlickRectangle(paneWidth / 2 * (i % 2), 0, paneWidth / 2, filterBaseY, commands[i]);
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
-		}
-		
 	}
 	
-	public void setStore(StoreInstance store){
-		this.store = store;
-		setFilter(commands[0]);
-	}
-	
-	private void process(String tag){
-		if (tag.startsWith("BUY")){
-			
-		}else if (tag.startsWith("SELL")){
-			
-		}else if (tag.startsWith("SELECT")){
-			
-		}
-	}
-	
-	private void selectItem(Item i){}
-	
-	private void sellItem(Item i, int quantity){}
-	
-	private void buyItem(Item i, int quantity){}
-	
-	
-	
-	
-
-	public void setFilter(String filter){
-		
-		System.out.println("Filter: " + filter);
-		
-		if (filter.equals(commands[0])){
-			results = boolInventory ? Inventory.getItemsInInventory() : store.getItemsInInventory();
-		}else if (filter.equals(commands[1])){
-			results = boolInventory ? Inventory.getConsumablesAsItems() : store.getConsumablesAsItems();
-		}else if (filter.equals(commands[2])){
-			results = boolInventory ? Inventory.getWeaponsAsItems() : store.getWeaponsAsItems();
-		}else if (filter.equals(commands[3])){
-			results = boolInventory ? Inventory.getMiscAsItems() : store.getMiscAsItems();
-		}else if (filter.equals(commands[4])){
-			this.parent.swapView(SlickSKR.MAP);
-			return;
-		}else if (filter.equals(commands[5])){
-			boolInventory = true;
-			setFilter(commands[0]);
-			return;
-		}else if (filter.equals(commands[6])){
-			boolInventory = false;
-			setFilter(commands[0]);
-			return;
-		}else {
-			System.out.println("Error: This code should never be reached.");
-			System.out.println("Unhandled filter type: " + filter);
-			return;
-		}
+	protected void setInventoryFilter(){
 		
 		final int incX = 150;
 		final int baseX = 300;
@@ -159,17 +140,17 @@ public class Store extends SlickGameState{
 		
 	}
 	
-	private void getInventoryFilterPane(Graphics g){
+	protected void getInventoryFilterPane(Graphics g){
 		
 		g.draw(filterPane);
 		
 		for (int i = 0; i < filterItems.length; i++){
-			filterItems[i].paintCenter(g);
+			filterItems[i].paintCenter(g, (TrueTypeFont) g.getFont());
 		}
 			
 	}
-	
-	private void displayResults(Graphics g){
+
+	protected void displayResults(Graphics g){
 
 		g.drawString("Name", 300, 100);
 		g.drawString("Quantity", 450, 100);
@@ -234,39 +215,11 @@ public class Store extends SlickGameState{
 		
 	}
 
-	@Override
-	public void enter(GameContainer arg0, StateBasedGame arg1) throws SlickException {
-		
-		setItem(0);
-		lblMoney = "Funds: " + Inventory.getMoney() + " yen";
-		
-	}
-
-	@Override
-	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
-		
-		getInventoryFilterPane(g);
-		getInventorySelectedItem(g);
-		getMoneyPane(g);
-		displayResults(g);
-		
-	}
+	public abstract void setItem(String itemName);
 	
+	public abstract void setItem(int itemIndex);
 	
-	
-	public void setItem(String itemName){
-		
-		setItem(Inventory.getItemByName(itemName));
-		
-	}
-	
-	public void setItem(int itemIndex){
-		
-		setItem(Inventory.getItemByIndex(itemIndex));
-		
-	}
-	
-	private void setItem(Item i){
+	protected void setItem(Item i){
 		
 		this.item = i;
 		itemParams[0].setText("Name: " + i.getName());		
@@ -308,42 +261,6 @@ public class Store extends SlickGameState{
 		itemParams[5].setText("Potency: " + strPotency);
 		
 	}
-		
-	@Override
-	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
-		
-		for (SlickRectangle s : filterItems){
-			if (s.isWithinBounds(x, y)){
-				this.setFilter(s.getTag());
-				break;
-			}
-		}
-		
-		for (SlickRectangle s : items){
-			if (s.isWithinBounds(x, y)){
-				setItem(results.get(Integer.parseInt(s.getTag())));
-				break;
-			}
-		}
-		
-	}
-	
-	@Override
-	public void keyReleased(int code, char arg1) {
-		
-		if (code == Input.KEY_A){
-			this.setFilter(commands[0]);
-		}else if (code == Input.KEY_C){
-			this.setFilter(commands[1]);
-		}else if (code == Input.KEY_W){
-			this.setFilter(commands[2]);
-		}else if (code == Input.KEY_M){
-			this.setFilter(commands[3]);
-		}else if (code == Input.KEY_B){
-			this.setFilter(commands[4]);
-		}
-		
-	}
 	
 	@Override
 	public void mouseReleased(int arg0, int x, int y) {
@@ -358,5 +275,21 @@ public class Store extends SlickGameState{
 		
 	}
 	
-
+	protected boolean keyReleased(int code){
+		if (code == Input.KEY_A){
+			this.setFilter(commands[0]);
+		}else if (code == Input.KEY_C){
+			this.setFilter(commands[1]);
+		}else if (code == Input.KEY_W){
+			this.setFilter(commands[2]);
+		}else if (code == Input.KEY_M){
+			this.setFilter(commands[3]);
+		}else if (code == Input.KEY_B){
+			this.setFilter(commands[4]);
+		}else{
+			return false;
+		}
+		return true;
+	}
+	
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -33,8 +32,7 @@ public class MenuMainWindow extends SlickGameState{
 	private int timer = 0;
 	private String message = "";
 	private SlickRectangle alert;
-	private Font VICTORY_FONT;
-	private Font DEFAULT_FONT;
+	private TrueTypeFont VICTORY_FONT;
 	
 	ArrayList<PlayableCharacter> characters;
 
@@ -99,21 +97,19 @@ public class MenuMainWindow extends SlickGameState{
 			characters.get(i).instantiate();
 			menuCharacters[i] = new SlickRectangle(0, 150 * i, x, 150, Integer.toString(i));
 		}
-		VICTORY_FONT = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 24), false);
-		DEFAULT_FONT = arg0.getDefaultFont();
+		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 24);
 		alert = new SlickRectangle(150, 200, 550, 40, "");
 	}
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
-		
+
+		g.setFont(SlickSKR.DEFAULT_FONT);
 		menuItemPane(g);
 		characterPane(g);
 		if (timer > 0){
-			g.setFont(VICTORY_FONT);
 			alert.setText(message);
-			alert.paintCenter(g);
-			g.setFont(DEFAULT_FONT);
+			alert.paintCenter(g, VICTORY_FONT);
 			timer--;
 		}
 		
