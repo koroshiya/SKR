@@ -2,6 +2,7 @@ package com.japanzai.skr;
 
 import item.ConsumableItem;
 import item.Item;
+import item.StoreInstance;
 import item.Weapon;
 
 import java.awt.Point;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 import org.newdawn.slick.SlickException;
 
@@ -26,16 +26,13 @@ import com.japanzai.jreader.dialog.JxDialog;
 import console.dialogue.ComplexDialogue;
 import console.dialogue.Dialogue;
 import console.dialogue.Line;
-
 import map.ParentMap;
 import map.generator.MapGenerator;
 import map.generator.TileGenerator;
-
 import character.BossCharacter;
 import character.EnemyCharacter;
 import character.NonPlayableCharacter;
 import character.PlayableCharacter;
-
 import screen.GameScreen;
 import slickgamestate.MapScreen;
 import slickgamestate.SlickSKR;
@@ -49,12 +46,10 @@ import tile.RandomTile;
 import tile.Tile;
 import tile.TransitionTile;
 import tile.event.CharacterEventBattleTile;
+import tile.event.CharacterEventStoreTile;
 import tile.event.CharacterEventTile;
-
 import animation.AnimatedSprite;
 
-
- 
 public class Driver implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -197,7 +192,7 @@ public class Driver implements Serializable{
 		String slime = "/res/enemy/monster/slime/";
 		String fat = "/res/enemy/human/boss/fatty/";
 		ConsumableItem rice = new ConsumableItem("Riceball", 1, 0, 10, null);
-							
+		
 		EnemyCharacter henchman = new EnemyCharacter("Random", "Flunkie", 
 				styles.get(2), weapons.get(0), genders.get(1), 12, "Militia", genericEnemySprite,
 				rice, 30, 20, 50);
@@ -238,7 +233,7 @@ public class Driver implements Serializable{
 	private void instantiateInventory(){
 		
 		Inventory.addWeapons(weapons);
-
+		
 		String imgRice = "/res/item/food/riceball.png";
 		String imgKimchi = "/res/item/food/kimchi.png";
 		//String name, int value, int rarity, int potency
@@ -249,7 +244,7 @@ public class Driver implements Serializable{
 		
 		Inventory.addItem(rice);
 		Inventory.addItem(kimchi);
-		
+		Inventory.setMoney(50);
 
 		
 	}
@@ -357,7 +352,13 @@ public class Driver implements Serializable{
 		dialogue.add("Hello there, Ken.");
 		dialogue.add("This game really lacks content, doesn't it?");
 		//Tile tileNPC = NPC(imgNPC, dialogue);
-		CharacterEventTile tileNPC = new CharacterEventTile(imgNPC, InteractiveNPC(imgNPC, dialogue), SlickSKR.MENU);
+		ArrayList<Item> storeItems = new ArrayList<Item>();
+		storeItems.add(weapons.get(0));
+		storeItems.add(weapons.get(1));
+		storeItems.add(weapons.get(2));
+		storeItems.add(Inventory.getItemByIndex(0));
+		StoreInstance store = new StoreInstance(storeItems);
+		CharacterEventTile tileNPC = new CharacterEventStoreTile(imgNPC, InteractiveNPC(imgNPC, dialogue), store);
 		PresetTile preTile1 = new PresetTile(tileNPC, 1, 5);
 		
 		ArrayList<String> dialogue2 = new ArrayList<String>();

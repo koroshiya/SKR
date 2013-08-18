@@ -1,6 +1,7 @@
 package com.japanzai.skr;
 import item.ConsumableItem;
 import item.Item;
+import item.StoreInstance;
 import item.Weapon;
 
 import java.util.ArrayList;
@@ -27,23 +28,31 @@ public class Inventory {
 		return cost <= money;
 	}
 	
-	public static void sellItem(Item item, int quantity){
-		
-		if (item.canSell(quantity)){
-			item.sell(quantity);
-			receiveMoney(item.getValue() * quantity);
+	public static boolean sellItem(StoreInstance store, Item i, int quantity){
+		store.addItem(i);
+		Item dest = store.getItem(i);
+		if (dest.canBuy(quantity) && i.canSell(quantity)){
+			i.decreaseQuantity(quantity);
+			dest.buy(quantity);
+			receiveMoney(i.getValue() * quantity);
+			return true;
 		}
-		
+		return false;
 	}
 	
-	public static void buyItem(Item item, int quantity){
-		if (canAfford(item.getValue() * quantity) && item.canBuy(quantity)){
-			if (isItemInInventory(item)){
-				addItem(item);
-			}
-			item.buy(quantity);
-			payMoney(item.getValue() * quantity);
+	public static boolean buyItem(StoreInstance store, int index, int quantity){
+		Item src = store.getItem(index);
+		if (!isItemInInventory(src)){
+			addItem(src);
 		}
+		Item dest = getItem(src.getName());
+		if (canAfford(src.getValue() * quantity) && dest.canBuy(quantity) && src.canSell(quantity)){
+			src.decreaseQuantity(quantity);
+			dest.buy(quantity);
+			payMoney(src.getValue() * quantity);
+			return true;
+		}
+		return false;
 	}
 	
 	public static boolean isItemInInventory(Item item){
@@ -91,8 +100,8 @@ public class Inventory {
 	public static void addItem(Item item){
 		
 		if (item != null){
-			if (!isItemInInventory(item)){items.add(item);}
-			item.increaseQuantity(1);
+			if (!isItemInInventory(item)){items.add(item.create(0));}
+			getItemByName(item.getName()).increaseQuantity(1); //TODO: may create bug with items in store
 		}
 		
 	}
@@ -240,6 +249,12 @@ public class Inventory {
 	
 	public static ArrayList<Item> getItemsInInventory(){
 		
+		return getItemsInInventory(items);
+		
+	}
+	
+	public static ArrayList<Item> getItemsInInventory(ArrayList<Item> items){
+		
 		ArrayList<Item> itemsInStock = new ArrayList<Item>();
 		
 		for (Item i : items){
@@ -252,6 +267,12 @@ public class Inventory {
 	}
 	
 	public static ArrayList<Item> getWeaponsAsItems(){
+		
+		return getWeaponsAsItems(items);
+		
+	}
+	
+	public static ArrayList<Item> getWeaponsAsItems(ArrayList<Item> items){
 		
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
@@ -267,6 +288,12 @@ public class Inventory {
 	
 	public static ArrayList<Item> getConsumablesAsItems(){
 		
+		return getConsumablesAsItems(items);
+		
+	}
+
+	public static ArrayList<Item> getConsumablesAsItems(ArrayList<Item> items){
+		
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
 		for (Item item : items){
@@ -280,6 +307,12 @@ public class Inventory {
 	}
 	
 	public static ArrayList<Item> getMiscAsItems(){
+		
+		return getMiscAsItems(items);
+		
+	}
+	
+	public static ArrayList<Item> getMiscAsItems(ArrayList<Item> items){
 		
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		

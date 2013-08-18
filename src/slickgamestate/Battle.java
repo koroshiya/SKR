@@ -86,9 +86,9 @@ public class Battle extends SlickGameState{
 		
 	}
 	
-	public void start() throws SlickException{
+	private void start() throws SlickException{
 		
-		//make arraylist of all players and enemies, then order by speed?
+		//TODO: make arraylist of all players and enemies, then order by speed?
 		
 		/*if (enemies.get(0) instanceof BossCharacter){
 			BossCharacter bc = (BossCharacter) enemies.get(0);
@@ -188,8 +188,15 @@ public class Battle extends SlickGameState{
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+		VICTORY_FONT = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 48), false);
+		DEFAULT_FONT = arg0.getDefaultFont();
+	}
+	
+	public void enter(GameContainer arg0, StateBasedGame arg1){
+
+		this.party = Party.getCharactersInParty();
 		
-		for (PlayableCharacter c : Party.getCharactersInParty()){
+		for (PlayableCharacter c : this.party){
 			c.instantiateForBattle();
 			c.startBattle();
 		}
@@ -199,13 +206,16 @@ public class Battle extends SlickGameState{
 			c.startBattle();
 		}
 		
-		this.currentCharacter = Party.getCharacters().get(0);
+		this.currentCharacter = this.party.get(0);
 		
-		setMenu();
 		BattleConsole.cleanConsole();
-		VICTORY_FONT = new TrueTypeFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 48), false);
-		DEFAULT_FONT = arg0.getDefaultFont();
+		resetDefaultInterface();
 		
+		try {
+			this.start();
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -496,13 +506,6 @@ public class Battle extends SlickGameState{
 	
 	public void setEnemies(ArrayList<EnemyCharacter> enemies) {
 		this.enemies = enemies;
-		this.party = Party.getCharactersInParty();
-		resetDefaultInterface();
-		try {
-			this.start();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private void setTargetEnemies() throws SlickException{

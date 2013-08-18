@@ -3,6 +3,8 @@ package item;
 import java.io.Serializable;
 import java.lang.Math;
 
+import org.newdawn.slick.SlickException;
+
 public class Weapon extends Item implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -101,6 +103,22 @@ public class Weapon extends Item implements Serializable{
 	public void setEquipped(boolean equipped){this.boolEquipped = equipped;}
 	
 	public int getSpeed(){return this.speed;}
+
+	@Override
+	public Item create(int quantity) {
+		try {
+			Weapon w = new Weapon(getName(), intType, Strength, Defence, 
+					Evasion, Mind, critical, accuracy,
+					range, onehanded, getRarity(), 0,
+					getAvatar());
+			w.increaseQuantity(quantity);
+			w.setValue(super.getValue());
+			return w;
+		} catch (SlickException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 
 

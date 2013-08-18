@@ -1,4 +1,5 @@
 package generator.dialogue;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -20,8 +21,8 @@ public class GUI extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
 	
-	public static final String[] commands = {"Add line", "Add question", "End dialogue", "Remove line", "Remove all"};
-	private JButton[] buttons = new JButton[3];
+	public static final String[] commands = {"Add line", "Add question", "End dialogue", "Remove line", "Remove all", "Add newline"};
+	private JButton[] buttons;
 	private JTextArea textInput;
 	private JTextField textEntry;
 	private boolean question = false;
@@ -67,11 +68,12 @@ public class GUI extends JFrame{
 		this.add(panel);
 		
 		JPanel rightPane = new JPanel();
-		rightPane.setLayout(new GridLayout(4, 0));
+		rightPane.setLayout(new GridLayout(commands.length - 1, 0));
 		rightPane.setMaximumSize(new Dimension(100, 400));
 		
 		ButtonListener listener = new ButtonListener(this);
 		
+		buttons = new JButton[commands.length];
 		for (int i = 1; i < buttons.length; i++){
 			buttons[i] = setJButton(commands[i], listener);
 			rightPane.add(buttons[i]);
@@ -121,6 +123,10 @@ public class GUI extends JFrame{
 		
 	}
 	
+	public void addNewline(){
+		textEntry.setText(textEntry.getText() + "\\n");
+	}
+	
 	public void end(){
 		if (write()){
 			System.exit(0);
@@ -136,14 +142,11 @@ public class GUI extends JFrame{
 		}else{
 			writeOut.add("Dialogue cd = new Dialogue();");
 		}
-		writeOut.add("\n");
 		for (int i = 0; i < max; i++){
 			writeOut.add("cd.addLine(new Line(npc, \"" + this.dialogue.get(i) + "\", " + i + ", false));");
-			writeOut.add("\n");
 		}
 		if (question){
 			writeOut.add("cd.addLine(new Line(npc, \"" + this.dialogue.get(max) + "\", " + max + ", true));");
-			writeOut.add("\n");
 		}
 		return export(writeOut);
 	}
@@ -151,12 +154,13 @@ public class GUI extends JFrame{
 	private boolean export(ArrayList<String> outputText){
 		
 		try {
-			if (!outputFile.exists()){
+			boolean exists = outputFile.exists();
+			if (!exists){
 				outputFile.createNewFile();
 			}
-			BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile, exists));
 			for (String line : outputText){
-				writer.write(line);
+				writer.write(line + "\n");
 			}
 			writer.close();
 			System.out.println("Map successfully written to: " + outputFile.getAbsolutePath());
@@ -167,7 +171,7 @@ public class GUI extends JFrame{
 		}
 		
 	}
-
+	
 	public void clearLast() {
 		this.dialogue.remove((this.dialogue.size() - 1));
 		String[] lines = textInput.getText().split("\\n");

@@ -2,6 +2,8 @@ package item;
 
 import java.io.Serializable;
 
+import org.newdawn.slick.SlickException;
+
 import character.CombatCapableCharacter;
 
 public class ConsumableItem extends Item implements Serializable{
@@ -10,8 +12,7 @@ public class ConsumableItem extends Item implements Serializable{
 	
 	private int potency;
 	
-	public ConsumableItem(String name, int value, int rarity, 
-							int potency, String avatar){
+	public ConsumableItem(String name, int value, int rarity, int potency, String avatar){
 		
 		super(name, value, rarity, avatar);
 		this.potency = potency;
@@ -40,8 +41,14 @@ public class ConsumableItem extends Item implements Serializable{
 	 * */
 	public boolean usedOnDead(){return this.potency < 0;}
 
-
-
-	
+	@Override
+	public Item create(int quantity) {
+		try {
+			return new ConsumableItem(getName(), getValue(), getRarity(), potency, getAvatar());
+		} catch (SlickException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }

@@ -32,6 +32,8 @@ public class ButtonListener implements ActionListener{
 				parent.clearLast();
 			}else if (command.equals(GUI.commands[4])){
 				parent.clearAll();
+			}else if (command.equals(GUI.commands[5])){
+				parent.addNewline();
 			}
 			
 		}

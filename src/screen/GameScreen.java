@@ -2,8 +2,6 @@ package screen;
 
 import interfaces.InteractableObject;
 
-import javax.swing.JOptionPane;
-
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
@@ -16,8 +14,6 @@ import slickgamestate.SlickSKR;
 import map.ParentMap;
 
 import character.EnemyCharacter;
-
-import com.japanzai.skr.Driver;
 
 import console.MapConsole;
 import console.dialogue.Dialogue;
@@ -59,13 +55,7 @@ public class GameScreen extends AppGameContainer{
 	
 	public void setBattle(ArrayList<EnemyCharacter> enemies){
 		
-		//try {
-			//((StateBasedGame)this.game).addState(new Battle(this, enemies));
-			//((Battle)this.getState(SlickSKR.BATTLE)) = new Battle();
-			((Battle)this.getState(SlickSKR.BATTLE)).setEnemies(enemies);
-		//} catch (SlickException e) {
-		//	e.printStackTrace();
-		//}
+		((Battle)this.getState(SlickSKR.BATTLE)).setEnemies(enemies);
 		((StateBasedGame)super.game).enterState(SlickSKR.BATTLE);
 		
 	}

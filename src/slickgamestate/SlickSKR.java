@@ -24,6 +24,7 @@ public class SlickSKR extends StateBasedGame {
 	public static final int MENU = 2;
 	public static final int INVENTORY = 3;
 	public static final int CHARACTER = 4;
+	public static final int STORE = 5;
 	public static final int MAINMENU = 664;
 	public static final int CONTROLSCREEN = 665;
 	public static final int GAMEOVER = 666;
@@ -39,6 +40,7 @@ public class SlickSKR extends StateBasedGame {
 		this.addState(new MenuMainWindow(gs));
 		this.addState(new InventoryWindow(gs));
 		this.addState(new CharacterProfileWindow(gs));
+		this.addState(new Store(gs));
 		this.addState(new StartScreen(gs));
 		this.addState(new GameOver(gs));
 		

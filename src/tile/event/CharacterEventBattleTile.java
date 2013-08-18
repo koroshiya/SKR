@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.SlickException;
 
-
-
 import screen.GameScreen;
 import slickgamestate.Battle;
 import slickgamestate.SlickSKR;
@@ -15,7 +13,7 @@ import character.NonPlayableCharacter;
 
 public class CharacterEventBattleTile extends CharacterEventTile{
 	
-	private ArrayList<EnemyCharacter> enemies;
+	private final ArrayList<EnemyCharacter> enemies;
 	
 	public CharacterEventBattleTile(String spritePath, NonPlayableCharacter npc, EnemyCharacter enemy) throws SlickException {
 
@@ -36,11 +34,6 @@ public class CharacterEventBattleTile extends CharacterEventTile{
 		Battle battle = ((Battle)parent.getState(SlickSKR.BATTLE));
 		battle.setEnemies(enemies);
 		super.interact(parent);
-		try {
-			battle.start();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

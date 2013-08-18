@@ -1,4 +1,10 @@
 v.023
+Added MapGenerator and DialogueGenerator applications
+Fixes to DialogueGenerator interface and file writing
+Implemented basic StoreInstance object
+Fixed InventoryWindow and Store list instantiation
+Fixed battle instantiation
+Fixes made to Inventory
 
 v0.22
 Confirmed ComplexDialogue of greater than two levels
