@@ -10,11 +10,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import slickgamestate.Battle;
 import slickgamestate.MapScreen;
 import slickgamestate.SlickSKR;
-
 import map.ParentMap;
-
 import character.EnemyCharacter;
-
 import console.MapConsole;
 import console.dialogue.Dialogue;
 
@@ -25,6 +22,7 @@ public class GameScreen extends AppGameContainer{
 	public GameScreen(SlickSKR skr) throws SlickException{
 		
 		super(skr);
+		this.setIcon((("images/icon.png")));
 		
 	}
 	

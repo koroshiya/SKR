@@ -1,10 +1,10 @@
 package character;
 
+import interfaces.Serial;
 import item.ConsumableItem;
 import item.Weapon;
 
 import java.util.ArrayList;
-import java.io.Serializable;
 import java.lang.Math;
 
 import org.newdawn.slick.Image;
@@ -14,45 +14,44 @@ import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
 
 import console.BattleConsole;
-
 import technique.FuryBreak;
 import technique.HealingTechnique;
 
-public class PlayableCharacter extends CombatCapableCharacter implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
+public class PlayableCharacter extends CombatCapableCharacter implements Serial {
 
-	private ArrayList<Weapon> supportedWeapons;
+	private final ArrayList<Weapon> supportedWeapons;
 	//PlayableCharacter profile picture?
 	
-	private String height;
-	private String occupation;
+	private final String height;
+	private final String occupation;
 	
 	private int experience;
 	private int experienceToNextLevel;
-	private String unique;
-	private String nationality;
+	private final String unique;
+	private final String nationality;
 	private int temper; //0 min, 10 max. If 10, show "Fury break" instead of "attack"
 	
 	private boolean inParty;
 	private FuryBreak fury;
-		
-	public PlayableCharacter (String firstName, String lastName, FightingStyle style, 
-					Weapon weapon, Gender gender,
-					String unique, String occupation, String height,
-					String nationality, int level, FuryBreak fury, 
-					String nickName, String sprite){
-						
-	this(firstName, lastName, style, weapon, gender, 
-			unique, occupation, height, nationality, nickName, sprite);
-	setLevel(level, null);
-		
-	}
 	
 	public PlayableCharacter (String firstName, String lastName, FightingStyle style, 
 					Weapon weapon, Gender gender,
 					String unique, String occupation, String height,
-					String nationality, String nickName, String sprite){
+					String nationality, int level, FuryBreak fury, 
+					String nickName, String sprite, ArrayList<Weapon> supportedWeapons){
+						
+		this(firstName, lastName, style, weapon, gender, 
+				unique, occupation, height, nationality, 
+				nickName, sprite, supportedWeapons);
+		setLevel(level, null);
+		
+	}
+	
+	public PlayableCharacter (String firstName, String lastName, FightingStyle style, 
+							Weapon weapon, Gender gender,
+							String unique, String occupation, String height,
+							String nationality, String nickName, String sprite,
+							ArrayList<Weapon> supportedWeapons){
 						
 		super(firstName, lastName, style, weapon, gender, nickName, sprite);
 	
@@ -64,6 +63,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Seriali
 		this.unique = unique;
 		this.temper = 0;
 		this.inParty = false;
+		this.supportedWeapons = supportedWeapons;
 		
 	}
 	
@@ -199,6 +199,18 @@ public class PlayableCharacter extends CombatCapableCharacter implements Seriali
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void setExperience(int experience2) {
+		this.experience = experience2;
+	}
+
+	public void setExperienceToNextLevel(int experienceToNextLevel2) {
+		this.experienceToNextLevel = experienceToNextLevel2;
+	}
+
+	public void setTemper(int temper2) {
+		this.temper = temper2;
 	}
 	
 }

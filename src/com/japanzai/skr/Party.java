@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.SlickException;
 
 import character.PlayableCharacter;
+import character.PlayableCharacterSave;
 
 public class Party {
 	
@@ -151,7 +152,22 @@ public class Party {
 	public static void setParty(ArrayList<PlayableCharacter> newCharacters){
 		characters = newCharacters;
 	}
-
+	
+	public static ArrayList<PlayableCharacterSave> getCharactersSaved(){
+		ArrayList<PlayableCharacterSave> saved = new ArrayList<PlayableCharacterSave>();
+		for (PlayableCharacter c : characters){
+			saved.add(new PlayableCharacterSave(c));
+		}
+		return saved;
+	}
+	
+	public static void setCharactersSaved(ArrayList<PlayableCharacterSave> saved){
+		ArrayList<PlayableCharacter> chars = new ArrayList<PlayableCharacter>();
+		for (PlayableCharacterSave s : saved){
+			chars.add((PlayableCharacter)s.serialLoad());
+		}
+		characters = chars;
+	}
 	
 	public static void initialize() throws SlickException {
 		

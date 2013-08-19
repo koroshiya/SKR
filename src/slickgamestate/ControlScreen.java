@@ -4,14 +4,16 @@ import java.io.IOException;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameScreen;
 
-
 public class ControlScreen extends SlickGameState{
+
+	private Image backgroundImage;
 	
 	public ControlScreen(GameScreen battleScreen) {
 		
@@ -20,9 +22,16 @@ public class ControlScreen extends SlickGameState{
 	}	
 	
 	@Override
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
+		backgroundImage = new Image("/res/start.png");
+	}
+	
+	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 
 		g.setFont(SlickSKR.DEFAULT_FONT);
+		g.drawImage(backgroundImage, 0, 0);
+		
 		g.drawString("Controls:", 20, 100);
 		g.drawString("A - Interact", 20, 120);
 		g.drawString("W - Menu", 20, 140);

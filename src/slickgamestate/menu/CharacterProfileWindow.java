@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -15,7 +16,6 @@ import slickgamestate.SlickSKR;
 import com.japanzai.skr.Party;
 
 import controls.SlickRectangle;
-
 import character.PlayableCharacter;
 
 public class CharacterProfileWindow extends SlickGameState{
@@ -79,13 +79,13 @@ public class CharacterProfileWindow extends SlickGameState{
 		*/
 
 		labels[5] = ("Level: " + Integer.toString(character.getLevel()));
-		labels[6] = ("HP: " + Integer.toString(character.getHP()));
-		labels[7] = ("Strength: " + Integer.toString(character.getStrength()));
-		labels[8] = ("Defence: " + Integer.toString(character.getDefence()));
-		labels[9] = ("Mind: " + Integer.toString(character.getMind()));
-		labels[10] = ("Evasion: " + Double.toString(character.getEvasion() * 100) + "%");
-		labels[11] = ("Accuracy: " + Double.toString(character.getAccuracy() * 100) + "%");
-		labels[12] = ("Speed: " + Integer.toString(character.getSpeed()));
+		labels[6] = ("HP: " + Integer.toString(character.getStats().getHP()));
+		labels[7] = ("Strength: " + Integer.toString(character.getStats().getStrength()));
+		labels[8] = ("Defence: " + Integer.toString(character.getStats().getDefence()));
+		labels[9] = ("Mind: " + Integer.toString(character.getStats().getMind()));
+		labels[10] = ("Evasion: " + Double.toString(character.getStats().getEvasion() * 100) + "%");
+		labels[11] = ("Accuracy: " + Double.toString(character.getStats().getAccuracy() * 100) + "%");
+		labels[12] = ("Speed: " + Integer.toString(character.getStats().getSpeed()));
 		
 	}
 	
@@ -95,6 +95,9 @@ public class CharacterProfileWindow extends SlickGameState{
 	public void enter(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		
 		this.setCharacter(Party.getCharacterByIndex(0));
+		for (PlayableCharacter p : Party.getCharacters()){
+			p.instantiate();
+		}
 		partyMembers = new SlickRectangle[Party.getCharacters().size()];
 		
 		int row = 0;
@@ -161,6 +164,15 @@ public class CharacterProfileWindow extends SlickGameState{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void keyReleased(int code, char arg1) {
+		
+		if (code == Input.KEY_W){
+			parent.swapView(SlickSKR.MENU);
+		}
+		
 	}
 	
 }

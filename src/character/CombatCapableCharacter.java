@@ -4,7 +4,6 @@ import item.Item;
 import item.Weapon;
 
 import java.util.ArrayList;
-import java.io.Serializable;
 import java.lang.Math;
 
 import org.newdawn.slick.Image;
@@ -17,46 +16,23 @@ import com.japanzai.skr.Gender;
 import com.japanzai.skr.Inventory;
 
 import console.BattleConsole;
-
 import technique.CombatTechnique;
 import technique.HealingTechnique;
 import technique.Technique;
 
-public abstract class CombatCapableCharacter extends Character implements Serializable{
+public abstract class CombatCapableCharacter extends Character{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private FightingStyle style;
 	private Weapon weapon; //Weapon type. eg. Fists, pickaxe, etc.   //Weapon leftHand and rightHand?
 	private ArrayList<Technique> techniques;
 	
 	private Image dead;
 	private Image alive;
-	/*
-	 * TODO: Add sprite imageicon
-	 * TODO: Add avatar imageicon
-	 * TODO: Add profile pic imageicon
-	 * */
 	
-	private int level;
+	protected int level;
 	
-	private int statHP;
-	private int statStrength;
-	private int statDefence;
-	private int statMind;
-	private double statEvasion; //evasion as a ratio.
-	private double statAccuracy; //accuracy as a ratio. eg. 100% hit rate
-	private int statSpeed;
-	
-	private int currentHP;
-	private int currentStrength;
-	private int currentDefence;
-	private int currentMind;
-	private double currentEvasion;
-	private double currentAccuracy;
-	private int currentSpeed;
+	private Status status;
+	private Status currentStatus;
 	
 	private double gauge;
 	
@@ -76,20 +52,10 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 		this.style = style;
 		this.level = 1; //Change way it's set?
-		
-		this.statHP = style.getBaseHP();
-		this.statStrength = style.getBaseStrength();
-		this.statDefence = style.getBaseDefence();
-		this.statEvasion = style.getBaseEvasion();
-		this.statMind = style.getBaseMind();
-		this.statAccuracy = style.getBaseAccuracy();
-		this.statSpeed = style.getBaseSpeed();
-		
-		this.currentHP = this.statHP;
-		
-		//this.sprite = new JLabel(this.getName());
 
-		//this.sprite = new JLabel(new ImageIcon("../images/ken/forward1.png"));
+		this.status = new Status(style.getBaseStats());
+		this.currentStatus = new Status(style.getBaseStats());
+		
 		this.weapon = weapon;
 		this.techniques = new ArrayList<Technique>();
 		
@@ -107,7 +73,7 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 	public void attack(CombatCapableCharacter opponent){
 		
-		double accuracy = this.currentAccuracy * this.weapon.getAccuracy();
+		double accuracy = this.currentStatus.getAccuracy() * this.weapon.getAccuracy();
 		boolean hit = calcAccuracy(accuracy) && !opponent.calcEvade();
 		
 		dealDamage(hit, this.weapon.attack(), opponent);
@@ -124,7 +90,7 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 		if (tech.getAlwaysHits()){
 			hit = true;
 		}else{
-			double accuracy = this.currentAccuracy * tech.getAccuracy();
+			double accuracy = this.currentStatus.getAccuracy() * tech.getAccuracy();
 			hit = calcAccuracy(accuracy) && !opponent.calcEvade();
 		}
 		
@@ -140,8 +106,8 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	private void dealDamage(boolean hit, int str, CombatCapableCharacter opponent){
 		
 		if (hit){
-			int attackStrength = str + this.currentStrength;
-			int damageTaken = opponent.takeDamage(attackStrength, this.currentStrength);
+			int attackStrength = str + this.currentStatus.getStrength();
+			int damageTaken = opponent.takeDamage(attackStrength, this.currentStatus.getStrength());
 			BattleConsole.writeConsole(getName() + " dealt " + damageTaken + " to " + opponent.getName());
 			if (!opponent.isAlive()){
 				BattleConsole.writeConsole(getName() + " defeated " + opponent.getName());
@@ -181,7 +147,7 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 	public boolean calcEvade(){
 		
-		return calculate(this.currentEvasion);
+		return calculate(this.currentStatus.getEvasion());
 		
 	}
 	
@@ -201,12 +167,12 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 	public int takeDamage(int damage, int attackPower){
 		
-		double ratio = (double)attackPower / (double)this.currentDefence;
+		double ratio = (double)attackPower / (double)this.currentStatus.getDefence();
 		int damageTaken = (int) Math.ceil((double)damage * ratio);
 		
 		
-		if (this.currentHP <= damageTaken){
-			this.currentHP = 0;
+		if (this.currentStatus.getHP() <= damageTaken){
+			this.currentStatus.setHP(0);
 			
 			//this.status.setFont(this.strike); //TODO: set this on start if dead?
 			
@@ -215,7 +181,7 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 			 * TODO: when implementing real sprites, change with dead sprite
 			 * */
 		}else{
-			this.currentHP -= damageTaken;
+			this.currentStatus.setHP(this.currentStatus.getHP() - damageTaken);
 		}
 		
 		return damageTaken;
@@ -225,14 +191,14 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	public void startBattle(){
 		
 		if (!(this instanceof PlayableCharacter)){
-			this.currentHP = this.statHP;
+			this.currentStatus.setHP(this.status.getHP());
 		}
-		this.currentStrength = this.statStrength;
-		this.currentDefence = this.statDefence;
-		this.currentMind = this.statMind;
-		this.currentEvasion = this.statEvasion;
-		this.currentAccuracy = this.statAccuracy;
-		this.currentSpeed = this.statSpeed;
+		this.currentStatus.setStrength(this.status.getStrength());
+		this.currentStatus.setDefence(this.status.getDefence());
+		this.currentStatus.setMind(this.status.getMind());
+		this.currentStatus.setEvasion(this.status.getEvasion());
+		this.currentStatus.setAccuracy(this.status.getAccuracy());
+		this.currentStatus.setSpeed(this.status.getSpeed());
 		this.gauge = 0;
 		
 		if (this.techniques != null){
@@ -258,17 +224,21 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 		BattleConsole.cleanConsole();
 		BattleConsole.writeConsole(getName() + " went up to level " + this.level);
 		
-		int curHP = this.statHP;
-		this.statHP += levelUpBonus() + getGender().getHPBonus() + style.getHPBonus(); //Bigger bonus for HP?
-		curHP = this.statHP - curHP;
-		this.currentHP += curHP;
+		int curHP = this.status.getHP();
 		
-		this.statStrength += levelUpBonus() + getGender().getStrengthBonus() + style.getStrengthBonus();
-		this.statDefence += levelUpBonus() + getGender().getDefenceBonus() + style.getDefenceBonus();
-		this.statMind += levelUpBonus() + getGender().getMindBonus() + style.getMindBonus();
-		this.statAccuracy += slightBonus();
-		this.statEvasion += slightBonus();
-		this.statSpeed += levelUpBonus() + getGender().getSpeedBonus() + style.getSpeedBonus();
+		this.status.setStats(
+				this.status.getHP() + levelUpBonus() + getGender().getHPBonus() + style.getHPBonus(),  //Bigger bonus for HP?
+				this.status.getStrength() + levelUpBonus() + getGender().getStrengthBonus() + style.getStrengthBonus(),
+				this.status.getDefence() + levelUpBonus() + getGender().getDefenceBonus() + style.getDefenceBonus(),
+				this.status.getMind() + levelUpBonus() + getGender().getMindBonus() + style.getMindBonus(),
+				this.status.getAccuracy() + slightBonus(),
+				this.status.getEvasion() + slightBonus(),
+				this.status.getSpeed() + levelUpBonus() + getGender().getSpeedBonus() + style.getSpeedBonus()
+							);
+		
+
+		curHP = this.status.getHP() - curHP;
+		this.currentStatus.setHP(this.currentStatus.getHP() + curHP);
 		
 		ArrayList<Technique> tech = this.style.getTechnique(this.level);
 		for (Technique t : tech){
@@ -304,21 +274,21 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 	//Getters/Setters/Is
 	
-	public boolean isAlive(){return this.currentHP != 0;}
+	public boolean isAlive(){return this.currentStatus.getHP() != 0;}
 	
 	public void revive(){
 		revive(50);
 	}
 	
 	public void revive(int percentHP){
-		this.currentHP = (int) Math.ceil(this.statHP * ((double)percentHP / 100));
+		this.currentStatus.setHP((int) Math.ceil(this.status.getHP() * ((double)percentHP / 100)));
 	}
 	
 	public void heal(int amount){
 		
-		this.currentHP += amount;
+		this.currentStatus.setHP(this.currentStatus.getHP() + amount);
 		BattleConsole.writeConsole(this.getName() + " recovered " + amount + " HP");
-		if (this.currentHP > this.statHP){this.currentHP = this.statHP;}
+		if (this.currentStatus.getHP() > this.status.getHP()){this.currentStatus.setHP(this.status.getHP());}
 		
 	}
 	
@@ -384,47 +354,9 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 	public int getLevel(){return this.level;}
 	
-	public int getHP(){return this.statHP;}
+	public Status getStats(){return this.status;}
 	
-	public int getStrength(){return this.statStrength;}
-	
-	public int getDefence(){return this.statDefence;}
-	
-	public int getMind(){return this.statMind;}
-	
-	public double getEvasion(){return this.statEvasion;}
-	
-	public double getAccuracy(){return this.statAccuracy;}
-	
-	public int getSpeed(){return this.statSpeed;}
-	
-	public int getCurrentHP(){return this.currentHP;}
-	
-	public int getCurrentStrength(){return this.currentStrength;}
-	
-	public int getCurrentDefence(){return this.currentDefence;}
-	
-	public int getCurrentMind(){return this.currentMind;}
-	
-	public double getCurrentEvasion(){return this.currentEvasion;}
-	
-	public double getCurrentAccuracy(){return this.currentAccuracy;}
-	
-	public int getCurrentSpeed(){return this.currentSpeed;}
-
-	public void setCurrentHP(int currentHP){this.currentHP = currentHP;}
-	
-	public void setCurrentStrength(int currentStrength){this.currentStrength = currentStrength;}
-	
-	public void setCurrentDefence(int currentDefence){this.currentDefence = currentDefence;}
-	
-	public void setCurrentMind(int currentMind){this.currentMind = currentMind;}
-	
-	public void setCurrentEvasion(double currentEvasion){this.currentEvasion = currentEvasion;}
-	
-	public void setCurrentAccuracy(double currentAccuracy){this.currentAccuracy = currentAccuracy;}
-	
-	public void setCurrentSpeed(int currentSpeed){this.currentSpeed = currentSpeed;}
+	public Status getCurrentStats(){return this.currentStatus;}
 	
 	public double getGauge(){return this.gauge;}
 	
@@ -432,7 +364,7 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 	public void incrementGauge(){
 		
-		double amount = (double)this.currentSpeed / 20;
+		double amount = (double)this.currentStatus.getSpeed() / 20;
 		this.gauge += amount;
 		if (this.gauge > 10){this.gauge = 10;}
 		
@@ -468,9 +400,17 @@ public abstract class CombatCapableCharacter extends Character implements Serial
 	
 	public void setDeadIcon(Image icon){this.dead = icon;}
 	
-	public String getStatus(){return getCurrentHP() + "/" + getHP();}
+	public String getStatus(){return this.currentStatus.getHP() + "/" + this.status.getHP();}
 	//this.status.setFont(this.currentHP == 0 ? this.strike : this.genericFont);
 	
 	public abstract void instantiateForBattle();
+
+	public void setGauge(double gauge) {
+		this.gauge = gauge;
+	}
+
+	public void setTechniques(ArrayList<Technique> techniques) {
+		this.techniques = techniques;
+	}
 	
 }

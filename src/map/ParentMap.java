@@ -43,7 +43,8 @@ public class ParentMap {
 	public static final int DOWN = 40;
 	
 	private boolean locked;
-	private int encounterRate; //TODO: turn into constructor
+	private int encounterRate;
+	 //TODO: turn into constructor
 	//TODO: enemy or battle arraylist
 	//TODO: dynamically create battle depending on enemy arraylist? mix and match
 	private String defaultTile;
@@ -51,8 +52,6 @@ public class ParentMap {
 	
 	private float xDiff;
 	private float yDiff;
-	
-	//TODO: add random encounters
 	
 	public ParentMap(Point coordinates, Point currentPosition, PlayableCharacter c,
 			AnimatedSprite animatedSprite, ArrayList<EnemyCharacter> enemies,

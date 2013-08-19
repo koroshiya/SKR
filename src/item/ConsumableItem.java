@@ -1,14 +1,8 @@
 package item;
 
-import java.io.Serializable;
-
-import org.newdawn.slick.SlickException;
-
 import character.CombatCapableCharacter;
 
-public class ConsumableItem extends Item implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
+public class ConsumableItem extends Item {
 	
 	private int potency;
 	
@@ -43,14 +37,11 @@ public class ConsumableItem extends Item implements Serializable{
 
 	@Override
 	public Item create(int quantity) {
-		try {
-			Item i = new ConsumableItem(getName(), getValue(), getRarity(), potency, getAvatar());
-			i.increaseQuantity(quantity);
-			return i;
-		} catch (SlickException e) {
-			e.printStackTrace();
-			return null;
-		}
+		
+		Item i = new ConsumableItem(getName(), getValue(), getRarity(), potency, getAvatar());
+		i.increaseQuantity(quantity);
+		return i;
+		
 	}
 
 }

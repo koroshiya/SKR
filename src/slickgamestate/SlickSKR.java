@@ -46,6 +46,7 @@ public class SlickSKR extends StateBasedGame {
 		this.addState(new CharacterProfileWindow(gs));
 		this.addState(new Store(gs));
 		this.addState(new StartScreen(gs));
+		this.addState(new ControlScreen(gs));
 		this.addState(new GameOver(gs));
 		
 	}

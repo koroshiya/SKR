@@ -2,12 +2,14 @@ package com.japanzai.skr;
 
 import item.ConsumableItem;
 import item.Item;
+import item.ItemSave;
 import item.StoreInstance;
 import item.Weapon;
 
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -33,6 +35,7 @@ import character.BossCharacter;
 import character.EnemyCharacter;
 import character.NonPlayableCharacter;
 import character.PlayableCharacter;
+import character.PlayableCharacterSave;
 import screen.GameScreen;
 import slickgamestate.MapScreen;
 import slickgamestate.SlickSKR;
@@ -156,16 +159,16 @@ public class Driver implements Serializable{
 		
 		PlayableCharacter ken = new PlayableCharacter("Ken", "Kitano", 
 				styles.get(0), weapons.get(0), genders.get(1), 
-				kenUnique, "Boss", "175cm", "Japanese", null, kenSprite);
+				kenUnique, "Boss", "175cm", "Japanese", null, kenSprite, weapons);
 		PlayableCharacter yumin = new PlayableCharacter("Yumin", "Yoshizawa", 
 				styles.get(1), weapons.get(2), genders.get(0), 
-				yuminUnique, "Policewoman", "163cm", "Korean", null, yuminSprite);
+				yuminUnique, "Policewoman", "163cm", "Korean", null, yuminSprite, weapons);
 		PlayableCharacter pickaxe = new PlayableCharacter("San-Dae", "Yang", 
 				styles.get(2), weapons.get(3), genders.get(1), "info", 
-				"Henchman", "165cm", "Korean", "Pickaxe", pickSprite);
+				"Henchman", "165cm", "Korean", "Pickaxe", pickSprite, weapons);
 		PlayableCharacter taesoo = new PlayableCharacter("Tae-Soo", "Park", 
 				styles.get(3), weapons.get(0), genders.get(1), 
-				"info", "Ken's right-hand man", "182cm", "Korean", null, taeSprite);
+				"info", "Ken's right-hand man", "182cm", "Korean", null, taeSprite, weapons);
 		/*PlayableCharacter doheun = new PlayableCharacter("Do-Heun", "Chang", 
 				styles.get(4), weapons.get(7), techniques, genders.get(1), 
 				"info", "Henchman", "212cm", "Korean", null, kenSprite, i);*/
@@ -476,8 +479,8 @@ public class Driver implements Serializable{
 		FileOutputStream fos = new FileOutputStream(f);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(Inventory.getMoney());
-		oos.writeObject(Inventory.getItems());
-		oos.writeObject(Party.getCharacters());
+		oos.writeObject(Inventory.getItemsSaved());
+		oos.writeObject(Party.getCharactersSaved());
 		//oos.writeObject(d.bs);
 		oos.close();
 		
@@ -501,21 +504,29 @@ public class Driver implements Serializable{
 		
 	}
 	
-	public static void load(File f) throws IOException, ClassNotFoundException{
+	@SuppressWarnings("unchecked")
+	public static boolean load(File f){
 		
-		FileInputStream fis = new FileInputStream(f);
-		ObjectInputStream ois = new ObjectInputStream(fis);
-		Inventory.setMoney((Integer)ois.readObject());
-		Inventory.setItems((ArrayList<Item>)ois.readObject());
-		Party.setParty((ArrayList<PlayableCharacter>)ois.readObject());
-		ois.close();
-		
-		//d.bs = (BattleScreen)ois.readObject();
-		//d.repaint();
+		try{
+			FileInputStream fis = new FileInputStream(f);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			Inventory.setMoney((Integer)ois.readObject());
+			Inventory.setItemsSaved((ArrayList<ItemSave>)ois.readObject());
+			Party.setCharactersSaved((ArrayList<PlayableCharacterSave>)ois.readObject());
+			ois.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 		
 	}
 	
-	public static void load() throws IOException, ClassNotFoundException{
+	public static boolean load() {
 		
 		//JFileChooser jfc = new JFileChooser();
 		//jfc.setFileFilter(new SaveFilter());
@@ -524,15 +535,16 @@ public class Driver implements Serializable{
 		ArrayList<Pairing> pairings = new ArrayList<Pairing>();
 		File f = new File("");;
 		JxDialog jx;
-		pairings.add(new Pairing(new ImageIcon(f.getClass().getResource("/images/avatar.png")), ".sks"));
+		pairings.add(new Pairing(new ImageIcon(f.getClass().getResource("/images/icon.png")), ".sks"));
 		jx = new JxDialog(pairings);
 		f = jx.showDialog();
 		
 		if (f != null && f.exists() && f.getName().endsWith(".sks")){
-			load(f);
-		}else {
+			return load(f);
+		}/*else {
 			load(new File("skr_save.sks"));
-		}
+		}*/
+		return false;
 	}
 	
 	public static void quit(){

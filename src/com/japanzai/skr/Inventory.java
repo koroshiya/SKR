@@ -1,6 +1,8 @@
 package com.japanzai.skr;
+
 import item.ConsumableItem;
 import item.Item;
+import item.ItemSave;
 import item.StoreInstance;
 import item.Weapon;
 
@@ -8,10 +10,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.SlickException;
 
-public class Inventory { 
-	//Change Weapon objects into Item objects 
-	//Add money, sell/buy commands, consume, etc. 
-	//If getType consumable
+public class Inventory {
 	
 	private static ArrayList<Item> items = new ArrayList<Item>();
 	private static int money = 0; //Coins? Yen? I'll have to make it a long if we're using Yen
@@ -334,6 +333,22 @@ public class Inventory {
 			i.instantiate();
 		}
 		
+	}
+	
+	public static ArrayList<ItemSave> getItemsSaved(){
+		ArrayList<ItemSave> saved = new ArrayList<ItemSave>();
+		for (Item i : items){
+			saved.add(new ItemSave(i));
+		}
+		return saved;
+	}
+	
+	public static void setItemsSaved(ArrayList<ItemSave> saved){
+		ArrayList<Item> chars = new ArrayList<Item>();
+		for (ItemSave s : saved){
+			chars.add((Item) s.serialLoad());
+		}
+		items = chars;
 	}
 	
 }

@@ -1,3 +1,11 @@
+v0.25
+Fixed movement via keystroke
+Overhauled stat implementation for combat capable characters, weapons, etc.
+Fixed CharacterProfileMenu key event regression
+Altered numerous classes to allow for serialization
+Implemented basic load and save
+General improvements to existing functions involving serialization
+
 v0.24
 Merged common Store and InventoryWindow params
 Fixed display for non-Inventory items in Store

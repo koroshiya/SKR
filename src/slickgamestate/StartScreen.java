@@ -8,6 +8,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import com.japanzai.skr.Driver;
+
 import controls.SlickRectangle;
 import screen.GameScreen;
 
@@ -30,11 +32,11 @@ public class StartScreen extends SlickGameState{
 			this.parent.swapView(SlickSKR.MAP);
 		}else if (s.equals(commands[2])){
 			System.out.println("Load");
-			//Driver.load();
-			//processMenuItem(commands[1]);
+			if (Driver.load()){
+				processMenuItem(commands[1]);
+			}
 		}else if (s.equals(commands[3])){
-			//this.parent.swapView(SlickSKR.CONTROLSCREEN); //TODO: implement
-			System.out.println("Controls");
+			this.parent.swapView(SlickSKR.CONTROLSCREEN);
 		}
 	}
 
@@ -50,11 +52,10 @@ public class StartScreen extends SlickGameState{
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
-		//TODO: init background image
-		backgroundImage = new Image("/res/gameover.png");
+		backgroundImage = new Image("/res/start.png");
 		rects = new SlickRectangle[commands.length];
 		for (int i = 0; i < commands.length; i++){
-			rects[i] = new SlickRectangle(250, 200 + (i * 100), buttonWidth, buttonHeight, commands[i]);
+			rects[i] = new SlickRectangle(250, 150 + (i * 100), buttonWidth, buttonHeight, commands[i]);
 		}
 	}
 

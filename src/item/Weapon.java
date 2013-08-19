@@ -1,21 +1,14 @@
 package item;
 
-import java.io.Serializable;
 import java.lang.Math;
 
-import org.newdawn.slick.SlickException;
+import character.Status;
 
-public class Weapon extends Item implements Serializable{
-
-	private static final long serialVersionUID = 1L;
+public class Weapon extends Item {
 	
-	private int Strength;
-	private int Defence;
-	private double Evasion;
-	private int Mind;
-	private int critical; //Critical hit ratio. Value between 0 and 100
-	private double accuracy;
-	private int speed; //Multiple attacks in quick succession? Lower critical for rapid attacks?
+	private Status stats;
+	private int critical;
+	//Critical hit ratio. Value between 0 and 100 //Multiple attacks in quick succession? Lower critical for rapid attacks?
 	
 	public final static String[] TYPE = {"Fist", "Pickaxe", "Bat", "Gun", "Katana", "Sashimi Knife", "Wrench", "Log"};
 	private int intType;
@@ -29,12 +22,8 @@ public class Weapon extends Item implements Serializable{
 				String avatar){
 		super(name, baseValue, rarity, avatar); //baseValue = 1 if sellable, 0 if not sellable
 		this.intType = type;
-		this.Strength = strength;
-		this.Defence = defence;
-		this.Evasion = evasion;
-		this.Mind = mind;
+		this.stats = new Status(0, strength, defence, mind, evasion, accuracy, 0);
 		this.critical = critical;
-		this.accuracy = accuracy;
 				
 		this.range = range;
 		this.onehanded = onehanded;
@@ -48,10 +37,30 @@ public class Weapon extends Item implements Serializable{
 		
 	}
 	
+	public Weapon(String name, int type, Status status, int critical,
+				int range, boolean onehanded, int rarity, int baseValue,
+				String avatar){
+		super(name, baseValue, rarity, avatar); //baseValue = 1 if sellable, 0 if not sellable
+		this.intType = type;
+		this.stats = new Status(status);
+		this.critical = critical;
+				
+		this.range = range;
+		this.onehanded = onehanded;
+		
+		if (baseValue != 0){
+			int value = (status.getStrength() + status.getDefence() + status.getMind() + 
+				(critical * 5) + ((int) Math.round(status.getAccuracy() + status.getEvasion() * 10)) + 
+				(rarity * 200)) * baseValue;
+			super.setValue(value);
+		}
+		
+	}
+	
 	public int attack(){
 		
 		int multiplier = calcCritical();
-		return multiplier * Strength;
+		return multiplier * stats.getStrength();
 		
 	}
 	
@@ -82,17 +91,19 @@ public class Weapon extends Item implements Serializable{
 		return intType;
 	}
 	
-	public int getStrength(){return this.Strength;}
+	public Status getStats(){return this.stats;}
 	
-	public int getDefence(){return this.Defence;}
+	public int getStrength(){return this.stats.getStrength();}
 	
-	public double getEvasion(){return this.Evasion;}
+	public int getDefence(){return this.stats.getDefence();}
 	
-	public int getMind(){return this.Mind;}
+	public double getEvasion(){return this.stats.getEvasion();}
+	
+	public int getMind(){return this.stats.getMind();}
 	
 	public int getCritical(){return this.critical;}
 	
-	public double getAccuracy(){return this.accuracy;}
+	public double getAccuracy(){return this.stats.getAccuracy();}
 	
 	public boolean isOneHanded(){return this.onehanded;}
 	
@@ -102,22 +113,18 @@ public class Weapon extends Item implements Serializable{
 	
 	public void setEquipped(boolean equipped){this.boolEquipped = equipped;}
 	
-	public int getSpeed(){return this.speed;}
+	public int getSpeed(){return this.stats.getSpeed();}
 
 	@Override
 	public Item create(int quantity) {
-		try {
-			Weapon w = new Weapon(getName(), intType, Strength, Defence, 
-					Evasion, Mind, critical, accuracy,
-					range, onehanded, getRarity(), 0,
-					getAvatar());
-			w.increaseQuantity(quantity);
-			w.setValue(super.getValue());
-			return w;
-		} catch (SlickException e) {
-			e.printStackTrace();
-			return null;
-		}
+		
+		Weapon w = new Weapon(
+				getName(), intType, stats, critical, range, 
+				onehanded, getRarity(), 0, getAvatar());
+		w.increaseQuantity(quantity);
+		w.setValue(super.getValue());
+		return w;
+		
 	}
 
 

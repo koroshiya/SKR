@@ -1,7 +1,5 @@
 package character;
 
-import java.io.Serializable;
-
 import interfaces.Photogenic;
 
 import org.newdawn.slick.Image;
@@ -9,16 +7,13 @@ import org.newdawn.slick.SlickException;
 
 import com.japanzai.skr.Gender;
 
-public abstract class Character implements Photogenic, Serializable{
-	
-	private static final long serialVersionUID = 1L;
+public abstract class Character implements Photogenic{
 	
 	private String firstName;
 	private String lastName;
 	private String nickName;
 	
 	private Gender gender;
-	private String nationality;
 	
 	private String avatar;
 	protected Image cache;
@@ -50,15 +45,13 @@ public abstract class Character implements Photogenic, Serializable{
 		return this.nickName != null ? this.nickName : this.firstName;
 	}
 	
-	public String getNationality(){return this.nationality;}
-	
 	public Gender getGender(){return this.gender;}
 	
 	public String getSpriteDirectory(){
 		return this.spriteDirectory;
 	}
 	
-	public String getAvatar() throws SlickException{
+	public String getAvatar(){
 		return (this.spriteDirectory + "avatar.png");
 	}
 	

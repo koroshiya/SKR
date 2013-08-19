@@ -24,24 +24,14 @@ public class MapScreen extends SlickGameState{
 	
 	private Image sprite;
 	
-	public static final int LEFT = 37;
-	public static final int RIGHT = 39;
-	public static final int UP = 38;
-	public static final int DOWN = 40;
-	
 	private final int INTERACT = Input.KEY_A;
 	private final int MENU = Input.KEY_W;
 	private final int QUIT = Input.KEY_ESCAPE;
 	private final int FULLSCREEN = Input.KEY_F;
 	
 	private ParentMap map;
-	
 	public static int ICON_SIZE = 47;
-	
 	private SlickDrawableFrame activeDialog = null;
-	 //TODO: turn into constructor
-	//TODO: enemy or battle arraylist
-	//TODO: dynamically create battle depending on enemy arraylist? mix and match
 	
 	
 	public MapScreen(ParentMap map){
@@ -59,10 +49,26 @@ public class MapScreen extends SlickGameState{
 		map.instantiateImages();
 		
 	}
-
+	
+	@Override
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {
+		Input i = super.parent.getInput();
+		if (!getParentMap().isLocked()){
+			if (i.isKeyDown(Input.KEY_UP)){
+				getParentMap().moveUp();
+			}else if (i.isKeyDown(Input.KEY_RIGHT)){
+				getParentMap().moveRight();
+			}else if (i.isKeyDown(Input.KEY_LEFT)){
+				getParentMap().moveLeft();
+			}else if (i.isKeyDown(Input.KEY_DOWN)){
+				getParentMap().moveDown();
+			}
+		}
+	}
+	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
-
+		
 		g.setFont(SlickSKR.DEFAULT_FONT);
 		
 		try{
@@ -184,22 +190,6 @@ public class MapScreen extends SlickGameState{
 		if (activeDialog != null){
 			MapConsole console = (MapConsole)activeDialog;
 			console.keyPressed(code, arg1);
-		}else{
-			try{
-				if (code == Input.KEY_UP){
-					getParentMap().moveUp();
-				}else if (code == Input.KEY_RIGHT){
-					getParentMap().moveRight();
-				}else if (code == Input.KEY_LEFT){
-					getParentMap().moveLeft();
-				}else if (code == Input.KEY_DOWN){
-					getParentMap().moveDown();
-				}else {
-					//System.out.println("MapScreen KeyPressed: " + code);
-				}
-			}catch (Exception ex){
-				ex.printStackTrace();
-			}
 		}
 		
 	}

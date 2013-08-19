@@ -66,7 +66,7 @@ public class MenuMainWindow extends SlickGameState{
 			inc += baseInc;
 			g.drawString(c.getOccupation(), x, y + inc);
 			inc += baseInc;
-			g.drawString(c.getCurrentHP() + "/" + c.getHP() + "HP", x, y + inc);
+			g.drawString(c.getCurrentStats().getHP() + "/" + c.getStats().getHP() + "HP", x, y + inc);
 			inc += baseInc;
 			g.drawString("Level " + c.getLevel(), x, y + inc);
 			inc += baseInc;
@@ -208,8 +208,6 @@ public class MenuMainWindow extends SlickGameState{
 				Driver.load();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
