@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="natives"/>
+	<classpathentry kind="src" path="natives">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SKR/natives"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="src" path="libs"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/JxFileDialog"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/JxFileDialog"/>
+	<classpathentry exported="true" kind="lib" path="libs/lwjgl.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/slick.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/lwjgl.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SKR/natives/linux"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
