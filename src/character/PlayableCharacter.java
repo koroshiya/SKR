@@ -20,14 +20,13 @@ import technique.HealingTechnique;
 public class PlayableCharacter extends CombatCapableCharacter implements Serial {
 
 	private final ArrayList<Weapon> supportedWeapons;
-	//PlayableCharacter profile picture?
 	
 	private final String height;
 	private final String occupation;
 	
 	private int experience;
 	private int experienceToNextLevel;
-	private final String unique;
+	private final ArrayList<String> unique;
 	private final String nationality;
 	private int temper; //0 min, 10 max. If 10, show "Fury break" instead of "attack"
 	
@@ -36,7 +35,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	
 	public PlayableCharacter (String firstName, String lastName, FightingStyle style, 
 					Weapon weapon, Gender gender,
-					String unique, String occupation, String height,
+					ArrayList<String> unique, String occupation, String height,
 					String nationality, int level, FuryBreak fury, 
 					String nickName, String sprite, ArrayList<Weapon> supportedWeapons){
 						
@@ -49,7 +48,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	
 	public PlayableCharacter (String firstName, String lastName, FightingStyle style, 
 							Weapon weapon, Gender gender,
-							String unique, String occupation, String height,
+							ArrayList<String> kenUnique, String occupation, String height,
 							String nationality, String nickName, String sprite,
 							ArrayList<Weapon> supportedWeapons){
 						
@@ -60,7 +59,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 		this.occupation = occupation;
 		this.experience = 0;
 		this.experienceToNextLevel = 20;
-		this.unique = unique;
+		this.unique = kenUnique;
 		this.temper = 0;
 		this.inParty = false;
 		this.supportedWeapons = supportedWeapons;
@@ -166,7 +165,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	
 	public int getExperienceToNextLevel(){return this.experienceToNextLevel;}
 	
-	public String getUniqueInfo(){return this.unique;}
+	public ArrayList<String> getUniqueInfo(){return this.unique;}
 	
 	public boolean isInParty(){return this.inParty;}
 	

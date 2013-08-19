@@ -42,16 +42,16 @@ public class ChestTile extends InteractiveTile implements InteractableObject {
 		
 		if (!this.open){
 			
-			StringBuffer itemList = new StringBuffer("Obtained:");
+			ArrayList<String> itemList = new ArrayList<String>();
+			itemList.add("Obtained:");
 			for (Item item : treasure){
 				Inventory.addItem(item);
-				itemList.append("\n-" + item.getName());
+				itemList.add("-" + item.getName());
 			}
 			this.setSprite(sprite);
 			this.open = true;
 
-			Line line = new Line(this, itemList.toString(), 0, false);
-			d = new Dialogue(line);
+			d = new Dialogue(itemList, this);
 			
 		}else {
 			Line line = new Line(this, "The chest is empty...", 0, false);

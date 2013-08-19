@@ -1,3 +1,10 @@
+v0.26
+Prepared minor characters for later use
+Fixed appearance of unique text on CharacterProfileWindow
+Fixed text presentation of chests
+Fixed font rendering for SlickRectangle
+Removed /images; superseded by /res. Also removed other unnecessary images
+
 v0.25
 Fixed movement via keystroke
 Overhauled stat implementation for combat capable characters, weapons, etc.

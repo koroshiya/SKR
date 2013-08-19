@@ -56,7 +56,7 @@ public class SlickSKR extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		
-		DEFAULT_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 16);
+		DEFAULT_FONT = SlickSKR.loadFont("Ubuntu-R.ttf", 16);
 		this.getState(MAINMENU).init(gc, this);
 		this.enterState(MAINMENU);
 		
@@ -67,6 +67,7 @@ public class SlickSKR extends StateBasedGame {
 			InputStream inputStream	= ResourceLoader.getResourceAsStream("/res/font/" + fontName);
 			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
 			return new TrueTypeFont(awtFont2.deriveFont(size), true);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Font rendering failed");

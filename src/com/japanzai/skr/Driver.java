@@ -152,23 +152,39 @@ public class Driver implements Serializable{
 		String taeSprite = "/res/party/taesoo/";
 		String pickSprite = "/res/party/pickaxe/";
 		
-		String kenUnique = "Favourite weapon:" + "\n" + "Metal baseball bat" + "\n" + "\n" + 
-								"Ken's family was killed by the \nHakuryu-Kai when he was 13 years old.";
-		String yuminUnique = "Favourite weapon:" + "\n" + "Dual wielding handgun & katana" + "\n" + "\n" + 
-								"Yumin's father branded her with a \nOshiroi-Bori tatoo on her back.";
+		ArrayList<String> kenUnique = new ArrayList<String>();
+		kenUnique.add("Favourite weapon:");
+		kenUnique.add("Metal baseball bat");
+		kenUnique.add("Ken's family was killed by the");
+		kenUnique.add("Hakuryu-Kai when he was 13 years old.");
+		
+		ArrayList<String> yuminUnique = new ArrayList<String>();
+		yuminUnique.add("Favourite weapon: Handgun & katana");
+		yuminUnique.add("Yumin's father branded her with a");
+		yuminUnique.add("Oshiroi-Bori tatoo on her back.");
+		
+		ArrayList<String> pickaxeUnique = new ArrayList<String>();
+		pickaxeUnique.add("Favourite weapon: Pickaxe");
+		pickaxeUnique.add("Always carries a pickaxe with him,");
+		pickaxeUnique.add("even if it can't be seen by the naked eye.");
+		
+		ArrayList<String> taeUnique = new ArrayList<String>();
+		taeUnique.add("Tattoo on his back.");
+		
+		//String doUnique = "Favourite weapon:" + "\n" + "4x2 plank" + "\n" + "\n" + "Enormous build. Loves his car.";
 		
 		PlayableCharacter ken = new PlayableCharacter("Ken", "Kitano", 
-				styles.get(0), weapons.get(0), genders.get(1), 
-				kenUnique, "Boss", "175cm", "Japanese", null, kenSprite, weapons);
+				styles.get(0), weapons.get(0), genders.get(1), kenUnique, 
+				"Boss", "175cm", "Japanese", null, kenSprite, weapons);
 		PlayableCharacter yumin = new PlayableCharacter("Yumin", "Yoshizawa", 
-				styles.get(1), weapons.get(2), genders.get(0), 
-				yuminUnique, "Policewoman", "163cm", "Korean", null, yuminSprite, weapons);
+				styles.get(1), weapons.get(2), genders.get(0), yuminUnique, 
+				"Policewoman", "163cm", "Japanese", null, yuminSprite, weapons);
 		PlayableCharacter pickaxe = new PlayableCharacter("San-Dae", "Yang", 
-				styles.get(2), weapons.get(3), genders.get(1), "info", 
+				styles.get(2), weapons.get(3), genders.get(1), pickaxeUnique, 
 				"Henchman", "165cm", "Korean", "Pickaxe", pickSprite, weapons);
 		PlayableCharacter taesoo = new PlayableCharacter("Tae-Soo", "Park", 
-				styles.get(3), weapons.get(0), genders.get(1), 
-				"info", "Ken's right-hand man", "182cm", "Korean", null, taeSprite, weapons);
+				styles.get(3), weapons.get(0), genders.get(1), taeUnique,
+				"Ken's right-hand man", "182cm", "Korean", null, taeSprite, weapons);
 		/*PlayableCharacter doheun = new PlayableCharacter("Do-Heun", "Chang", 
 				styles.get(4), weapons.get(7), techniques, genders.get(1), 
 				"info", "Henchman", "212cm", "Korean", null, kenSprite, i);*/
@@ -183,10 +199,73 @@ public class Driver implements Serializable{
 			Party.addCharacter(c);
 		}
 		
-		//Party.toggleCharacterInParty(doheun);
-		//Party.addCharacter(doheun);
+	}
+	
+	/*
+	private void instantiateMinorCharacters(){
+		
+		String marinSprite = "/res/party/marin/";
+		String yooSprite = "/res/party/yoo/";
+		String kimSprite = "/res/party/ban-phuong/";
+		String zenSprite = "/res/party/zen/";
+		String kaeSprite = "/res/party/kae-lyn/";
+		String ryuSprite = "/res/party/ryu/";
+		String rainSprite = "/res/party/rain/";
+		String benitoSprite = "/res/party/benito/";
+		
+		String marinUnique = "Favourite weapon:" + "\n" + "Dual wrenches" + "\n" + "\n" + "Ex Korean soldier; Tae-soo's loyal underling.";
+		String yooUnique = "Ex Barmaid";
+		String kimUnique = "Favourite martial art:" + "\n" + "Muai Thai" + "\n" + "\n" + "Korean father and Vietnamese mother. Ken's rival.";
+		String zenUnique = "Ex-monk";
+		String kaeUnique = "Favorite weapon:" + "\n" + "Dual sashimi knives" + "\n" + "\n" + "Weapons specialist. Bust size over 100cm.";
+		String ryuUnique = "Yumin's father. Boss of the White Dragon Clan.";
+		String rainUnique = "Favourite weapon:" + "\n" + "Dual semi-auto handguns, katana" + "\n" + "\n" + "White Dragon Clan hitman and Boss's right hand man.";
+		String benitoUnique = "Well-endowed.";
+		
+		PlayableCharacter marin = new PlayableCharacter("San-Ki", "Lee", 
+				styles.get(0), weapons.get(0), genders.get(1), marinUnique, 
+				"Henchman", "180cm", "Korean", "Marin", marinSprite, weapons);
+		
+		PlayableCharacter yoo = new PlayableCharacter("Ji-Hae", "Yoo", 
+				styles.get(1), weapons.get(2), genders.get(0), yooUnique, 
+				"Cabaret owner", "Unknown", "Korean", "Miss Yoo", yooSprite, weapons);
+		
+		PlayableCharacter kim = new PlayableCharacter("Ban-Phuong", "Kim", 
+				styles.get(2), weapons.get(3), genders.get(1), kimUnique, 
+				"Assassin", "Unknown", "Korean", null, kimSprite, weapons);
+		
+		PlayableCharacter zen = new PlayableCharacter("Bae-Dal", "Choi", 
+				styles.get(3), weapons.get(0), genders.get(1), zenUnique,
+				"Casino Director", "Unknown", "Korean", "Master Zen", zenSprite, weapons);
+
+		PlayableCharacter kae = new PlayableCharacter("Kae-Lyn", "Kim", 
+				styles.get(1), weapons.get(2), genders.get(0), kaeUnique, 
+				"Weapons specialist", "Unknown", "Korean", null, kaeSprite, weapons);
+		
+		PlayableCharacter ryu = new PlayableCharacter("Ryu", "Yoshizawa", 
+				styles.get(0), weapons.get(0), genders.get(1), ryuUnique, 
+				"Boss", "Unknown", "Japanese", "Godfather", ryuSprite, weapons);
+		
+		PlayableCharacter rain = new PlayableCharacter("Rain", "Fujimi", 
+				styles.get(0), weapons.get(0), genders.get(1), rainUnique, 
+				"Hitman", "Unknown", "Japanese", "Crow", rainSprite, weapons);
+		
+		PlayableCharacter benito = new PlayableCharacter("Benito", "Armani", 
+				styles.get(0), weapons.get(0), genders.get(1), benitoUnique, 
+				"Henchman", "Unknown", "Italian", "Italian Stallion", benitoSprite, weapons);
+
+		PlayableCharacter[] chars = {marin, yoo, kim, zen, kae, ryu, rain, benito};
+		
+		for (PlayableCharacter c : chars){
+			for (Technique t : c.getFightingStyle().getTechnique(c.getLevel())){
+				c.learnTechnique(t);
+			}
+			Party.toggleCharacterInParty(c);
+			Party.addCharacter(c);
+		}
 		
 	}
+	*/
 	
 	private void instantiateEnemies(){
 
@@ -535,7 +614,7 @@ public class Driver implements Serializable{
 		ArrayList<Pairing> pairings = new ArrayList<Pairing>();
 		File f = new File("");;
 		JxDialog jx;
-		pairings.add(new Pairing(new ImageIcon(f.getClass().getResource("/images/icon.png")), ".sks"));
+		pairings.add(new Pairing(new ImageIcon(f.getClass().getResource("/res/icon.png")), ".sks"));
 		jx = new JxDialog(pairings);
 		f = jx.showDialog();
 		
@@ -560,98 +639,4 @@ public class Driver implements Serializable{
 		
 	}
 	
-/*
-Name : Ken
-Age : 18yo (currently 20ish)
-
-
-Name : Yumin (real name : Yumi)
-Nickname : N/A
-Age : 18yo (currently 20ish)
-Nationality : Korean (real nationality : Japanese)
-Favourite weapon : Handgun + katana
-Unique : Oshiroi-Bori tatoo on her back
-
-Name : Do-Heun
-Favourite weapon : 4x2 log
-Unique : Build, love his car
-
-Name : Tae-Soo
-Unique : Tatoo on his back
-
-Nickname : Pickaxe
-Favourite weapon : Pickaxe
-Unique : Character, hu ?
-
-Name : San-Ki
-Nickname : Marin
-Surname : Lee
-Sex : Male
-Height : 180cm
-Nationality : Korean
-Occupation : Henchman
-Favourite weapon : Double wrench (sometime gun)
-Unique : Ex Korean soldier (tae-soo's loyal underling)
-
-Name : Ji-Hae
-Nickname : Miss Yoo
-Surname : Yoo
-Sex : Female
-Nationality : Korean
-Occupation : head of the pleasure district
-Unique : Ex Barmaid (2 times rape victim)
-
-Name : Ban Phuong
-Surname : Kim
-Sex : Male
-Nationality : Korean
-Occupation : currently boss of an assassin team
-Favourite weapon : Muai Thai
-Unique : Korean father and Vietnamese mother, Ken's rival
-
-Name : Bae-Dal
-Nickname : Master Zen
-Surname : Choi
-Sex : Male
-Nationality : Korean
-Occupation : Casino Director
-Unique : ex monk
-
-Name : Kae-Lyn
-Surname : Kim
-Sex : Female
-Age : 18
-Nationality : Korean
-Occupation : Henchman + Weapon specialist
-Favourite weapon : Double sashimi knife
-Unique : Bust size over 100cm
-
-Name : Ryu
-Nickname : Godfather
-Surname : Yoshizawa
-Sex : Male
-Nationality : Japanese
-Occupation : White Dragon Clan's Boss
-Unique : Yumin's father
-
-Name : Rain
-Nickname : Crow
-Surname : Fujimi
-Sex : Male
-Nationality : Japanese
-Occupation : White Dragon Clan's hitman and Boss' right hand
-Favourite weapon : Double semi-auto handgun + Katana
-Unique : Right hand was cut by Yumin
-
-Name : Benito
-Nickname : Italian Stallion
-Surname : Armani
-Sex : Male
-Age : 18
-Nationality : Italian
-Occupation : Henchman
-Fighting style: wild, kinda like parkour
-Unique : Huge ****
-*/
-
 }

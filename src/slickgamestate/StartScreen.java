@@ -58,7 +58,7 @@ public class StartScreen extends SlickGameState{
 			rects[i] = new SlickRectangle(250, 150 + (i * 100), buttonWidth, buttonHeight, commands[i]);
 		}
 	}
-
+	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 

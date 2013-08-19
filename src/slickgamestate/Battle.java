@@ -10,7 +10,6 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameScreen;
@@ -223,7 +222,7 @@ public class Battle extends SlickGameState{
 		
 		this.drawBattlePane(g);
 		this.drawBattleParticipants(g);
-		for (SlickRectangle rect : rects){rect.paint(g);}
+		for (SlickRectangle rect : rects){rect.paintCenter(g);}
 		BattleConsole.paint(g);
 		String message = "";
 		if (mode == VICTORY_MODE){

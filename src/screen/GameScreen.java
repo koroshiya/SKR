@@ -22,16 +22,18 @@ public class GameScreen extends AppGameContainer{
 	public GameScreen(SlickSKR skr) throws SlickException{
 		
 		super(skr);
-		this.setIcon((("images/icon.png")));
+		this.setIcon((("/res/icon.png")));
 		
 	}
 	
 	public void setSKR(SlickSKR skr){
 		super.game = skr;
+		this.setDefaultFont(SlickSKR.DEFAULT_FONT);
 		this.setVSync(true);
 		this.setSmoothDeltas(true);
 		this.setUpdateOnlyWhenVisible(true);
 		this.setAlwaysRender(true);
+		this.setTargetFrameRate(60);
 		//this.setShowFPS(false);
 		//TODO: Set animated cursor
 		//TODO: Set icon

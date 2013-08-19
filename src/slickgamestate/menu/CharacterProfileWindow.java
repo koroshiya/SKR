@@ -1,6 +1,7 @@
 package slickgamestate.menu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -42,6 +43,12 @@ public class CharacterProfileWindow extends SlickGameState{
 			g.drawString(labels[i], x, y + y * i);
 		}
 		
+		ArrayList<String> list = character.getUniqueInfo();
+		for (int i = 0; i < list.size(); i++){
+			g.drawString(list.get(i), x, y * (15 + i));
+		}
+		
+		
 	}
 	
 	private void drawCharacterPanel(Graphics g){
@@ -58,13 +65,12 @@ public class CharacterProfileWindow extends SlickGameState{
 		
 		this.character = character;
 		lblAvatar = new Image(this.character.getProfilePicture());
-		labels = new String[14];
+		labels = new String[13];
 		
 		labels[0] = character.getName(); //All info
 		labels[1] = character.getHeight();
 		labels[2] = character.getOccupation();
 		labels[3] = character.getNationality();
-		labels[13] = "\n" + character.getUniqueInfo();
 
 		labels[4] = "Equipped: " + character.getWeapon().getName();
 		//JLabel lblLeftHand = new JLabel(character.getUniqueInfo());

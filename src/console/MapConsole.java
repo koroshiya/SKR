@@ -12,8 +12,7 @@ import org.newdawn.slick.SlickException;
 
 import screen.GameScreen;
 import screen.SlickListener;
-
-
+import tile.ChestTile;
 import console.dialogue.ComplexDialogue;
 import console.dialogue.Dialogue;
 import controls.SlickRectangle;
@@ -62,12 +61,23 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	public void paint(Graphics g){
 		background.paint(g);
 		for (SlickRectangle rect : rects){
-			rect.paint(g);
+			rect.paintCenter(g);
 		}
 		g.drawImage(this.dialogue.getCache(), 10, 495);
-		g.drawString(this.dialogue.speak(), 140, 490);
-	}
 		
+		final int x = 140;
+		int y = 490;
+		
+		if (!(npc instanceof ChestTile)){
+			g.drawString(this.dialogue.speak(), 140, 490);
+		}else{
+			for (String s : this.dialogue.getDialog()){
+				g.drawString(s, x, y);
+				y += 14;
+			}
+		}
+	}
+	
 	public void speak(Dialogue d) throws SlickException{d.increment();}
 
 	private int converse(Dialogue d) throws SlickException {

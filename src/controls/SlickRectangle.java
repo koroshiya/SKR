@@ -22,7 +22,6 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	private final float width;
 	private final float height;
 	
-	
 	private boolean enabled; //TODO: change color if disabled?
 	
 	public SlickRectangle(float x, float y, float width, float height, String tag) throws SlickException{
@@ -110,7 +109,7 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 			g.draw(this);
 			final int textx = f.getWidth(displayText);
 			final int texty = f.getHeight(displayText);
-			f.drawString(x + (width - textx) / 2, y + (height - texty) / 2, displayText, Color.white);
+			g.drawString(displayText, x + (int)((width - textx) / 2), y + (int)((height - texty) / 2));
 		}
 	}
 	

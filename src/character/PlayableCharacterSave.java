@@ -38,7 +38,7 @@ public class PlayableCharacterSave implements SerialChild{
 	
 	private final int experience;
 	private final int experienceToNextLevel;
-	private final String unique;
+	private final ArrayList<String> unique;
 	private final String nationality;
 	private final int temper;
 	private final boolean inParty;

@@ -1,5 +1,7 @@
 package console.dialogue;
 
+import interfaces.Photogenic;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -26,7 +28,7 @@ public class Dialogue implements Serializable{
 		
 	}
 	
-	public Dialogue(ArrayList<String> text, Character c){
+	public Dialogue(ArrayList<String> text, Photogenic c){
 
 		this.counter = -1;
 		this.dialogue = new ArrayList<Line>();
@@ -72,7 +74,7 @@ public class Dialogue implements Serializable{
 		
 	}
 	
-	public void addLines(ArrayList<String> text, Character c){
+	public void addLines(ArrayList<String> text, Photogenic c){
 		for (String s : text){
 			Line line = new Line(c, s, max, false);
 			this.addLine(line);
@@ -126,6 +128,17 @@ public class Dialogue implements Serializable{
 		for (Line l : d){
 			addLine(l);
 		}
+	}
+	
+	public ArrayList<String> getDialog() {
+		
+		ArrayList<String> dialog = new ArrayList<String>();
+		for (Line line : this.dialogue){
+			dialog.add(line.getText());
+		}
+		this.counter = this.max - 1;
+		return dialog;
+		
 	}
 	
 }
