@@ -36,11 +36,11 @@ public class SlickSKR extends StateBasedGame {
 		
 		super(GAME_NAME);
 		this.addState(new Battle(current.getFrame(), new ArrayList<EnemyCharacter>()));
-		this.addState(new MapScreen(MAP, current));
-		this.addState(new MenuMainWindow(MENU, current.getFrame()));
-		this.addState(new InventoryWindow(INVENTORY, current.getFrame()));
-		this.addState(new CharacterProfileWindow(CHARACTER, current.getFrame()));
-		this.addState(new GameOver(GAMEOVER, current.getFrame()));
+		this.addState(new MapScreen(current));
+		this.addState(new MenuMainWindow(current.getFrame()));
+		this.addState(new InventoryWindow(current.getFrame()));
+		this.addState(new CharacterProfileWindow(current.getFrame()));
+		this.addState(new GameOver(current.getFrame()));
 		
 	}
 	

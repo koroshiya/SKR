@@ -22,7 +22,7 @@ public class GameScreen extends AppGameContainer{
 	public GameScreen(SlickSKR skr) throws SlickException{
 		
 		super(skr);
-		this.setIcon((("/res/icon.png")));
+		this.setIcon("/res/icon.png");
 		
 	}
 	

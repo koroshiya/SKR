@@ -32,9 +32,9 @@ public class StartScreen extends SlickGameState{
 			this.parent.swapView(SlickSKR.MAP);
 		}else if (s.equals(commands[2])){
 			System.out.println("Load");
-			if (Driver.load()){
+			/*if (Driver.load()){
 				processMenuItem(commands[1]);
-			}
+			}*/ //TODO: reimplement
 		}else if (s.equals(commands[3])){
 			this.parent.swapView(SlickSKR.CONTROLSCREEN);
 		}

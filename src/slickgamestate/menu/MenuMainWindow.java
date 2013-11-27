@@ -172,7 +172,7 @@ public class MenuMainWindow extends SlickGameState{
 		}else if (s.equals(commands[4])){
 			Driver.save();
 		}else if (s.equals(commands[5])){
-			Driver.load();
+			//Driver.load(); //TODO: reimplement
 		}
 		
 	}
@@ -205,7 +205,7 @@ public class MenuMainWindow extends SlickGameState{
 			}else if (code == (keys[4])){
 				Driver.save();
 			}else if (code == (keys[5])){
-				Driver.load();
+				//Driver.load(); //TODO: reimplement
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

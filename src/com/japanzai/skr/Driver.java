@@ -22,8 +22,8 @@ import javax.swing.JFileChooser;
 
 import org.newdawn.slick.SlickException;
 
-import com.japanzai.jreader.Pairing;
-import com.japanzai.jreader.dialog.JxDialog;
+//import com.japanzai.jreader.Pairing;
+//import com.japanzai.jreader.dialog.JxDialog;
 
 import console.dialogue.ComplexDialogue;
 import console.dialogue.Dialogue;
@@ -605,7 +605,7 @@ public class Driver implements Serializable{
 		
 	}
 	
-	public static boolean load() {
+	/*public static boolean load() {
 		
 		//JFileChooser jfc = new JFileChooser();
 		//jfc.setFileFilter(new SaveFilter());
@@ -620,11 +620,11 @@ public class Driver implements Serializable{
 		
 		if (f != null && f.exists() && f.getName().endsWith(".sks")){
 			return load(f);
-		}/*else {
+		}*//*else {
 			load(new File("skr_save.sks"));
-		}*/
+		}*//*
 		return false;
-	}
+	}*/
 	
 	public static void quit(){
 		

@@ -8,9 +8,13 @@ import org.newdawn.slick.MouseListener;
 
 import org.newdawn.slick.SlickException;
 
-import com.japanzai.skr.MapScreen;
+import com.japanzai.skr.SlickSKR;
 
 import screen.GameScreen;
+import slickgamestate.MapScreen;
+import tile.CharacterTile;
+import tile.InteractiveTile;
+import tile.Tile;
 
 import character.NonPlayableCharacter;
 
@@ -31,8 +35,8 @@ public class MovementListener implements KeyListener, MouseListener {
 	
 	private void moveToClick(Point p) throws SlickException{
 		
-		int x = (int) Math.floor(p.x / ParentMap.ICON_SIZE);
-		int y = (int) Math.floor(p.y / ParentMap.ICON_SIZE);
+		int x = (int) Math.floor(p.x / MapScreen.ICON_SIZE);
+		int y = (int) Math.floor(p.y / MapScreen.ICON_SIZE);
 		
 		map.getParentMap().tryMoveToTile(x, y);
 		
@@ -41,17 +45,17 @@ public class MovementListener implements KeyListener, MouseListener {
 	private void interact() throws SlickException{
 		
 		int dir = map.getParentMap().getDirection();
-		int x = (int)map.getParentMap().getCurrentPositionX() + map.getParentMap().getCharacterPositionX() * ParentMap.ICON_SIZE;
-		int y = (int)map.getParentMap().getCurrentPositionY() + map.getParentMap().getCharacterPositionY() * ParentMap.ICON_SIZE;
+		int x = (int)map.getParentMap().getCurrentPositionX() + map.getParentMap().getCharacterPositionX() * MapScreen.ICON_SIZE;
+		int y = (int)map.getParentMap().getCurrentPositionY() + map.getParentMap().getCharacterPositionY() * MapScreen.ICON_SIZE;
 		
 		if (dir == ParentMap.UP){
-			y -= ParentMap.ICON_SIZE;
+			y -= MapScreen.ICON_SIZE;
 		}else if (dir == ParentMap.RIGHT){
-			x += ParentMap.ICON_SIZE;
+			x += MapScreen.ICON_SIZE;
 		}else if (dir == ParentMap.LEFT){
-			x -= ParentMap.ICON_SIZE;
+			x -= MapScreen.ICON_SIZE;
 		}else if (dir == ParentMap.DOWN){
-			y += ParentMap.ICON_SIZE;
+			y += MapScreen.ICON_SIZE;
 		}
 		
 		if (map.getParentMap().tileExists(x, y)){
@@ -63,7 +67,7 @@ public class MovementListener implements KeyListener, MouseListener {
 				CharacterTile tile = (CharacterTile)t;
 				tile.face(dir);
 				NonPlayableCharacter c = tile.getCharacter();				
-				map.getParentMap().getFrame().WriteOnMap(c.getDialogue());
+				map.getParentMap().getFrame().WriteOnMap(c.getDialogue(), tile);
 				//tile.interact();
 			}
 		}
@@ -146,7 +150,7 @@ public class MovementListener implements KeyListener, MouseListener {
 	public void keyReleased(int code, char arg1) {
 		
 		if (code == MENU){
-			map.getParentMap().getFrame().swapToMenu();
+			map.getParentMap().getFrame().swapView(SlickSKR.MAP);
 		}else if (code == QUIT){
 			//exit
 			//TODO: make exit prompt

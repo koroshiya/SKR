@@ -9,7 +9,6 @@
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="src" path="libs"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/JxFileDialog"/>
 	<classpathentry exported="true" kind="lib" path="libs/lwjgl.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/slick.jar"/>
 	<classpathentry kind="output" path="bin"/>
