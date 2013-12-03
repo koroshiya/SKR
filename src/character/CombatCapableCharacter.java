@@ -16,6 +16,7 @@ import com.japanzai.skr.Gender;
 import com.japanzai.skr.Inventory;
 
 import console.BattleConsole;
+import slickgamestate.SlickSKR;
 import technique.CombatTechnique;
 import technique.HealingTechnique;
 import technique.Technique;
@@ -109,15 +110,17 @@ public abstract class CombatCapableCharacter extends Character{
 			int attackStrength = str + this.currentStatus.getStrength();
 			int damageTaken = opponent.takeDamage(attackStrength, this.currentStatus.getStrength());
 			BattleConsole.writeConsole(getName() + " dealt " + damageTaken + " to " + opponent.getName());
+			SlickSKR.PlaySFX(this.weapon.getSFXHit());
 			if (!opponent.isAlive()){
 				BattleConsole.writeConsole(getName() + " defeated " + opponent.getName());
 				
 				if (opponent instanceof EnemyCharacter || opponent instanceof BossCharacter){
 					EnemyCharacter vanquishedOpponent = (EnemyCharacter) opponent;
-					vanquishOpponent(vanquishedOpponent);					
+					vanquishOpponent(vanquishedOpponent);
 				}
 			}
 		}else {
+			SlickSKR.PlaySFX(this.weapon.getSFXMiss());
 			BattleConsole.writeConsole(getName() + " missed " + opponent.getName());
 		}
 	}
@@ -173,7 +176,7 @@ public abstract class CombatCapableCharacter extends Character{
 		
 		if (this.currentStatus.getHP() <= damageTaken){
 			this.currentStatus.setHP(0);
-			
+			//SlickSKR.PlaySFX("weeden/die-or-lose-life.ogg");
 			//this.status.setFont(this.strike); //TODO: set this on start if dead?
 			
 			/**
@@ -182,6 +185,7 @@ public abstract class CombatCapableCharacter extends Character{
 			 * */
 		}else{
 			this.currentStatus.setHP(this.currentStatus.getHP() - damageTaken);
+			//TODO: sound of getting hit
 		}
 		
 		return damageTaken;
@@ -223,6 +227,8 @@ public abstract class CombatCapableCharacter extends Character{
 		this.level++;
 		BattleConsole.cleanConsole();
 		BattleConsole.writeConsole(getName() + " went up to level " + this.level);
+		//TODO: level up sfx
+		//loss = AudioLoader.getAudio("WAV", ResourceLoader.getResourceAsStream("/res/sfx/game-over.wav"));
 		
 		int curHP = this.status.getHP();
 		
@@ -282,6 +288,7 @@ public abstract class CombatCapableCharacter extends Character{
 	
 	public void revive(int percentHP){
 		this.currentStatus.setHP((int) Math.ceil(this.status.getHP() * ((double)percentHP / 100)));
+		SlickSKR.PlaySFX("other/public/revive.wav");
 	}
 	
 	public void heal(int amount){
@@ -289,6 +296,8 @@ public abstract class CombatCapableCharacter extends Character{
 		this.currentStatus.setHP(this.currentStatus.getHP() + amount);
 		BattleConsole.writeConsole(this.getName() + " recovered " + amount + " HP");
 		if (this.currentStatus.getHP() > this.status.getHP()){this.currentStatus.setHP(this.status.getHP());}
+		//TODO: healing sfx
+		//loss = AudioLoader.getAudio("WAV", ResourceLoader.getResourceAsStream("/res/sfx/game-over.wav"));
 		
 	}
 	

@@ -1,3 +1,15 @@
+v0.27
+Superseded WalkingSprite with AnimatedSprite
+Replaced character sprites with spritesheets
+Fixed brief flash of other screens at load
+Introduced sounds and set groundwork for implementation
+Introduced libraries for OGG sound support
+Implemented some basic SFX and BG music
+Removed tons of old classes, bins, etc.
+Removed duplicate images
+Other misc changes
+Implemented basic transition effects
+
 v0.26
 Prepared minor characters for later use
 Fixed appearance of unique text on CharacterProfileWindow

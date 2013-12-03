@@ -9,8 +9,12 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.openal.Audio;
+import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.ResourceLoader;
 
 import console.MapConsole;
 import screen.GameScreen;
@@ -32,6 +36,7 @@ public class MapScreen extends SlickGameState{
 	private ParentMap map;
 	public static int ICON_SIZE = 47;
 	private SlickDrawableFrame activeDialog = null;
+	private Audio mCache = null; //TODO: remove and put short transition instead?
 	
 	
 	public MapScreen(ParentMap map){
@@ -47,6 +52,16 @@ public class MapScreen extends SlickGameState{
 		//super.parent.setTargetFrameRate(60);
 		sprite = new Image(map.getDefaultTile());
 		map.instantiateImages();
+		if (mCache == null){
+			try {
+				mCache = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("/res/sfx/other/public/summeropenfielddusk.ogg"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (mCache != null){SlickSKR.PlayMusic(mCache);}
 		
 	}
 	

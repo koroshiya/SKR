@@ -3,9 +3,13 @@ package screen;
 import interfaces.InteractableObject;
 
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.state.transition.Transition;
 
 import slickgamestate.Battle;
 import slickgamestate.MapScreen;
@@ -45,7 +49,27 @@ public class GameScreen extends AppGameContainer{
 		}
 	}
 	
-	public void swapView(int i){((StateBasedGame)super.game).enterState(i);}
+	public void swapView(int i){
+		Transition transIn;
+		Transition transOut;
+		switch(i){
+			case SlickSKR.BATTLE:
+				//SlickSKR.PlaySFX("other/public/battle_start.ogg");
+				transIn = new FadeOutTransition(Color.black, 400);
+				transOut = new FadeInTransition(Color.black, 400);
+				break;
+			case SlickSKR.MAINMENU:
+			default:
+				((StateBasedGame)super.game).enterState(i);
+				return;
+		}
+		((StateBasedGame)super.game).enterState(i, transIn, transOut);
+		if (i == SlickSKR.BATTLE){SlickSKR.PlaySFX("other/public/battle_start.ogg");}
+	}
+	
+	public void swapView(int i, Transition transIn, Transition transOut){
+		((StateBasedGame)super.game).enterState(i, transIn, transOut);
+	}
 	
 	public int getStateIndex(){return ((StateBasedGame)super.game).getCurrentStateID();}
 	

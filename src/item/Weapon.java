@@ -115,6 +115,59 @@ public class Weapon extends Item {
 	
 	public int getSpeed(){return this.stats.getSpeed();}
 
+	public String getSFXHit(){
+		switch(intType){
+			case 2:
+				return "other/public/hit_bat.ogg";
+			case 3:
+				return "other/public/hit_bullet.ogg";
+			case 4:
+				return "other/public/hit_katana.ogg";
+			case 1:
+				//return "pickaxe.ogg";
+			case 5:
+				return "other/public/hit_knife.ogg";
+			case 6:
+				return "other/public/hit_wrench.ogg";
+			case 7:
+				return "other/public/hit_log.ogg";
+			default:
+				return "other/public/hit_punch.ogg";
+		}
+	}
+
+	public String getSFXHitCritical(){
+		switch(intType){
+			case 1:
+				return "pickaxe.ogg";
+			case 2:
+				return "other/public/hit_bat_critical.ogg";
+			case 3:
+				return "other/public/hit_bullet_critical.ogg";
+			case 4:
+				return "other/public/hit_katana_critical.ogg";
+			case 7:
+				return "other/public/hit_log_critical.ogg";
+			case 5:
+				//return "knife.ogg";
+			case 6:
+				//return "wrench.ogg";
+			default:
+				return "other/public/hit_punch_critical.ogg";
+		}
+	}
+
+	public String getSFXMiss(){
+		switch(intType){
+			case 3:
+				return "other/public/miss_bullet.ogg";
+			case 5:
+				return "other/public/miss_knife.ogg";
+			default:
+				return "other/public/miss_melee.ogg";
+		}
+	}
+
 	@Override
 	public Item create(int quantity) {
 		

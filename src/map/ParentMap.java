@@ -17,7 +17,6 @@ import tile.Tile;
 import tile.TransitionTile;
 
 import animation.AnimatedSprite;
-import animation.WalkingSprite;
 
 import character.BossCharacter;
 import character.EnemyCharacter;
@@ -33,7 +32,6 @@ public class ParentMap {
 	private int direction;
 	private ArrayList<EnemyCharacter> enemies;
 	
-	private WalkingSprite walkingSprite;
 	private AnimatedSprite animatedSprite;
 	private GameScreen parent;
 	
@@ -247,7 +245,7 @@ public class ParentMap {
 			
 			lock();
 				
-			Thread thread = new Thread(new spriteThread(this, this.walkingSprite, pts));
+			Thread thread = new Thread(new spriteThread(this, this.animatedSprite, pts));
 			thread.start();
 				
 		}
@@ -263,7 +261,7 @@ public class ParentMap {
 			
 			if (canMoveToPosition(d, currentPositiony2)){
 				
-				Thread thread = new Thread(new spriteThread(this, this.walkingSprite, d, currentPositiony2));
+				Thread thread = new Thread(new spriteThread(this, this.animatedSprite, d, currentPositiony2));
 				thread.start();
 
 				Tile tile = getTileByPosition(d + (this.getCharacterPositionX() * MapScreen.ICON_SIZE), 
@@ -290,12 +288,12 @@ public class ParentMap {
 	public class spriteThread implements Runnable{
 		
 		private ParentMap map;
-		private WalkingSprite sprite;
+		private AnimatedSprite sprite;
 		private double x;
 		private double y;
 		private ArrayList<Point> points;
 		
-		public spriteThread(ParentMap map, WalkingSprite sprite, double x, double y){
+		public spriteThread(ParentMap map, AnimatedSprite sprite, double x, double y){
 			this.map = map;
 			this.sprite = sprite;
 			this.x = x;
@@ -303,7 +301,7 @@ public class ParentMap {
 			this.points = null;
 		}
 		
-		public spriteThread(ParentMap map, WalkingSprite sprite, ArrayList<Point> points){
+		public spriteThread(ParentMap map, AnimatedSprite sprite, ArrayList<Point> points){
 			this.map = map;
 			this.sprite = sprite;
 			this.points = points;
@@ -326,7 +324,7 @@ public class ParentMap {
 					} catch (SlickException e) {
 						e.printStackTrace();
 					}
-					this.sprite = this.map.getWalkingSprite();
+					this.sprite = this.map.getAnimatedSprite();
 					
 					try {
 						takeStep(px, py);
@@ -433,24 +431,24 @@ public class ParentMap {
 	public void showSprite() throws SlickException{
 		
 		if (this.direction == LEFT){
-			this.walkingSprite = this.animatedSprite.getLeft();
-			this.cache = this.walkingSprite.getImage();
+			this.animatedSprite.setDirection(AnimatedSprite.LEFT);
+			this.cache = this.animatedSprite.getImage();
 		}else if (this.direction == RIGHT){
-			this.walkingSprite = this.animatedSprite.getRight();
-			this.cache = this.walkingSprite.getImage();
+			this.animatedSprite.setDirection(AnimatedSprite.RIGHT);
+			this.cache = this.animatedSprite.getImage();
 		}else if (this.direction == UP){
-			this.walkingSprite = this.animatedSprite.getUp();
-			this.cache = this.walkingSprite.getImage();
+			this.animatedSprite.setDirection(AnimatedSprite.FORWARD);
+			this.cache = this.animatedSprite.getImage();
 		}else {
-			this.walkingSprite = this.animatedSprite.getDown();
-			this.cache = this.walkingSprite.getImage();
+			this.animatedSprite.setDirection(AnimatedSprite.BACKWARD);
+			this.cache = this.animatedSprite.getImage();
 		}
 		
 	}
 		
 	public synchronized Image getCache(){return this.cache;}
 	
-	public synchronized WalkingSprite getWalkingSprite(){return this.walkingSprite;}
+	public synchronized AnimatedSprite getAnimatedSprite(){return this.animatedSprite;}
 		
 	public ArrayList<EnemyCharacter> getEnemies() {return this.enemies;}
 	

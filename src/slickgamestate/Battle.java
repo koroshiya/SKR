@@ -92,6 +92,7 @@ public class Battle extends SlickGameState{
 			BossCharacter bc = (BossCharacter) enemies.get(0);
 			parent.WriteOnMap(bc.getDialogue());
 		}*/
+		if (this.enemies.size() == 0){return;}
 		mode = this.MENU_MODE;
 		if (running){
 			resetDefaultInterface();
@@ -123,8 +124,10 @@ public class Battle extends SlickGameState{
 		
 		if (partyWon()){
 			mode = VICTORY_MODE;
+			SlickSKR.PlaySFX("other/public/decide.ogg");
 		}else if (partyLost()){
 			mode = LOSS_MODE;
+			SlickSKR.PlaySFX("weeden/die-or-lose-life.ogg");
 			if (Party.getCharactersAlive(true).size() == 0){
 				parent.gameover();
 			}else {
@@ -192,6 +195,7 @@ public class Battle extends SlickGameState{
 	public void enter(GameContainer arg0, StateBasedGame arg1){
 
 		this.party = Party.getCharactersInParty();
+		SlickSKR.PlayMusic("other/public/battle.ogg");
 		
 		for (PlayableCharacter c : this.party){
 			c.instantiateForBattle();
@@ -495,6 +499,7 @@ public class Battle extends SlickGameState{
 			setTargetItems();
 		}else if (command.equals(commands[3])){
 			mode = RUN_MODE;
+			SlickSKR.PlaySFX("other/attrib/game-over.ogg");
 			setTargetBattleEnd();
 		}else if (command.equals(commands[4])){
 			setDefaultInterface(this.currentCharacter);

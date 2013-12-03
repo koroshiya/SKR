@@ -1,0 +1,13 @@
+The sounds included in this directory, or rather, the subdirectory of this directory, fall under two licenses.
+First, CC0 1.0 Universal (CC0 1.0), the Creative Commons 0 license. These are public domain sounds.
+Second, the Creative Commons Attribution 3.0 Unported license. These are sounds for which the creator must be credited.
+
+For the exact license agreements, please follow the links below.
+Creative Commons 0: http://creativecommons.org/publicdomain/zero/1.0/
+Attribution: http://creativecommons.org/licenses/by/3.0/
+
+---------------
+
+Sounds
+
+Each subdirectory contains a license file specifying the type of license used and containing a link to the creator.

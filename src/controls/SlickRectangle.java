@@ -61,6 +61,7 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	
 	public boolean isWithinBounds(int x, int y){
 		if (enabled && x >= this.x && x < this.x + this.width && y >= this.y && y < this.y + this.height){
+			//SlickSKR.PlaySFX("other/public/intro_button.ogg");
 			return true;
 		}
 		return false;

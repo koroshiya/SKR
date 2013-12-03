@@ -2,13 +2,16 @@ package slickgamestate;
 
 import java.io.IOException;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import com.japanzai.skr.Driver;
+//import com.japanzai.skr.Driver; //TODO: reimplement
 
 import controls.SlickRectangle;
 import screen.GameScreen;
@@ -29,7 +32,7 @@ public class StartScreen extends SlickGameState{
 		if (s.equals(commands[0])){
 			System.out.println("Continue");
 		}else if (s.equals(commands[1])){
-			this.parent.swapView(SlickSKR.MAP);
+			this.parent.swapView(SlickSKR.MAP, new FadeOutTransition(Color.white, 800), new FadeInTransition(Color.white, 800));
 		}else if (s.equals(commands[2])){
 			System.out.println("Load");
 			/*if (Driver.load()){
@@ -44,10 +47,16 @@ public class StartScreen extends SlickGameState{
 	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
 		for (SlickRectangle rect : rects){
 			if (rect.isWithinBounds(x, y)){
+				SlickSKR.PlaySFX("other/public/intro_button.ogg");
 				this.processMenuItem(rect.getTag());
 				break;
 			}
 		}
+	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame arg1){
+		SlickSKR.PlayMusic("other/public/intro.ogg");
 	}
 	
 	@Override

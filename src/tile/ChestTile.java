@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.SlickException;
 
 import screen.GameScreen;
+import slickgamestate.SlickSKR;
 
 import com.japanzai.skr.Inventory;
 
@@ -41,7 +42,8 @@ public class ChestTile extends InteractiveTile implements InteractableObject {
 		Dialogue d;
 		
 		if (!this.open){
-			
+
+			SlickSKR.PlaySFX("other/public/chest-opening.ogg");
 			ArrayList<String> itemList = new ArrayList<String>();
 			itemList.add("Obtained:");
 			for (Item item : treasure){

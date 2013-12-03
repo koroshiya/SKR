@@ -10,6 +10,8 @@ import java.lang.Math;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import animation.AnimatedSprite;
+
 import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
 
@@ -32,6 +34,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	
 	private boolean inParty;
 	private FuryBreak fury;
+	private final AnimatedSprite sprite;
 	
 	public PlayableCharacter (String firstName, String lastName, FightingStyle style, 
 					Weapon weapon, Gender gender,
@@ -63,6 +66,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 		this.temper = 0;
 		this.inParty = false;
 		this.supportedWeapons = supportedWeapons;
+		this.sprite = new AnimatedSprite(this);
 		
 	}
 	
@@ -193,7 +197,9 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	public void instantiateForBattle(){
 		super.resetGauge();
 		try {
-			this.setAliveIcon(new Image(getSpriteDirectory() + "left2.png"));
+			this.sprite.instantiate();
+			this.sprite.setDirection(AnimatedSprite.LEFT);
+			this.setAliveIcon(this.sprite.getImage());
 			this.setDeadIcon(new Image("/res/dead.png"));
 		} catch (SlickException e) {
 			e.printStackTrace();
