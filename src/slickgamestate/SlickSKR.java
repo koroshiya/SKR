@@ -34,8 +34,9 @@ public class SlickSKR extends StateBasedGame {
 	public static final int MAINMENU = 664;
 	public static final int CONTROLSCREEN = 665;
 	public static final int GAMEOVER = 666;
-	
-	public static final boolean DEBUG_MODE = false;
+
+	public static final boolean NO_ENCOUNTERS = true;
+	public static final boolean NO_TRANSITIONS = true;
 	public static TrueTypeFont DEFAULT_FONT;
 	
 	public SlickSKR(ParentMap current) throws SlickException{

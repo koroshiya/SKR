@@ -2,6 +2,9 @@ package character;
 
 import java.io.Serializable;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 import interfaces.NPC;
 import item.Item;
 import item.Weapon;
@@ -54,6 +57,17 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 	
 	public void setDialogue(Dialogue dialogue){
 		this.dialogue = dialogue;
+	}
+	
+	@Override
+	public void instantiateForBattle(){
+		try {
+			this.sprite.instantiate(96);
+			this.setAliveIcon(this.sprite.getBattleIconEnemy());
+			this.setDeadIcon(new Image("/res/dead.png"));
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//TODO: implement boss dialog

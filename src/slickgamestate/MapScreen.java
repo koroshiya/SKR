@@ -9,12 +9,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.openal.Audio;
-import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.ResourceLoader;
 
 import console.MapConsole;
 import screen.GameScreen;
@@ -36,8 +32,6 @@ public class MapScreen extends SlickGameState{
 	private ParentMap map;
 	public static int ICON_SIZE = 47;
 	private SlickDrawableFrame activeDialog = null;
-	private Audio mCache = null; //TODO: remove and put short transition instead?
-	
 	
 	public MapScreen(ParentMap map){
 		
@@ -52,16 +46,7 @@ public class MapScreen extends SlickGameState{
 		//super.parent.setTargetFrameRate(60);
 		sprite = new Image(map.getDefaultTile());
 		map.instantiateImages();
-		if (mCache == null){
-			try {
-				mCache = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("/res/sfx/other/public/summeropenfielddusk.ogg"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		if (mCache != null){SlickSKR.PlayMusic(mCache);}
+		SlickSKR.PlayMusic(map.getThemeMusic());
 		
 	}
 	
@@ -84,38 +69,38 @@ public class MapScreen extends SlickGameState{
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
-		g.setFont(SlickSKR.DEFAULT_FONT);
+		//g.setFont(SlickSKR.DEFAULT_FONT);
 		
 		try{
 			
 			double posX = this.map.getCurrentPositionX() / ICON_SIZE;
 			double posY = this.map.getCurrentPositionY() / ICON_SIZE;
 			float y;
-			Tile tile = null;
 			
 			float yDiff = map.getYDiff();
 			float xDiff = map.getXDiff();
+			float iDiff;
+			String defaultTile = map.getDefaultTile();
 			
-			for (int i = -1; i < this.map.getCharacterPositionX() * 2 + 2; i++){
-				float iDiff = i * ICON_SIZE - xDiff;
-				for (int j = -1; j < this.map.getCharacterPositionY() * 2 + 2; j++){
-					
+			int i = -2;
+			int j;
+			int totalX = this.map.getCharacterPositionX() * 2 + 2;
+			int totalY = this.map.getCharacterPositionY() * 2 + 2;
+			while (++i < totalX){
+				iDiff = i * ICON_SIZE - xDiff;
+				j = -2;
+				while (++j < totalY){
 					try{
-						
-						tile = map.getTileByIndex(i + posX, j + posY);
 						y = j * ICON_SIZE - yDiff;
-						g.drawImage(sprite, iDiff, y, null);	
-						if (tile.getAvatar() != map.getDefaultTile()){
-							g.drawImage(tile.getCache(), iDiff, y, null);
-						}
-						//System.out.println("success");
+						g.drawImage(sprite, iDiff, y, null);
+						map.getTileByIndex(i + posX, j + posY).drawIfNotDefault(g, defaultTile, iDiff, y);
 					}catch (Exception ex){
 						//g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
 					}
 				}
 			}	
 			
-			g.drawImage(this.map.getCache(), this.map.getCharacterPositionX() * ICON_SIZE, this.map.getCharacterPositionY() * ICON_SIZE, null);
+			this.map.getAnimatedSprite().draw(this.map.getCharacterPositionX() * ICON_SIZE, this.map.getCharacterPositionY() * ICON_SIZE);
 			
 		}catch (Exception ex){
 			ex.printStackTrace();
@@ -129,10 +114,9 @@ public class MapScreen extends SlickGameState{
 	
 	public ParentMap getParentMap() {return map;}
 	
-	public void setMap(ParentMap map2) throws SlickException {
+	public void setMap(ParentMap map2) {
 		this.map = map2;
-		//sprite = new Image(map.getDefaultTile());
-		//map.instantiateImages();
+		super.parent.swapView(SlickSKR.MAP);
 	}
 
 	public void removeMapConsole() {activeDialog = null;}

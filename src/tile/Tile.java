@@ -2,6 +2,7 @@ package tile;
 
 import interfaces.Photogenic;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -85,10 +86,15 @@ public class Tile implements Photogenic{
 			e.printStackTrace();
 		}
 	}
+	
+	public void setSprite(Image icon){
+		//this.sprite = icon;
+		this.setCache(icon);
+	}
 
 	@Override
-	public String getAvatar() throws SlickException {
-		return (this.sprite);
+	public String getAvatar() {
+		return this.sprite;
 	}
 	
 	public void instantiate() throws SlickException{
@@ -97,10 +103,6 @@ public class Tile implements Photogenic{
 	
 	public void setCache(Image cache){
 		this.cache = cache;
-	}
-	
-	public Image getCache(){
-		return this.cache;
 	}
 
 	public int getXCoordinate(){
@@ -118,5 +120,19 @@ public class Tile implements Photogenic{
 	public void setYCoordinate(int y){
 		this.y = y;
 	}
+	
+	public void draw(Graphics g, float x, float y){
+		g.drawImage(this.cache, x, y);
+	}
+	
+	public Image getCache(){
+		return this.cache;
+	}
+	
+	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y){
+		if (sprite != defaultImage){g.drawImage(cache, x, y, null);}
+	}
+	
+	public void stepOn(){}
 	
 }

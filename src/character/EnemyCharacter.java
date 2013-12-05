@@ -10,6 +10,8 @@ import java.lang.Math;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import animation.AnimatedSprite;
+
 import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
 import com.japanzai.skr.Party;
@@ -27,6 +29,7 @@ public class EnemyCharacter extends CombatCapableCharacter implements Serializab
 	private int dropRate;
 	private int money;
 	private int encounterRate;
+	protected final AnimatedSprite sprite;
 	
 	public EnemyCharacter (String firstName, String lastName, FightingStyle style, 
 					Weapon weapon, Gender gender,
@@ -40,6 +43,7 @@ public class EnemyCharacter extends CombatCapableCharacter implements Serializab
 		this.dropRate = dropRate;
 		this.money = money;
 		this.encounterRate = encounterRate;
+		this.sprite = new AnimatedSprite(this);
 		
 	}
 	
@@ -106,7 +110,8 @@ public class EnemyCharacter extends CombatCapableCharacter implements Serializab
 	@Override
 	public void instantiateForBattle(){
 		try {
-			this.setAliveIcon(new Image(getSpriteDirectory() + "right2.png"));
+			this.sprite.instantiate();
+			this.setAliveIcon(this.sprite.getBattleIconEnemy());
 			this.setDeadIcon(new Image("/res/dead.png"));
 		} catch (SlickException e) {
 			e.printStackTrace();

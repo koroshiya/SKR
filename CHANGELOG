@@ -1,3 +1,12 @@
+v0.28
+Replaced previous timer for animation with built-in Slick Animation class (might revert; too fast)
+Implemented strikethrough for deceased characters (in battle)
+Replaced sprites with spritesheets for current enemies
+Removed music cache for MapScreen
+Improved rendering algorithm for MapScreen
+Updated lwjgl
+Added Slick JDoc
+
 v0.27
 Superseded WalkingSprite with AnimatedSprite
 Replaced character sprites with spritesheets

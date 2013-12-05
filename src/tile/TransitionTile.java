@@ -22,5 +22,14 @@ public class TransitionTile extends Tile {
 	public void interact(GameScreen parent) throws SlickException {
 		this.currentMap.getFrame().setMap(this.map);
 	}
+
+	@Override
+	public void stepOn() {
+		try {
+			this.currentMap.getFrame().setMap(this.map);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

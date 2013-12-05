@@ -2,83 +2,83 @@ package animation;
 
 import java.io.Serializable;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
-import character.CombatCapableCharacter;
+import slickgamestate.MapScreen;
 
-public class AnimatedSprite implements Runnable, Serializable {
+import character.Character;
+
+public class AnimatedSprite implements Serializable {
 
 	private static final long serialVersionUID = 5388120283498326586L;
-	private SpriteSheet tileSheet;
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
 	public static final int FORWARD = 1;
 	public static final int BACKWARD = 0;
-	private Image pics[][];
-	private final long pause;
-	private int currentFrame;
 	private int direction;
 	private final String spriteDir;
+	private Animation anim[];
 	
-	public AnimatedSprite(CombatCapableCharacter c){
+	public AnimatedSprite(Character c){
 
-		pics = new Image[4][4];
-		this.currentFrame = 1;
-		this.pause = 120;
 		this.direction = LEFT;
 		this.spriteDir = c.getSpriteDirectory();
 		
 	}
 	
-	public void instantiate() throws SlickException{
+	public void instantiate(int sizeX){
+		SpriteSheet tileSheet;
 		try{
-			this.tileSheet = new SpriteSheet(this.spriteDir + "sheet.png", 48, 48, new Color(0,0,0));
+			tileSheet = new SpriteSheet(this.spriteDir + "sheet.png", sizeX, sizeX, new Color(0,0,0));
 		}catch (Exception ex){
 			//ex.printStackTrace();
+			return;
 		}
+		anim = new Animation[4];
 		for (int y = 0; y < 4; y++) {
-			for (int x = 0; x < 3; x++) {
-				pics[x][y] = tileSheet.getSprite(x,y);
+			anim[y] = new Animation(false);
+			for (int x = 0; x < 2; x++) {
+				anim[y].addFrame(tileSheet.getSprite(x,y), 60);
 			}
-			pics[3][y] = tileSheet.getSprite(1,y);
+			anim[y].setCurrentFrame(1);
+			anim[y].setAutoUpdate(true);
+			anim[y].setLooping(false);
+			anim[y].stop();
 		}
 	}
 	
-	public synchronized Image getNextFrame() throws SlickException{
-		this.nextFrame();
-		return this.getImage();
+	public void instantiate(){instantiate(MapScreen.ICON_SIZE + 1);}
+
+	public synchronized void draw(int x, int y){
+		this.anim[this.direction].draw(x, y);
 	}
 
-	public synchronized Image getImage() throws SlickException{
-		return pics[this.currentFrame][this.direction];
+	public synchronized void draw(float x, float y){
+		this.anim[this.direction].draw(x, y);
 	}
 	
-	public synchronized void nextFrame(){
-		this.currentFrame += this.currentFrame == 3 ? -3 : 1;
+	public synchronized Image getBattleIcon(){
+		return anim[AnimatedSprite.LEFT].getCurrentFrame();
+	}
+	
+	public synchronized Image getBattleIconEnemy(){
+		return anim[AnimatedSprite.RIGHT].getCurrentFrame();
 	}
 
 	public void setDirection(int direction){
 		this.direction = direction;
 	}
 
-	@Override
 	public synchronized void run(){
-		
-		nextFrame();
-		try {
-			Thread.sleep(pause);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		nextFrame();
-		
+		this.anim[this.direction].restart();
 	}
 
-	public Long getTimeBetweenFrames() {
-		return this.pause;
+	public int getTimeBetweenFrames() {
+		return 120;
 	}
 	
 }

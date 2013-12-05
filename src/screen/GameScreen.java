@@ -34,10 +34,11 @@ public class GameScreen extends AppGameContainer{
 		super.game = skr;
 		this.setDefaultFont(SlickSKR.DEFAULT_FONT);
 		this.setVSync(true);
+		this.setTargetFrameRate(60);
 		this.setSmoothDeltas(true);
 		this.setUpdateOnlyWhenVisible(true);
 		this.setAlwaysRender(true);
-		this.setTargetFrameRate(60);
+		this.setMaximumLogicUpdateInterval(10);
 		//this.setShowFPS(false);
 		//TODO: Set animated cursor
 		//TODO: Set icon
@@ -50,18 +51,29 @@ public class GameScreen extends AppGameContainer{
 	}
 	
 	public void swapView(int i){
+		if (SlickSKR.NO_TRANSITIONS){
+			((StateBasedGame)super.game).enterState(i);
+			return;
+		}
+		
+		int curr = this.getState().getID();
 		Transition transIn;
 		Transition transOut;
-		switch(i){
-			case SlickSKR.BATTLE:
-				//SlickSKR.PlaySFX("other/public/battle_start.ogg");
-				transIn = new FadeOutTransition(Color.black, 400);
-				transOut = new FadeInTransition(Color.black, 400);
-				break;
-			case SlickSKR.MAINMENU:
-			default:
-				((StateBasedGame)super.game).enterState(i);
-				return;
+		if (i == SlickSKR.BATTLE || curr == SlickSKR.BATTLE || (i == SlickSKR.MAP && curr == SlickSKR.MAP)){
+			transIn = new FadeOutTransition(Color.black, 400);
+			transOut = new FadeInTransition(Color.black, 400);
+		}else if (i == SlickSKR.MENU || curr == SlickSKR.MENU){
+			((StateBasedGame)super.game).enterState(i);
+			return;
+		}else if (i == SlickSKR.GAMEOVER || curr == SlickSKR.GAMEOVER){
+			transIn = new FadeOutTransition(Color.black, 200);
+			transOut = new FadeInTransition(Color.black, 200);
+		}else if (curr == SlickSKR.MAINMENU){
+			transIn = new FadeOutTransition(Color.white, 800);
+			transOut = new FadeInTransition(Color.white, 800);
+		}else{
+			((StateBasedGame)super.game).enterState(i);
+			return;
 		}
 		((StateBasedGame)super.game).enterState(i, transIn, transOut);
 		if (i == SlickSKR.BATTLE){SlickSKR.PlaySFX("other/public/battle_start.ogg");}
@@ -113,7 +125,7 @@ public class GameScreen extends AppGameContainer{
 	
 	public boolean isEncounter(ParentMap map){
 		
-		if (!SlickSKR.DEBUG_MODE && map.randomEncounter()){
+		if (!SlickSKR.NO_ENCOUNTERS && map.randomEncounter()){
 			return true;
 		}
 		return false;

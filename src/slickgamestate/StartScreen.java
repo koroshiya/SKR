@@ -32,7 +32,7 @@ public class StartScreen extends SlickGameState{
 		if (s.equals(commands[0])){
 			System.out.println("Continue");
 		}else if (s.equals(commands[1])){
-			this.parent.swapView(SlickSKR.MAP, new FadeOutTransition(Color.white, 800), new FadeInTransition(Color.white, 800));
+			this.parent.swapView(SlickSKR.MAP);
 		}else if (s.equals(commands[2])){
 			System.out.println("Load");
 			/*if (Driver.load()){

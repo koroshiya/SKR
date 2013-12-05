@@ -9,9 +9,6 @@ import console.dialogue.Dialogue;
 
 public class NonPlayableCharacter extends Character implements NPC, Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Dialogue dialogue;
 
@@ -20,12 +17,7 @@ public class NonPlayableCharacter extends Character implements NPC, Serializable
 							String nickName, String avatar){
 	
 		super(firstName, lastName, gender, nickName, avatar);
-		
-		if (dialogue != null){
-			this.dialogue = dialogue;
-		}else {
-			this.dialogue = new Dialogue();
-		}
+		this.dialogue = dialogue != null ? dialogue : new Dialogue();
 		
 	}
 		

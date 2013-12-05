@@ -47,13 +47,15 @@ public class ParentMap {
 	//TODO: dynamically create battle depending on enemy arraylist? mix and match
 	private String defaultTile;
 	private Image cache;
+	private final String themeMusic;
 	
 	private float xDiff;
 	private float yDiff;
 	
 	public ParentMap(Point coordinates, Point currentPosition, PlayableCharacter c,
 			AnimatedSprite animatedSprite, ArrayList<EnemyCharacter> enemies,
-			GameScreen parent, Point mapSize, int encounterRate, String grass) throws SlickException{
+			GameScreen parent, Point mapSize, int encounterRate, String grass,
+			String theme) throws SlickException{
 
 		this.parent = parent;
 		this.coordinates = coordinates;
@@ -66,6 +68,7 @@ public class ParentMap {
 		this.enemies = enemies;
 		this.encounterRate = encounterRate;
 		this.defaultTile = grass;
+		this.themeMusic = theme;
 	
 	}
 	
@@ -83,6 +86,7 @@ public class ParentMap {
 		this.currentPositiony = y;
 		xDiff = 0;
 		yDiff = 0;
+		this.getTileByPosition(x/MapScreen.ICON_SIZE, y/MapScreen.ICON_SIZE).stepOn();
 		
 	}
 	
@@ -324,7 +328,6 @@ public class ParentMap {
 					} catch (SlickException e) {
 						e.printStackTrace();
 					}
-					this.sprite = this.map.getAnimatedSprite();
 					
 					try {
 						takeStep(px, py);
@@ -383,17 +386,13 @@ public class ParentMap {
 			xDiff = 0;
 			yDiff = 0;
 			
-			this.sprite.getNextFrame();
-			this.map.showSprite();
+			this.sprite.run();
 			
 			for (int a = 0; a < 30; a++){
 				xDiff += diffX;
 				yDiff += diffY;
 				pause();
 			}
-			
-			this.sprite.getNextFrame();
-			this.map.showSprite();
 			
 			for (int a = 0; a < 30; a++){
 				xDiff += diffX;
@@ -432,16 +431,12 @@ public class ParentMap {
 		
 		if (this.direction == LEFT){
 			this.animatedSprite.setDirection(AnimatedSprite.LEFT);
-			this.cache = this.animatedSprite.getImage();
 		}else if (this.direction == RIGHT){
 			this.animatedSprite.setDirection(AnimatedSprite.RIGHT);
-			this.cache = this.animatedSprite.getImage();
 		}else if (this.direction == UP){
 			this.animatedSprite.setDirection(AnimatedSprite.FORWARD);
-			this.cache = this.animatedSprite.getImage();
 		}else {
 			this.animatedSprite.setDirection(AnimatedSprite.BACKWARD);
-			this.cache = this.animatedSprite.getImage();
 		}
 		
 	}
@@ -490,7 +485,6 @@ public class ParentMap {
 
 	public void setTiles(Tile[][] generatedMap) {
 		this.tileMap = new TileMap(generatedMap);
-		
 	}
 	
 	public void setAnimatedSprite(AnimatedSprite animatedSprite2) {
@@ -508,5 +502,9 @@ public class ParentMap {
 	public double getCurrentPositionX() {return this.currentPositionx;}
 
 	public double getCurrentPositionY() {return this.currentPositiony;}
+	
+	public String getThemeMusic(){
+		return this.themeMusic;
+	}
 	
 }

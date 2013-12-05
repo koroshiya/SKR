@@ -375,12 +375,12 @@ public class Driver implements Serializable{
 		bs = new GameScreen(new SlickSKR());
 		current = new ParentMap(coordinates, currentPosition, Party.getCharacterByIndex(0),
 									animatedSprite, enemies, bs, mapSize, 97, 
-									grass);
+									grass, "other/public/summeropenfielddusk.ogg");
 
 		Tile[][] deadTile = createDeadMap(32 * MapScreen.ICON_SIZE, 26 * MapScreen.ICON_SIZE);
 		Point newCurPos = new Point(20 * MapScreen.ICON_SIZE, 0);
 		destination = new ParentMap(coordinates, newCurPos, Party.getCharacterByIndex(0),
-				animatedSprite, bossEnemies, bs, mapSize, 5, mud);	
+				animatedSprite, bossEnemies, bs, mapSize, 5, mud, "other/public/summeropenfielddusk.ogg");	
 		destination.setTiles(deadTile);
 		
 		TileGenerator tGenerator = new TileGenerator(basicRandomTiles());
@@ -528,19 +528,9 @@ public class Driver implements Serializable{
 		
 	}
 	
-	private static CharacterTile NPC(String imgNPC, ArrayList<String> d, Gender gender) throws SlickException{
-		
-		NonPlayableCharacter npc = new NonPlayableCharacter("Random", "NPC", gender, null, "NPC", "/res/");
-		//Dialogue dialogue = new Dialogue(d, npc); //Character hasn't been created yet
-		npc.getDialogue().addLines(d, npc);
-		
-		return new CharacterTile(imgNPC, npc);
-		
-	}
-	
 	private NonPlayableCharacter InteractiveNPC(String imgNPC, ArrayList<String> d) throws SlickException{
 		
-		NonPlayableCharacter npc = new NonPlayableCharacter("Random", "NPC", genders.get(0), null, "NPC", "/res/");
+		NonPlayableCharacter npc = new NonPlayableCharacter("Random", "NPC", genders.get(0), null, "NPC", "/res/enemy/militia/");
 		//Dialogue dialogue = new Dialogue(d, npc); //Character hasn't been created yet
 		npc.getDialogue().addLines(d, npc);
 		

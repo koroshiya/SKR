@@ -2,7 +2,10 @@ package tile;
 
 import map.ParentMap;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+
+import animation.AnimatedSprite;
 
 import interfaces.InteractableObject;
 
@@ -17,20 +20,15 @@ public class CharacterTile extends Tile implements InteractableObject {
 	
 	private final NonPlayableCharacter npc;
 	
-	private final String forward;
-	private final String backward;
-	private final String left;
-	private final String right;
+	private final AnimatedSprite sprite;
 
 	public CharacterTile(String spritePath, NonPlayableCharacter npc) throws SlickException {
 
-		super(false, false, spritePath + "backward2.png");
+		super(false, false, spritePath);
 		this.npc = npc;
-
-		this.forward = (spritePath + "forward2.png");
-		this.backward = (spritePath + "backward2.png");
-		this.left = (spritePath + "right2.png");
-		this.right = (spritePath + "left2.png");
+		
+		this.sprite = new AnimatedSprite(npc);
+		this.sprite.setDirection(AnimatedSprite.BACKWARD);
 		
 	}
 	
@@ -51,18 +49,30 @@ public class CharacterTile extends Tile implements InteractableObject {
 		}
 	}
 	
+	public void instantiate() throws SlickException{
+		this.sprite.instantiate();
+		this.sprite.setDirection(AnimatedSprite.BACKWARD);
+	}
+	
 	public void face(int dir) {
 		if (dir == ParentMap.UP){
-			this.setSprite(this.backward);
+			this.sprite.setDirection(AnimatedSprite.BACKWARD);
 		}else if (dir == ParentMap.RIGHT){
-			super.setSprite(this.right);
+			this.sprite.setDirection(AnimatedSprite.LEFT);
 		}else if (dir == ParentMap.LEFT){
-			super.setSprite(this.left);
+			this.sprite.setDirection(AnimatedSprite.RIGHT);
 		}else if (dir == ParentMap.DOWN){
-			super.setSprite(this.forward);
+			this.sprite.setDirection(AnimatedSprite.FORWARD);
 		}
 	}
-
+	
+	public void draw(int x, int y){
+		this.sprite.draw(x, y);
+	}
+	
+	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y){
+		this.sprite.draw(x, y);
+	}
 	
 	@Override
 	public void finishInteraction(GameScreen parent) {}

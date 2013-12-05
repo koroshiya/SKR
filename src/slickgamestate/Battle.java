@@ -245,38 +245,35 @@ public class Battle extends SlickGameState{
 	public void drawBattlePane(Graphics g){
 		
 		for (int i = 0; i < this.enemies.size(); i++){
-			EnemyCharacter e = this.enemies.get(i);
-			if (e.getSprite() == null){
-				e.instantiateForBattle();
-				e.startBattle();
-			}
-			g.drawImage(e.getSprite(), 25, partyY + constY * i);
+			this.enemies.get(i).getSprite().draw(25, partyY + constY * i);
 		}
 		
 		for (int i = 0; i < this.party.size(); i++){
-			g.drawImage(this.party.get(i).getSprite(), 727, partyY + constY * i);
+			this.party.get(i).getSprite().draw(727, partyY + constY * i);
 		}
 	}
 	
 	public void drawBattleParticipants(Graphics g){
 		
 		for (int i = 0; i < enemies.size(); i++){
-			EnemyCharacter c = enemies.get(i);
-			drawChar(g, c, i, 0);
+			drawChar(g, enemies.get(i), i, 0);
 		}
 		for (int i = 0; i < party.size(); i++){
-			PlayableCharacter c = party.get(i);
-			drawChar(g, c, i, 340);
+			drawChar(g, party.get(i), i, 340);
 		}
 		
 	}
 	
 	private void drawChar(Graphics g, CombatCapableCharacter c, int i, int x){
 		int tempY = 500 + i * 25;
+		String nick = c.getNickName();
 		if (!c.isAlive()){
-			//TODO: strikethrough
+			
+			final int textx = SlickSKR.DEFAULT_FONT.getWidth(nick);
+			final int texty = SlickSKR.DEFAULT_FONT.getHeight(nick) / 2;
+			g.drawLine(x, tempY + texty, x + textx, tempY + texty);
 		}
-		g.drawString(c.getNickName(), x, tempY);
+		g.drawString(nick, x, tempY);
 		g.drawString(c.getStatus(), x + 150, tempY);
 	}
 	

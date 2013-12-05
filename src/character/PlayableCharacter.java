@@ -198,8 +198,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 		super.resetGauge();
 		try {
 			this.sprite.instantiate();
-			this.sprite.setDirection(AnimatedSprite.LEFT);
-			this.setAliveIcon(this.sprite.getImage());
+			this.setAliveIcon(this.sprite.getBattleIcon());
 			this.setDeadIcon(new Image("/res/dead.png"));
 		} catch (SlickException e) {
 			e.printStackTrace();
