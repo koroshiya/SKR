@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import slickgamestate.SlickGameState;
 import character.Character;
 
 public class Dialogue implements Serializable{
@@ -109,6 +110,7 @@ public class Dialogue implements Serializable{
 	public void reset(){setCounter(-1);}
 	
 	private void setCounter(int count){
+		SlickGameState.flush();
 		this.counter = count;
 		if (this.counter >= 0 && this.counter < this.max){
 			Line line = this.dialogue.get(this.counter);

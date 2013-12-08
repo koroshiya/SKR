@@ -1,3 +1,9 @@
+v0.29
+Reverted lwjgl (compat issues)
+Implemented workaround so music wouldn't restart from same source
+Implemented screen caching to drastically reduce CPU load (bug with movement; offscreen not captured)
+Fix for numerous font-related issues
+
 v0.28
 Replaced previous timer for animation with built-in Slick Animation class (might revert; too fast)
 Implemented strikethrough for deceased characters (in battle)

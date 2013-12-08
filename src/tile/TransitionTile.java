@@ -2,8 +2,6 @@ package tile;
 
 import map.ParentMap;
 
-import org.newdawn.slick.SlickException;
-
 import screen.GameScreen;
 
 public class TransitionTile extends Tile {
@@ -19,17 +17,14 @@ public class TransitionTile extends Tile {
 		
 	}
 
-	public void interact(GameScreen parent) throws SlickException {
-		this.currentMap.getFrame().setMap(this.map);
+	public void interact(GameScreen parent) {
+		parent.setMap(this.map);
 	}
 
 	@Override
-	public void stepOn() {
-		try {
-			this.currentMap.getFrame().setMap(this.map);
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+	public boolean stepOn() {
+		interact(this.currentMap.getFrame());
+		return true;
 	}
 	
 }

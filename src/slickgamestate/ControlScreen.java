@@ -25,21 +25,31 @@ public class ControlScreen extends SlickGameState{
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
 		backgroundImage = new Image("/res/start.png");
 	}
+
+	@Override
+	public void enter(GameContainer gc, StateBasedGame arg1){
+		//SlickSKR.PlayMusic("other/public/intro.ogg");
+	}
 	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 
-		g.setFont(SlickSKR.DEFAULT_FONT);
-		g.drawImage(backgroundImage, 0, 0);
-		
-		g.drawString("Controls:", 20, 100);
-		g.drawString("A - Interact", 20, 120);
-		g.drawString("W - Menu", 20, 140);
-		g.drawString("F - Fullscreen", 20, 160);
-		g.drawString("Esc - Quit", 20, 180);
+		if (screenCache == null){
+			g.drawImage(backgroundImage, 0, 0);
+			
+			g.drawString("Controls:", 20, 100);
+			g.drawString("A - Interact", 20, 120);
+			g.drawString("W - Menu", 20, 140);
+			g.drawString("F - Fullscreen", 20, 160);
+			g.drawString("Esc - Quit", 20, 180);
+	
+			g.drawString("Programming: Koro", 20, 220);
+			g.drawString("Sprites: Peter Hull", 20, 240);
 
-		g.drawString("Programming: Koro", 20, 220);
-		g.drawString("Sprites: Peter Hull", 20, 240);
+			SlickGameState.capture(g);
+		}else{
+			g.drawImage(screenCache, 0, 0);
+		}
 		
 	}
 

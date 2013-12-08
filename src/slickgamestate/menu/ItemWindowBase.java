@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
@@ -35,6 +36,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 	
 	private Item item;
 	private SlickRectangle[] items;
+	private Image background;
 
 	public ItemWindowBase(int state, GameScreen parent, String[] commands) {
 		super(state, parent);
@@ -62,6 +64,12 @@ public abstract class ItemWindowBase extends SlickGameState{
 		}
 	}
 	
+
+	@Override
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
+		background = new Image("/res/terrain/refinery.png");
+	}
+	
 	@Override
 	public void enter(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 
@@ -69,17 +77,25 @@ public abstract class ItemWindowBase extends SlickGameState{
 		setItem(0);
 		lblMoney = "Funds: " + Inventory.getMoney() + " yen";
 		Inventory.initialize();
+		//SlickSKR.PlayMusic("other/public/");
 		
 	}
+	
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
 
-		g.setFont(SlickSKR.DEFAULT_FONT);
-		getInventoryFilterPane(g);
-		getInventorySelectedItem(g);
-		getMoneyPane(g);
-		displayResults(g);
+		if (screenCache == null){
+			g.drawImage(background, 0, 0);
+			
+			getInventoryFilterPane(g);
+			getInventorySelectedItem(g);
+			getMoneyPane(g);
+			displayResults(g);
+			SlickGameState.capture(g);
+		}else{
+			g.drawImage(screenCache, 0, 0);
+		}
 		
 	}
 
@@ -145,7 +161,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 		g.draw(filterPane);
 		
 		for (int i = 0; i < filterItems.length; i++){
-			filterItems[i].paintCenter(g, (TrueTypeFont) g.getFont());
+			filterItems[i].paintCenter(g);
 		}
 			
 	}

@@ -3,6 +3,7 @@ package tile;
 import org.newdawn.slick.Graphics;
 
 import screen.GameScreen;
+import slickgamestate.SlickGameState;
 import interfaces.InteractableObject;
 
 public abstract class InteractiveTile extends Tile implements InteractableObject {
@@ -16,6 +17,8 @@ public abstract class InteractiveTile extends Tile implements InteractableObject
 	}
 	
 	@Override
-	public void finishInteraction(GameScreen parent){}
+	public void finishInteraction(GameScreen parent){
+		SlickGameState.flush();
+	}
 	
 }

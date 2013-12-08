@@ -2,16 +2,14 @@ package slickgamestate;
 
 import java.io.IOException;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
 //import com.japanzai.skr.Driver; //TODO: reimplement
+
 
 import controls.SlickRectangle;
 import screen.GameScreen;
@@ -21,7 +19,7 @@ public class StartScreen extends SlickGameState{
 	private Image backgroundImage;
 	private SlickRectangle[] rects;
 	private String commands[] = {"Continue", "New Game", "Load", "Controls"};
-	private final int buttonWidth = 300;
+	private final int buttonWidth = 200;
 	private final int buttonHeight = 50;
 	
 	public StartScreen(GameScreen parent) {
@@ -57,6 +55,7 @@ public class StartScreen extends SlickGameState{
 	@Override
 	public void enter(GameContainer gc, StateBasedGame arg1){
 		SlickSKR.PlayMusic("other/public/intro.ogg");
+		screenCache = null;
 	}
 	
 	@Override
@@ -64,18 +63,24 @@ public class StartScreen extends SlickGameState{
 		backgroundImage = new Image("/res/start.png");
 		rects = new SlickRectangle[commands.length];
 		for (int i = 0; i < commands.length; i++){
-			rects[i] = new SlickRectangle(250, 150 + (i * 100), buttonWidth, buttonHeight, commands[i]);
+			rects[i] = new SlickRectangle(300, 150 + (i * 100), buttonWidth, buttonHeight, commands[i], "/res/button_onyx_200x50.png");
+			rects[i].initialize();
 		}
 	}
 	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
-
-		g.setFont(SlickSKR.DEFAULT_FONT);
-		g.drawImage(backgroundImage, 0, 0);
 		
-		for (int i = 0; i < commands.length; i++){
-			rects[i].paintCenter(g);
+		if (screenCache == null){
+			g.drawImage(backgroundImage, 0, 0);
+			
+			for (int i = 0; i < commands.length; i++){
+				g.drawImage(rects[i].getCache(), rects[i].getMinX(), rects[i].getMinY());
+				rects[i].paintCenter(g, true);
+			}
+			SlickGameState.capture(g);
+		}else{
+			g.drawImage(screenCache, 0, 0);
 		}
 		
 	}

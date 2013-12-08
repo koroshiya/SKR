@@ -6,14 +6,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 import animation.AnimatedSprite;
-
 import interfaces.InteractableObject;
-
 import console.dialogue.Dialogue;
-
 import screen.GameScreen;
-
-
+import slickgamestate.SlickGameState;
 import character.NonPlayableCharacter;
 
 public class CharacterTile extends Tile implements InteractableObject {
@@ -75,6 +71,8 @@ public class CharacterTile extends Tile implements InteractableObject {
 	}
 	
 	@Override
-	public void finishInteraction(GameScreen parent) {}
+	public void finishInteraction(GameScreen parent) {
+		SlickGameState.flush();
+	}
 	
 }

@@ -19,18 +19,28 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Dialogue dialogue;
+	private final String battleMusic;
+	
+
 
 	public BossCharacter (String firstName, String lastName, FightingStyle style, 
-					Weapon weapon, Gender gender,
-					int experienceGivenWhenDefeated, Dialogue dialogue, 
-					String nickName, String sprite, Item item, int rate, int money, 
-					int encounterRate){
+					Weapon weapon, Gender gender, int experienceGivenWhenDefeated, 
+					Dialogue dialogue, String nickName, String sprite, Item item, 
+					int rate, int money, int encounterRate){
+		this(firstName, lastName, style, weapon, gender, experienceGivenWhenDefeated, 
+				dialogue, nickName, sprite, item, rate, money, encounterRate, "");
+	}
+
+	public BossCharacter (String firstName, String lastName, FightingStyle style, 
+					Weapon weapon, Gender gender, int experienceGivenWhenDefeated, 
+					Dialogue dialogue, String nickName, String sprite, Item item, 
+					int rate, int money, int encounterRate, String bgm){
 						
-		super(firstName, lastName, style, weapon, gender, 
-				experienceGivenWhenDefeated, nickName, sprite, item, rate, money,
-				encounterRate);
+		super(firstName, lastName, style, weapon, gender, experienceGivenWhenDefeated, 
+				nickName, sprite, item, rate, money, encounterRate);
 	
 		this.dialogue = dialogue;
+		this.battleMusic = bgm;
 		
 	}
 	
@@ -38,7 +48,7 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 		BossCharacter ex = new BossCharacter(getFirstName(), getLastName(), 
 				getFightingStyle(), getWeapon(), getGender(), 
 				getExperienceGivenWhenDefeated(), dialogue, getNickName(), getSpriteDirectory(), 
-				getDrop(), getDropRate(), getMoney(), getEncounterRate());
+				getDrop(), getDropRate(), getMoney(), getEncounterRate(), this.battleMusic);
 		ex.setLevel(getLevel(), null);
 		return ex;
 	}
@@ -57,6 +67,10 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 	
 	public void setDialogue(Dialogue dialogue){
 		this.dialogue = dialogue;
+	}
+	
+	public String getBattleMusic(){
+		return this.battleMusic;
 	}
 	
 	@Override

@@ -39,6 +39,14 @@ public class Tile implements Photogenic{
 		
 	}
 	
+	public Tile(boolean open, boolean reachable, Image cache) {
+		
+		this.open = reachable && open;
+		this.reachable = reachable;
+		this.cache = cache;
+		this.sprite = " ";
+	}
+
 	public void openTile(){
 		
 		if (this.reachable){
@@ -133,6 +141,6 @@ public class Tile implements Photogenic{
 		if (sprite != defaultImage){g.drawImage(cache, x, y, null);}
 	}
 	
-	public void stepOn(){}
+	public boolean stepOn(){return false;}
 	
 }

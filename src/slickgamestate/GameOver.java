@@ -32,13 +32,22 @@ public class GameOver extends SlickGameState {
 		rects[1] = new SlickRectangle(402, 350, 100, 50, commands[1]);
 		
 	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame arg1){
+		//SlickSKR.PlayMusic("other/public/intro.ogg");
+	}
 
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
-		g.setFont(SlickSKR.DEFAULT_FONT);
-		g.drawImage(label, 0, 0);
-		for (SlickRectangle rect : rects){
-			rect.paint(g);
+		if (screenCache == null){
+			g.drawImage(label, 0, 0);
+			for (SlickRectangle rect : rects){
+				rect.paint(g);
+			}
+			SlickGameState.capture(g);
+		}else{
+			g.drawImage(screenCache, 0, 0);
 		}
 	}
 	

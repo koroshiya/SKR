@@ -37,7 +37,8 @@ public class SlickSKR extends StateBasedGame {
 
 	public static final boolean NO_ENCOUNTERS = true;
 	public static final boolean NO_TRANSITIONS = true;
-	public static TrueTypeFont DEFAULT_FONT;
+	
+	private static String musicPlaying = "";
 	
 	public SlickSKR(ParentMap current) throws SlickException{
 		
@@ -60,7 +61,12 @@ public class SlickSKR extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		
-		DEFAULT_FONT = SlickSKR.loadFont("Ubuntu-R.ttf", 16);
+		gc.setDefaultFont(SlickSKR.loadFont("Ubuntu-R.ttf", 16));
+		/*try {
+			gc.setMouseCursor("/res/rsword.png", 0, 0);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}*/
 		this.getState(MAINMENU).init(gc, this);
 		this.enterState(MAINMENU);
 		
@@ -89,11 +95,14 @@ public class SlickSKR extends StateBasedGame {
 	}
 	
 	public static void PlayMusic(String location){
-		try {
-			Audio vict = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("/res/sfx/" + location));
-			if (!vict.isPlaying()){vict.playAsMusic(1.0f, 1.0f, true);}
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (location != musicPlaying){
+			try {
+				musicPlaying = location;
+				Audio vict = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("/res/sfx/" + location));
+				vict.playAsMusic(1.0f, 1.0f, true);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

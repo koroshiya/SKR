@@ -12,6 +12,7 @@ import org.newdawn.slick.SlickException;
 
 import screen.GameScreen;
 import screen.SlickListener;
+import slickgamestate.SlickGameState;
 import tile.ChestTile;
 import console.dialogue.ComplexDialogue;
 import console.dialogue.Dialogue;
@@ -104,6 +105,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		rects[1].setEnabled(!question);
 		rects[2].setEnabled(question);
 		rects[3].setEnabled(question);
+		SlickGameState.flush();
 	}
 	
 	//If currently talking normally, return true. If asking a question, return false

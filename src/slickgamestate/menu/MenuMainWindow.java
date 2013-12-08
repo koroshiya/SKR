@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
@@ -32,6 +33,7 @@ public class MenuMainWindow extends SlickGameState{
 	private int timer = 0;
 	private String message = "";
 	private SlickRectangle alert;
+	private Image background;
 	private TrueTypeFont VICTORY_FONT;
 	
 	ArrayList<PlayableCharacter> characters;
@@ -45,22 +47,24 @@ public class MenuMainWindow extends SlickGameState{
 	public void menuItemPane(Graphics g) throws SlickException{
 		
 		for (int i = 0; i < menuItems.length; i++){
-			menuItems[i].paintCenter(g);
+			g.drawImage(menuItems[i].getCache(), menuItems[i].getMinX(), menuItems[i].getMinY());
+			menuItems[i].paintCenter(g, true);
 		}
-					
+		
 	}
 	
 	public void characterPane(Graphics g){
 		
-		final float x = 160;
+		final float x = 155;
 		float y = 0;
 		int inc;
 		final int baseInc = 13;
 		for (int i = 0; i < menuCharacters.length; i++){
+			g.drawImage(menuCharacters[i].getCache(), menuCharacters[i].getMinX(), menuCharacters[i].getMinY());
 			PlayableCharacter c = characters.get(i);
 			inc = baseInc;
 			g.setColor(Color.white);
-			g.draw(menuCharacters[i]);
+			//g.draw(menuCharacters[i]);
 			g.drawImage(c.getCache(), 0, y);
 			g.drawString(c.getName(), x, y + inc);
 			inc += baseInc;
@@ -88,29 +92,43 @@ public class MenuMainWindow extends SlickGameState{
 		menuItems = new SlickRectangle[commands.length];
 		for (int i = 0; i < commands.length; i++){
 			s = (String) commands[i];
-			menuItems[i] = new SlickRectangle(x, i * y, 450, y, s);
+			menuItems[i] = new SlickRectangle(x, i * y, 450, y, s, "/res/button_onyx_450x50.png");
+			menuItems[i].initialize();
 		}
 		
 		characters = Party.getCharacters();
 		menuCharacters = new SlickRectangle[characters.size()];
 		for (int i = 0; i < menuCharacters.length; i++){
 			characters.get(i).instantiate();
-			menuCharacters[i] = new SlickRectangle(0, 150 * i, x, 150, Integer.toString(i));
+			menuCharacters[i] = new SlickRectangle(0, 150 * i, x, 150, Integer.toString(i), "/res/button_onyx_350x150.png");
+			menuCharacters[i].initialize();
 		}
 		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 24);
 		alert = new SlickRectangle(150, 200, 550, 40, "");
+		background = new Image("/res/terrain/refinery.png");
+	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame arg1){
+		//SlickSKR.PlayMusic("other/public/intro.ogg");
 	}
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
-
-		g.setFont(SlickSKR.DEFAULT_FONT);
-		menuItemPane(g);
-		characterPane(g);
-		if (timer > 0){
-			alert.setText(message);
-			alert.paintCenter(g, VICTORY_FONT);
-			timer--;
+		
+		if (screenCache == null){
+			g.drawImage(background, 0, 0);
+			
+			menuItemPane(g);
+			characterPane(g);
+			if (timer > 0){
+				alert.setText(message);
+				alert.paintCenter(g, VICTORY_FONT);
+				timer--;
+			}
+			SlickGameState.capture(g);
+		}else{
+			g.drawImage(screenCache, 0, 0);
 		}
 		
 	}

@@ -3,7 +3,9 @@ package controls;
 import interfaces.SlickDrawableFrame;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
@@ -22,6 +24,9 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	private final float width;
 	private final float height;
 	
+	private final String imgSrc;
+	private Image cache = null;
+	
 	private boolean enabled; //TODO: change color if disabled?
 	
 	public SlickRectangle(float x, float y, float width, float height, String tag) throws SlickException{
@@ -32,7 +37,15 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 		this(x, y, width, height, tag, enabled, tag);
 	}
 
-	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText) throws SlickException{
+	public SlickRectangle(float x, float y, float width, float height, String tag, String url) throws SlickException{
+		this(x, y, width, height, tag, true, tag, url);
+	}
+
+	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String url) throws SlickException{
+		this(x, y, width, height, tag, enabled, tag, url);
+	}
+
+	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText, String imgSrc) throws SlickException{
 		super(x, y, width, height);
 		this.tag = tag;
 		this.x = x;
@@ -41,8 +54,9 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 		this.height = height;
 		this.enabled = enabled;
 		this.displayText = displayText;
+		this.imgSrc = imgSrc;
 	}
-	
+
 	public String getTag(){
 		return this.tag;
 	}
@@ -85,6 +99,14 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 		this.displayText = displayText;
 	}
 	
+	public void initialize(){
+		try {
+			cache = new Image(imgSrc);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void paint(Graphics g) {
 		if (enabled){
@@ -96,22 +118,36 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 			g.drawString(displayText, x, y);
 		}
 	}
-
-	public void paintCenter(Graphics g){
-		paintCenter(g, SlickSKR.DEFAULT_FONT);
+	
+	public Image getCache(){
+		return this.cache;
 	}
 
-	public void paintCenter(Graphics g, TrueTypeFont f){
+	public void paintCenter(Graphics g){
+		paintCenter(g, false);
+	}
+
+	public void paintCenter(Graphics g, boolean hollow){
+		paintCenter(g, g.getFont(), hollow);
+	}
+
+	public void paintCenter(Graphics g, Font f, boolean hollow){
 		if (enabled){
-			Color temp = g.getColor();
-			g.setColor(Color.black);
-			g.fill(this);
-			g.setColor(temp);
-			g.draw(this);
+			if (!hollow){
+				Color temp = g.getColor();
+				g.setColor(Color.black);
+				g.fill(this);
+				g.setColor(temp);
+				g.draw(this);
+			}
 			final int textx = f.getWidth(displayText);
 			final int texty = f.getHeight(displayText);
 			g.drawString(displayText, x + (int)((width - textx) / 2), y + (int)((height - texty) / 2));
 		}
+	}
+
+	public void paintCenter(Graphics g, TrueTypeFont f){
+		paintCenter(g, f, false);
 	}
 	
 }

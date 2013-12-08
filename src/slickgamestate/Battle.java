@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -195,7 +196,16 @@ public class Battle extends SlickGameState{
 	public void enter(GameContainer arg0, StateBasedGame arg1){
 
 		this.party = Party.getCharactersInParty();
-		SlickSKR.PlayMusic("other/public/battle.ogg");
+		if (this.enemies.get(0) instanceof BossCharacter){
+			BossCharacter boss = (BossCharacter) this.enemies.get(0);
+			if (boss.getBattleMusic() != ""){
+				SlickSKR.PlayMusic(boss.getBattleMusic());
+			}else{
+				SlickSKR.PlayMusic("other/public/boss1.ogg");
+			}
+		}else{
+			SlickSKR.PlayMusic("other/public/battle.ogg");
+		}
 		
 		for (PlayableCharacter c : this.party){
 			c.instantiateForBattle();
@@ -222,22 +232,26 @@ public class Battle extends SlickGameState{
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
-		g.setFont(SlickSKR.DEFAULT_FONT);
-		
-		this.drawBattlePane(g);
-		this.drawBattleParticipants(g);
-		for (SlickRectangle rect : rects){rect.paintCenter(g);}
-		BattleConsole.paint(g);
-		String message = "";
-		if (mode == VICTORY_MODE){
-			message = "Victory";
-		}else if (mode == LOSS_MODE){
-			message = "Defeated";
-		}else if (mode == RUN_MODE){
-			message = "Coward";
-		}
-		if (!message.equals("")){
-			VICTORY_FONT.drawString(300, 250, message);
+		if (screenCache == null){
+			
+			this.drawBattlePane(g);
+			this.drawBattleParticipants(g);
+			for (SlickRectangle rect : rects){rect.paintCenter(g);}
+			BattleConsole.paint(g);
+			String message = "";
+			if (mode == VICTORY_MODE){
+				message = "Victory";
+			}else if (mode == LOSS_MODE){
+				message = "Defeated";
+			}else if (mode == RUN_MODE){
+				message = "Coward";
+			}
+			if (!message.equals("")){
+				VICTORY_FONT.drawString(300, 250, message);
+			}
+			SlickGameState.capture(g);
+		}else{
+			g.drawImage(screenCache, 0, 0);
 		}
 		
 	}
@@ -269,8 +283,8 @@ public class Battle extends SlickGameState{
 		String nick = c.getNickName();
 		if (!c.isAlive()){
 			
-			final int textx = SlickSKR.DEFAULT_FONT.getWidth(nick);
-			final int texty = SlickSKR.DEFAULT_FONT.getHeight(nick) / 2;
+			final int textx = g.getFont().getWidth(nick);
+			final int texty = g.getFont().getHeight(nick) / 2;
 			g.drawLine(x, tempY + texty, x + textx, tempY + texty);
 		}
 		g.drawString(nick, x, tempY);

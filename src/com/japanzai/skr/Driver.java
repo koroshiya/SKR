@@ -380,7 +380,7 @@ public class Driver implements Serializable{
 		Tile[][] deadTile = createDeadMap(32 * MapScreen.ICON_SIZE, 26 * MapScreen.ICON_SIZE);
 		Point newCurPos = new Point(20 * MapScreen.ICON_SIZE, 0);
 		destination = new ParentMap(coordinates, newCurPos, Party.getCharacterByIndex(0),
-				animatedSprite, bossEnemies, bs, mapSize, 5, mud, "other/public/summeropenfielddusk.ogg");	
+				animatedSprite, bossEnemies, bs, mapSize, 5, mud, "other/public/Cavern.ogg");	
 		destination.setTiles(deadTile);
 		
 		TileGenerator tGenerator = new TileGenerator(basicRandomTiles());
