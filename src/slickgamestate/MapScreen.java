@@ -47,6 +47,7 @@ public class MapScreen extends SlickGameState{
 		sprite = new Image(map.getDefaultTile());
 		map.instantiateImages();
 		SlickSKR.PlayMusic(map.getThemeMusic());
+		screenCache = null;
 		
 	}
 	
@@ -70,45 +71,69 @@ public class MapScreen extends SlickGameState{
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
 		//g.setFont(SlickSKR.DEFAULT_FONT);
-		
-		try{
+		float yDiff = map.getYDiff();
+		float xDiff = map.getXDiff();
+		double posX = this.map.getCurrentPositionX() / ICON_SIZE;
+		double posY = this.map.getCurrentPositionY() / ICON_SIZE;
+		int totalX = this.map.getCharacterPositionX() * 2 + 1;
+		int totalY = this.map.getCharacterPositionY() * 2 + 1;
+		if (screenCache != null){
+			g.drawImage(screenCache, -xDiff, -yDiff);
+			/*if (xDiff != 0){
+				int mult = xDiff > 0 ? totalX : -1;
+				String defaultTile = map.getDefaultTile();
+				float xAxi = (mult) * ICON_SIZE - xDiff;
+				for (int i = 0; i < totalY; i++){
+					float yAxi = ICON_SIZE * i;
+					float yAxig = 48 * i;
+					g.drawImage(sprite,xAxi, yAxig);
+					map.getTileByIndex(mult + posX, i + posY).drawIfNotDefault(g, defaultTile, xAxi, yAxi);
+				}
+			}else if (yDiff != 0){
+				int mult = yDiff > 0 ? totalY : -1;
+				String defaultTile = map.getDefaultTile();
+				float yAxi = (mult) * ICON_SIZE - yDiff;
+				for (int i = 0; i < totalX; i++){
+					float xAxi = ICON_SIZE * i;
+					float xAxig = 48 * i;
+					g.drawImage(sprite,xAxig, yAxi);
+					map.getTileByIndex(i + posX, mult + posY).drawIfNotDefault(g, defaultTile, xAxi, yAxi);
+				}
+			}*/
+		}else{
+			g.fillRect(-48, -48, 896, 696, sprite, xDiff, yDiff);
+
+			screenCache = new Image(896,696);
 			
-			double posX = this.map.getCurrentPositionX() / ICON_SIZE;
-			double posY = this.map.getCurrentPositionY() / ICON_SIZE;
-			float y;
-			
-			float yDiff = map.getYDiff();
-			float xDiff = map.getXDiff();
-			float iDiff;
-			String defaultTile = map.getDefaultTile();
-			
-			int i = -2;
-			int j;
-			int totalX = this.map.getCharacterPositionX() * 2 + 2;
-			int totalY = this.map.getCharacterPositionY() * 2 + 2;
-			while (++i < totalX){
-				iDiff = i * ICON_SIZE - xDiff;
-				j = -2;
-				while (++j < totalY){
-					try{
-						y = j * ICON_SIZE - yDiff;
-						g.drawImage(sprite, iDiff, y, null);
-						map.getTileByIndex(i + posX, j + posY).drawIfNotDefault(g, defaultTile, iDiff, y);
-					}catch (Exception ex){
-						//g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
+			try{
+
+				String defaultTile = map.getDefaultTile();
+				
+				int i = -2;
+				int j;
+				while (++i < totalX + 1){
+					j = -2;
+					while (++j < totalY + 1){
+						try{
+							map.getTileByIndex(i + posX, j + posY).drawIfNotDefault(g, defaultTile, i * ICON_SIZE, j * ICON_SIZE);
+						}catch (Exception ex){
+							//g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
+						}
 					}
 				}
-			}	
+				
+			}catch (Exception ex){
+				ex.printStackTrace();
+			}
 			
-			this.map.getAnimatedSprite().draw(this.map.getCharacterPositionX() * ICON_SIZE, this.map.getCharacterPositionY() * ICON_SIZE);
-			
-		}catch (Exception ex){
-			ex.printStackTrace();
+			if (this.activeDialog != null){
+				this.activeDialog.paint(g);
+			}
+			g.copyArea(screenCache, 0, 0);
+			g.flush();
 		}
 		
-		if (this.activeDialog != null){
-			this.activeDialog.paint(g);
-		}
+		this.map.getAnimatedSprite().draw(this.map.getCharacterPositionX() * ICON_SIZE, this.map.getCharacterPositionY() * ICON_SIZE);
 		
 	}
 	
@@ -124,7 +149,7 @@ public class MapScreen extends SlickGameState{
 	public void setMapConsole(SlickDrawableFrame activeDialog){this.activeDialog = activeDialog;}
 
 	@Override
-	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
+	public void processMouseClick(int clickCount, int x, int y) {
 		int px = (int) Math.floor(x / MapScreen.ICON_SIZE);
 		int py = (int) Math.floor(y / MapScreen.ICON_SIZE);
 		
@@ -143,12 +168,7 @@ public class MapScreen extends SlickGameState{
 			MapConsole console = (MapConsole)activeDialog;
 			console.mouseReleased(arg0, x, y);
 		}else{
-			try{
-				processMouseClick(1, x, y);
-			}catch (Exception ex){
-				System.out.println("Can't move there");
-				ex.printStackTrace();
-			}
+			processMouseClick(1, x, y);
 		}
 		
 	}
@@ -180,6 +200,7 @@ public class MapScreen extends SlickGameState{
 				tile.interact(getParentMap().getFrame());
 			}
 		}
+		SlickGameState.flush();
 		
 	}
 

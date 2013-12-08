@@ -10,14 +10,12 @@ import org.newdawn.slick.util.pathfinding.Path.Step;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
-
 import screen.GameScreen;
 import slickgamestate.MapScreen;
+import slickgamestate.SlickGameState;
 import tile.Tile;
 import tile.TransitionTile;
-
 import animation.AnimatedSprite;
-
 import character.BossCharacter;
 import character.EnemyCharacter;
 import character.PlayableCharacter;
@@ -86,6 +84,7 @@ public class ParentMap {
 		this.currentPositiony = y;
 		xDiff = 0;
 		yDiff = 0;
+		SlickGameState.flush();
 		this.getTileByPosition(x/MapScreen.ICON_SIZE, y/MapScreen.ICON_SIZE).stepOn();
 		
 	}
@@ -109,11 +108,13 @@ public class ParentMap {
 	
 	public void tryMoveToTile(int x, int y) throws SlickException{
 		
-		int a = (int) (Math.floor(this.currentPositionx / MapScreen.ICON_SIZE) + this.getCharacterPositionX());
-		int b = (int) (Math.floor(this.currentPositiony / MapScreen.ICON_SIZE) + this.getCharacterPositionY());
-		
 		x += this.currentPositionx / MapScreen.ICON_SIZE;
 		y += this.currentPositiony / MapScreen.ICON_SIZE;
+		
+		if (x < 0 || y < 0){return;}
+		
+		int a = (int) (Math.floor(this.currentPositionx / MapScreen.ICON_SIZE) + this.getCharacterPositionX());
+		int b = (int) (Math.floor(this.currentPositiony / MapScreen.ICON_SIZE) + this.getCharacterPositionY());
 
 		Point start = new Point(a, b);
 		Point finish = new Point(x, y);
@@ -339,11 +340,7 @@ public class ParentMap {
 					
 					if (tile instanceof TransitionTile){
 						TransitionTile t = (TransitionTile) tile;
-						try {
-							t.interact(getFrame());
-						} catch (SlickException e) {
-							e.printStackTrace();
-						}
+						t.interact(getFrame());
 						break;
 					}else if (parent.isEncounter(map)){
 						parent.encounter(map);

@@ -16,7 +16,11 @@ public class TileMap implements TileBasedMap {
 	
 	@Override
 	public boolean blocked(PathFindingContext arg0, int arg1, int arg2) {
-		return !tiles[arg1][arg2].isOpen();
+		try{
+			return !tiles[arg1][arg2].isOpen();
+		}catch(ArrayIndexOutOfBoundsException ex){
+			return false;
+		}
 	}
 
 	@Override
@@ -39,11 +43,8 @@ public class TileMap implements TileBasedMap {
 	
 	public Tile getTileByIndex(double x, double y){
 		
-		Tile tile = null;
-		
 		try{
-			tile = this.tiles[(int) x][(int) y];
-			return tile;
+			return this.tiles[(int) x][(int) y];
 		}catch (NullPointerException ex){
 			return null;
 		}catch (ArrayIndexOutOfBoundsException ex){
@@ -53,7 +54,11 @@ public class TileMap implements TileBasedMap {
 	}
 	
 	public boolean isOpenAndReachable(double x, double y){
-		return (tiles[(int) x][(int) y].isReachable() && tiles[(int) x][(int) y].isOpen());
+		try{
+			return (tiles[(int) x][(int) y].isReachable() && tiles[(int) x][(int) y].isOpen());
+		}catch (ArrayIndexOutOfBoundsException ex){
+			return false;
+		}
 	}
 	
 	public void instantiate(String defaultTile) throws SlickException{

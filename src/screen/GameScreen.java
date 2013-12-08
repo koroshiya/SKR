@@ -13,6 +13,7 @@ import org.newdawn.slick.state.transition.Transition;
 
 import slickgamestate.Battle;
 import slickgamestate.MapScreen;
+import slickgamestate.SlickGameState;
 import slickgamestate.SlickSKR;
 import map.ParentMap;
 import character.EnemyCharacter;
@@ -32,7 +33,6 @@ public class GameScreen extends AppGameContainer{
 	
 	public void setSKR(SlickSKR skr){
 		super.game = skr;
-		this.setDefaultFont(SlickSKR.DEFAULT_FONT);
 		this.setVSync(true);
 		this.setTargetFrameRate(60);
 		this.setSmoothDeltas(true);
@@ -51,6 +51,7 @@ public class GameScreen extends AppGameContainer{
 	}
 	
 	public void swapView(int i){
+		SlickGameState.flush();
 		if (SlickSKR.NO_TRANSITIONS){
 			((StateBasedGame)super.game).enterState(i);
 			return;
@@ -161,7 +162,7 @@ public class GameScreen extends AppGameContainer{
 		}*/
 	}
 
-	public void setMap(ParentMap map) throws SlickException {
+	public void setMap(ParentMap map) {
 		((MapScreen)this.getState()).setMap(map);
 	}
 	

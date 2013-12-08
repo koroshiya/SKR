@@ -45,8 +45,8 @@ public class MovementListener implements KeyListener, MouseListener {
 	private void interact() throws SlickException{
 		
 		int dir = map.getParentMap().getDirection();
-		int x = (int)map.getParentMap().getCurrentPositionX() + map.getParentMap().getCharacterPositionX() * MapScreen.ICON_SIZE;
-		int y = (int)map.getParentMap().getCurrentPositionY() + map.getParentMap().getCharacterPositionY() * MapScreen.ICON_SIZE;
+		int x = (int)map.getParentMap().getCurrentPositionX();
+		int y = (int)map.getParentMap().getCurrentPositionY();
 		
 		if (dir == ParentMap.UP){
 			y -= MapScreen.ICON_SIZE;
