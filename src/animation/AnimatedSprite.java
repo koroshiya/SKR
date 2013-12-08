@@ -50,7 +50,7 @@ public class AnimatedSprite implements Serializable {
 		}
 	}
 	
-	public void instantiate(){instantiate(MapScreen.ICON_SIZE + 1);}
+	public void instantiate(){instantiate(MapScreen.ICON_SIZE);}
 
 	public synchronized void draw(int x, int y){
 		this.anim[this.direction].draw(x, y);

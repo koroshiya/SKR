@@ -45,14 +45,16 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		//TODO: set aside space at bottom for char info, map, etc.
 		//BattleMenuListener listener = new BattleMenuListener();
 
-		background = new SlickRectangle(0, 480, 801, 120, "");
+		background = new SlickRectangle(-1, 506, 817, 120, "", false, "/res/button-brown-816x120.png");
+		background.initialize();
 		
 		final int buttonWidth = 150;
 		final int buttonHeight = 25;
 		final int startX = 650;
-		int startY = 484;
+		int startY = 510;
 		for (int i = 0; i < rects.length; i++){
-			rects[i] = new SlickRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false);
+			rects[i] = new SlickRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false, "/res/button_blue_150x25.png");
+			rects[i].initialize();
 			startY += buttonHeight + 2;
 		}
 		rects[1].setEnabled(true);
@@ -60,17 +62,18 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	}
 	
 	public void paint(Graphics g){
-		background.paint(g);
+		g.drawImage(background.getCache(), background.getMinX(), background.getMinY());
 		for (SlickRectangle rect : rects){
-			rect.paintCenter(g);
+			g.drawImage(rect.getCache(), rect.getMinX(), rect.getMinY());
+			rect.paintCenter(g,true);
 		}
-		g.drawImage(this.dialogue.getCache(), 10, 495);
+		g.drawImage(this.dialogue.getCache(), 10, 515);
 		
 		final int x = 140;
-		int y = 490;
+		int y = 518;
 		
 		if (!(npc instanceof ChestTile)){
-			g.drawString(this.dialogue.speak(), 140, 490);
+			g.drawString(this.dialogue.speak(), 140, y);
 		}else{
 			for (String s : this.dialogue.getDialog()){
 				g.drawString(s, x, y);

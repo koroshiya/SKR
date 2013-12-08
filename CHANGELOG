@@ -1,3 +1,8 @@
+v0.31
+Fix for size of Player sprites
+Fixed StartScreen broken in v0.30
+Multiple screens adapted to new resolution and SlickGameState Flush update method
+
 v0.30
 Added docs for Slick
 Fixed huge memory/VRAM leak

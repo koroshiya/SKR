@@ -78,14 +78,14 @@ public class MenuMainWindow extends SlickGameState{
 			inc += baseInc;
 			g.drawString(c.isInParty() ? "In party" : "Not in party", x, y + inc);
 			inc += baseInc;
-			y += 150f;
+			y += 155f;
 		}
 	}	
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
 		
-		final float x = 350;
+		final float x = 376;
 		final float y = 50;
 
 		String s = "";
@@ -100,7 +100,7 @@ public class MenuMainWindow extends SlickGameState{
 		menuCharacters = new SlickRectangle[characters.size()];
 		for (int i = 0; i < menuCharacters.length; i++){
 			characters.get(i).instantiate();
-			menuCharacters[i] = new SlickRectangle(0, 150 * i, x, 150, Integer.toString(i), "/res/button_onyx_350x150.png");
+			menuCharacters[i] = new SlickRectangle(0, 155 * i, x, 150, Integer.toString(i), "/res/button_brown_376x155.png");
 			menuCharacters[i].initialize();
 		}
 		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 24);
@@ -117,18 +117,22 @@ public class MenuMainWindow extends SlickGameState{
 	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
 
 		if (screenCache == null || SlickGameState.needFlush()){
-			g.drawImage(background, 0, 0);
+			//g.drawImage(background, 0, 0);
+			g.fillRect(0,0,gc.getWidth(),gc.getHeight(),background,0,0);
 			
 			menuItemPane(g);
 			characterPane(g);
-			if (timer > 0){
-				alert.setText(message);
-				alert.paintCenter(g, VICTORY_FONT);
-				timer--;
-			}
 			SlickGameState.capture(g);
 		}else{
 			g.drawImage(screenCache, 0, 0);
+		}
+		if (timer > 0){
+			alert.setText(message);
+			alert.paintCenter(g, VICTORY_FONT);
+			timer--;
+			if (timer == 0){
+				SlickGameState.setFlush(true);
+			}
 		}
 		
 	}
@@ -169,12 +173,14 @@ public class MenuMainWindow extends SlickGameState{
 							}
 						}
 						if (!charAlive){
-							timer = 120;
+							timer = 150;
 							message = "Can't remove last living member from party";
+							SlickGameState.setFlush(true);
 							return;
 						}
 					}
 					characters.get(i).toggleInParty();
+					SlickGameState.setFlush(true);
 				}
 			}catch (NumberFormatException nfe){
 				nfe.printStackTrace();

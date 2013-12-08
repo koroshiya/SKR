@@ -15,7 +15,7 @@ public class BattleConsole {
 	public static void cleanConsole(){
 		if (console == null){
 			try {
-				console = new SlickRectangle(0, 0, 801, 100, "");
+				console = new SlickRectangle(0, 0, 817, 100, "");
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}

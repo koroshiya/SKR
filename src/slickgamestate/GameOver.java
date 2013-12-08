@@ -26,7 +26,7 @@ public class GameOver extends SlickGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		
-		label = new Image("/res/gameover.png");
+		label = new Image("/res/terrain/lab-dark.png");
 		rects = new SlickRectangle[2];
 		rects[0] = new SlickRectangle(300, 350, 100, 50, commands[0]);
 		rects[1] = new SlickRectangle(402, 350, 100, 50, commands[1]);
@@ -41,7 +41,8 @@ public class GameOver extends SlickGameState {
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		if (screenCache == null || SlickGameState.needFlush()){
-			g.drawImage(label, 0, 0);
+			//g.drawImage(label, 0, 0);
+			g.fillRect(0, 0, arg0.getWidth(), arg0.getHeight(), label, 0, 0);
 			for (SlickRectangle rect : rects){
 				rect.paint(g);
 			}
