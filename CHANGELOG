@@ -1,3 +1,11 @@
+v0.30
+Added docs for Slick
+Fixed huge memory/VRAM leak
+Fixed minor tearing
+Increased base resolution to 816x624 (need to update UIs)
+Better all-round resource usage
+**Broke StartScreen
+
 v0.29
 Reverted lwjgl (compat issues)
 Implemented workaround so music wouldn't restart from same source

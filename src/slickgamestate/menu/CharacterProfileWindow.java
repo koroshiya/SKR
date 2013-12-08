@@ -122,7 +122,7 @@ public class CharacterProfileWindow extends SlickGameState{
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
-		if (screenCache == null){
+		if (screenCache == null || screenCache.isDestroyed()){
 			drawCharacterInfoPanel(g);
 			drawCharacterPanel(g);
 			g.drawImage(lblAvatar, 0, 0);
@@ -138,7 +138,7 @@ public class CharacterProfileWindow extends SlickGameState{
 		
 		for (SlickRectangle rect : partyMembers){
 			if (rect.isWithinBounds(x, y)){
-				SlickGameState.flush();
+				SlickGameState.setFlush(true);
 				this.processMenuItem(rect.getTag(), clickCount);
 				break;
 			}

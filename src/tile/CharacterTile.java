@@ -72,7 +72,7 @@ public class CharacterTile extends Tile implements InteractableObject {
 	
 	@Override
 	public void finishInteraction(GameScreen parent) {
-		SlickGameState.flush();
+		SlickGameState.setFlush(true);
 	}
 	
 }

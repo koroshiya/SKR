@@ -40,7 +40,7 @@ public class GameOver extends SlickGameState {
 
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
-		if (screenCache == null){
+		if (screenCache == null || SlickGameState.needFlush()){
 			g.drawImage(label, 0, 0);
 			for (SlickRectangle rect : rects){
 				rect.paint(g);

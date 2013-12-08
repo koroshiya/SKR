@@ -9,3 +9,6 @@ You can learn more about the project here: http://slick.ninjacave.com/
 
 Sprites were made by Peter Hull.
 His services can be accessed at http://leftalive.deviantart.com/
+
+Other sprites, tiles, etc. were gathered from various public domain image vendors, such as opengameart.org
+The same goes for backgrounds and music. Licenses can be found in the appropriate subdirectories.

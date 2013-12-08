@@ -84,7 +84,7 @@ public class ParentMap {
 		this.currentPositiony = y;
 		xDiff = 0;
 		yDiff = 0;
-		SlickGameState.flush();
+		SlickGameState.setFlush(true);
 		this.getTileByPosition(x/MapScreen.ICON_SIZE, y/MapScreen.ICON_SIZE).stepOn();
 		
 	}
@@ -111,7 +111,7 @@ public class ParentMap {
 		x += this.currentPositionx / MapScreen.ICON_SIZE;
 		y += this.currentPositiony / MapScreen.ICON_SIZE;
 		
-		if (x < 0 || y < 0){return;}
+		if (x < 0 || y < 0 || x >= tileMap.getWidthInTiles() || y >= tileMap.getHeightInTiles()){return;}
 		
 		int a = (int) (Math.floor(this.currentPositionx / MapScreen.ICON_SIZE) + this.getCharacterPositionX());
 		int b = (int) (Math.floor(this.currentPositiony / MapScreen.ICON_SIZE) + this.getCharacterPositionY());
@@ -385,13 +385,8 @@ public class ParentMap {
 			
 			this.sprite.run();
 			
-			for (int a = 0; a < 30; a++){
-				xDiff += diffX;
-				yDiff += diffY;
-				pause();
-			}
-			
-			for (int a = 0; a < 30; a++){
+			int a = -1;
+			while (++a < 60){
 				xDiff += diffX;
 				yDiff += diffY;
 				pause();

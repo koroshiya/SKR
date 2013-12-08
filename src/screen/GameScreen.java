@@ -44,14 +44,14 @@ public class GameScreen extends AppGameContainer{
 		//TODO: Set icon
 		
 		try{
-			this.setDisplayMode(800, 600, false); //TODO: Change to true for fullscreen
+			this.setDisplayMode(816, 624, false); //TODO: Change to true for fullscreen
 		}catch (SlickException ex){
 			ex.printStackTrace();
 		}
 	}
 	
 	public void swapView(int i){
-		SlickGameState.flush();
+		SlickGameState.setFlush(true);
 		if (SlickSKR.NO_TRANSITIONS){
 			((StateBasedGame)super.game).enterState(i);
 			return;

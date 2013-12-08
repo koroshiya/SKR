@@ -115,8 +115,8 @@ public class MenuMainWindow extends SlickGameState{
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
-		
-		if (screenCache == null){
+
+		if (screenCache == null || SlickGameState.needFlush()){
 			g.drawImage(background, 0, 0);
 			
 			menuItemPane(g);

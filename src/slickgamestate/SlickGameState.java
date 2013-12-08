@@ -15,6 +15,7 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	protected final int state;
 	protected final GameScreen parent;
 	protected static Image screenCache;
+	private static boolean toFlush = false;
 	
 	public SlickGameState(int state, GameScreen parent){
 		this.state = state;
@@ -23,7 +24,7 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
-		screenCache = null;
+		screenCache = new Image(arg0.getWidth(), arg0.getHeight());
 	}
 	
 	@Override
@@ -32,17 +33,17 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	@Override
 	public int getID() {return state;}
 	
-	public static void flush(){
-		screenCache = null;
+	public static boolean needFlush(){
+		return toFlush;
+	}
+	
+	public static void setFlush(boolean needed){
+		toFlush = needed;
 	}
 	
 	public static void capture(Graphics g){
-		try {
-			screenCache = new Image(800,600);
-			g.copyArea(screenCache, 0, 0);
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		g.copyArea(screenCache, 0, 0);
+		SlickGameState.setFlush(false);
 	}
 		
 }

@@ -12,7 +12,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -21,7 +20,6 @@ import com.japanzai.skr.Inventory;
 import controls.SlickRectangle;
 import screen.GameScreen;
 import slickgamestate.SlickGameState;
-import slickgamestate.SlickSKR;
 
 public abstract class ItemWindowBase extends SlickGameState{
 	
@@ -84,8 +82,8 @@ public abstract class ItemWindowBase extends SlickGameState{
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
-
-		if (screenCache == null){
+		
+		if (screenCache == null || SlickGameState.needFlush()){
 			g.drawImage(background, 0, 0);
 			
 			getInventoryFilterPane(g);

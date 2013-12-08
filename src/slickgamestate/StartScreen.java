@@ -55,7 +55,12 @@ public class StartScreen extends SlickGameState{
 	@Override
 	public void enter(GameContainer gc, StateBasedGame arg1){
 		SlickSKR.PlayMusic("other/public/intro.ogg");
-		screenCache = null;
+		//SlickGameState.flush();
+		try {
+			SlickGameState.screenCache = new Image(gc.getWidth(), gc.getHeight());
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -66,12 +71,13 @@ public class StartScreen extends SlickGameState{
 			rects[i] = new SlickRectangle(300, 150 + (i * 100), buttonWidth, buttonHeight, commands[i], "/res/button_onyx_200x50.png");
 			rects[i].initialize();
 		}
+		SlickGameState.screenCache = new Image(arg0.getWidth(),arg0.getHeight());
 	}
 	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
-		if (screenCache == null){
+		if (screenCache == null || SlickGameState.needFlush()){
 			g.drawImage(backgroundImage, 0, 0);
 			
 			for (int i = 0; i < commands.length; i++){

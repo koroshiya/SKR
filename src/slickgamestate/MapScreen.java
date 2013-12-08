@@ -30,7 +30,7 @@ public class MapScreen extends SlickGameState{
 	private final int FULLSCREEN = Input.KEY_F;
 	
 	private ParentMap map;
-	public static int ICON_SIZE = 47;
+	public static int ICON_SIZE = 48;
 	private SlickDrawableFrame activeDialog = null;
 	
 	public MapScreen(ParentMap map){
@@ -47,7 +47,6 @@ public class MapScreen extends SlickGameState{
 		sprite = new Image(map.getDefaultTile());
 		map.instantiateImages();
 		SlickSKR.PlayMusic(map.getThemeMusic());
-		screenCache = null;
 		
 	}
 	
@@ -77,43 +76,56 @@ public class MapScreen extends SlickGameState{
 		double posY = this.map.getCurrentPositionY() / ICON_SIZE;
 		int totalX = this.map.getCharacterPositionX() * 2 + 1;
 		int totalY = this.map.getCharacterPositionY() * 2 + 1;
-		if (screenCache != null){
+		if (!SlickGameState.needFlush()){
+			String defaultTile = map.getDefaultTile();
 			g.drawImage(screenCache, -xDiff, -yDiff);
-			/*if (xDiff != 0){
-				int mult = xDiff > 0 ? totalX : -1;
-				String defaultTile = map.getDefaultTile();
-				float xAxi = (mult) * ICON_SIZE - xDiff;
-				for (int i = 0; i < totalY; i++){
-					float yAxi = ICON_SIZE * i;
-					float yAxig = 48 * i;
-					g.drawImage(sprite,xAxi, yAxig);
-					map.getTileByIndex(mult + posX, i + posY).drawIfNotDefault(g, defaultTile, xAxi, yAxi);
+			int mult;
+			float xAxi;
+			float yAxi;
+			int i = -1;
+			if (xDiff != 0){
+				if (xDiff > 0){
+					mult = totalX;
+					xAxi = arg0.getWidth();
+				}else{
+					mult = -1;
+					xAxi = -ICON_SIZE;
+				}
+				xAxi -= xDiff;
+				while (++i < totalY){
+					yAxi = ICON_SIZE * i;
+					g.drawImage(sprite, xAxi, yAxi);
+					Tile t = map.getTileByIndex(mult + posX, i + posY);
+					if (t != null){t.drawIfNotDefault(g, defaultTile, xAxi, yAxi);}
 				}
 			}else if (yDiff != 0){
-				int mult = yDiff > 0 ? totalY : -1;
-				String defaultTile = map.getDefaultTile();
-				float yAxi = (mult) * ICON_SIZE - yDiff;
-				for (int i = 0; i < totalX; i++){
-					float xAxi = ICON_SIZE * i;
-					float xAxig = 48 * i;
-					g.drawImage(sprite,xAxig, yAxi);
-					map.getTileByIndex(i + posX, mult + posY).drawIfNotDefault(g, defaultTile, xAxi, yAxi);
+				if (yDiff > 0){
+					mult = totalY;
+					yAxi = arg0.getHeight();
+				}else{
+					mult = -1;
+					yAxi = -ICON_SIZE;
 				}
-			}*/
+				yAxi -= yDiff;
+				while (++i < totalX){
+					xAxi = ICON_SIZE * i;
+					g.drawImage(sprite,xAxi, yAxi);
+					Tile t = map.getTileByIndex(i + posX, mult + posY);
+					if (t != null){t.drawIfNotDefault(g, defaultTile, xAxi, yAxi);}
+				}
+			}
 		}else{
-			g.fillRect(-48, -48, 896, 696, sprite, xDiff, yDiff);
-
-			screenCache = new Image(896,696);
+			g.fillRect(0, 0, arg0.getWidth(), arg0.getHeight(), sprite, xDiff, yDiff);
 			
 			try{
 
 				String defaultTile = map.getDefaultTile();
 				
-				int i = -2;
+				int i = -1;
 				int j;
-				while (++i < totalX + 1){
-					j = -2;
-					while (++j < totalY + 1){
+				while (++i < totalX){
+					j = -1;
+					while (++j < totalY){
 						try{
 							map.getTileByIndex(i + posX, j + posY).drawIfNotDefault(g, defaultTile, i * ICON_SIZE, j * ICON_SIZE);
 						}catch (Exception ex){
@@ -130,8 +142,9 @@ public class MapScreen extends SlickGameState{
 				this.activeDialog.paint(g);
 			}
 			g.copyArea(screenCache, 0, 0);
-			g.flush();
+			SlickGameState.setFlush(false);
 		}
+		g.flush();
 		
 		this.map.getAnimatedSprite().draw(this.map.getCharacterPositionX() * ICON_SIZE, this.map.getCharacterPositionY() * ICON_SIZE);
 		
@@ -200,7 +213,7 @@ public class MapScreen extends SlickGameState{
 				tile.interact(getParentMap().getFrame());
 			}
 		}
-		SlickGameState.flush();
+		SlickGameState.setFlush(true);
 		
 	}
 

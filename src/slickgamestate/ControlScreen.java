@@ -34,7 +34,7 @@ public class ControlScreen extends SlickGameState{
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 
-		if (screenCache == null){
+		if (screenCache == null || SlickGameState.needFlush()){
 			g.drawImage(backgroundImage, 0, 0);
 			
 			g.drawString("Controls:", 20, 100);

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -231,8 +230,8 @@ public class Battle extends SlickGameState{
 	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
-		
-		if (screenCache == null){
+
+		if (screenCache == null || SlickGameState.needFlush()){
 			
 			this.drawBattlePane(g);
 			this.drawBattleParticipants(g);

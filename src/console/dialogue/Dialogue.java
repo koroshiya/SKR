@@ -110,7 +110,7 @@ public class Dialogue implements Serializable{
 	public void reset(){setCounter(-1);}
 	
 	private void setCounter(int count){
-		SlickGameState.flush();
+		SlickGameState.setFlush(true);
 		this.counter = count;
 		if (this.counter >= 0 && this.counter < this.max){
 			Line line = this.dialogue.get(this.counter);
