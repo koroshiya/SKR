@@ -1,5 +1,7 @@
 package slickgamestate.menu;
 
+import org.newdawn.slick.Graphics;
+
 import screen.GameScreen;
 import slickgamestate.SlickSKR;
 
@@ -11,14 +13,20 @@ public class InventoryWindow extends ItemWindowBase {
 	
 	public InventoryWindow(GameScreen parent){
 		
-		super(SlickSKR.INVENTORY, parent,
-				new String[]{"All Items [A]", "Consumables [C]", "Weapons [W]", "Miscellaneous [M]", "Back to Menu [B]"}
-		);
+		super(SlickSKR.INVENTORY, parent, new String[]{
+			SlickSKR.getValueFromKey("screen.mainmenu.store.commands.allitems"), 
+			SlickSKR.getValueFromKey("screen.mainmenu.store.commands.consumables"),
+			SlickSKR.getValueFromKey("screen.mainmenu.store.commands.weapons"),
+			SlickSKR.getValueFromKey("screen.mainmenu.store.commands.misc"),
+			SlickSKR.getValueFromKey("screen.mainmenu.store.commands.backtomap"),
+		});
 		
 		filterItems = new SlickRectangle[commands.length];
 		resetFilter(commands.length);
 		
 	}
+	
+	public void extraPane(Graphics g){} //TODO
 	
 	protected int getFilterY(int filterBaseY, int i){
 		return filterBaseY * i;

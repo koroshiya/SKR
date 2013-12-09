@@ -16,6 +16,7 @@ import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
 
 import console.BattleConsole;
+import slickgamestate.SlickSKR;
 import technique.FuryBreak;
 import technique.HealingTechnique;
 
@@ -36,33 +37,32 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	private FuryBreak fury;
 	private final AnimatedSprite sprite;
 	
-	public PlayableCharacter (String firstName, String lastName, FightingStyle style, 
+	public PlayableCharacter (String nameEntry, FightingStyle style, 
 					Weapon weapon, Gender gender,
-					ArrayList<String> unique, String occupation, String height,
-					String nationality, int level, FuryBreak fury, 
-					String nickName, String sprite, ArrayList<Weapon> supportedWeapons){
+					int level, FuryBreak fury, 
+					ArrayList<Weapon> supportedWeapons){
 						
-		this(firstName, lastName, style, weapon, gender, 
-				unique, occupation, height, nationality, 
-				nickName, sprite, supportedWeapons);
+		this(nameEntry, style, weapon, gender, supportedWeapons);
 		setLevel(level, null);
 		
 	}
 	
-	public PlayableCharacter (String firstName, String lastName, FightingStyle style, 
+	public PlayableCharacter (String nameEntry, FightingStyle style, 
 							Weapon weapon, Gender gender,
-							ArrayList<String> kenUnique, String occupation, String height,
-							String nationality, String nickName, String sprite,
 							ArrayList<Weapon> supportedWeapons){
 						
-		super(firstName, lastName, style, weapon, gender, nickName, sprite);
+		super(nameEntry, style, weapon, gender);
 	
-		this.height = height;
-		this.nationality = nationality;
-		this.occupation = occupation;
+		this.height = SlickSKR.getValueFromKey(nameEntry + "height");
+		this.nationality = SlickSKR.getValueFromKey(nameEntry + "nationality");
+		this.occupation = SlickSKR.getValueFromKey(nameEntry + "occupation");
 		this.experience = 0;
 		this.experienceToNextLevel = 20;
-		this.unique = kenUnique;
+		this.unique = new ArrayList<String>();
+		unique.add(SlickSKR.getValueFromKey(nameEntry + "unique.one"));
+		unique.add(SlickSKR.getValueFromKey(nameEntry + "unique.two"));
+		unique.add(SlickSKR.getValueFromKey(nameEntry + "unique.three"));
+		unique.add(SlickSKR.getValueFromKey(nameEntry + "unique.four"));
 		this.temper = 0;
 		this.inParty = false;
 		this.supportedWeapons = supportedWeapons;
@@ -189,7 +189,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 		
 	}
 	
-	public String getProfilePicture() throws SlickException {
+	public String getProfilePicture() {
 		return this.getSpriteDirectory() + "profile.png";		
 	}
 	

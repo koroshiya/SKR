@@ -1,13 +1,16 @@
 package slickgamestate;
 
 import java.awt.Font;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import map.ParentMap;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.openal.Audio;
@@ -38,12 +41,15 @@ public class SlickSKR extends StateBasedGame {
 	public static final boolean NO_ENCOUNTERS = true;
 	public static final boolean NO_TRANSITIONS = true;
 	
+	private static final Properties prop = new Properties();
+	
 	private static String musicPlaying = "";
 	
-	public SlickSKR(ParentMap current) throws SlickException{
+	public SlickSKR(ParentMap current) throws SlickException, FileNotFoundException, IOException{
 		
 		super(GAME_NAME);
 		GameScreen gs = current.getFrame();
+		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
 		this.addState(new StartScreen(gs));
 		this.addState(new Battle(gs, new ArrayList<EnemyCharacter>()));
 		this.addState(new MapScreen(current));
@@ -56,11 +62,15 @@ public class SlickSKR extends StateBasedGame {
 		
 	}
 	
-	public SlickSKR(){super(GAME_NAME);}
+	public SlickSKR() throws IOException{
+		super(GAME_NAME);
+		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
+	}
 		
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		
+		SlickGameState.screenCache = new Image(gc.getWidth(), gc.getHeight());
 		gc.setDefaultFont(SlickSKR.loadFont("Ubuntu-R.ttf", 16));
 		/*try {
 			gc.setMouseCursor("/res/rsword.png", 0, 0);
@@ -108,6 +118,12 @@ public class SlickSKR extends StateBasedGame {
 	
 	public static void PlayMusic(Audio m){
 		if (!m.isPlaying()){m.playAsMusic(1.0f, 1.0f, true);}
+	}
+	
+	public static String getValueFromKey(String key){
+		String result = prop.getProperty(key);
+		System.out.println(key + ": " + result);
+		return result == null ? "" : result;
 	}
 	
 }

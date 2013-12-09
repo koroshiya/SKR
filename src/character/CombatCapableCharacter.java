@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.lang.Math;
 
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-
-import map.ParentMap;
 
 import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
@@ -36,21 +33,25 @@ public abstract class CombatCapableCharacter extends Character{
 	private Status currentStatus;
 	
 	private double gauge;
+	private final String propertyValue;
 	
-	public CombatCapableCharacter (String firstName, String lastName, FightingStyle style, 
-					Weapon weapon, Gender gender,
-					int level, String nickName, String sprite){
+	public CombatCapableCharacter(String property, FightingStyle style, Weapon weapon, Gender gender, int level){
 		
-		this(firstName, lastName, style, weapon, gender, nickName, sprite);
+		this(property, style, weapon, gender);
 		setLevel(level, null);
 		
 	}
 	
-	public CombatCapableCharacter (String firstName, String lastName, FightingStyle style, 
-					Weapon weapon, Gender gender, String nickName, String sprite){
+	public CombatCapableCharacter (String property, FightingStyle style, Weapon weapon, Gender gender){
 						
-		super(firstName, lastName, gender, nickName, sprite);
-	
+		super(
+			SlickSKR.getValueFromKey(property + "name.first"), 
+			SlickSKR.getValueFromKey(property + "name.last"), 
+			gender, 
+			SlickSKR.getValueFromKey(property + "name.nickname"), 
+			SlickSKR.getValueFromKey(property + "sprite")
+		);
+		this.propertyValue = property;
 		this.style = style;
 		this.level = 1; //Change way it's set?
 
@@ -288,7 +289,7 @@ public abstract class CombatCapableCharacter extends Character{
 	
 	public void revive(int percentHP){
 		this.currentStatus.setHP((int) Math.ceil(this.status.getHP() * ((double)percentHP / 100)));
-		SlickSKR.PlaySFX("other/public/revive.wav");
+		SlickSKR.PlaySFX("other/public/revive.ogg");
 	}
 	
 	public void heal(int amount){
@@ -302,6 +303,8 @@ public abstract class CombatCapableCharacter extends Character{
 	}
 	
 	public FightingStyle getFightingStyle(){return this.style;}
+	
+	public String getPropertyValue(){return this.propertyValue;}
 	
 	public Weapon getWeapon(){return this.weapon;}
 	
@@ -380,30 +383,6 @@ public abstract class CombatCapableCharacter extends Character{
 	}
 	
 	public Image getSprite(){return this.isAlive() ? this.alive : this.dead;}
-	
-	public Image getSprite(int dir) {
-		
-		Image f = null;
-		
-		try{
-			if (dir == ParentMap.LEFT){
-				f = new Image(this.getSpriteDirectory() + "left2.png");
-			}else if (dir == ParentMap.RIGHT){
-				f = new Image(this.getSpriteDirectory() + "right2.png");
-			}else if (dir == ParentMap.UP){
-				//backwards sprite
-				f = new Image(this.getSpriteDirectory() + "backwards2.png");
-			}else if (dir == ParentMap.DOWN){
-				//forwards sprite
-				f = new Image(this.getSpriteDirectory() + "forward2.png");
-			}
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-		
-		return f;
-		
-	}
 	
 	public void setAliveIcon(Image icon){this.alive = icon;}
 	

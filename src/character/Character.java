@@ -15,10 +15,9 @@ public abstract class Character implements Photogenic{
 	
 	private Gender gender;
 	
-	private String avatar;
 	protected Image cache;
 	
-	private String spriteDirectory; //TODO: consider swapping with String; get resource dynamically to save resources
+	private String spriteDirectory;
 	
 	public Character(String firstName, String lastName, 
 							Gender gender, String nickName,
@@ -29,7 +28,6 @@ public abstract class Character implements Photogenic{
 		this.gender = gender;
 		this.nickName = nickName;
 		this.spriteDirectory = spriteDirectory;
-		this.avatar = this.spriteDirectory + "avatar.png";
 		
 	}
 	
@@ -62,7 +60,7 @@ public abstract class Character implements Photogenic{
 
 	@Override
 	public void instantiate() throws SlickException {
-		this.cache = new Image(this.avatar);
+		this.cache = new Image(spriteDirectory + "avatar.png");
 	}
 	
 }

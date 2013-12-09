@@ -38,11 +38,7 @@ public class CharacterTile extends Tile implements InteractableObject {
 
 	@Override
 	public void interact(GameScreen parent) {
-		try {
-			parent.WriteOnMap(npc.getDialogue(), this);
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		parent.WriteOnMap(npc.getDialogue(), this);
 	}
 	
 	public void instantiate() throws SlickException{

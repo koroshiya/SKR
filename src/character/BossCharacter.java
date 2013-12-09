@@ -20,24 +20,22 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 	
 	private Dialogue dialogue;
 	private final String battleMusic;
-	
 
-
-	public BossCharacter (String firstName, String lastName, FightingStyle style, 
+	public BossCharacter (String name, FightingStyle style, 
 					Weapon weapon, Gender gender, int experienceGivenWhenDefeated, 
-					Dialogue dialogue, String nickName, String sprite, Item item, 
+					Dialogue dialogue, Item item, 
 					int rate, int money, int encounterRate){
-		this(firstName, lastName, style, weapon, gender, experienceGivenWhenDefeated, 
-				dialogue, nickName, sprite, item, rate, money, encounterRate, "");
+		this(name, style, weapon, gender, experienceGivenWhenDefeated, 
+				dialogue, item, rate, money, encounterRate, "");
 	}
 
-	public BossCharacter (String firstName, String lastName, FightingStyle style, 
+	public BossCharacter (String name, FightingStyle style, 
 					Weapon weapon, Gender gender, int experienceGivenWhenDefeated, 
-					Dialogue dialogue, String nickName, String sprite, Item item, 
+					Dialogue dialogue, Item item, 
 					int rate, int money, int encounterRate, String bgm){
 						
-		super(firstName, lastName, style, weapon, gender, experienceGivenWhenDefeated, 
-				nickName, sprite, item, rate, money, encounterRate);
+		super(name, style, weapon, gender, experienceGivenWhenDefeated, 
+				item, rate, money, encounterRate);
 	
 		this.dialogue = dialogue;
 		this.battleMusic = bgm;
@@ -45,9 +43,9 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 	}
 	
 	public BossCharacter create(){
-		BossCharacter ex = new BossCharacter(getFirstName(), getLastName(), 
+		BossCharacter ex = new BossCharacter(getPropertyValue(), 
 				getFightingStyle(), getWeapon(), getGender(), 
-				getExperienceGivenWhenDefeated(), dialogue, getNickName(), getSpriteDirectory(), 
+				getExperienceGivenWhenDefeated(), dialogue, 
 				getDrop(), getDropRate(), getMoney(), getEncounterRate(), this.battleMusic);
 		ex.setLevel(getLevel(), null);
 		return ex;

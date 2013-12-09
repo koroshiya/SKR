@@ -34,7 +34,7 @@ public class AnimatedSprite implements Serializable {
 		try{
 			tileSheet = new SpriteSheet(this.spriteDir + "sheet.png", sizeX, sizeX, new Color(0,0,0));
 		}catch (Exception ex){
-			//ex.printStackTrace();
+			ex.printStackTrace();
 			return;
 		}
 		anim = new Animation[4];

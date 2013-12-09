@@ -31,12 +31,12 @@ public class EnemyCharacter extends CombatCapableCharacter implements Serializab
 	private int encounterRate;
 	protected final AnimatedSprite sprite;
 	
-	public EnemyCharacter (String firstName, String lastName, FightingStyle style, 
+	public EnemyCharacter (String name, FightingStyle style, 
 					Weapon weapon, Gender gender,
-					int experienceGivenWhenDefeated, String nickName, String sprite,
+					int experienceGivenWhenDefeated,
 					Item drop, int dropRate, int money, int encounterRate){
 						
-		super(firstName, lastName, style, weapon, gender, nickName, sprite);
+		super(name, style, weapon, gender);
 	
 		this.experienceGivenWhenDefeated = experienceGivenWhenDefeated;
 		this.drop = drop;
@@ -48,9 +48,9 @@ public class EnemyCharacter extends CombatCapableCharacter implements Serializab
 	}
 	
 	public EnemyCharacter create() {
-		EnemyCharacter ex = new EnemyCharacter(getFirstName(), getLastName(), 
+		EnemyCharacter ex = new EnemyCharacter(this.getPropertyValue(),
 				getFightingStyle(), getWeapon(), getGender(), 
-				getExperienceGivenWhenDefeated(), getNickName(), getSpriteDirectory(), 
+				getExperienceGivenWhenDefeated(), 
 				getDrop(), getDropRate(), getMoney(), getEncounterRate());
 		ex.setLevel(getLevel(), null);
 		return ex;

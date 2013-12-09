@@ -4,6 +4,7 @@ import item.Item;
 import item.StoreInstance;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -19,8 +20,14 @@ public class Store extends ItemWindowBase{
 	private boolean boolInventory = true;
 	
 	public Store(GameScreen parent) {
-		super(SlickSKR.STORE, parent, 
-				new String[]{"All Items [A]", "Consumables [C]", "Weapons [W]", "Miscellaneous [M]", "Back to Map [B]", "Inventory [I]", "Store [S]"}
+		super(SlickSKR.STORE, parent, new String[]{
+				SlickSKR.getValueFromKey("screen.mainmenu.store.commands.allitems"), 
+				SlickSKR.getValueFromKey("screen.mainmenu.store.commands.consumables"),
+				SlickSKR.getValueFromKey("screen.mainmenu.store.commands.weapons"),
+				SlickSKR.getValueFromKey("screen.mainmenu.store.commands.misc"),
+				SlickSKR.getValueFromKey("screen.mainmenu.store.commands.backtomap"),
+				SlickSKR.getValueFromKey("screen.mainmenu.store.commands.inventory"),
+				SlickSKR.getValueFromKey("screen.mainmenu.store.commands.store")}
 		);
 		
 		filterItems = new SlickRectangle[commands.length];
@@ -30,11 +37,7 @@ public class Store extends ItemWindowBase{
 		final float paneWidth = 150;
 		
 		for (int i = commands.length - 2; i < commands.length; i++){
-			try {
-				filterItems[i] = new SlickRectangle(paneWidth * (i % 2), 0, paneWidth, filterBaseY, commands[i]);
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
+			filterItems[i] = new SlickRectangle(paneWidth * (i % 2), 0, paneWidth, filterBaseY, commands[i]);
 		}
 		
 	}
@@ -66,6 +69,8 @@ public class Store extends ItemWindowBase{
 			
 		}
 	}
+	
+	public void extraPane(Graphics g){} //TODO
 	
 	private void selectItem(Item i){}
 	

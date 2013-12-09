@@ -3,7 +3,6 @@ package console;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 
 import controls.SlickRectangle;
 
@@ -14,11 +13,7 @@ public class BattleConsole {
 
 	public static void cleanConsole(){
 		if (console == null){
-			try {
-				console = new SlickRectangle(0, 0, 817, 100, "");
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
+			console = new SlickRectangle(0, 0, 817, 100, "");
 		}
 		backlog.clear();
 	}
@@ -34,8 +29,12 @@ public class BattleConsole {
 	
 	public static void paint(Graphics g){
 		g.draw(console);
+		int i = -1;
 		int size = backlog.size();
-		for (int i = 0; i < size && i < 5; i++){
+		if (size > 5){
+			size = 5;
+		}
+		while (++i < size){
 			g.drawString(backlog.get(size - i - 1), 25, 15 + i * 15);
 		}
 		

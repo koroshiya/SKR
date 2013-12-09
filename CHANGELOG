@@ -2,6 +2,9 @@ v0.31
 Fix for size of Player sprites
 Fixed StartScreen broken in v0.30
 Multiple screens adapted to new resolution and SlickGameState Flush update method
+Massive SlickException cleanup
+Implemented .properties files for many text entries
+Few menu fixes (others will be broken)
 
 v0.30
 Added docs for Slick

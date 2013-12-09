@@ -33,18 +33,20 @@ public class CharacterProfileWindow extends SlickGameState{
 	}
 	
 	private void drawCharacterInfoPanel(Graphics g){
-				
-		//String s = character.getNickName() != null ? " (aka " + character.getNickName() + ")": "";
 
 		final int x = 455;
 		final int y = 15;
 		
-		for (int i = 0; i < labels.length; i++){
+		int i = -1;
+		int total = labels.length;
+		while (++i < total){
 			g.drawString(labels[i], x, y + y * i);
 		}
 		
+		i = -1;
 		ArrayList<String> list = character.getUniqueInfo();
-		for (int i = 0; i < list.size(); i++){
+		total = list.size();
+		while (++i < total){
 			g.drawString(list.get(i), x, y * (15 + i));
 		}
 		
@@ -54,7 +56,9 @@ public class CharacterProfileWindow extends SlickGameState{
 	private void drawCharacterPanel(Graphics g){
 		
 		PlayableCharacter c;
-		for (int i = 0; i < partyMembers.length; i++){
+		int i = -1;
+		int total = partyMembers.length;
+		while (++i < total){
 			c = Party.getCharacters().get(i);
 			g.drawImage(c.getCache().getScaledCopy(100, 100), partyMembers[i].getX(), partyMembers[i].getY());
 		}
@@ -72,7 +76,15 @@ public class CharacterProfileWindow extends SlickGameState{
 		labels[2] = character.getOccupation();
 		labels[3] = character.getNationality();
 
-		labels[4] = "Equipped: " + character.getWeapon().getName();
+		int i = -1;
+		String[] arr = {
+			"equipped", "level", "hp", "strength", "defence",
+			"mind", "evasion", "accuracy", "speed"
+		};
+		int total = arr.length;
+		while(++i < total){
+			labels[i+4] = SlickSKR.getValueFromKey("screen.characterprofilewindow.label." + arr[i]) + ": ";
+		}
 		//JLabel lblLeftHand = new JLabel(character.getUniqueInfo());
 		/*StringBuffer weapons = new StringBuffer();
 		weapons.append("Supported weapons: ");
@@ -84,14 +96,15 @@ public class CharacterProfileWindow extends SlickGameState{
 		JLabel lblSupported = new JLabel(weapons.toString());
 		*/
 
-		labels[5] = ("Level: " + Integer.toString(character.getLevel()));
-		labels[6] = ("HP: " + Integer.toString(character.getStats().getHP()));
-		labels[7] = ("Strength: " + Integer.toString(character.getStats().getStrength()));
-		labels[8] = ("Defence: " + Integer.toString(character.getStats().getDefence()));
-		labels[9] = ("Mind: " + Integer.toString(character.getStats().getMind()));
-		labels[10] = ("Evasion: " + Double.toString(character.getStats().getEvasion() * 100) + "%");
-		labels[11] = ("Accuracy: " + Double.toString(character.getStats().getAccuracy() * 100) + "%");
-		labels[12] = ("Speed: " + Integer.toString(character.getStats().getSpeed()));
+		labels[4] += character.getWeapon().getName();
+		labels[5] += Integer.toString(character.getLevel());
+		labels[6] += Integer.toString(character.getStats().getHP());
+		labels[7] += Integer.toString(character.getStats().getStrength());
+		labels[8] += Integer.toString(character.getStats().getDefence());
+		labels[9] += Integer.toString(character.getStats().getMind());
+		labels[10] += Double.toString(character.getStats().getEvasion() * 100) + "%";
+		labels[11] += Double.toString(character.getStats().getAccuracy() * 100) + "%";
+		labels[12] += Integer.toString(character.getStats().getSpeed());
 		
 	}
 	
@@ -111,7 +124,9 @@ public class CharacterProfileWindow extends SlickGameState{
 		final int startY = 400;
 		final int x = 455;
 		
-		for (int i = 0; i < partyMembers.length; i++){
+		int i = -1;
+		int total = partyMembers.length;
+		while (++i < total){
 			partyMembers[i] = new SlickRectangle(x + row, startY + 102 * col, 100, 100, Integer.toString(i));
 			row = row == 0 ? 102 : 0;
 			col = i > 1 ? 1 : 0;
@@ -120,9 +135,9 @@ public class CharacterProfileWindow extends SlickGameState{
 	}
 
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) {
 		
-		if (screenCache == null || screenCache.isDestroyed()){
+		if (SlickGameState.needFlush()){
 			drawCharacterInfoPanel(g);
 			drawCharacterPanel(g);
 			g.drawImage(lblAvatar, 0, 0);

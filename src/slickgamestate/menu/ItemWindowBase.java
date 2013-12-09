@@ -20,6 +20,7 @@ import com.japanzai.skr.Inventory;
 import controls.SlickRectangle;
 import screen.GameScreen;
 import slickgamestate.SlickGameState;
+import slickgamestate.SlickSKR;
 
 public abstract class ItemWindowBase extends SlickGameState{
 	
@@ -49,12 +50,10 @@ public abstract class ItemWindowBase extends SlickGameState{
 		final int baseY = 12;
 		
 		itemParams = new SlickRectangle[7];
-		for (int i = 0; i < itemParams.length; i++){
-			try {
-				itemParams[i] = new SlickRectangle(x + optX, y, 20, 15, "");
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
+		int i = -1;
+		int total = itemParams.length;
+		while (++i < total){
+			itemParams[i] = new SlickRectangle(x + optX, y, 20, 15, "");
 
 			optX = optX == 0 ? baseX : 0;
 			y += optY;
@@ -72,24 +71,30 @@ public abstract class ItemWindowBase extends SlickGameState{
 	public void enter(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 
 		setFilter(commands[0]);
+		for (SlickRectangle filterItem : filterItems){
+			filterItem.initialize();
+		}
 		setItem(0);
-		lblMoney = "Funds: " + Inventory.getMoney() + " yen";
+		lblMoney = SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.enter.funds") + 
+					": " + Inventory.getMoney() + " " + SlickSKR.getValueFromKey("common.currency");
 		Inventory.initialize();
 		//SlickSKR.PlayMusic("other/public/");
+		
 		
 	}
 	
 	
 	@Override
-	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
+	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) {
 		
-		if (screenCache == null || SlickGameState.needFlush()){
+		if (SlickGameState.needFlush()){
 			g.drawImage(background, 0, 0);
 			
 			getInventoryFilterPane(g);
 			getInventorySelectedItem(g);
 			getMoneyPane(g);
 			displayResults(g);
+			extraPane(g);
 			SlickGameState.capture(g);
 		}else{
 			g.drawImage(screenCache, 0, 0);
@@ -103,14 +108,14 @@ public abstract class ItemWindowBase extends SlickGameState{
 		for (SlickRectangle s : filterItems){
 			if (s.isWithinBounds(x, y)){
 				this.setFilter(s.getTag());
-				break;
+				return;
 			}
 		}
 		
 		for (SlickRectangle s : items){
 			if (s.isWithinBounds(x, y)){
 				setItem(results.get(Integer.parseInt(s.getTag())));
-				break;
+				return;
 			}
 		}
 		
@@ -126,14 +131,12 @@ public abstract class ItemWindowBase extends SlickGameState{
 		final int filterBaseY = 50;
 		final int paneWidth = 300;
 		
-		for (int i = 0; i < length; i++){
+		int i = -1;
+		while (++i < length){
 			filtery = getFilterY(filterBaseY, i);
-			try {
-				filterItems[i] = new SlickRectangle(filterx, filtery, paneWidth, filterBaseY, commands[i]);
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
+			filterItems[i] = new SlickRectangle(filterx, filtery, paneWidth, filterBaseY, commands[i], true, "/res/button_blue_300x50.png");
 		}
+		//TODO: ? SlickGameState
 	}
 	
 	protected void setInventoryFilter(){
@@ -144,12 +147,10 @@ public abstract class ItemWindowBase extends SlickGameState{
 		final int baseY = 130;
 		
 		items = new SlickRectangle[results.size()];
-		for (int i = 0; i < results.size(); i++){
-			try {
-				items[i] = new SlickRectangle(baseX, baseY + incY * i, incX, incY, Integer.toString(i));
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
+		int i = -1;
+		int total = results.size();
+		while (++i < total){
+			items[i] = new SlickRectangle(baseX, baseY + incY * i, incX, incY, Integer.toString(i));
 		}
 		
 	}
@@ -158,17 +159,20 @@ public abstract class ItemWindowBase extends SlickGameState{
 		
 		g.draw(filterPane);
 		
-		for (int i = 0; i < filterItems.length; i++){
-			filterItems[i].paintCenter(g);
+		int i = -1;
+		int total = filterItems.length;
+		while (++i < total){
+			g.drawImage(filterItems[i].getCache(), filterItems[i].getMinX(), filterItems[i].getMinY()); 
+			filterItems[i].paintCenter(g, true);
 		}
 			
 	}
 
 	protected void displayResults(Graphics g){
 
-		g.drawString("Name", 300, 100);
-		g.drawString("Quantity", 450, 100);
-		g.drawString("Value", 600, 100);
+		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.name"), 300, 100);
+		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.quantity"), 450, 100);
+		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.value"), 600, 100);
 		
 		final int incX = 150;
 		final int baseX = 300;
@@ -179,7 +183,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 
 			g.drawString(i.getName(), baseX, baseY);
 			g.drawString(Integer.toString(i.getQuantity()), baseX + incX, baseY);
-			g.drawString(Integer.toString(i.getValue()) + " yen", baseX + incX * 2, baseY);
+			g.drawString(Integer.toString(i.getValue()) + " " + SlickSKR.getValueFromKey("common.currency"), baseX + incX * 2, baseY);
 			baseY += incY;			
 			
 		}
@@ -189,6 +193,8 @@ public abstract class ItemWindowBase extends SlickGameState{
 		}
 		
 	}
+	
+	public abstract void extraPane(Graphics g);
 	
 	public void getMoneyPane(Graphics g){
 		
@@ -219,7 +225,9 @@ public abstract class ItemWindowBase extends SlickGameState{
 		g.draw(avatar);
 		g.drawImage(item.getCache(), 300 + 2, 2);
 		
-		for (int i = 0; i < itemParams.length; i++){
+		int i = -1;
+		int total = itemParams.length;
+		while (++i < total){
 			g.drawString(itemParams[i].getDisplayText(), x + optX, y);
 
 			optX = optX == 0 ? baseX : 0;
@@ -236,10 +244,11 @@ public abstract class ItemWindowBase extends SlickGameState{
 	protected void setItem(Item i){
 		
 		this.item = i;
-		itemParams[0].setText("Name: " + i.getName());		
+		itemParams[0].setText(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.name") + ": " + i.getName());		
 		determineItemType(i);
-		itemParams[2].setText("Value: " + Integer.toString(i.getValue()));
-		itemParams[6].setText("No description available"); //TODO: implement description parameter for items
+		itemParams[2].setText(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.value") + ": " + Integer.toString(i.getValue()));
+		itemParams[6].setText(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.setitem.nodescription"));
+		//TODO: implement description parameter for items
 		
 	}
 	
@@ -250,29 +259,30 @@ public abstract class ItemWindowBase extends SlickGameState{
 		String strAccuracy;
 		String strPotency;
 		
+		String na = SlickSKR.getValueFromKey("common.notavailable");
 		if (i instanceof ConsumableItem){
 			ConsumableItem c = (ConsumableItem) i;
-			type = "Consumable";
-			strAttack = "N/A";
-			strAccuracy = "N/A";
+			type = SlickSKR.getValueFromKey("item.type.consumable");
+			strAttack = na;
+			strAccuracy = na;
 			strPotency = Integer.toString(c.getPotency());
 		}else if (i instanceof Weapon){
 			Weapon w = (Weapon) i;
 			type = w.getTypeOfWeapon();
 			strAttack = Integer.toString(w.getStrength());
 			strAccuracy = Double.toString(Math.floor(w.getAccuracy() * 100)) + "%";
-			strPotency = "N/A";
+			strPotency = na;
 		}else {
-			type = "Miscellaneous";
-			strAttack = "N/A";
-			strAccuracy = "N/A";
-			strPotency = "N/A";
+			type = SlickSKR.getValueFromKey("item.type.misc");
+			strAttack = na;
+			strAccuracy = na;
+			strPotency = na;
 		}
 		
-		itemParams[1].setText("Type: " + type);
-		itemParams[3].setText("Strength: " + strAttack);
-		itemParams[4].setText("Accuracy: " + strAccuracy);
-		itemParams[5].setText("Potency: " + strPotency);
+		itemParams[1].setText(SlickSKR.getValueFromKey("common.type") + ": " + type);
+		itemParams[3].setText(SlickSKR.getValueFromKey("stat.strength") + ": " + strAttack);
+		itemParams[4].setText(SlickSKR.getValueFromKey("stat.accuracy") + ": " + strAccuracy);
+		itemParams[5].setText(SlickSKR.getValueFromKey("item.param.potency") + ": " + strPotency);
 		
 	}
 	

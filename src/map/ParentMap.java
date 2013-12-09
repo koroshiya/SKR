@@ -18,14 +18,12 @@ import tile.TransitionTile;
 import animation.AnimatedSprite;
 import character.BossCharacter;
 import character.EnemyCharacter;
-import character.PlayableCharacter;
 
 public class ParentMap {
 	
 	private Point coordinates;
 	private double currentPositionx;
 	private double currentPositiony;
-	private PlayableCharacter c; //character whose sprite we'll show
 	private TileMap tileMap;
 	private int direction;
 	private ArrayList<EnemyCharacter> enemies;
@@ -50,16 +48,15 @@ public class ParentMap {
 	private float xDiff;
 	private float yDiff;
 	
-	public ParentMap(Point coordinates, Point currentPosition, PlayableCharacter c,
+	public ParentMap(Point coordinates, Point currentPosition, 
 			AnimatedSprite animatedSprite, ArrayList<EnemyCharacter> enemies,
 			GameScreen parent, Point mapSize, int encounterRate, String grass,
-			String theme) throws SlickException{
+			String theme){
 
 		this.parent = parent;
 		this.coordinates = coordinates;
 		this.currentPositionx = currentPosition.x;
 		this.currentPositiony = currentPosition.y;
-		this.c = c;
 		this.tileMap = null;
 		this.direction = DOWN;
 		this.animatedSprite = animatedSprite;
@@ -106,7 +103,7 @@ public class ParentMap {
 		
 	}
 	
-	public void tryMoveToTile(int x, int y) throws SlickException{
+	public void tryMoveToTile(int x, int y) {
 		
 		x += this.currentPositionx / MapScreen.ICON_SIZE;
 		y += this.currentPositiony / MapScreen.ICON_SIZE;
@@ -199,38 +196,38 @@ public class ParentMap {
 		
 		if (dir == LEFT || dir == RIGHT || dir == UP || dir == DOWN){
 			this.direction = dir;
-			c.getSprite(dir);
+			showSprite();
 		}
 		
 	}
 	
 	public int getDirection(){return this.direction;}
 	
-	public void moveDown() throws SlickException{
+	public void moveDown() {
 		
 		move(this.currentPositionx, this.currentPositiony + MapScreen.ICON_SIZE, DOWN);
 		
 	}
 	
-	public void moveUp() throws SlickException{
+	public void moveUp() {
 		
 		move(this.currentPositionx, this.currentPositiony - MapScreen.ICON_SIZE, UP);
 		
 	}
 	
-	public void moveLeft() throws SlickException{
+	public void moveLeft() {
 		
 		move(this.currentPositionx - MapScreen.ICON_SIZE, this.currentPositiony, LEFT);
 		
 	}
 	 
-	public void moveRight() throws SlickException{
+	public void moveRight() {
 		
 		move(this.currentPositionx + MapScreen.ICON_SIZE, this.currentPositiony, RIGHT);
 		
 	}
 	
-	public void move(int dir) throws SlickException{
+	public void move(int dir) {
 		
 		if (dir == LEFT){
 			moveLeft();
@@ -256,7 +253,7 @@ public class ParentMap {
 		}
 	}
 	
-	private synchronized void move(double d, double currentPositiony2, int dir) throws SlickException{
+	private synchronized void move(double d, double currentPositiony2, int dir) {
 
 		if (!isLocked()){
 		
@@ -324,17 +321,9 @@ public class ParentMap {
 					int py = p.y * MapScreen.ICON_SIZE - getCharacterPositionY() * MapScreen.ICON_SIZE;
 					findDirection(p);
 					
-					try {
-						showSprite();
-					} catch (SlickException e) {
-						e.printStackTrace();
-					}
+					showSprite();
 					
-					try {
-						takeStep(px, py);
-					} catch (SlickException e) {
-						e.printStackTrace();
-					}
+					takeStep(px, py);
 					Tile tile = getTileByPosition(px + (getCharacterPositionX() * MapScreen.ICON_SIZE), 
 							py + (getCharacterPositionY() * MapScreen.ICON_SIZE));
 					
@@ -348,11 +337,7 @@ public class ParentMap {
 					}
 				}
 			}else {
-				try {
-					takeStep(this.x, this.y);
-				} catch (SlickException e) {
-					e.printStackTrace();
-				}
+				takeStep(this.x, this.y);
 				
 				if (parent.isEncounter(map)){
 					parent.encounter(map);
@@ -363,7 +348,7 @@ public class ParentMap {
 			
 		}
 		
-		private void takeStep(double x2, double y2) throws SlickException{
+		private void takeStep(double x2, double y2) {
 			
 			double diffX = 0;
 			double diffY = 0;
@@ -419,7 +404,7 @@ public class ParentMap {
 		}
 	}
 	
-	public void showSprite() throws SlickException{
+	public void showSprite(){
 		
 		if (this.direction == LEFT){
 			this.animatedSprite.setDirection(AnimatedSprite.LEFT);

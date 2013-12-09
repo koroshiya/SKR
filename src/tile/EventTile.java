@@ -1,7 +1,5 @@
 package tile;
 
-import org.newdawn.slick.SlickException;
-
 import screen.GameScreen;
 
 public class EventTile extends InteractiveTile {
@@ -14,7 +12,7 @@ public class EventTile extends InteractiveTile {
 	}
 
 	@Override
-	public void interact(GameScreen parent) throws SlickException {
+	public void interact(GameScreen parent) {
 		parent.swapView(state);
 	}
 	

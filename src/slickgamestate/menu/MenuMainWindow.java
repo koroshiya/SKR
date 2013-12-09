@@ -26,8 +26,7 @@ public class MenuMainWindow extends SlickGameState{
 		
 	private SlickRectangle[] menuItems;
 	private SlickRectangle[] menuCharacters;
-	private String[] commands = {"Inventory [I]", "Equipment [E]", "Characters [C]", 
-									"Backlog [B]", "Save [S]", "Load [L]", "Exit [W]", "Quit [Esc]"};
+	private final String[] commands;
 	private int[] keys = {Input.KEY_I, Input.KEY_E, Input.KEY_C, Input.KEY_B, 
 							Input.KEY_S, Input.KEY_L, Input.KEY_W, Input.KEY_ESCAPE};
 	private int timer = 0;
@@ -41,12 +40,24 @@ public class MenuMainWindow extends SlickGameState{
 	public MenuMainWindow(GameScreen parent){
 		
 		super(SlickSKR.MENU, parent);
+		commands = new String[]{
+			SlickSKR.getValueFromKey("screen.mainmenu.main.commands.inventory"),
+			SlickSKR.getValueFromKey("screen.mainmenu.main.commands.equipment"),
+			SlickSKR.getValueFromKey("screen.mainmenu.main.commands.characters"),
+			SlickSKR.getValueFromKey("screen.mainmenu.main.commands.backlog"),
+			SlickSKR.getValueFromKey("screen.mainmenu.main.commands.save"),
+			SlickSKR.getValueFromKey("screen.mainmenu.main.commands.load"),
+			SlickSKR.getValueFromKey("screen.mainmenu.main.commands.exit"),
+			SlickSKR.getValueFromKey("screen.mainmenu.main.commands.quit"),
+		};
 		
 	}
 	
-	public void menuItemPane(Graphics g) throws SlickException{
+	public void menuItemPane(Graphics g) {
 		
-		for (int i = 0; i < menuItems.length; i++){
+		int i = -1;
+		int total = menuItems.length;
+		while (++i < total){
 			g.drawImage(menuItems[i].getCache(), menuItems[i].getMinX(), menuItems[i].getMinY());
 			menuItems[i].paintCenter(g, true);
 		}
@@ -70,17 +81,17 @@ public class MenuMainWindow extends SlickGameState{
 			inc += baseInc;
 			g.drawString(c.getOccupation(), x, y + inc);
 			inc += baseInc;
-			g.drawString(c.getCurrentStats().getHP() + "/" + c.getStats().getHP() + "HP", x, y + inc);
+			g.drawString(c.getCurrentStats().getHP() + "/" + c.getStats().getHP() + SlickSKR.getValueFromKey("screen.mainmenu.main.characterpanel.hp"), x, y + inc);
 			inc += baseInc;
-			g.drawString("Level " + c.getLevel(), x, y + inc);
+			g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.main.characterpanel.level") + " " + c.getLevel(), x, y + inc);
 			inc += baseInc;
-			g.drawString((c.getExperienceToNextLevel() - c.getExperience()) + "xp until next level", x, y + inc);
+			g.drawString((c.getExperienceToNextLevel() - c.getExperience()) + SlickSKR.getValueFromKey("screen.mainmenu.main.characterpanel.xptonextlevel"), x, y + inc);
 			inc += baseInc;
-			g.drawString(c.isInParty() ? "In party" : "Not in party", x, y + inc);
+			g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.main.characterpanel." + (c.isInParty() ? "inparty" : "notinparty")), x, y + inc);
 			inc += baseInc;
 			y += 155f;
 		}
-	}	
+	}
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
@@ -89,8 +100,10 @@ public class MenuMainWindow extends SlickGameState{
 		final float y = 50;
 
 		String s = "";
+		int i = -1;
+		int total = commands.length;
 		menuItems = new SlickRectangle[commands.length];
-		for (int i = 0; i < commands.length; i++){
+		while (++i < total){
 			s = (String) commands[i];
 			menuItems[i] = new SlickRectangle(x, i * y, 450, y, s, "/res/button_onyx_450x50.png");
 			menuItems[i].initialize();
@@ -98,7 +111,9 @@ public class MenuMainWindow extends SlickGameState{
 		
 		characters = Party.getCharacters();
 		menuCharacters = new SlickRectangle[characters.size()];
-		for (int i = 0; i < menuCharacters.length; i++){
+		i = -1;
+		total = menuCharacters.length;
+		while (++i < total){
 			characters.get(i).instantiate();
 			menuCharacters[i] = new SlickRectangle(0, 155 * i, x, 150, Integer.toString(i), "/res/button_brown_376x155.png");
 			menuCharacters[i].initialize();
@@ -114,9 +129,9 @@ public class MenuMainWindow extends SlickGameState{
 	}
 	
 	@Override
-	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) throws SlickException {
+	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) {
 
-		if (screenCache == null || SlickGameState.needFlush()){
+		if (SlickGameState.needFlush()){
 			//g.drawImage(background, 0, 0);
 			g.fillRect(0,0,gc.getWidth(),gc.getHeight(),background,0,0);
 			
@@ -142,7 +157,7 @@ public class MenuMainWindow extends SlickGameState{
 		for (SlickRectangle rect : menuItems){
 			if (rect.isWithinBounds(x, y)){
 				this.processMenuItem(rect.getTag(), clickCount);
-				break;
+				return;
 			}
 		}
 		for (SlickRectangle rect : menuCharacters){
@@ -174,7 +189,7 @@ public class MenuMainWindow extends SlickGameState{
 						}
 						if (!charAlive){
 							timer = 150;
-							message = "Can't remove last living member from party";
+							message = SlickSKR.getValueFromKey("screen.mainmenu.main.processmenuitem.removelast");
 							SlickGameState.setFlush(true);
 							return;
 						}

@@ -16,11 +16,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.util.ResourceLoader;
 
 //import com.japanzai.jreader.Pairing;
 //import com.japanzai.jreader.dialog.JxDialog;
@@ -66,28 +68,40 @@ public class Driver implements Serializable{
 	ArrayList<EnemyCharacter> enemies = new ArrayList<EnemyCharacter>();
 	ArrayList<EnemyCharacter> bossEnemies = new ArrayList<EnemyCharacter>();
 	ArrayList<Technique> techniques = new ArrayList<Technique>();
+	Properties prop = new Properties();
 	private static Driver d;
 	
 	private GameScreen bs;
+	
+	private String getValueFromKey(String key){
+		String result = prop.getProperty(key);
+		return result == null ? "" : result;
+	}
 
 	private void instantiateFightingStyles(){
 		
 		//barbaric, assassin, tank
-		FightingStyle street = new FightingStyle(11, 10, 7, 0.1, 5, 0.99, 9, "Street Fighter");
-		FightingStyle cop = new FightingStyle(9, 8, 6, 0.15, 8, 1.01, 10, "Modern Samurai");
-		FightingStyle wreckless = new FightingStyle(10, 10, 7, 0.08, 5, 0.90, 8, "Wreckless Henchman");
-		FightingStyle taekwondo = new FightingStyle(12, 13, 13, 0.2, 6, 0.99, 12, "Tae kwon do");
-		FightingStyle tank = new FightingStyle(15, 15, 15, 0.05, 4, 0.90, 6, "Tank");
+		FightingStyle street = new FightingStyle(11, 10, 7, 0.1, 5, 0.99, 9, getValueFromKey("character.class.streetfighter"));
+		FightingStyle cop = new FightingStyle(9, 8, 6, 0.15, 8, 1.01, 10, getValueFromKey("character.class.modernsamurai"));
+		FightingStyle wreckless = new FightingStyle(10, 10, 7, 0.08, 5, 0.90, 8, getValueFromKey("character.class.wrecklesshenchman"));
+		FightingStyle taekwondo = new FightingStyle(12, 13, 13, 0.2, 6, 0.99, 12, getValueFromKey("character.class.taekwondo"));
+		FightingStyle tank = new FightingStyle(15, 15, 15, 0.05, 4, 0.90, 6, getValueFromKey("character.class.tank"));
 
 		//CombatTechnique(int attackStrength, int techniqueAccuracy, String name)
+		String combatTechString = "technique.combat.";
+		String healTechString = "technique.heal.";
 		CombatTechnique rush = new CombatTechnique(1.2, 90, 5, 
-				"Rush", "Player rushes their opponent headfirst", 1);
+				getValueFromKey(combatTechString + "name.rush"), 
+				getValueFromKey(combatTechString + "desc.rush"), 1);
 		CombatTechnique frenzy = new CombatTechnique(1.5, 70, 2, 
-				"Frenzy", "Player loses their cool and unleashes a wild attack", 2);
+				getValueFromKey(combatTechString + "name.frenzy"), 
+				getValueFromKey(combatTechString + "desc.frenzy"), 2);
 		CombatTechnique sureHit = new CombatTechnique(0.8, -1, 4, 
-				"Planned Strike", "Player bides their time, waiting for the opportune time to strike", 4);
+				getValueFromKey(combatTechString + "name.surehit"), 
+				getValueFromKey(combatTechString + "desc.surehit"), 4);
 		HealingTechnique firstAid = new HealingTechnique(10, 4, 
-				"First aid", "Player performs first aid on another active party member", 2);
+				getValueFromKey(healTechString + "name.firstaid"), 
+				getValueFromKey(healTechString + "desc.firstaid"), 2);
 
 		street.addTechnique(rush);
 		cop.addTechnique(rush);
@@ -110,15 +124,16 @@ public class Driver implements Serializable{
 	private void instantiateWeapons(){
 		
 		String strWeaponDir = "/res/item/weapon/sword.png";
+		String wpName = "weapon.class.name.";
 		
-		Weapon fists = new Weapon("Fists", 0, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, strWeaponDir);
-		Weapon gun = new Weapon("Gun", 3, 10, 10, 0.1, 10, 10, 0.99, 20, true, 0, 0, strWeaponDir);
-		Weapon katana = new Weapon("Katana", 4, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, strWeaponDir);
-		Weapon pickaxe = new Weapon("Pickaxe", 1, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, strWeaponDir);
-		Weapon bat = new Weapon("Wooden Bat", 2, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, strWeaponDir);
-		Weapon knife = new Weapon("Sashimi Knife", 5, 10, 10, 0.1, 10, 10, 0.99, 1, true, 0, 0, strWeaponDir);
-		Weapon wrench = new Weapon("Wrench", 6, 10, 10, 0.1, 10, 10, 0.99, 1, true, 0, 0, strWeaponDir);
-		Weapon log = new Weapon("Log", 7, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, strWeaponDir);
+		Weapon fists = new Weapon(getValueFromKey(wpName + "barehanded"), 0, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, strWeaponDir);
+		Weapon gun = new Weapon(getValueFromKey(wpName + "firearm"), 3, 10, 10, 0.1, 10, 10, 0.99, 20, true, 0, 0, strWeaponDir);
+		Weapon katana = new Weapon(getValueFromKey(wpName + "katana"), 4, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.katana.url"));
+		Weapon pickaxe = new Weapon(getValueFromKey(wpName + "pickaxe"), 1, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, strWeaponDir);
+		Weapon bat = new Weapon(getValueFromKey(wpName + "bat"), 2, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, strWeaponDir);
+		Weapon knife = new Weapon(getValueFromKey(wpName + "knife"), 5, 10, 10, 0.1, 10, 10, 0.99, 1, true, 0, 0, strWeaponDir);
+		Weapon wrench = new Weapon(getValueFromKey(wpName + "wrench"), 6, 10, 10, 0.1, 10, 10, 0.99, 1, true, 0, 0, strWeaponDir);
+		Weapon log = new Weapon(getValueFromKey(wpName + "log"), 7, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, strWeaponDir);
 		
 		weapons.add(fists);
 		weapons.add(pickaxe);
@@ -146,45 +161,18 @@ public class Driver implements Serializable{
 	}
 	
 	private void instantiatePlayableCharacters(){
+
+		String kenInfo = "character.ken.";
+		String yuminInfo = "character.yumin.";
+		String pickaxeInfo = "character.pickaxe.";
+		String taesooInfo = "character.taesoo.";
 		
-		String kenSprite = "/res/party/ken/";
-		String yuminSprite = "/res/party/yumin/";
-		String taeSprite = "/res/party/taesoo/";
-		String pickSprite = "/res/party/pickaxe/";
+		//String doUnique = "Favorite weapon:" + "\n" + "4x2 plank" + "\n" + "\n" + "Enormous build. Loves his car.";
 		
-		ArrayList<String> kenUnique = new ArrayList<String>();
-		kenUnique.add("Favourite weapon:");
-		kenUnique.add("Metal baseball bat");
-		kenUnique.add("Ken's family was killed by the");
-		kenUnique.add("Hakuryu-Kai when he was 13 years old.");
-		
-		ArrayList<String> yuminUnique = new ArrayList<String>();
-		yuminUnique.add("Favourite weapon: Handgun & katana");
-		yuminUnique.add("Yumin's father branded her with a");
-		yuminUnique.add("Oshiroi-Bori tatoo on her back.");
-		
-		ArrayList<String> pickaxeUnique = new ArrayList<String>();
-		pickaxeUnique.add("Favourite weapon: Pickaxe");
-		pickaxeUnique.add("Always carries a pickaxe with him,");
-		pickaxeUnique.add("even if it can't be seen by the naked eye.");
-		
-		ArrayList<String> taeUnique = new ArrayList<String>();
-		taeUnique.add("Tattoo on his back.");
-		
-		//String doUnique = "Favourite weapon:" + "\n" + "4x2 plank" + "\n" + "\n" + "Enormous build. Loves his car.";
-		
-		PlayableCharacter ken = new PlayableCharacter("Ken", "Kitano", 
-				styles.get(0), weapons.get(0), genders.get(1), kenUnique, 
-				"Boss", "175cm", "Japanese", null, kenSprite, weapons);
-		PlayableCharacter yumin = new PlayableCharacter("Yumin", "Yoshizawa", 
-				styles.get(1), weapons.get(2), genders.get(0), yuminUnique, 
-				"Policewoman", "163cm", "Japanese", null, yuminSprite, weapons);
-		PlayableCharacter pickaxe = new PlayableCharacter("San-Dae", "Yang", 
-				styles.get(2), weapons.get(3), genders.get(1), pickaxeUnique, 
-				"Henchman", "165cm", "Korean", "Pickaxe", pickSprite, weapons);
-		PlayableCharacter taesoo = new PlayableCharacter("Tae-Soo", "Park", 
-				styles.get(3), weapons.get(0), genders.get(1), taeUnique,
-				"Ken's right-hand man", "182cm", "Korean", null, taeSprite, weapons);
+		PlayableCharacter ken = new PlayableCharacter(kenInfo, styles.get(0), weapons.get(0), genders.get(1), weapons);
+		PlayableCharacter yumin = new PlayableCharacter(yuminInfo, styles.get(1), weapons.get(2), genders.get(0), weapons);
+		PlayableCharacter pickaxe = new PlayableCharacter(pickaxeInfo, styles.get(2), weapons.get(3), genders.get(1), weapons);
+		PlayableCharacter taesoo = new PlayableCharacter(taesooInfo, styles.get(3), weapons.get(0), genders.get(1), weapons);
 		/*PlayableCharacter doheun = new PlayableCharacter("Do-Heun", "Chang", 
 				styles.get(4), weapons.get(7), techniques, genders.get(1), 
 				"info", "Henchman", "212cm", "Korean", null, kenSprite, i);*/
@@ -269,21 +257,11 @@ public class Driver implements Serializable{
 	
 	private void instantiateEnemies(){
 
-		String genericEnemySprite = "/res/enemy/militia/";
-		String eye = "/res/enemy/monster/eyeball/";
-		String slime = "/res/enemy/monster/slime/";
-		String fat = "/res/enemy/human/boss/fatty/";
-		ConsumableItem rice = new ConsumableItem("Riceball", 1, 0, 10, null);
+		ConsumableItem rice = new ConsumableItem(getValueFromKey("consumable.riceball.name"), 1, 0, 10, getValueFromKey("consumable.riceball.img"));
 		
-		EnemyCharacter henchman = new EnemyCharacter("Random", "Flunkie", 
-				styles.get(2), weapons.get(0), genders.get(1), 12, "Militia", genericEnemySprite,
-				rice, 30, 20, 50);
-		EnemyCharacter henchman2 = new EnemyCharacter("Eye", "Ball", 
-				styles.get(0), weapons.get(0), genders.get(1), 16, "Eyeball", eye,
-				rice, 50, 30, 80);
-		EnemyCharacter henchman3 = new EnemyCharacter("Slime", "Hand", 
-				styles.get(4), weapons.get(0), genders.get(1), 20, "Slime", slime,
-				rice, 60, 40, 95);
+		EnemyCharacter henchman = new EnemyCharacter("enemy.militia.", styles.get(2), weapons.get(0), genders.get(1), 12, rice, 30, 20, 50);
+		EnemyCharacter henchman2 = new EnemyCharacter("enemy.eye.", styles.get(0), weapons.get(0), genders.get(1), 16, rice, 50, 30, 80);
+		EnemyCharacter henchman3 = new EnemyCharacter("enemy.slime.", styles.get(4), weapons.get(0), genders.get(1), 20, rice, 60, 40, 95);
 
 		henchman2.setLevel(3, null);
 		henchman3.setLevel(6, null);
@@ -292,9 +270,7 @@ public class Driver implements Serializable{
 		enemies.add(henchman2);
 		enemies.add(henchman3);
 		
-		BossCharacter fatty = new BossCharacter("Fat", "Bastard", 
-						styles.get(4), weapons.get(0), genders.get(1), 60, null, "Fatty", fat,
-						rice, 150, 70, 99);
+		BossCharacter fatty = new BossCharacter("enemy.fatbastard.", styles.get(4), weapons.get(0), genders.get(1), 60, null, rice, 150, 70, 99);
 		
 		Dialogue d = new Dialogue();
 		String str3 = "Ready to face your demise, maggot!?";
@@ -316,22 +292,47 @@ public class Driver implements Serializable{
 		
 		Inventory.addWeapons(weapons);
 		
-		String imgRice = "/res/item/food/riceball.png";
-		String imgKimchi = "/res/item/food/kimchi.png";
 		//String name, int value, int rarity, int potency
-		ConsumableItem rice = new ConsumableItem("Riceball", 1, 0, 10, imgRice);
+		ConsumableItem rice = new ConsumableItem(
+			getValueFromKey("consumable.riceball.name"), 
+			1, 0, 10, 
+			getValueFromKey("consumable.riceball.img")
+		);
+		ConsumableItem kimchi = new ConsumableItem(
+			getValueFromKey("consumable.kimchi.name"), 
+			5, 0, 15, 
+			getValueFromKey("consumable.kimchi.img")
+		);
+		
 		rice.increaseQuantity(1);
-		ConsumableItem kimchi = new ConsumableItem("Kimchi", 5, 0, 15, imgKimchi);
 		kimchi.increaseQuantity(1);
 		
 		Inventory.addItem(rice);
 		Inventory.addItem(kimchi);
 		Inventory.setMoney(50);
-
 		
 	}
 	
 	private void instantiate(){
+
+		try {
+			bs = new GameScreen(new SlickSKR());
+		} catch (SlickException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			prop.load(ResourceLoader.getResourceAsStream("/res/script/names_en_US.properties"));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+			System.exit(0);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			System.exit(0);
+		}
 		
 		instantiateFightingStyles();
 		instantiateWeapons();
@@ -372,15 +373,11 @@ public class Driver implements Serializable{
 		
 
 		//SlickSKR sk = null;
-		bs = new GameScreen(new SlickSKR());
-		current = new ParentMap(coordinates, currentPosition, Party.getCharacterByIndex(0),
-									animatedSprite, enemies, bs, mapSize, 97, 
-									grass, "other/public/summeropenfielddusk.ogg");
+		current = new ParentMap(coordinates, currentPosition, animatedSprite, enemies, bs, mapSize, 97, grass, "other/public/summeropenfielddusk.ogg");
 
 		Tile[][] deadTile = createDeadMap(32 * MapScreen.ICON_SIZE, 26 * MapScreen.ICON_SIZE);
 		Point newCurPos = new Point(20 * MapScreen.ICON_SIZE, 0);
-		destination = new ParentMap(coordinates, newCurPos, Party.getCharacterByIndex(0),
-				animatedSprite, bossEnemies, bs, mapSize, 5, mud, "other/public/Cavern.ogg");	
+		destination = new ParentMap(coordinates, newCurPos, animatedSprite, bossEnemies, bs, mapSize, 5, mud, "other/public/Cavern.ogg");	
 		destination.setTiles(deadTile);
 		
 		TileGenerator tGenerator = new TileGenerator(basicRandomTiles());

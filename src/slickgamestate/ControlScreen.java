@@ -32,16 +32,16 @@ public class ControlScreen extends SlickGameState{
 	}
 	
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) {
 
-		if (screenCache == null || SlickGameState.needFlush()){
+		if (SlickGameState.needFlush()){
 			g.drawImage(backgroundImage, 0, 0);
 			
-			g.drawString("Controls:", 20, 100);
-			g.drawString("A - Interact", 20, 120);
-			g.drawString("W - Menu", 20, 140);
-			g.drawString("F - Fullscreen", 20, 160);
-			g.drawString("Esc - Quit", 20, 180);
+			g.drawString(SlickSKR.getValueFromKey("screen.control.commands.heading"), 20, 100);
+			g.drawString(SlickSKR.getValueFromKey("screen.control.commands.interact"), 20, 120);
+			g.drawString(SlickSKR.getValueFromKey("screen.control.commands.menu"), 20, 140);
+			g.drawString(SlickSKR.getValueFromKey("screen.control.commands.fullscreen"), 20, 160);
+			g.drawString(SlickSKR.getValueFromKey("screen.control.commands.quit"), 20, 180);
 	
 			g.drawString("Programming: Koro", 20, 220);
 			g.drawString("Sprites: Peter Hull", 20, 240);
@@ -54,7 +54,7 @@ public class ControlScreen extends SlickGameState{
 	}
 
 	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {}
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) {}
 
 	@Override
 	public int getID() {

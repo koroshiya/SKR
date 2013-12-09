@@ -1,7 +1,5 @@
 package slickgamestate;
 
-import java.io.IOException;
-
 import interfaces.SlickDrawableFrame;
 import map.ParentMap;
 
@@ -51,7 +49,7 @@ public class MapScreen extends SlickGameState{
 	}
 	
 	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) {
 		Input i = super.parent.getInput();
 		if (!getParentMap().isLocked()){
 			if (i.isKeyDown(Input.KEY_UP)){
@@ -67,7 +65,7 @@ public class MapScreen extends SlickGameState{
 	}
 	
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) {
 		
 		//g.setFont(SlickSKR.DEFAULT_FONT);
 		float yDiff = map.getYDiff();
@@ -166,12 +164,7 @@ public class MapScreen extends SlickGameState{
 		int px = (int) Math.floor(x / MapScreen.ICON_SIZE);
 		int py = (int) Math.floor(y / MapScreen.ICON_SIZE);
 		
-		try {
-			getParentMap().tryMoveToTile(px, py);
-		} catch (SlickException e) {
-			System.out.println("Can't move there");
-			e.printStackTrace();
-		}
+		getParentMap().tryMoveToTile(px, py);
 	}	
 	
 	@Override
@@ -186,7 +179,7 @@ public class MapScreen extends SlickGameState{
 		
 	}
 	
-	private void interact() throws SlickException{
+	private void interact() {
 		
 		int dir = getParentMap().getDirection();
 		int x = (int)getParentMap().getCurrentPositionX() + getParentMap().getCharacterPositionX() * MapScreen.ICON_SIZE;
@@ -240,11 +233,7 @@ public class MapScreen extends SlickGameState{
 				//TODO: make exit prompt
 				System.exit(0);
 			}else if (code == INTERACT){
-				try {
-					interact();
-				} catch (SlickException e) {
-					e.printStackTrace();
-				}
+				interact();
 			}else if (code == FULLSCREEN){
 				GameScreen parent = getParentMap().getFrame();
 				parent.setFullScreen();

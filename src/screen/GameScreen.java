@@ -109,7 +109,7 @@ public class GameScreen extends AppGameContainer{
 		
 	public boolean isInBattle(){return getState() instanceof Battle;}
 	
-	public void WriteOnMap(Dialogue dialogue, InteractableObject npc) throws SlickException{
+	public void WriteOnMap(Dialogue dialogue, InteractableObject npc) {
 		
 		GameState comp = getState();
 		
@@ -148,18 +148,6 @@ public class GameScreen extends AppGameContainer{
 		setBattle(enemies);
 		swapView(1);
 		
-	}
-			
-	public void gameover() throws SlickException{
-
-		swapView(SlickSKR.GAMEOVER);
-				
-		/*int choice = MessageBox.ChoiceBox("Resume from last save point?", "Game Over", null);
-		if (choice == JOptionPane.YES_OPTION){
-			Driver.restart();
-		}else{
-			System.exit(0);
-		}*/
 	}
 
 	public void setMap(ParentMap map) {

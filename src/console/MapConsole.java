@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 
 import screen.GameScreen;
 import screen.SlickListener;
@@ -35,7 +34,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	
 	private final String[] tags = {"Back [W]", "Next [A]", "Yes [S]", "No [D]"};
 	
-	public MapConsole(ArrayList<Dialogue> dialogues, Dialogue dialogue, GameScreen battleScreen) throws SlickException{
+	public MapConsole(ArrayList<Dialogue> dialogues, Dialogue dialogue, GameScreen battleScreen) {
 			
 		super();
 		
@@ -82,9 +81,9 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		}
 	}
 	
-	public void speak(Dialogue d) throws SlickException{d.increment();}
+	public void speak(Dialogue d) {d.increment();}
 
-	private int converse(Dialogue d) throws SlickException {
+	private int converse(Dialogue d) {
 		
 		boolean moreDialogue = d.moreDialogue();
 		rects[0].setEnabled(this.dialogue.canGoBack());
@@ -99,7 +98,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		
 	}
 	
-	public int converse() throws SlickException{return converse(this.dialogue);}
+	public int converse() {return converse(this.dialogue);}
 	
 	public void setInteractiveTile(InteractableObject npc){this.npc = npc;}
 		
@@ -154,41 +153,31 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	}
 	
 	public void process(String tag) {
-		
-		try{
-			if (tag.equals(tags[0])){
-				back();
-			}else if (tag.equals(tags[1])){
-				next();
-			}else if (tag.equals(tags[2])){
-				answer(true);
-			} else if (tag.equals(tags[3])){
-				answer(false);
-			}			
-		} catch (SlickException e) {
-			e.printStackTrace();
+		if (tag.equals(tags[0])){
+			back();
+		}else if (tag.equals(tags[1])){
+			next();
+		}else if (tag.equals(tags[2])){
+			answer(true);
+		} else if (tag.equals(tags[3])){
+			answer(false);
 		}
-		
 	}
 	
 	@Override
 	public void keyReleased(int code, char arg1) {
-		try{
-			if (code == INTERACT){
-				next();
-			}else if (code == BACK){
-				back();
-			}else if (code == YES){
-				answer(true);
-			}else if (code == NO){
-				answer(false);
-			}
-		} catch (SlickException e) {
-			e.printStackTrace();
+		if (code == INTERACT){
+			next();
+		}else if (code == BACK){
+			back();
+		}else if (code == YES){
+			answer(true);
+		}else if (code == NO){
+			answer(false);
 		}
 	}
 	
-	private void answer(boolean answer) throws SlickException{
+	private void answer(boolean answer) {
 		
 		if (!isTalking()){
 			answerQuestion(answer);
@@ -197,7 +186,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		
 	}
 	
-	private void next() throws SlickException{
+	private void next() {
 		
 		if (!isTalking()){return;}
 		
@@ -212,7 +201,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		}
 	}
 	
-	private void back() throws SlickException{
+	private void back() {
 		Dialogue d = getDialogue();
 		if (d.canGoBack()){
 			d.back();

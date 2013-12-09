@@ -2,8 +2,6 @@ package tile;
 
 import java.util.ArrayList;
 
-import org.newdawn.slick.SlickException;
-
 import screen.GameScreen;
 import slickgamestate.SlickSKR;
 
@@ -37,7 +35,7 @@ public class ChestTile extends InteractiveTile implements InteractableObject {
 	}
 
 	@Override
-	public void interact(GameScreen parent) throws SlickException {
+	public void interact(GameScreen parent) {
 		
 		Dialogue d;
 		

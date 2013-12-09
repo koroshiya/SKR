@@ -5,7 +5,6 @@ import interfaces.SerialChild;
 import item.ItemSave;
 import item.Weapon;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import technique.FuryBreak;
@@ -18,12 +17,9 @@ public class PlayableCharacterSave implements SerialChild{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final String firstName;
-	private final String lastName;
-	private final String nickName;
+	private final String nameEntry;
 	
 	private final Gender gender;
-	private final String avatar;
 	private final FightingStyle style;
 	private final SerialChild weapon; //Weapon type. eg. Fists, pickaxe, etc.   //Weapon leftHand and rightHand?
 	private final ArrayList<Technique> techniques;
@@ -33,25 +29,18 @@ public class PlayableCharacterSave implements SerialChild{
 	private final Status currentStatus;
 	private final double gauge;
 	private ArrayList<SerialChild> supportedWeapons;
-	private final String height;
-	private final String occupation;
 	
 	private final int experience;
 	private final int experienceToNextLevel;
-	private final ArrayList<String> unique;
-	private final String nationality;
 	private final int temper;
 	private final boolean inParty;
 	private final FuryBreak fury;
 	
 	public PlayableCharacterSave(PlayableCharacter pc){
 		
-		this.firstName = pc.getFirstName();
-		this.lastName = pc.getLastName();
-		this.nickName = pc.getNickName();
+		this.nameEntry = pc.getFirstName();
 		
 		this.gender = pc.getGender();
-		this.avatar = new File(pc.getAvatar()).getParent() + "/";
 		
 		this.style = pc.getFightingStyle();
 		this.weapon = new ItemSave(pc.getWeapon());
@@ -67,13 +56,8 @@ public class PlayableCharacterSave implements SerialChild{
 			this.supportedWeapons.add(new ItemSave(w));
 		};
 		
-		this.height = pc.getHeight();
-		this.occupation = pc.getOccupation();
-		
 		this.experience = pc.getExperience();
 		this.experienceToNextLevel = pc.getExperienceToNextLevel();
-		this.unique = pc.getUniqueInfo();
-		this.nationality = pc.getNationality();
 		this.temper = pc.getTemper();
 		
 		this.inParty = pc.isInParty();
@@ -89,11 +73,10 @@ public class PlayableCharacterSave implements SerialChild{
 		for (SerialChild is : supportedWeapons){
 			weapons.add((Weapon)is.serialLoad());
 		}
-		pc = new PlayableCharacter(firstName, lastName, style, 
+		pc = new PlayableCharacter(nameEntry, style, 
 				(Weapon)weapon.serialLoad(), gender,
-				unique, occupation, height,
-				nationality, level, fury, 
-				nickName, avatar, weapons);
+				level, fury, 
+				weapons);
 		pc.getStats().setStats(status);
 		pc.getCurrentStats().setStats(currentStatus);
 		pc.setInParty(inParty);

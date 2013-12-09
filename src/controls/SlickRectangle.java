@@ -10,8 +10,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 
-import slickgamestate.SlickSKR;
-
 public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	
 	private static final long serialVersionUID = 1L;
@@ -29,23 +27,23 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	
 	private boolean enabled; //TODO: change color if disabled?
 	
-	public SlickRectangle(float x, float y, float width, float height, String tag) throws SlickException{
+	public SlickRectangle(float x, float y, float width, float height, String tag) {
 		this(x, y, width, height, tag, true);
 	}
 
-	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled) throws SlickException{
+	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled) {
 		this(x, y, width, height, tag, enabled, tag);
 	}
 
-	public SlickRectangle(float x, float y, float width, float height, String tag, String url) throws SlickException{
+	public SlickRectangle(float x, float y, float width, float height, String tag, String url) {
 		this(x, y, width, height, tag, true, tag, url);
 	}
 
-	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String url) throws SlickException{
+	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String url) {
 		this(x, y, width, height, tag, enabled, tag, url);
 	}
 
-	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText, String imgSrc) throws SlickException{
+	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText, String imgSrc) {
 		super(x, y, width, height);
 		this.tag = tag;
 		this.x = x;

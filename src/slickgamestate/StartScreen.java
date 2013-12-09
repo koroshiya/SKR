@@ -18,12 +18,18 @@ public class StartScreen extends SlickGameState{
 	
 	private Image backgroundImage;
 	private SlickRectangle[] rects;
-	private String commands[] = {"Continue", "New Game", "Load", "Controls"};
+	private final String commands[];
 	private final int buttonWidth = 200;
 	private final int buttonHeight = 50;
 	
 	public StartScreen(GameScreen parent) {
 		super(SlickSKR.MAINMENU, parent);
+		commands = new String[]{
+			SlickSKR.getValueFromKey("screen.start.controls.continue"),
+			SlickSKR.getValueFromKey("screen.start.controls.newgame"),
+			SlickSKR.getValueFromKey("screen.start.controls.load"),
+			SlickSKR.getValueFromKey("screen.start.controls.controls")
+		};
 	}
 	
 	private void processMenuItem(String s) throws IOException, ClassNotFoundException{
