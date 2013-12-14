@@ -32,6 +32,7 @@ public class MapScreen extends SlickGameState{
 	public static int ICON_SIZE = 48;
 	private SlickDrawableFrame activeDialog = null;
 	public static SlickCache mapCache;
+	private SlickCache bgCache;
 	
 	public MapScreen(ParentMap map){
 		
@@ -41,18 +42,23 @@ public class MapScreen extends SlickGameState{
 	}
 	
 	@Override
-	public void enter(GameContainer gc, StateBasedGame arg1) throws SlickException {
-		
-		//super.parent.setTargetFrameRate(60);
-		sprite = new Image(map.getDefaultTile());
-		map.instantiateImages();
-		SlickSKR.PlayMusic(map.getThemeMusic());
+	public void init(GameContainer gc, StateBasedGame arg1){
+
 		try { //TODO: check for leak over time
 			mapCache = new SlickCache((float)map.getPositionX(), (float)map.getPositionY(), map.getWidth(), map.getHeight());
-			mapCache.setFlush(true);
+			bgCache = new SlickCache(ICON_SIZE, ICON_SIZE, gc.getWidth() + ICON_SIZE * 2, gc.getHeight() + ICON_SIZE * 2);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame arg1) throws SlickException {
+		
+		sprite = new Image(map.getDefaultTile());
+		map.instantiateImages();
+		SlickSKR.PlayMusic(map.getThemeMusic());
+		mapCache.setFlush(true);
 		
 	}
 	
@@ -75,6 +81,7 @@ public class MapScreen extends SlickGameState{
 			float xDiff = map.getXDiff();
 			if (xDiff != 0 || yDiff != 0){
 				mapCache.move(xDiff, yDiff);
+				bgCache.move(xDiff, yDiff);
 			}
 		}
 		
@@ -82,23 +89,26 @@ public class MapScreen extends SlickGameState{
 	
 	public void resetPosition(){
 		mapCache.resetPosition();
+		bgCache.resetPosition();
 	}
 	
 	public void resetPosition(float xDiff, float yDiff){
 		mapCache.move(xDiff, yDiff);
 		mapCache.resetPosition();
+		bgCache.move(xDiff, yDiff);
+		bgCache.resetPosition(ICON_SIZE, ICON_SIZE);
 	}
 	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
 		//g.setFont(SlickSKR.DEFAULT_FONT);
-		if (!mapCache.needFlush()){
-			mapCache.draw(g);
-		}else{
+		if (mapCache.needFlush()){
 			try { //TODO: check for leak over time
 				Graphics gc = mapCache.getGraphics();
-				gc.fillRect(0, 0, mapCache.getWidth(), mapCache.getHeight(), sprite, 0, 0);
+				gc.clear();
+				Graphics gb = bgCache.getGraphics();
+				gb.fillRect(0, 0, bgCache.getWidth(), bgCache.getHeight(), sprite, 0, 0);
 				
 				String defaultTile = map.getDefaultTile();
 				
@@ -109,7 +119,6 @@ public class MapScreen extends SlickGameState{
 					while (++j < mapCache.getHeight()){
 						try{
 							map.getTileByIndex(i, j).drawIfNotDefault(gc, defaultTile, i * ICON_SIZE, j * ICON_SIZE);
-							System.out.println("Drawing tile at X pos " + i*ICON_SIZE);
 						}catch (Exception ex){
 							//g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
 						}
@@ -124,11 +133,9 @@ public class MapScreen extends SlickGameState{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			//g.copyArea(mapCache, 0, 0);
-			System.out.println("Drawing char at X pos " + this.map.getCharacterPositionX() * ICON_SIZE);
 		}
+		bgCache.draw(g);
 		mapCache.draw(g);
-		//g.drawImage(mapCache, 0, 0);
 		g.flush();
 
 		this.map.getAnimatedSprite().draw(this.map.getCharacterPositionX() * ICON_SIZE, this.map.getCharacterPositionY() * ICON_SIZE);
@@ -137,9 +144,10 @@ public class MapScreen extends SlickGameState{
 	
 	public ParentMap getParentMap() {return map;}
 	
-	public void setMap(ParentMap map2) {
+	public void setMap(ParentMap map2, float startX, float startY) {
 		this.map = map2;
 		super.parent.swapView(SlickSKR.MAP);
+		mapCache.setFlush(true);
 	}
 
 	public void removeMapConsole() {activeDialog = null;}
@@ -152,7 +160,7 @@ public class MapScreen extends SlickGameState{
 		int py = (int) Math.floor(y / MapScreen.ICON_SIZE);
 		
 		getParentMap().tryMoveToTile(px, py);
-		this.mapCache.setFlush(true);
+		mapCache.setFlush(true);
 	}
 	
 	@Override

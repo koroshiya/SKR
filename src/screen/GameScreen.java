@@ -155,8 +155,8 @@ public class GameScreen extends AppGameContainer{
 		
 	}
 
-	public void setMap(ParentMap map) {
-		((MapScreen)this.getState()).setMap(map);
+	public void setMap(ParentMap map, float startX, float startY) {
+		((MapScreen)this.getState()).setMap(map, startX, startY);
 	}
 	
 	public void removeMapConsole(){

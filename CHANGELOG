@@ -1,3 +1,9 @@
+v0.32
+Removed unnecessary draw cycle from MapScreen render
+Moved background to secondary cache to fix out of border issues
+Added destination coordinate parameters for transitioning
+Removed obsolete Transition class
+
 v0.31
 Fix for size of Player sprites
 Fixed StartScreen broken in v0.30

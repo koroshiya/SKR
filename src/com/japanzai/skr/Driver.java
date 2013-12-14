@@ -436,7 +436,7 @@ public class Driver implements Serializable{
 		Tile tileKoro = NPC(imgKoro);
 		PresetTile preTile3 = new PresetTile(tileKoro, 16, 10);
 		
-		Tile tTile = new TransitionTile(tilePic, destination, current);
+		Tile tTile = new TransitionTile(tilePic, destination, current, 20, 16);
 		PresetTile preTile4 = new PresetTile(tTile, 20, 0);
 		
 		ArrayList<PresetTile> basicPresetTiles = new ArrayList<PresetTile>();
