@@ -2,8 +2,13 @@ package character;
 
 import interfaces.Photogenic;
 
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
+
+import slickgamestate.MapScreen;
 
 import com.japanzai.skr.Gender;
 
@@ -17,7 +22,13 @@ public abstract class Character implements Photogenic{
 	
 	protected Image cache;
 	
-	private String spriteDirectory;
+	public static final int LEFT = 2;
+	public static final int RIGHT = 3;
+	public static final int FORWARD = 1;
+	public static final int BACKWARD = 0;
+	private int direction;
+	private final String spriteDirectory;
+	private Animation anim[];
 	
 	public Character(String firstName, String lastName, 
 							Gender gender, String nickName,
@@ -28,8 +39,37 @@ public abstract class Character implements Photogenic{
 		this.gender = gender;
 		this.nickName = nickName;
 		this.spriteDirectory = spriteDirectory;
+		this.direction = LEFT;
 		
 	}
+	
+	public void instantiate(int sizeX){
+		try{
+			this.cache = new Image(spriteDirectory + "avatar.png");
+		}catch (SlickException ex){
+			ex.printStackTrace();
+		}
+		SpriteSheet tileSheet;
+		try{
+			tileSheet = new SpriteSheet(this.spriteDirectory + "sheet.png", sizeX, sizeX, new Color(0,0,0));
+		}catch (Exception ex){
+			ex.printStackTrace();
+			return;
+		}
+		anim = new Animation[4];
+		for (int y = 0; y < 4; y++) {
+			anim[y] = new Animation(false);
+			for (int x = 0; x < 2; x++) {
+				anim[y].addFrame(tileSheet.getSprite(x,y), 60);
+			}
+			anim[y].setCurrentFrame(1);
+			anim[y].setAutoUpdate(true);
+			anim[y].setLooping(false);
+			anim[y].stop();
+		}
+	}
+
+	public void instantiate(){instantiate(MapScreen.ICON_SIZE);}
 	
 	public boolean isMale(){return this.gender.isMale();}
 	
@@ -57,10 +97,32 @@ public abstract class Character implements Photogenic{
 	public Image getCache() {
 		return this.cache;
 	}
+	public synchronized void draw(int x, int y){
+		this.anim[this.direction].draw(x, y);
+	}
 
-	@Override
-	public void instantiate() throws SlickException {
-		this.cache = new Image(spriteDirectory + "avatar.png");
+	public synchronized void draw(float x, float y){
+		this.anim[this.direction].draw(x, y);
+	}
+	
+	public synchronized Image getBattleIcon(){
+		return anim[LEFT].getCurrentFrame();
+	}
+	
+	public synchronized Image getBattleIconEnemy(){
+		return anim[RIGHT].getCurrentFrame();
+	}
+
+	public void setDirection(int direction){
+		this.direction = direction;
+	}
+
+	public synchronized void run(){
+		this.anim[this.direction].restart();
+	}
+
+	public int getTimeBetweenFrames() {
+		return 120;
 	}
 	
 }

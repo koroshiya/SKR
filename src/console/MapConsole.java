@@ -61,18 +61,22 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	}
 	
 	public void paint(Graphics g){
-		g.drawImage(background.getCache(), background.getMinX(), background.getMinY());
+		paint(g, 0, 0);
+	}
+	
+	public void paint(Graphics g, int offX, int offY){
+		g.drawImage(background.getCache(), background.getMinX() + offX, background.getMinY() + offY);
 		for (SlickRectangle rect : rects){
-			g.drawImage(rect.getCache(), rect.getMinX(), rect.getMinY());
-			rect.paintCenter(g,true);
+			g.drawImage(rect.getCache(), rect.getMinX() + offX, rect.getMinY() + offY);
+			rect.paintCenter(g,true, offX, offY);
 		}
-		g.drawImage(this.dialogue.getCache(), 10, 515);
+		g.drawImage(this.dialogue.getCache(), 10 + offX, 515 + offY);
 		
-		final int x = 140;
-		int y = 518;
+		final int x = 140 + offX;
+		int y = 518 + offY;
 		
 		if (!(npc instanceof ChestTile)){
-			g.drawString(this.dialogue.speak(), 140, y);
+			g.drawString(this.dialogue.speak(), x, y);
 		}else{
 			for (String s : this.dialogue.getDialog()){
 				g.drawString(s, x, y);
@@ -107,7 +111,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		rects[1].setEnabled(!question);
 		rects[2].setEnabled(question);
 		rects[3].setEnabled(question);
-		SlickGameState.setFlush(true);
+		SlickGameState.setFlush(true, true);
 	}
 	
 	//If currently talking normally, return true. If asking a question, return false

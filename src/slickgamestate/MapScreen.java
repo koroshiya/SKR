@@ -11,6 +11,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import console.MapConsole;
+import controls.SlickCache;
 import screen.GameScreen;
 import tile.CharacterTile;
 import tile.InteractiveTile;
@@ -30,6 +31,7 @@ public class MapScreen extends SlickGameState{
 	private ParentMap map;
 	public static int ICON_SIZE = 48;
 	private SlickDrawableFrame activeDialog = null;
+	public static SlickCache mapCache;
 	
 	public MapScreen(ParentMap map){
 		
@@ -45,13 +47,19 @@ public class MapScreen extends SlickGameState{
 		sprite = new Image(map.getDefaultTile());
 		map.instantiateImages();
 		SlickSKR.PlayMusic(map.getThemeMusic());
+		try { //TODO: check for leak over time
+			mapCache = new SlickCache((float)map.getPositionX(), (float)map.getPositionY(), map.getWidth(), map.getHeight());
+			mapCache.setFlush(true);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) {
 		Input i = super.parent.getInput();
-		if (!getParentMap().isLocked()){
+		if (!getParentMap().isLocked() && this.activeDialog == null){
 			if (i.isKeyDown(Input.KEY_UP)){
 				getParentMap().moveUp();
 			}else if (i.isKeyDown(Input.KEY_RIGHT)){
@@ -62,88 +70,67 @@ public class MapScreen extends SlickGameState{
 				getParentMap().moveDown();
 			}
 		}
+		if (!mapCache.needFlush()){
+			float yDiff = map.getYDiff();
+			float xDiff = map.getXDiff();
+			if (xDiff != 0 || yDiff != 0){
+				mapCache.move(xDiff, yDiff);
+			}
+		}
+		
+	}
+	
+	public void resetPosition(){
+		mapCache.resetPosition();
+	}
+	
+	public void resetPosition(float xDiff, float yDiff){
+		mapCache.move(xDiff, yDiff);
+		mapCache.resetPosition();
 	}
 	
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) {
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
 		//g.setFont(SlickSKR.DEFAULT_FONT);
-		float yDiff = map.getYDiff();
-		float xDiff = map.getXDiff();
-		double posX = this.map.getCurrentPositionX() / ICON_SIZE;
-		double posY = this.map.getCurrentPositionY() / ICON_SIZE;
-		int totalX = this.map.getCharacterPositionX() * 2 + 1;
-		int totalY = this.map.getCharacterPositionY() * 2 + 1;
-		if (!SlickGameState.needFlush()){
-			String defaultTile = map.getDefaultTile();
-			g.drawImage(screenCache, -xDiff, -yDiff);
-			int mult;
-			float xAxi;
-			float yAxi;
-			int i = -1;
-			if (xDiff != 0){
-				if (xDiff > 0){
-					mult = totalX;
-					xAxi = arg0.getWidth();
-				}else{
-					mult = -1;
-					xAxi = -ICON_SIZE;
-				}
-				xAxi -= xDiff;
-				while (++i < totalY){
-					yAxi = ICON_SIZE * i;
-					g.drawImage(sprite, xAxi, yAxi);
-					Tile t = map.getTileByIndex(mult + posX, i + posY);
-					if (t != null){t.drawIfNotDefault(g, defaultTile, xAxi, yAxi);}
-				}
-			}else if (yDiff != 0){
-				if (yDiff > 0){
-					mult = totalY;
-					yAxi = arg0.getHeight();
-				}else{
-					mult = -1;
-					yAxi = -ICON_SIZE;
-				}
-				yAxi -= yDiff;
-				while (++i < totalX){
-					xAxi = ICON_SIZE * i;
-					g.drawImage(sprite,xAxi, yAxi);
-					Tile t = map.getTileByIndex(i + posX, mult + posY);
-					if (t != null){t.drawIfNotDefault(g, defaultTile, xAxi, yAxi);}
-				}
-			}
+		if (!mapCache.needFlush()){
+			mapCache.draw(g);
 		}else{
-			g.fillRect(0, 0, arg0.getWidth(), arg0.getHeight(), sprite, xDiff, yDiff);
-			
-			try{
-
+			try { //TODO: check for leak over time
+				Graphics gc = mapCache.getGraphics();
+				gc.fillRect(0, 0, mapCache.getWidth(), mapCache.getHeight(), sprite, 0, 0);
+				
 				String defaultTile = map.getDefaultTile();
 				
 				int i = -1;
 				int j;
-				while (++i < totalX){
+				while (++i < mapCache.getWidth()){
 					j = -1;
-					while (++j < totalY){
+					while (++j < mapCache.getHeight()){
 						try{
-							map.getTileByIndex(i + posX, j + posY).drawIfNotDefault(g, defaultTile, i * ICON_SIZE, j * ICON_SIZE);
+							map.getTileByIndex(i, j).drawIfNotDefault(gc, defaultTile, i * ICON_SIZE, j * ICON_SIZE);
+							System.out.println("Drawing tile at X pos " + i*ICON_SIZE);
 						}catch (Exception ex){
 							//g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
 						}
 					}
 				}
 				
-			}catch (Exception ex){
-				ex.printStackTrace();
+				if (this.activeDialog != null){
+					this.activeDialog.paint(gc, (int)mapCache.getInitX(), (int)mapCache.getInitY());
+				}
+				
+				mapCache.setFlush(false);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			
-			if (this.activeDialog != null){
-				this.activeDialog.paint(g);
-			}
-			g.copyArea(screenCache, 0, 0);
-			SlickGameState.setFlush(false);
+			//g.copyArea(mapCache, 0, 0);
+			System.out.println("Drawing char at X pos " + this.map.getCharacterPositionX() * ICON_SIZE);
 		}
+		mapCache.draw(g);
+		//g.drawImage(mapCache, 0, 0);
 		g.flush();
-		
+
 		this.map.getAnimatedSprite().draw(this.map.getCharacterPositionX() * ICON_SIZE, this.map.getCharacterPositionY() * ICON_SIZE);
 		
 	}
@@ -165,11 +152,11 @@ public class MapScreen extends SlickGameState{
 		int py = (int) Math.floor(y / MapScreen.ICON_SIZE);
 		
 		getParentMap().tryMoveToTile(px, py);
-	}	
+		this.mapCache.setFlush(true);
+	}
 	
 	@Override
 	public void mouseReleased(int arg0, int x, int y) {
-		
 		if (activeDialog != null){
 			MapConsole console = (MapConsole)activeDialog;
 			console.mouseReleased(arg0, x, y);
@@ -206,13 +193,12 @@ public class MapScreen extends SlickGameState{
 				tile.interact(getParentMap().getFrame());
 			}
 		}
-		SlickGameState.setFlush(true);
+		mapCache.setFlush(true);
 		
 	}
 
 	@Override
 	public void keyPressed(int code, char arg1) {
-		
 		if (activeDialog != null){
 			MapConsole console = (MapConsole)activeDialog;
 			console.keyPressed(code, arg1);
@@ -222,7 +208,6 @@ public class MapScreen extends SlickGameState{
 
 	@Override
 	public void keyReleased(int code, char arg1) {
-		
 		if (activeDialog != null){
 			MapConsole console = (MapConsole)activeDialog;
 			console.keyReleased(code, arg1);

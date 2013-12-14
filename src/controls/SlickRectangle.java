@@ -107,18 +107,31 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	
 	@Override
 	public void paint(Graphics g) {
+		paint(g, 0, 0);
+	}
+	
+	@Override
+	public void paint(Graphics g, int offX, int offY) {
 		if (enabled){
 			Color temp = g.getColor();
 			g.setColor(Color.black);
 			g.fill(this);
 			g.setColor(temp);
 			g.draw(this);
-			g.drawString(displayText, x, y);
+			g.drawString(displayText, x + offX, y + offY);
 		}
 	}
 	
 	public Image getCache(){
 		return this.cache;
+	}
+
+	public void paintCenter(Graphics g, int offX, int offY){
+		paintCenter(g, false, offX, offY);
+	}
+
+	public void paintCenter(Graphics g, boolean hollow, int offX, int offY){
+		paintCenter(g, g.getFont(), hollow, offX, offY);
 	}
 
 	public void paintCenter(Graphics g){
@@ -130,6 +143,14 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	}
 
 	public void paintCenter(Graphics g, Font f, boolean hollow){
+		paintCenter(g, f, hollow, 0, 0);
+	}
+
+	public void paintCenter(Graphics g, TrueTypeFont f){
+		paintCenter(g, f, false);
+	}
+
+	public void paintCenter(Graphics g, Font f, boolean hollow, int offX, int offY){
 		if (enabled){
 			if (!hollow){
 				Color temp = g.getColor();
@@ -140,12 +161,8 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 			}
 			final int textx = f.getWidth(displayText);
 			final int texty = f.getHeight(displayText);
-			g.drawString(displayText, x + (int)((width - textx) / 2), y + (int)((height - texty) / 2));
+			g.drawString(displayText, offX + x + (int)((width - textx) / 2), offY + y + (int)((height - texty) / 2));
 		}
-	}
-
-	public void paintCenter(Graphics g, TrueTypeFont f){
-		paintCenter(g, f, false);
 	}
 	
 }

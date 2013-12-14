@@ -5,26 +5,21 @@ import map.ParentMap;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
-import animation.AnimatedSprite;
 import interfaces.InteractableObject;
 import console.dialogue.Dialogue;
 import screen.GameScreen;
 import slickgamestate.SlickGameState;
+import character.Character;
 import character.NonPlayableCharacter;
 
 public class CharacterTile extends Tile implements InteractableObject {
 	
 	private final NonPlayableCharacter npc;
-	
-	private final AnimatedSprite sprite;
 
 	public CharacterTile(String spritePath, NonPlayableCharacter npc) throws SlickException {
 
 		super(false, false, spritePath);
 		this.npc = npc;
-		
-		this.sprite = new AnimatedSprite(npc);
-		this.sprite.setDirection(AnimatedSprite.BACKWARD);
 		
 	}
 	
@@ -42,33 +37,33 @@ public class CharacterTile extends Tile implements InteractableObject {
 	}
 	
 	public void instantiate() throws SlickException{
-		this.sprite.instantiate();
-		this.sprite.setDirection(AnimatedSprite.BACKWARD);
+		this.npc.instantiate();
+		this.npc.setDirection(Character.BACKWARD);
 	}
 	
 	public void face(int dir) {
 		if (dir == ParentMap.UP){
-			this.sprite.setDirection(AnimatedSprite.BACKWARD);
+			this.npc.setDirection(Character.BACKWARD);
 		}else if (dir == ParentMap.RIGHT){
-			this.sprite.setDirection(AnimatedSprite.LEFT);
+			this.npc.setDirection(Character.LEFT);
 		}else if (dir == ParentMap.LEFT){
-			this.sprite.setDirection(AnimatedSprite.RIGHT);
+			this.npc.setDirection(Character.RIGHT);
 		}else if (dir == ParentMap.DOWN){
-			this.sprite.setDirection(AnimatedSprite.FORWARD);
+			this.npc.setDirection(Character.FORWARD);
 		}
 	}
 	
 	public void draw(int x, int y){
-		this.sprite.draw(x, y);
+		this.npc.draw(x, y);
 	}
 	
 	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y){
-		this.sprite.draw(x, y);
+		this.npc.draw(x, y);
 	}
 	
 	@Override
 	public void finishInteraction(GameScreen parent) {
-		SlickGameState.setFlush(true);
+		SlickGameState.setFlush(true, true);
 	}
 	
 }

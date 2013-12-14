@@ -65,7 +65,6 @@ public class InventoryWindow extends ItemWindowBase {
 	
 	@Override
 	public void keyReleased(int code, char arg1) {
-		
 		if (!keyReleased(code)){
 			//TODO: commands unique to Store
 		}

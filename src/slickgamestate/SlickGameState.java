@@ -2,10 +2,11 @@ package slickgamestate;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import controls.SlickCache;
 
 import screen.GameScreen;
 import interfaces.SlickEventHandler;
@@ -14,8 +15,7 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	
 	protected final int state;
 	protected final GameScreen parent;
-	protected static Image screenCache;
-	private static boolean toFlush = false;
+	private static SlickCache screenCache;
 	
 	public SlickGameState(int state, GameScreen parent){
 		this.state = state;
@@ -31,17 +31,33 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	@Override
 	public int getID() {return state;}
 	
-	public static boolean needFlush(){
-		return toFlush;
+	public static void initCache(GameContainer arg0){
+		try {
+			screenCache = new SlickCache(0, 0, arg0.getWidth(),arg0.getHeight());
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public static void setFlush(boolean needed){
-		toFlush = needed;
+	public static boolean needFlush(){
+		return screenCache.needFlush();
+	}
+	
+	public static void setFlush(boolean needed, boolean map){
+		if (map){
+			MapScreen.mapCache.setFlush(needed);
+		}else{
+			screenCache.setFlush(needed);
+		}
 	}
 	
 	public static void capture(Graphics g){
 		g.copyArea(screenCache, 0, 0);
-		SlickGameState.setFlush(false);
+		SlickGameState.setFlush(false, false);
+	}
+	
+	public static void drawCache(Graphics g){
+		g.drawImage(screenCache, 0, 0);
 	}
 		
 }

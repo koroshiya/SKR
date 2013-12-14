@@ -1,16 +1,13 @@
 package slickgamestate;
 
-import java.io.IOException;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-//import com.japanzai.skr.Driver; //TODO: reimplement
-
-
+import controls.SlickCache;
 import controls.SlickRectangle;
 import screen.GameScreen;
 
@@ -21,6 +18,7 @@ public class StartScreen extends SlickGameState{
 	private final String commands[];
 	private final int buttonWidth = 200;
 	private final int buttonHeight = 50;
+	private final int[] keys = {Input.KEY_C, Input.KEY_N, Input.KEY_L, Input.KEY_M};
 	
 	public StartScreen(GameScreen parent) {
 		super(SlickSKR.MAINMENU, parent);
@@ -32,23 +30,20 @@ public class StartScreen extends SlickGameState{
 		};
 	}
 	
-	private void processMenuItem(String s) throws IOException, ClassNotFoundException{
+	private void processMenuItem(String s){
 		if (s.equals(commands[0])){
 			System.out.println("Continue");
 		}else if (s.equals(commands[1])){
 			this.parent.swapView(SlickSKR.MAP);
 		}else if (s.equals(commands[2])){
-			System.out.println("Load");
-			/*if (Driver.load()){
-				processMenuItem(commands[1]);
-			}*/ //TODO: reimplement
+			this.parent.swapView(SlickSKR.LOAD);
 		}else if (s.equals(commands[3])){
 			this.parent.swapView(SlickSKR.CONTROLSCREEN);
 		}
 	}
 
 	@Override
-	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
+	public void processMouseClick(int clickCount, int x, int y) {
 		for (SlickRectangle rect : rects){
 			if (rect.isWithinBounds(x, y)){
 				SlickSKR.PlaySFX("other/public/intro_button.ogg");
@@ -61,7 +56,7 @@ public class StartScreen extends SlickGameState{
 	@Override
 	public void enter(GameContainer gc, StateBasedGame arg1){
 		SlickSKR.PlayMusic("other/public/intro.ogg");
-		SlickGameState.setFlush(true);
+		SlickGameState.setFlush(true, false);
 	}
 	
 	@Override
@@ -72,13 +67,13 @@ public class StartScreen extends SlickGameState{
 			rects[i] = new SlickRectangle(300, 150 + (i * 100), buttonWidth, buttonHeight, commands[i], "/res/button_onyx_200x50.png");
 			rects[i].initialize();
 		}
-		SlickGameState.screenCache = new Image(arg0.getWidth(),arg0.getHeight());
+		SlickGameState.initCache(arg0);
 	}
 	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		
-		if (screenCache == null || SlickGameState.needFlush()){
+		if (SlickGameState.needFlush()){
 			//g.drawImage(backgroundImage, 0, 0);
 			g.drawImage(backgroundImage, 0, 0, 0, 0, 1920, 1200);
 			
@@ -88,22 +83,28 @@ public class StartScreen extends SlickGameState{
 			}
 			SlickGameState.capture(g);
 		}else{
-			g.drawImage(screenCache, 0, 0);
+			SlickGameState.drawCache(g);
 		}
 		
 	}
 	
 	@Override
 	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
+		processMouseClick(arg3, arg1, arg2);
+	}
+	
+	@Override
+	public void keyReleased(int code, char arg1) {
 		
-		try {
-			processMouseClick(arg3, arg1, arg2);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		int i = -1;
+		int total = commands.length;
+		
+		while (++i < total){
+			if (code == keys[i]){
+				SlickSKR.PlaySFX("other/public/intro_button.ogg");
+				this.processMenuItem(commands[i]);
+			}
 		}
-		
 	}
 
 }

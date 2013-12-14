@@ -12,12 +12,12 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
 import screen.GameScreen;
 import slickgamestate.MapScreen;
-import slickgamestate.SlickGameState;
 import tile.Tile;
 import tile.TransitionTile;
-import animation.AnimatedSprite;
+import character.Character;
 import character.BossCharacter;
 import character.EnemyCharacter;
+import character.PlayableCharacter;
 
 public class ParentMap {
 	
@@ -28,7 +28,7 @@ public class ParentMap {
 	private int direction;
 	private ArrayList<EnemyCharacter> enemies;
 	
-	private AnimatedSprite animatedSprite;
+	private PlayableCharacter animatedSprite;
 	private GameScreen parent;
 	
 	public static final int LEFT = 37;
@@ -49,7 +49,7 @@ public class ParentMap {
 	private float yDiff;
 	
 	public ParentMap(Point coordinates, Point currentPosition, 
-			AnimatedSprite animatedSprite, ArrayList<EnemyCharacter> enemies,
+			PlayableCharacter animatedSprite, ArrayList<EnemyCharacter> enemies,
 			GameScreen parent, Point mapSize, int encounterRate, String grass,
 			String theme){
 
@@ -79,9 +79,9 @@ public class ParentMap {
 
 		this.currentPositionx = x;
 		this.currentPositiony = y;
+		((MapScreen)parent.getState()).resetPosition((float)xDiff, (float)yDiff);
 		xDiff = 0;
 		yDiff = 0;
-		SlickGameState.setFlush(true);
 		this.getTileByPosition(x/MapScreen.ICON_SIZE, y/MapScreen.ICON_SIZE).stepOn();
 		
 	}
@@ -177,11 +177,11 @@ public class ParentMap {
 	public int getYBoundary(){return this.coordinates.y;}
 	
 	public synchronized int getCharacterPositionX(){
-		return (int) Math.ceil(this.coordinates.getX() / 4 / MapScreen.ICON_SIZE);
+		return (int) Math.floor(this.coordinates.getX() / 4 / MapScreen.ICON_SIZE);
 	}
 	
 	public synchronized int getCharacterPositionY(){
-		return (int) Math.ceil(this.coordinates.getY() / 4 / MapScreen.ICON_SIZE);
+		return (int) Math.floor(this.coordinates.getY() / 4 / MapScreen.ICON_SIZE);
 	}
 	
 	public synchronized double getRelativeX(){
@@ -246,7 +246,7 @@ public class ParentMap {
 		if (!isLocked()){
 			
 			lock();
-				
+			
 			Thread thread = new Thread(new spriteThread(this, this.animatedSprite, pts));
 			thread.start();
 				
@@ -290,12 +290,12 @@ public class ParentMap {
 	public class spriteThread implements Runnable{
 		
 		private ParentMap map;
-		private AnimatedSprite sprite;
+		private PlayableCharacter sprite;
 		private double x;
 		private double y;
 		private ArrayList<Point> points;
 		
-		public spriteThread(ParentMap map, AnimatedSprite sprite, double x, double y){
+		public spriteThread(ParentMap map, PlayableCharacter sprite, double x, double y){
 			this.map = map;
 			this.sprite = sprite;
 			this.x = x;
@@ -303,7 +303,7 @@ public class ParentMap {
 			this.points = null;
 		}
 		
-		public spriteThread(ParentMap map, AnimatedSprite sprite, ArrayList<Point> points){
+		public spriteThread(ParentMap map, PlayableCharacter sprite, ArrayList<Point> points){
 			this.map = map;
 			this.sprite = sprite;
 			this.points = points;
@@ -354,6 +354,9 @@ public class ParentMap {
 			double diffY = 0;
 			
 			double diff = (double)MapScreen.ICON_SIZE / (double)60;
+
+			System.out.println("current: " + this.map.currentPositionx);
+			System.out.println("destination: " + x2);
 			
 			if (x2 > this.map.currentPositionx){
 				diffX = diff;
@@ -407,20 +410,20 @@ public class ParentMap {
 	public void showSprite(){
 		
 		if (this.direction == LEFT){
-			this.animatedSprite.setDirection(AnimatedSprite.LEFT);
+			this.animatedSprite.setDirection(Character.LEFT);
 		}else if (this.direction == RIGHT){
-			this.animatedSprite.setDirection(AnimatedSprite.RIGHT);
+			this.animatedSprite.setDirection(Character.RIGHT);
 		}else if (this.direction == UP){
-			this.animatedSprite.setDirection(AnimatedSprite.FORWARD);
+			this.animatedSprite.setDirection(Character.FORWARD);
 		}else {
-			this.animatedSprite.setDirection(AnimatedSprite.BACKWARD);
+			this.animatedSprite.setDirection(Character.BACKWARD);
 		}
 		
 	}
 		
 	public synchronized Image getCache(){return this.cache;}
 	
-	public synchronized AnimatedSprite getAnimatedSprite(){return this.animatedSprite;}
+	public synchronized PlayableCharacter getAnimatedSprite(){return this.animatedSprite;}
 		
 	public ArrayList<EnemyCharacter> getEnemies() {return this.enemies;}
 	
@@ -464,7 +467,7 @@ public class ParentMap {
 		this.tileMap = new TileMap(generatedMap);
 	}
 	
-	public void setAnimatedSprite(AnimatedSprite animatedSprite2) {
+	public void setAnimatedSprite(PlayableCharacter animatedSprite2) {
 		this.animatedSprite = animatedSprite2;
 	}
 	

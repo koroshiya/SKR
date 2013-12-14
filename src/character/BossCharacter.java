@@ -74,8 +74,8 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 	@Override
 	public void instantiateForBattle(){
 		try {
-			this.sprite.instantiate(96);
-			this.setAliveIcon(this.sprite.getBattleIconEnemy());
+			super.instantiate(96);
+			this.setAliveIcon(getBattleIconEnemy());
 			this.setDeadIcon(new Image("/res/dead.png"));
 		} catch (SlickException e) {
 			e.printStackTrace();

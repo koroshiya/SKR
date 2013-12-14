@@ -2,30 +2,18 @@ package com.japanzai.skr;
 
 import item.ConsumableItem;
 import item.Item;
-import item.ItemSave;
 import item.StoreInstance;
 import item.Weapon;
 
 import java.awt.Point;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.ResourceLoader;
-
-//import com.japanzai.jreader.Pairing;
-//import com.japanzai.jreader.dialog.JxDialog;
 
 import console.dialogue.ComplexDialogue;
 import console.dialogue.Dialogue;
@@ -37,7 +25,6 @@ import character.BossCharacter;
 import character.EnemyCharacter;
 import character.NonPlayableCharacter;
 import character.PlayableCharacter;
-import character.PlayableCharacterSave;
 import screen.GameScreen;
 import slickgamestate.MapScreen;
 import slickgamestate.SlickSKR;
@@ -53,7 +40,6 @@ import tile.TransitionTile;
 import tile.event.CharacterEventBattleTile;
 import tile.event.CharacterEventStoreTile;
 import tile.event.CharacterEventTile;
-import animation.AnimatedSprite;
 
 public class Driver implements Serializable{
 
@@ -369,7 +355,7 @@ public class Driver implements Serializable{
 		Point mapSize = new Point(16 * MapScreen.ICON_SIZE, 13 * MapScreen.ICON_SIZE);
 		Point coordinates = new Point(32 * MapScreen.ICON_SIZE, 24 * MapScreen.ICON_SIZE); //Multiple base by pix size?
 		Point currentPosition = new Point(8 * MapScreen.ICON_SIZE, 6 * MapScreen.ICON_SIZE);
-		AnimatedSprite animatedSprite = new AnimatedSprite(Party.getCharacterByIndex(0));
+		PlayableCharacter animatedSprite = Party.getCharacterByIndex(0);
 		
 
 		//SlickSKR sk = null;
@@ -539,79 +525,6 @@ public class Driver implements Serializable{
 		d = new Driver();
 		d.instantiate();
 	}
-
-	public static void save(File f) throws IOException{
-		
-		FileOutputStream fos = new FileOutputStream(f);
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		oos.writeObject(Inventory.getMoney());
-		oos.writeObject(Inventory.getItemsSaved());
-		oos.writeObject(Party.getCharactersSaved());
-		//oos.writeObject(d.bs);
-		oos.close();
-		
-	}
-	
-	public static void save() throws IOException{
-		
-		JFileChooser jfc = new JFileChooser();
-		jfc.setFileFilter(new SaveFilter());
-		//jfc.showSaveDialog(d.bs); //TODO: reimplement
-		File f = jfc.getSelectedFile();
-		
-		if (f != null){
-			if (!f.getName().endsWith(".sks")){
-				f = new File(f.getAbsolutePath() + ".sks");
-			}
-			save(f);
-		}else {
-			save(new File("skr_save.sks"));
-		}
-		
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static boolean load(File f){
-		
-		try{
-			FileInputStream fis = new FileInputStream(f);
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			Inventory.setMoney((Integer)ois.readObject());
-			Inventory.setItemsSaved((ArrayList<ItemSave>)ois.readObject());
-			Party.setCharactersSaved((ArrayList<PlayableCharacterSave>)ois.readObject());
-			ois.close();
-			return true;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-		
-	}
-	
-	/*public static boolean load() {
-		
-		//JFileChooser jfc = new JFileChooser();
-		//jfc.setFileFilter(new SaveFilter());
-		//jfc.showOpenDialog(d.bs);
-		//File f = jfc.getSelectedFile();
-		ArrayList<Pairing> pairings = new ArrayList<Pairing>();
-		File f = new File("");;
-		JxDialog jx;
-		pairings.add(new Pairing(new ImageIcon(f.getClass().getResource("/res/icon.png")), ".sks"));
-		jx = new JxDialog(pairings);
-		f = jx.showDialog();
-		
-		if (f != null && f.exists() && f.getName().endsWith(".sks")){
-			return load(f);
-		}*//*else {
-			load(new File("skr_save.sks"));
-		}*//*
-		return false;
-	}*/
 	
 	public static void quit(){
 		

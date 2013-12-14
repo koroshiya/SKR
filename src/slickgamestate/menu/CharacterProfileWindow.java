@@ -143,7 +143,7 @@ public class CharacterProfileWindow extends SlickGameState{
 			g.drawImage(lblAvatar, 0, 0);
 			SlickGameState.capture(g);
 		}else{
-			g.drawImage(screenCache, 0, 0);
+			SlickGameState.drawCache(g);
 		}
 		
 	}
@@ -153,7 +153,7 @@ public class CharacterProfileWindow extends SlickGameState{
 		
 		for (SlickRectangle rect : partyMembers){
 			if (rect.isWithinBounds(x, y)){
-				SlickGameState.setFlush(true);
+				SlickGameState.setFlush(true, false);
 				this.processMenuItem(rect.getTag(), clickCount);
 				break;
 			}
@@ -194,7 +194,6 @@ public class CharacterProfileWindow extends SlickGameState{
 	
 	@Override
 	public void keyReleased(int code, char arg1) {
-		
 		if (code == Input.KEY_W){
 			parent.swapView(SlickSKR.MENU);
 		}

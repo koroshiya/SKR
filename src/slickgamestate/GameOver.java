@@ -52,7 +52,7 @@ public class GameOver extends SlickGameState {
 			}
 			SlickGameState.capture(g);
 		}else{
-			g.drawImage(screenCache, 0, 0);
+			SlickGameState.drawCache(g);
 		}
 	}
 	

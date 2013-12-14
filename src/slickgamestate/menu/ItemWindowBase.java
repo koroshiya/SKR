@@ -97,7 +97,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 			extraPane(g);
 			SlickGameState.capture(g);
 		}else{
-			g.drawImage(screenCache, 0, 0);
+			SlickGameState.drawCache(g);
 		}
 		
 	}
@@ -288,7 +288,6 @@ public abstract class ItemWindowBase extends SlickGameState{
 	
 	@Override
 	public void mouseReleased(int arg0, int x, int y) {
-		
 		try {
 			processMouseClick(1, x, y);
 		} catch (ClassNotFoundException e) {

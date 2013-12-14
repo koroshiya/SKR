@@ -8,7 +8,7 @@ import org.newdawn.slick.MouseListener;
 
 import org.newdawn.slick.SlickException;
 
-import com.japanzai.skr.SlickSKR;
+import slickgamestate.SlickSKR;
 
 import screen.GameScreen;
 import slickgamestate.MapScreen;

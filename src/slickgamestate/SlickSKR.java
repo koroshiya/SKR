@@ -24,6 +24,8 @@ import slickgamestate.menu.CharacterProfileWindow;
 import slickgamestate.menu.InventoryWindow;
 import slickgamestate.menu.MenuMainWindow;
 import slickgamestate.menu.Store;
+import slickgamestate.state.Load;
+import slickgamestate.state.Save;
 
 public class SlickSKR extends StateBasedGame {
 
@@ -34,6 +36,8 @@ public class SlickSKR extends StateBasedGame {
 	public static final int INVENTORY = 3;
 	public static final int CHARACTER = 4;
 	public static final int STORE = 5;
+	public static final int SAVE = 662;
+	public static final int LOAD = 663;
 	public static final int MAINMENU = 664;
 	public static final int CONTROLSCREEN = 665;
 	public static final int GAMEOVER = 666;
@@ -51,6 +55,8 @@ public class SlickSKR extends StateBasedGame {
 		GameScreen gs = current.getFrame();
 		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
 		this.addState(new StartScreen(gs));
+		this.addState(new Save(gs));
+		this.addState(new Load(gs));
 		this.addState(new Battle(gs, new ArrayList<EnemyCharacter>()));
 		this.addState(new MapScreen(current));
 		this.addState(new MenuMainWindow(gs));
@@ -70,7 +76,6 @@ public class SlickSKR extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		
-		SlickGameState.screenCache = new Image(gc.getWidth(), gc.getHeight());
 		gc.setDefaultFont(SlickSKR.loadFont("Ubuntu-R.ttf", 16));
 		/*try {
 			gc.setMouseCursor("/res/rsword.png", 0, 0);

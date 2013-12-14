@@ -139,14 +139,14 @@ public class MenuMainWindow extends SlickGameState{
 			characterPane(g);
 			SlickGameState.capture(g);
 		}else{
-			g.drawImage(screenCache, 0, 0);
+			SlickGameState.drawCache(g);
 		}
 		if (timer > 0){
 			alert.setText(message);
 			alert.paintCenter(g, VICTORY_FONT);
 			timer--;
 			if (timer == 0){
-				SlickGameState.setFlush(true);
+				SlickGameState.setFlush(true, false);
 			}
 		}
 		
@@ -169,7 +169,7 @@ public class MenuMainWindow extends SlickGameState{
 		
 	}
 	
-	private void processMenuItem(String s, int clickCount) throws IOException, ClassNotFoundException{
+	private void processMenuItem(String s, int clickCount){
 		
 		timer = 0;
 		if (clickCount == 2){
@@ -190,12 +190,12 @@ public class MenuMainWindow extends SlickGameState{
 						if (!charAlive){
 							timer = 150;
 							message = SlickSKR.getValueFromKey("screen.mainmenu.main.processmenuitem.removelast");
-							SlickGameState.setFlush(true);
+							SlickGameState.setFlush(true, false);
 							return;
 						}
 					}
 					characters.get(i).toggleInParty();
-					SlickGameState.setFlush(true);
+					SlickGameState.setFlush(true, false);
 				}
 			}catch (NumberFormatException nfe){
 				nfe.printStackTrace();
@@ -209,16 +209,15 @@ public class MenuMainWindow extends SlickGameState{
 		}else if (s.equals(commands[7])){
 			Driver.quit();
 		}else if (s.equals(commands[4])){
-			Driver.save();
+			parent.swapView(SlickSKR.SAVE);
 		}else if (s.equals(commands[5])){
-			//Driver.load(); //TODO: reimplement
+			parent.swapView(SlickSKR.LOAD);
 		}
 		
 	}
 	
 	@Override
 	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
-		
 		try {
 			processMouseClick(arg3, arg1, arg2);
 		} catch (ClassNotFoundException e) {
@@ -231,23 +230,12 @@ public class MenuMainWindow extends SlickGameState{
 	
 	@Override
 	public void keyReleased(int code, char arg1) {
-		System.out.println("MainMenuWindow: " + code);
-		try {
-			if (code == (keys[6])){
-				parent.swapView(SlickSKR.MAP);
-			}else if (code == (keys[2])){
-				parent.swapView(SlickSKR.CHARACTER);
-			}else if (code == (keys[0])){
-				parent.swapView(SlickSKR.INVENTORY);
-			}else if (code == (keys[7])){
-				Driver.quit();
-			}else if (code == (keys[4])){
-				Driver.save();
-			}else if (code == (keys[5])){
-				//Driver.load(); //TODO: reimplement
+		int i = -1;
+		int total = keys.length;
+		while (++i < total){
+			if (code == keys[i]){
+				this.processMenuItem(commands[i], 0);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 	

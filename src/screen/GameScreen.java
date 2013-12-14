@@ -15,6 +15,7 @@ import slickgamestate.Battle;
 import slickgamestate.MapScreen;
 import slickgamestate.SlickGameState;
 import slickgamestate.SlickSKR;
+import slickgamestate.state.StateTemplate;
 import map.ParentMap;
 import character.EnemyCharacter;
 import console.MapConsole;
@@ -39,6 +40,7 @@ public class GameScreen extends AppGameContainer{
 		this.setUpdateOnlyWhenVisible(true);
 		this.setAlwaysRender(true);
 		this.setMaximumLogicUpdateInterval(10);
+		
 		//this.setShowFPS(false);
 		//TODO: Set animated cursor
 		//TODO: Set icon
@@ -51,13 +53,16 @@ public class GameScreen extends AppGameContainer{
 	}
 	
 	public void swapView(int i){
-		SlickGameState.setFlush(true);
+		SlickGameState.setFlush(true, false);
+		int curr = this.getState().getID();
+		if (i == SlickSKR.SAVE || i == SlickSKR.LOAD){
+			((StateTemplate)this.getState(i)).setBack(curr);
+		}
 		if (SlickSKR.NO_TRANSITIONS){
 			((StateBasedGame)super.game).enterState(i);
 			return;
 		}
 		
-		int curr = this.getState().getID();
 		Transition transIn;
 		Transition transOut;
 		if (i == SlickSKR.BATTLE || curr == SlickSKR.BATTLE || (i == SlickSKR.MAP && curr == SlickSKR.MAP)){

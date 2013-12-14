@@ -10,8 +10,6 @@ import java.lang.Math;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import animation.AnimatedSprite;
-
 import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
 
@@ -35,7 +33,6 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	
 	private boolean inParty;
 	private FuryBreak fury;
-	private final AnimatedSprite sprite;
 	
 	public PlayableCharacter (String nameEntry, FightingStyle style, 
 					Weapon weapon, Gender gender,
@@ -66,7 +63,6 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 		this.temper = 0;
 		this.inParty = false;
 		this.supportedWeapons = supportedWeapons;
-		this.sprite = new AnimatedSprite(this);
 		
 	}
 	
@@ -140,10 +136,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 		
 	}
 	
-	public void healAlly(PlayableCharacter ally, 
-							HealingTechnique tech, 
-							ConsumableItem item,
-							PlayableCharacter user){
+	public void healAlly(PlayableCharacter ally, HealingTechnique tech, ConsumableItem item, PlayableCharacter user){
 	
 			if (tech != null){
 				BattleConsole.writeConsole(user.getName() + " used " + tech.getName());
@@ -197,8 +190,8 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	public void instantiateForBattle(){
 		super.resetGauge();
 		try {
-			this.sprite.instantiate();
-			this.setAliveIcon(this.sprite.getBattleIcon());
+			super.instantiate();
+			this.setAliveIcon(getBattleIcon());
 			this.setDeadIcon(new Image("/res/dead.png"));
 		} catch (SlickException e) {
 			e.printStackTrace();

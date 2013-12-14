@@ -48,7 +48,7 @@ public class ControlScreen extends SlickGameState{
 
 			SlickGameState.capture(g);
 		}else{
-			g.drawImage(screenCache, 0, 0);
+			SlickGameState.drawCache(g);
 		}
 		
 	}
@@ -67,8 +67,6 @@ public class ControlScreen extends SlickGameState{
 
 	@Override
 	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
-		
-		
 		
 	}
 	
