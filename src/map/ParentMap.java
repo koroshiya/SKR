@@ -380,6 +380,7 @@ public class ParentMap {
 				pause();
 			}
 
+			this.map.animatedSprite.restartFrame();
 			this.map.moveToPosition(this.map.currentPositionx + 60 * diffX, this.map.currentPositiony + 60 * diffY);
 			
 		}

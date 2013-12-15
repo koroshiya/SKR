@@ -10,7 +10,6 @@ import java.util.Properties;
 import map.ParentMap;
 
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.openal.Audio;
@@ -75,7 +74,6 @@ public class SlickSKR extends StateBasedGame {
 		
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
-		
 		gc.setDefaultFont(SlickSKR.loadFont("Ubuntu-R.ttf", 16));
 		/*try {
 			gc.setMouseCursor("/res/rsword.png", 0, 0);

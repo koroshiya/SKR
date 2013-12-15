@@ -126,7 +126,9 @@ public class MapScreen extends SlickGameState{
 				}
 				
 				if (this.activeDialog != null){
+					
 					this.activeDialog.paint(gc, (int)mapCache.getInitX(), (int)mapCache.getInitY());
+					this.activeDialog.paint(gb, ICON_SIZE, ICON_SIZE);
 				}
 				
 				mapCache.setFlush(false);

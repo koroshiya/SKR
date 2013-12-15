@@ -133,7 +133,7 @@ public class Battle extends SlickGameState{
 			SlickSKR.PlaySFX("other/public/decide.ogg");
 		}else if (partyLost()){
 			mode = LOSS_MODE;
-			SlickSKR.PlaySFX("weeden/die-or-lose-life.ogg");
+			//SlickSKR.PlaySFX("weeden/die-or-lose-life.ogg");
 			if (Party.getCharactersAlive(true).size() == 0){
 				parent.swapView(SlickSKR.GAMEOVER);
 			}else {
@@ -318,6 +318,7 @@ public class Battle extends SlickGameState{
 		for (SlickRectangle rect : rects){
 			if (rect.isWithinBounds(x, y)){
 				process(rect.getTag());
+				SlickGameState.setFlush(true, false);
 				break;
 			}
 		}
@@ -502,7 +503,7 @@ public class Battle extends SlickGameState{
 			setTargetItems();
 		}else if (command.equals(commands[3])){
 			mode = RUN_MODE;
-			SlickSKR.PlaySFX("other/attrib/game-over.ogg");
+			//SlickSKR.PlaySFX("other/attrib/game-over.ogg"); //TODO: new music for running away
 			setTargetBattleEnd();
 		}else if (command.equals(commands[4])){
 			setDefaultInterface(this.currentCharacter);

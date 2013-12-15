@@ -12,7 +12,6 @@ import com.japanzai.skr.Inventory;
 
 import controls.SlickRectangle;
 import screen.GameScreen;
-import slickgamestate.SlickGameState;
 import slickgamestate.SlickSKR;
 
 public class Store extends ItemWindowBase{

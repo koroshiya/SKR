@@ -3,6 +3,9 @@ Removed unnecessary draw cycle from MapScreen render
 Moved background to secondary cache to fix out of border issues
 Added destination coordinate parameters for transitioning
 Removed obsolete Transition class
+Fixed background for ItemWindowBase and derivatives
+Fixed out of bounds rendering for MapConsole
+Changes to default volume and certain sounds
 
 v0.31
 Fix for size of Player sprites

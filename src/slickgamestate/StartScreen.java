@@ -5,9 +5,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.state.StateBasedGame;
 
-import controls.SlickCache;
 import controls.SlickRectangle;
 import screen.GameScreen;
 
@@ -55,6 +55,11 @@ public class StartScreen extends SlickGameState{
 	
 	@Override
 	public void enter(GameContainer gc, StateBasedGame arg1){
+		//SoundStore.get().setMusicOn(false);
+		//SoundStore.get().setSoundsOn(false);
+		SoundStore.get().setMusicVolume(0.3f);
+		SoundStore.get().setSoundVolume(0.3f);
+		//gc.setMusicOn(false);
 		SlickSKR.PlayMusic("other/public/intro.ogg");
 		SlickGameState.setFlush(true, false);
 	}

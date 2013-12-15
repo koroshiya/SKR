@@ -32,7 +32,7 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	}
 
 	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled) {
-		this(x, y, width, height, tag, enabled, tag);
+		this(x, y, width, height, tag, enabled, "");
 	}
 
 	public SlickRectangle(float x, float y, float width, float height, String tag, String url) {
@@ -99,7 +99,11 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 	
 	public void initialize(){
 		try {
-			cache = new Image(imgSrc);
+			if (!imgSrc.equals("")){
+				cache = new Image(imgSrc);
+			}else{
+				cache = new Image(0,0);
+			}
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}

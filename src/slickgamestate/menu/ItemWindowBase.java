@@ -88,7 +88,8 @@ public abstract class ItemWindowBase extends SlickGameState{
 	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) {
 		
 		if (SlickGameState.needFlush()){
-			g.drawImage(background, 0, 0);
+			//g.drawImage(background, 0, 0);
+			g.fillRect(0, 0, gc.getWidth(), gc.getHeight(), background, 0, 0);
 			
 			getInventoryFilterPane(g);
 			getInventorySelectedItem(g);
@@ -162,6 +163,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 		int i = -1;
 		int total = filterItems.length;
 		while (++i < total){
+			//filterItems[i].paint(g);
 			g.drawImage(filterItems[i].getCache(), filterItems[i].getMinX(), filterItems[i].getMinY()); 
 			filterItems[i].paintCenter(g, true);
 		}

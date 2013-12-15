@@ -39,7 +39,7 @@ public class GameOver extends SlickGameState {
 	
 	@Override
 	public void enter(GameContainer gc, StateBasedGame arg1){
-		//SlickSKR.PlayMusic("other/public/intro.ogg");
+		SlickSKR.PlaySFX("other/public/game-over-evil.ogg");
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package character;
 
+import java.io.File;
+
 import interfaces.Photogenic;
 
 import org.newdawn.slick.Animation;
@@ -45,7 +47,9 @@ public abstract class Character implements Photogenic{
 	
 	public void instantiate(int sizeX){
 		try{
-			this.cache = new Image(spriteDirectory + "avatar.png");
+			if (new File(spriteDirectory + "avatar.png").exists()){
+				this.cache = new Image(spriteDirectory + "avatar.png");
+			}
 		}catch (SlickException ex){
 			ex.printStackTrace();
 		}
@@ -59,8 +63,12 @@ public abstract class Character implements Photogenic{
 		anim = new Animation[4];
 		for (int y = 0; y < 4; y++) {
 			anim[y] = new Animation(false);
-			for (int x = 0; x < 2; x++) {
-				anim[y].addFrame(tileSheet.getSprite(x,y), 60);
+			for (int x = 0; x < 4; x++) {
+				try{
+					anim[y].addFrame(tileSheet.getSprite(x,y), 30);
+				}catch (Exception e){
+					break;
+				}
 			}
 			anim[y].setCurrentFrame(1);
 			anim[y].setAutoUpdate(true);
@@ -97,6 +105,7 @@ public abstract class Character implements Photogenic{
 	public Image getCache() {
 		return this.cache;
 	}
+	
 	public synchronized void draw(int x, int y){
 		this.anim[this.direction].draw(x, y);
 	}
@@ -119,6 +128,11 @@ public abstract class Character implements Photogenic{
 
 	public synchronized void run(){
 		this.anim[this.direction].restart();
+		//anim[this.direction].setCurrentFrame(1);
+	}
+	
+	public void restartFrame(){
+		anim[this.direction].setCurrentFrame(1);
 	}
 
 	public int getTimeBetweenFrames() {

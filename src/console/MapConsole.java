@@ -65,6 +65,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	}
 	
 	public void paint(Graphics g, int offX, int offY){
+		System.out.println("Drawing at " + (background.getMinX() + offX) + ", " + (background.getMinY() + offY));
 		g.drawImage(background.getCache(), background.getMinX() + offX, background.getMinY() + offY);
 		for (SlickRectangle rect : rects){
 			g.drawImage(rect.getCache(), rect.getMinX() + offX, rect.getMinY() + offY);
