@@ -1,15 +1,13 @@
 package map.generator;
 
-import java.util.ArrayList;
-
 import tile.RandomTile;
 import tile.Tile;
 
 public class TileGenerator {
 	
-	private ArrayList<RandomTile> tiles;
+	private RandomTile[] tiles;
 	
-	public TileGenerator(ArrayList<RandomTile> tiles){
+	public TileGenerator(RandomTile[] tiles){
 		
 		this.tiles = tiles;
 		
@@ -21,7 +19,7 @@ public class TileGenerator {
 			if (t.canGenerate()){return t.getTile();}
 		}
 		
-		return this.tiles.get(tiles.size()).getTile();
+		return this.tiles[tiles.length].getTile();
 		
 	}
 	

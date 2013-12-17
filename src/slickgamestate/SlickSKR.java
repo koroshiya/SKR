@@ -124,9 +124,10 @@ public class SlickSKR extends StateBasedGame {
 	}
 	
 	public static String getValueFromKey(String key){
-		String result = prop.getProperty(key);
-		System.out.println(key + ": " + result);
-		return result == null ? "" : result;
+		//String result = prop.getProperty(key);
+		//System.out.println(key + ": " + result);
+		//return result == null ? "" : result;
+		return prop.getProperty(key);
 	}
 	
 }

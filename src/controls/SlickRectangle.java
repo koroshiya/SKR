@@ -126,8 +126,14 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 		}
 	}
 	
-	public Image getCache(){
-		return this.cache;
+	public void paintCache(Graphics g){
+		paintCache(g, 0, 0);
+	}
+	
+	public void paintCache(Graphics g, int xOff, int yOff){
+		float newX = x + xOff;
+		float newY = y + yOff;
+		g.drawImage(cache, newX, newY, newX + width, newY + height, 0, 0, cache.getWidth(), cache.getHeight());
 	}
 
 	public void paintCenter(Graphics g, int offX, int offY){

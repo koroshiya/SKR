@@ -6,13 +6,18 @@ import item.Weapon;
 import java.util.ArrayList;
 import java.lang.Math;
 
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
 import com.japanzai.skr.Inventory;
 
 import console.BattleConsole;
+import slickgamestate.MapScreen;
 import slickgamestate.SlickSKR;
 import technique.CombatTechnique;
 import technique.HealingTechnique;
@@ -34,6 +39,7 @@ public abstract class CombatCapableCharacter extends Character{
 	
 	private double gauge;
 	private final String propertyValue;
+	protected Animation attack;
 	
 	public CombatCapableCharacter(String property, FightingStyle style, Weapon weapon, Gender gender, int level){
 		
@@ -60,16 +66,6 @@ public abstract class CombatCapableCharacter extends Character{
 		
 		this.weapon = weapon;
 		this.techniques = new ArrayList<Technique>();
-		
-		//@SuppressWarnings("rawtypes")
-		//Map attributes = (new JLabel().getFont()).getAttributes();
-		//attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
-		//this.strike = new Font(attributes);
-		//this.genericFont = new JLabel().getFont();
-		
-		//startBattle(); //Just used to set current stat values
-		
-		//this.status = new JLabel(getName() + "    " + getCurrentHP() + "/" + getHP());
 		
 	}
 	
@@ -107,6 +103,9 @@ public abstract class CombatCapableCharacter extends Character{
 	
 	private void dealDamage(boolean hit, int str, CombatCapableCharacter opponent){
 		
+		System.out.println("cFrame: " + attack.getFrame());
+		attack.restart();
+		System.out.println("cFrame: " + attack.getFrame());
 		if (hit){
 			int attackStrength = str + this.currentStatus.getStrength();
 			int damageTaken = opponent.takeDamage(attackStrength, this.currentStatus.getStrength());
@@ -124,6 +123,7 @@ public abstract class CombatCapableCharacter extends Character{
 			SlickSKR.PlaySFX(this.weapon.getSFXMiss());
 			BattleConsole.writeConsole(getName() + " missed " + opponent.getName());
 		}
+		
 	}
 	
 	private void vanquishOpponent(EnemyCharacter vanquishedOpponent){
@@ -392,6 +392,48 @@ public abstract class CombatCapableCharacter extends Character{
 	//this.status.setFont(this.currentHP == 0 ? this.strike : this.genericFont);
 	
 	public abstract void instantiateForBattle();
+	
+	public void instantiate(int sizeX){
+		super.instantiate(sizeX);
+		attack = new Animation();
+		try {
+			SpriteSheet tileSheet = new SpriteSheet(this.getSpriteDirectory() + "attack.png", sizeX, sizeX, new Color(0,0,0));
+			for (int y = 0; y < tileSheet.getVerticalCount(); y++) {
+				for (int x = 0; x < tileSheet.getHorizontalCount(); x++) {
+					try{
+						attack.addFrame(tileSheet.getSprite(x,y), 120 / tileSheet.getHorizontalCount());
+					}catch (Exception e){
+						break;
+					}
+				}
+				attack.setAutoUpdate(true);
+				attack.setLooping(false);
+			}
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Frame Count: " + this.attack.getFrame());
+	}
+	
+	public void instantiate(){
+		this.instantiate(MapScreen.ICON_SIZE);
+	}
+	
+	public void instantiateSuper(int sizeX){
+		super.instantiate(sizeX);
+	}
+	
+	public boolean isAttacking(){
+		return this.attack.getFrame() != this.attack.getFrameCount();
+	}
+	
+	public Image getAnimatedFrame(){
+		return this.attack.getCurrentFrame();
+	}
+	
+	public int getCurrentFrameNumber(){
+		return this.attack.getFrame();
+	}
 
 	public void setGauge(double gauge) {
 		this.gauge = gauge;

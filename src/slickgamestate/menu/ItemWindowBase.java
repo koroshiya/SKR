@@ -4,7 +4,6 @@ import item.ConsumableItem;
 import item.Item;
 import item.Weapon;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
@@ -12,7 +11,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
 import com.japanzai.skr.Inventory;
@@ -25,7 +23,6 @@ import slickgamestate.SlickSKR;
 public abstract class ItemWindowBase extends SlickGameState{
 	
 	private String lblMoney;
-	private final Rectangle filterPane = new Rectangle(0, 0, 300f, 550f);
 	protected final String[] commands;
 	
 	protected SlickRectangle[] filterItems;
@@ -34,7 +31,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 	private SlickRectangle[] itemParams;
 	
 	private Item item;
-	private SlickRectangle[] items;
+	protected SlickRectangle[] items;
 	private Image background;
 
 	public ItemWindowBase(int state, GameScreen parent, String[] commands) {
@@ -61,7 +58,6 @@ public abstract class ItemWindowBase extends SlickGameState{
 		}
 	}
 	
-
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
 		background = new Image("/res/terrain/refinery.png");
@@ -78,11 +74,8 @@ public abstract class ItemWindowBase extends SlickGameState{
 		lblMoney = SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.enter.funds") + 
 					": " + Inventory.getMoney() + " " + SlickSKR.getValueFromKey("common.currency");
 		Inventory.initialize();
-		//SlickSKR.PlayMusic("other/public/");
-		
 		
 	}
-	
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame arg1, Graphics g) {
@@ -104,7 +97,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 	}
 
 	@Override
-	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
+	public void processMouseClick(int clickCount, int x, int y) {
 		
 		for (SlickRectangle s : filterItems){
 			if (s.isWithinBounds(x, y)){
@@ -135,36 +128,39 @@ public abstract class ItemWindowBase extends SlickGameState{
 		int i = -1;
 		while (++i < length){
 			filtery = getFilterY(filterBaseY, i);
-			filterItems[i] = new SlickRectangle(filterx, filtery, paneWidth, filterBaseY, commands[i], true, "/res/button_blue_300x50.png");
+			filterItems[i] = new SlickRectangle(filterx, filtery, paneWidth, filterBaseY, commands[i], true, "/res/buttons/btn_gray+border_500x58.png");
 		}
-		//TODO: ? SlickGameState
 	}
 	
 	protected void setInventoryFilter(){
 		
 		final int incX = 150;
-		final int baseX = 300;
-		final int incY = 15;
-		final int baseY = 130;
+		final int baseX = 335;
+		final int incY = 18;
+		final int baseY = 160;
 		
 		items = new SlickRectangle[results.size()];
 		int i = -1;
 		int total = results.size();
 		while (++i < total){
-			items[i] = new SlickRectangle(baseX, baseY + incY * i, incX, incY, Integer.toString(i));
+			items[i] = new SlickRectangle(baseX, baseY + incY * i, incX * 3, incY, Integer.toString(i), true, "/res/buttons/button_onyx_450x50.png");
+			items[i].initialize();
 		}
+		
+		if (total > 0){
+			item = results.get(0);
+		}
+		
+		SlickGameState.setFlush(true, false);
 		
 	}
 	
 	protected void getInventoryFilterPane(Graphics g){
 		
-		g.draw(filterPane);
-		
 		int i = -1;
 		int total = filterItems.length;
 		while (++i < total){
-			//filterItems[i].paint(g);
-			g.drawImage(filterItems[i].getCache(), filterItems[i].getMinX(), filterItems[i].getMinY()); 
+			filterItems[i].paintCache(g);
 			filterItems[i].paintCenter(g, true);
 		}
 			
@@ -172,22 +168,28 @@ public abstract class ItemWindowBase extends SlickGameState{
 
 	protected void displayResults(Graphics g){
 
-		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.name"), 300, 100);
-		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.quantity"), 450, 100);
-		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.value"), 600, 100);
+		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.name"), 350, 140); //TODO: SlickRectangle for headings
+		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.quantity"), 500, 140);
+		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.value"), 650, 140);
 		
 		final int incX = 150;
-		final int baseX = 300;
-		final int incY = 15;
-		int baseY = 130;
+		final int baseX = 350;
+		final int incY = 18;
+		int baseY = 158;
 		
-		for (Item i : results){
-
-			g.drawString(i.getName(), baseX, baseY);
-			g.drawString(Integer.toString(i.getQuantity()), baseX + incX, baseY);
-			g.drawString(Integer.toString(i.getValue()) + " " + SlickSKR.getValueFromKey("common.currency"), baseX + incX * 2, baseY);
-			baseY += incY;			
-			
+		int i = -1;
+		int total = items.length;
+		SlickRectangle rect;
+		Item item;
+		while (++i < total){
+			rect = items[i];
+			item = results.get(i);
+			rect.paintCache(g);
+			g.drawString(item.getName(), baseX, baseY);
+			g.drawString(Integer.toString(item.getQuantity()), baseX + incX, baseY);
+			g.drawString(Integer.toString(item.getValue()) + " " + 
+						SlickSKR.getValueFromKey("common.currency"), baseX + incX * 2, baseY);
+			baseY += incY;
 		}
 		
 		if (results.size() > 0 && this.item == null){
@@ -199,33 +201,31 @@ public abstract class ItemWindowBase extends SlickGameState{
 	public abstract void extraPane(Graphics g);
 	
 	public void getMoneyPane(Graphics g){
-		
-		final float x = 0f;
-		final float y = 550f;
-		
-		final float maxX = 300f;
-		final float maxY = 600f;
-		
-		Rectangle pane = new Rectangle(x, y, maxX, maxY);
-		g.draw(pane);
-		
-		g.drawString(lblMoney, x, y);
+
+		SlickRectangle stats = new SlickRectangle(0, 550, 300, 72, lblMoney, true, "/res/buttons/button_onyx_450x50.png");
+		stats.initialize();
+		stats.paintCache(g);
+		stats.paintCenter(g, true);
+		//g.drawString(lblMoney, x, y);
 		
 	}
 	
 	public void getInventorySelectedItem(Graphics g){
 		
-		float x = 410;
-		float y = 0;
+		float x = 435;
+		float y = 40;
 		float optX = 0;
 		float optY = 0;
 		
 		int baseX = 200;
-		int baseY = 12;
+		int baseY = 16;
 		
-		Rectangle avatar = new Rectangle(300, 0, 100f, 100f);
-		g.draw(avatar);
-		g.drawImage(item.getCache(), 300 + 2, 2);
+		//Rectangle avatar = new Rectangle(300, 0, 100f, 100f);
+		//g.draw(avatar);
+		SlickRectangle stats = new SlickRectangle(335, 30, 450, 100, "", false, "/res/buttons/button_onyx_450x50.png");
+		stats.initialize();
+		stats.paintCache(g);
+		item.drawScaled(g, 352, 47, 64, 64);
 		
 		int i = -1;
 		int total = itemParams.length;
@@ -251,7 +251,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 		itemParams[2].setText(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.value") + ": " + Integer.toString(i.getValue()));
 		itemParams[6].setText(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.setitem.nodescription"));
 		//TODO: implement description parameter for items
-		
+		SlickGameState.setFlush(true, false);
 	}
 	
 	private void determineItemType(Item i){
@@ -290,14 +290,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 	
 	@Override
 	public void mouseReleased(int arg0, int x, int y) {
-		try {
-			processMouseClick(1, x, y);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		processMouseClick(1, x, y);
 	}
 	
 	protected boolean keyReleased(int code){

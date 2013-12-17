@@ -108,6 +108,7 @@ public class MapScreen extends SlickGameState{
 				Graphics gc = mapCache.getGraphics();
 				gc.clear();
 				Graphics gb = bgCache.getGraphics();
+				gb.clear();
 				gb.fillRect(0, 0, bgCache.getWidth(), bgCache.getHeight(), sprite, 0, 0);
 				
 				String defaultTile = map.getDefaultTile();

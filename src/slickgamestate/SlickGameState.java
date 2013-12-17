@@ -59,5 +59,9 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	public static void drawCache(Graphics g){
 		g.drawImage(screenCache, 0, 0);
 	}
+	
+	public static void darken(){
+		screenCache.setColor(0, 155, 155, 155);
+	}
 		
 }

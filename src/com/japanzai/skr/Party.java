@@ -46,8 +46,24 @@ public class Party {
 			
 	}
 	
+	public static int getCharacterIndexByName(String name){//Char name = fName + " " + lName
+		
+		int i = -1;
+		int total = characters.size();
+		while (++i < total){
+			if (characters.get(i).equals(name)){
+				return i;
+			}
+		}
+		
+		return -1; //assertion?
+			
+	}
+	
 	/**
 	 * @param boolMale True if searching for males, otherwise false
+	 * 
+	 * @return Returns an ArrayList of PlayableCharacter objects of the specified gender
 	 * */
 	public static ArrayList<PlayableCharacter> getCharacterByGender(boolean boolMale){
 		
@@ -63,6 +79,11 @@ public class Party {
 		
 	}
 	
+	/**
+	 * @param boolMale True if searching for living characters, otherwise false
+	 * 
+	 * @return Returns an ArrayList of PlayableCharacter objects, dependent on whether alive or dead
+	 * */
 	public static ArrayList<PlayableCharacter> getCharactersAlive(boolean alive){
 		
 		ArrayList<PlayableCharacter> characterList = new ArrayList<PlayableCharacter>();

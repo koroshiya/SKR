@@ -15,7 +15,7 @@ public class StoreInstance {
 	}
 	
 	public boolean buy(int index, int quantity){
-		return Inventory.buyItem(this, index, quantity);
+		return Inventory.buyItem(getItem(index), quantity);
 	}
 	
 	public boolean sell(Item i, int quantity){

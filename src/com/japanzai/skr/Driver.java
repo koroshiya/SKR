@@ -35,6 +35,9 @@ import tile.CharacterTile;
 import tile.ChestTile;
 import tile.PresetTile;
 import tile.RandomTile;
+import tile.ScaleTile;
+import tile.SpanTile;
+import tile.SpanTransitionTile;
 import tile.Tile;
 import tile.TransitionTile;
 import tile.event.CharacterEventBattleTile;
@@ -109,26 +112,17 @@ public class Driver implements Serializable{
 	
 	private void instantiateWeapons(){
 		
-		String strWeaponDir = "/res/item/weapon/sword.png";
 		String wpName = "weapon.class.name.";
 		
-		Weapon fists = new Weapon(getValueFromKey(wpName + "barehanded"), 0, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, strWeaponDir);
-		Weapon gun = new Weapon(getValueFromKey(wpName + "firearm"), 3, 10, 10, 0.1, 10, 10, 0.99, 20, true, 0, 0, strWeaponDir);
-		Weapon katana = new Weapon(getValueFromKey(wpName + "katana"), 4, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.katana.url"));
-		Weapon pickaxe = new Weapon(getValueFromKey(wpName + "pickaxe"), 1, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, strWeaponDir);
-		Weapon bat = new Weapon(getValueFromKey(wpName + "bat"), 2, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, strWeaponDir);
-		Weapon knife = new Weapon(getValueFromKey(wpName + "knife"), 5, 10, 10, 0.1, 10, 10, 0.99, 1, true, 0, 0, strWeaponDir);
-		Weapon wrench = new Weapon(getValueFromKey(wpName + "wrench"), 6, 10, 10, 0.1, 10, 10, 0.99, 1, true, 0, 0, strWeaponDir);
-		Weapon log = new Weapon(getValueFromKey(wpName + "log"), 7, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, strWeaponDir);
-		
-		weapons.add(fists);
-		weapons.add(pickaxe);
-		weapons.add(bat);
-		weapons.add(gun);
-		weapons.add(katana);
-		weapons.add(knife);
-		weapons.add(wrench);
-		weapons.add(log);
+		weapons.add(new Weapon(getValueFromKey(wpName + "barehanded"), 0, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, getValueFromKey("weapon.image.barehanded.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "firearm"), 3, 10, 10, 0.1, 10, 10, 0.99, 20, true, 0, 0, getValueFromKey("weapon.image.firearm.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "katana"), 4, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.katana.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "pickaxe"), 1, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.pickaxe.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "axe"), 2, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.axe.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "knife"), 5, 10, 10, 0.1, 10, 10, 0.99, 1, true, 0, 0, getValueFromKey("weapon.image.knife.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "twohandsword"), 6, 10, 10, 0.1, 10, 10, 0.99, 1, true, 0, 0, getValueFromKey("weapon.image.twohandsword.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "mace"), 7, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, getValueFromKey("weapon.image.mace.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "spear"), 8, 10, 10, 0.1, 10, 10, 0.99, 8, false, 0, 0, getValueFromKey("weapon.image.spear.url")));
 		
 		/*for (Weapon weapon : weapons){
 			weapon.increaseQuantity(1);
@@ -351,12 +345,10 @@ public class Driver implements Serializable{
 		ParentMap current = null;
 		ParentMap destination = null;
 		
-		
 		Point mapSize = new Point(16 * MapScreen.ICON_SIZE, 13 * MapScreen.ICON_SIZE);
 		Point coordinates = new Point(32 * MapScreen.ICON_SIZE, 24 * MapScreen.ICON_SIZE); //Multiple base by pix size?
 		Point currentPosition = new Point(8 * MapScreen.ICON_SIZE, 6 * MapScreen.ICON_SIZE);
 		PlayableCharacter animatedSprite = Party.getCharacterByIndex(0);
-		
 
 		//SlickSKR sk = null;
 		current = new ParentMap(coordinates, currentPosition, animatedSprite, enemies, bs, mapSize, 97, grass, "other/public/summeropenfielddusk.ogg");
@@ -370,17 +362,20 @@ public class Driver implements Serializable{
 		MapGenerator generator = new MapGenerator(basicPresetTiles(current, destination), tGenerator, 32, 26, "/res/terrain/border/");		
 		current.setTiles(generator.generateMap());
 		
-		
 		bs.setSKR(new SlickSKR(current));
 		
 		bs.start();
 		
 	}
 	
-	private ArrayList<RandomTile> basicRandomTiles() throws SlickException{
-		
+	private RandomTile[] basicRandomTiles() throws SlickException{
+
 		String grass = ("/res/terrain/grass.png");
-		String rock = ("/res/terrain/rock.png");
+		//String grass = ("/res/terrain/grass3.png");
+		//String rock = ("/res/terrain/rock.png");
+		String weed = ("/res/terrain/weed02.png");
+		String pine = ("/res/terrain/pine-none03.png");
+		String shrub = ("/res/terrain/shrub2-05.png");
 		String chestClosed = ("/res/terrain/closedChest.png");
 		String chestOpen = ("/res/terrain/openChest.png");
 		
@@ -388,65 +383,59 @@ public class Driver implements Serializable{
 		items.add(Inventory.getItem("Riceball"));
 		items.add(Inventory.getItem("Kimchi"));
 		
-		Tile grassTile = new Tile(true, true, grass);
+		Tile grassTile = new ScaleTile(true, true, grass);
 		Tile chestTile = new ChestTile(chestClosed, chestOpen, grass, items);
-		Tile rockTile = new Tile(false, false, rock);
+		//Tile rockTile = new Tile(false, false, rock);
+		Tile pineTile = new SpanTile(true, true, pine, 155, 149);
+		Tile weedTile = new Tile(true, true, weed);
+		Tile shrubTile = new Tile(true, true, shrub);
 		
-		RandomTile rt1 = new RandomTile(chestTile, 99);
-		RandomTile rt2 = new RandomTile(rockTile, 95);
-		RandomTile rt3 = new RandomTile(grassTile, 0);
-		
-		ArrayList<RandomTile> rTiles = new ArrayList<RandomTile>();
-		rTiles.add(rt1);
-		rTiles.add(rt2);
-		rTiles.add(rt3);
-		
-		return rTiles;
+		return new RandomTile[]{
+			new RandomTile(chestTile, 99),
+			new RandomTile(pineTile, 98),
+			new RandomTile(shrubTile, 98),
+			new RandomTile(weedTile, 98),
+			//new RandomTile(rockTile, 98),
+
+			new RandomTile(grassTile, 0)
+		};
 		
 	}
 	
-	private ArrayList<PresetTile> basicPresetTiles(ParentMap current, ParentMap destination) throws IOException, SlickException{
+	private PresetTile[] basicPresetTiles(ParentMap current, ParentMap destination) throws IOException, SlickException{
 
 		String imgNPC = ("/res/enemy/militia/");
-		//String imgNPC = ("/res/enemy/militia/right2.png");
 		String imgKoro = ("/res/enemy/koro/");
-		String tilePic = ("/res/terrain/border/borderExitTop.png");
-		String grassPic = ("/res/terrain/grass.png");
 		
 		ArrayList<String> dialogue = new ArrayList<String>();
 		dialogue.add("Hello there, Ken.");
 		dialogue.add("This game really lacks content, doesn't it?");
-		//Tile tileNPC = NPC(imgNPC, dialogue);
+		
 		ArrayList<Item> storeItems = new ArrayList<Item>();
 		storeItems.add(Inventory.getConsumables().get(0).create(5));
 		storeItems.add(Inventory.getConsumables().get(1).create(2));
 		StoreInstance store = new StoreInstance(storeItems);
-		CharacterEventTile tileNPC = new CharacterEventStoreTile(imgNPC, InteractiveNPC(imgNPC, dialogue), store);
-		PresetTile preTile1 = new PresetTile(tileNPC, 1, 5);
 		
 		ArrayList<String> dialogue2 = new ArrayList<String>();
 		dialogue2.add("PREPARE TO FACE YOUR DEATH, MAGGOT!");
-		
+
+		CharacterEventTile tileNPC = new CharacterEventStoreTile(imgNPC, InteractiveNPC(imgNPC, dialogue), store);
 		CharacterEventTile tileEnemy = new CharacterEventBattleTile(imgNPC, InteractiveNPC(imgNPC, dialogue2), this.enemies.get(2).create());
-		PresetTile preTile5 = new PresetTile(tileEnemy, 3, 17);
+		Tile basicTile = new Tile(true, true, "/res/terrain/grass.png", 16, 12);
+		Tile tTile = new TransitionTile("/res/terrain/border/borderExitTop.png", destination, current, 20, 16);
+		Tile pineTile = new SpanTile(true, true, "/res/terrain/pine-none03.png", 155, 149);
+		Tile tentTile = new SpanTransitionTile("/res/terrain/building/tent.png", destination, current, 10, 20, 228, 216, 2, 2);
+		/*
+		 String sprite, ParentMap map,
+			ParentMap currentMap, int startX, int startY, 
+			int width, int height, int entranceXIndex, int entranceYIndex
+		 * */
 		
-		Tile basicTile = new Tile(true, true, grassPic, 16, 12);
-		PresetTile preTile2 = new PresetTile(basicTile, 16, 12);
-		
-		Tile tileKoro = NPC(imgKoro);
-		PresetTile preTile3 = new PresetTile(tileKoro, 16, 10);
-		
-		Tile tTile = new TransitionTile(tilePic, destination, current, 20, 16);
-		PresetTile preTile4 = new PresetTile(tTile, 20, 0);
-		
-		ArrayList<PresetTile> basicPresetTiles = new ArrayList<PresetTile>();
-		basicPresetTiles.add(preTile1);
-		basicPresetTiles.add(preTile2);
-		basicPresetTiles.add(preTile3);
-		basicPresetTiles.add(preTile4);
-		basicPresetTiles.add(preTile5);
-		
-		return basicPresetTiles;
+		return new PresetTile[]{
+			new PresetTile(tileNPC, 1, 5), new PresetTile(basicTile, 16, 12), new PresetTile(NPC(imgKoro), 16, 10),
+			new PresetTile(tTile, 20, 0), new PresetTile(tileEnemy, 3, 17), new PresetTile(pineTile, 19, 10),
+			new PresetTile(tentTile, 10, 20)
+		};
 		
 	}
 	

@@ -3,7 +3,6 @@ package slickgamestate;
 import item.ConsumableItem;
 import item.Item;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Font;
@@ -33,6 +32,7 @@ public class Battle extends SlickGameState{
 	private GameScreen parent;
 	
 	private boolean running;
+	private int attackTime = 0;
 	
 	private PlayableCharacter currentCharacter;
 	
@@ -91,7 +91,9 @@ public class Battle extends SlickGameState{
 	}
 	
 	private void start() {
-		
+
+		attackTime = 120;
+		SlickGameState.setFlush(true, false);
 		//TODO: make arraylist of all players and enemies, then order by speed?
 		
 		/*if (enemies.get(0) instanceof BossCharacter){
@@ -186,6 +188,7 @@ public class Battle extends SlickGameState{
 			}else {
 				EnemyCharacter character = (EnemyCharacter) c;
 				character.invokeAI();
+				attackTime = 120;
 			}
 
 		}else {
@@ -198,6 +201,19 @@ public class Battle extends SlickGameState{
 		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 48);
 	}
 	
+	@Override
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2){
+
+		if (attackTime > 0){
+			attackTime--;
+			if (attackTime == 0){
+				SlickGameState.setFlush(true, false);
+			}
+		}
+		
+	}
+	
+	@Override
 	public void enter(GameContainer arg0, StateBasedGame arg1){
 
 		this.party = Party.getCharactersInParty();
@@ -228,14 +244,18 @@ public class Battle extends SlickGameState{
 		resetDefaultInterface();
 		
 		this.start();
+		attackTime = 0;
 	}
 	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) {
-
+		
+		if (this.attackTime > 0 || SlickGameState.needFlush()){
+			this.drawBattlePane(g);
+		}
+		
 		if (SlickGameState.needFlush()){
 			
-			this.drawBattlePane(g);
 			this.drawBattleParticipants(g);
 			for (SlickRectangle rect : rects){rect.paintCenter(g);}
 			BattleConsole.paint(g);
@@ -258,17 +278,27 @@ public class Battle extends SlickGameState{
 	}
 	
 	public void drawBattlePane(Graphics g){
-		
 		int i = -1;
 		int total = this.enemies.size();
+		CombatCapableCharacter c;
 		while (++i < total){
-			this.enemies.get(i).getSprite().draw(25, partyY + constY * i);
+			c = this.enemies.get(i);
+			if (c.isAttacking()){
+				c.getAnimatedFrame().draw(0, partyY + constY * i);
+			}else{
+				c.getSprite().draw(0, partyY + constY * i);
+			}
 		}
 		
 		i = -1;
 		total = this.party.size();
 		while (++i < total){
-			this.party.get(i).getSprite().draw(727, partyY + constY * i);
+			c = this.party.get(i);
+			if (c.isAttacking()){
+				c.getAnimatedFrame().draw(727, partyY + constY * i);
+			}else{
+				c.getSprite().draw(727, partyY + constY * i);
+			}
 		}
 	}
 	
@@ -291,11 +321,11 @@ public class Battle extends SlickGameState{
 	private void drawChar(Graphics g, CombatCapableCharacter c, int i, int x){
 		int tempY = 500 + i * 25;
 		String nick = c.getNickName();
+		Font f = g.getFont();
 		if (!c.isAlive()){
-			
-			final int textx = g.getFont().getWidth(nick);
-			final int texty = g.getFont().getHeight(nick) / 2;
-			g.drawLine(x, tempY + texty, x + textx, tempY + texty);
+			final int textx = x + f.getWidth(nick);
+			final int texty = tempY + f.getHeight(nick) / 2;
+			g.drawLine(x, texty, textx, texty);
 		}
 		g.drawString(nick, x, tempY);
 		g.drawString(c.getStatus(), x + 150, tempY);
@@ -303,17 +333,11 @@ public class Battle extends SlickGameState{
 	
 	@Override
 	public void mouseReleased(int arg0, int x, int y) {
-		try {
-			this.processMouseClick(1, x, y);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.processMouseClick(1, x, y);
 	}
 	
 	@Override
-	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
+	public void processMouseClick(int clickCount, int x, int y) {
 		
 		for (SlickRectangle rect : rects){
 			if (rect.isWithinBounds(x, y)){

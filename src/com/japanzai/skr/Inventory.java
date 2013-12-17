@@ -39,8 +39,7 @@ public class Inventory {
 		return false;
 	}
 	
-	public static boolean buyItem(StoreInstance store, int index, int quantity){
-		Item src = store.getItem(index);
+	public static boolean buyItem(Item src, int quantity){
 		if (!isItemInInventory(src)){
 			addItem(src);
 		}

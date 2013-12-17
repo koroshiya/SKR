@@ -7,8 +7,11 @@ import item.Weapon;
 import java.util.ArrayList;
 import java.lang.Math;
 
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 import com.japanzai.skr.FightingStyle;
 import com.japanzai.skr.Gender;
@@ -190,12 +193,34 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	public void instantiateForBattle(){
 		super.resetGauge();
 		try {
-			super.instantiate();
+			this.instantiate();
 			this.setAliveIcon(getBattleIcon());
 			this.setDeadIcon(new Image("/res/dead.png"));
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void instantiate(int sizeX){
+		//super.instantiate(sizeX);
+		this.instantiateSuper(sizeX);
+		attack = new Animation();
+		try {
+			SpriteSheet tileSheet = new SpriteSheet(this.getSpriteDirectory() + "attack.png", 64, 48, new Color(0,0,0));
+			int y = 0; //this.getWeapon().getTypeOfWeaponIndex(); //TODO:
+			for (int x = 0; x < tileSheet.getHorizontalCount(); x++) {
+				try{
+					attack.addFrame(tileSheet.getSprite(x,y), 120 / tileSheet.getHorizontalCount());
+				}catch (Exception e){
+					break;
+				}
+			}
+			attack.setCurrentFrame(1);
+			attack.setAutoUpdate(true);
+			attack.setLooping(false);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		} catch (Exception e){}
 	}
 
 	public void setExperience(int experience2) {

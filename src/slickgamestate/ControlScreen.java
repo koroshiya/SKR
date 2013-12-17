@@ -2,18 +2,17 @@ package slickgamestate;
 
 import java.io.IOException;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.state.StateBasedGame;
 
+import controls.SlickRectangle;
 import screen.GameScreen;
 
 public class ControlScreen extends SlickGameState{
-
-	private Image backgroundImage;
 	
 	public ControlScreen(GameScreen battleScreen) {
 		
@@ -22,8 +21,8 @@ public class ControlScreen extends SlickGameState{
 	}	
 	
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
-		backgroundImage = new Image("/res/start.png");
+	public void init(GameContainer arg0, StateBasedGame arg1){
+		
 	}
 
 	@Override
@@ -35,7 +34,8 @@ public class ControlScreen extends SlickGameState{
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) {
 
 		if (SlickGameState.needFlush()){
-			g.drawImage(backgroundImage, 0, 0);
+			GradientFill fill = new GradientFill(0, 0, Color.gray, arg0.getWidth(), arg0.getHeight(), Color.white);
+			g.fill(new SlickRectangle(0, 0, arg0.getWidth(), arg0.getHeight(), ""),  fill);
 			
 			g.drawString(SlickSKR.getValueFromKey("screen.control.commands.heading"), 20, 100);
 			g.drawString(SlickSKR.getValueFromKey("screen.control.commands.interact"), 20, 120);

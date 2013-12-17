@@ -1,5 +1,6 @@
 package item;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -91,10 +92,9 @@ public abstract class Item implements Photogenic, Serial {
 	public String getAvatar() {
 		return (this.avatar);
 	}
-
-	@Override
-	public Image getCache() {
-		return this.cache;
+	
+	public void drawScaled(Graphics g, int x, int y, int width, int height){
+		g.drawImage(cache, x, y, x + width, y + height, 0, 0, cache.getWidth(), cache.getHeight());
 	}
 	
 }

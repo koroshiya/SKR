@@ -1,6 +1,5 @@
 package slickgamestate.menu;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
@@ -26,12 +25,17 @@ public class CharacterProfileWindow extends SlickGameState{
 	private SlickRectangle[] partyMembers;
 	String[] labels;
 	
-	public CharacterProfileWindow(GameScreen gameScreen) throws SlickException{
-		
+	public CharacterProfileWindow(GameScreen gameScreen){
 		super(SlickSKR.CHARACTER, gameScreen);
-		
+		labels = new String[13];
 	}
 	
+	/**
+	 * Draws each of the labels pertaining to a character's information,
+	 * such as their stats and background info.
+	 * 
+	 * @param g Graphics context in which to draw the information
+	 * */
 	private void drawCharacterInfoPanel(Graphics g){
 
 		final int x = 455;
@@ -53,23 +57,37 @@ public class CharacterProfileWindow extends SlickGameState{
 		
 	}
 	
+	/**
+	 * Draws each of the character's avatars such that the character in focus
+	 * can be swapped by clicking on another character's avatar.
+	 * 
+	 * @param g Graphics context in which to draw the avatars
+	 * */
 	private void drawCharacterPanel(Graphics g){
 		
-		PlayableCharacter c;
+		ArrayList<PlayableCharacter> characters = Party.getCharacters();
 		int i = -1;
 		int total = partyMembers.length;
 		while (++i < total){
-			c = Party.getCharacters().get(i);
-			g.drawImage(c.getCache().getScaledCopy(100, 100), partyMembers[i].getX(), partyMembers[i].getY());
+			characters.get(i).drawScaled(g, (int)partyMembers[i].getX(), (int)partyMembers[i].getY(), 100, 100);
 		}
 		
 	}
 	
-	public void setCharacter(PlayableCharacter character) throws SlickException{
+	/**
+	 * Sets the character for whom the focus of the window should be.
+	 * Sets the profile picture, stats, info, etc. accordingly.
+	 * 
+	 * @param character PlayableCharacter from party to set.
+	 * */
+	public void setCharacter(PlayableCharacter character){
 		
 		this.character = character;
-		lblAvatar = new Image(this.character.getProfilePicture());
-		labels = new String[13];
+		try {
+			lblAvatar = new Image(this.character.getProfilePicture());
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 		
 		labels[0] = character.getName(); //All info
 		labels[1] = character.getHeight();
@@ -108,16 +126,23 @@ public class CharacterProfileWindow extends SlickGameState{
 		
 	}
 	
+	/**
+	 * Returns the character currently in focus.
+	 * 
+	 * @return Character whose information, picture, etc. is currently being displayed.
+	 * */
 	public PlayableCharacter getCharacter(){return this.character;}
 	
 	@Override
-	public void enter(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+	public void enter(GameContainer arg0, StateBasedGame arg1) {
 		
-		this.setCharacter(Party.getCharacterByIndex(0));
-		for (PlayableCharacter p : Party.getCharacters()){
+		ArrayList<PlayableCharacter> characters = Party.getCharacters();
+		this.setCharacter(characters.get(0));
+		for (PlayableCharacter p : characters){
 			p.instantiate();
 		}
-		partyMembers = new SlickRectangle[Party.getCharacters().size()];
+		int total = characters.size();
+		partyMembers = new SlickRectangle[total];
 		
 		int row = 0;
 		int col = 1;
@@ -125,7 +150,6 @@ public class CharacterProfileWindow extends SlickGameState{
 		final int x = 455;
 		
 		int i = -1;
-		int total = partyMembers.length;
 		while (++i < total){
 			partyMembers[i] = new SlickRectangle(x + row, startY + 102 * col, 100, 100, Integer.toString(i));
 			row = row == 0 ? 102 : 0;
@@ -149,7 +173,7 @@ public class CharacterProfileWindow extends SlickGameState{
 	}
 	
 	@Override
-	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
+	public void processMouseClick(int clickCount, int x, int y) {
 		
 		for (SlickRectangle rect : partyMembers){
 			if (rect.isWithinBounds(x, y)){
@@ -163,41 +187,44 @@ public class CharacterProfileWindow extends SlickGameState{
 
 	private void processMenuItem(String tag, int clickCount) {
 		
-		int i;
 		try{
-			i = Integer.parseInt(tag);
+			int i = Integer.parseInt(tag);
+			if (i >= 0 && i < partyMembers.length){
+				this.setCharacter(Party.getCharacterByIndex(i));
+			}
 		}catch (NumberFormatException nfe){
 			nfe.printStackTrace();
-			return;
-		}
-		
-		if (i >= 0 && i < partyMembers.length){
-			try {
-				this.setCharacter(Party.getCharacterByIndex(i));
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
 		}
 		
 	}
 	
 	@Override
 	public void mouseReleased(int arg0, int x, int y){
-		try {
-			processMouseClick(1, x, y);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		processMouseClick(1, x, y);
 	}
 	
 	@Override
 	public void keyReleased(int code, char arg1) {
 		if (code == Input.KEY_W){
 			parent.swapView(SlickSKR.MENU);
+		}else if (code == Input.KEY_LEFT){
+			previousCharacter();
+		}else if (code == Input.KEY_RIGHT){
+			nextCharacter();
 		}
 		
+	}
+	
+	private void nextCharacter(){
+		int i = Party.getCharacterIndexByName(this.character.getName());
+		i = (i < Party.getCharacters().size() - 1) ? i + 1 : 0;
+		this.setCharacter(Party.getCharacterByIndex(i));
+	}
+	
+	private void previousCharacter(){
+		int i = Party.getCharacterIndexByName(this.character.getName());
+		i = (i > 0) ? i - 1 : Party.getCharacters().size() - 1;
+		this.setCharacter(Party.getCharacterByIndex(i));
 	}
 	
 }

@@ -44,7 +44,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		//TODO: set aside space at bottom for char info, map, etc.
 		//BattleMenuListener listener = new BattleMenuListener();
 
-		background = new SlickRectangle(-1, 506, 817, 120, "", false, "/res/button-brown-816x120.png");
+		background = new SlickRectangle(-1, 506, 817, 120, "", false, "/res/buttons/button-brown-816x120.png");
 		background.initialize();
 		
 		final int buttonWidth = 150;
@@ -52,7 +52,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		final int startX = 650;
 		int startY = 510;
 		for (int i = 0; i < rects.length; i++){
-			rects[i] = new SlickRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false, "/res/button_blue_150x25.png");
+			rects[i] = new SlickRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false, "/res/buttons/button_blue_150x25.png");
 			rects[i].initialize();
 			startY += buttonHeight + 2;
 		}
@@ -65,10 +65,9 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	}
 	
 	public void paint(Graphics g, int offX, int offY){
-		System.out.println("Drawing at " + (background.getMinX() + offX) + ", " + (background.getMinY() + offY));
-		g.drawImage(background.getCache(), background.getMinX() + offX, background.getMinY() + offY);
+		background.paintCache(g, offX, offY);
 		for (SlickRectangle rect : rects){
-			g.drawImage(rect.getCache(), rect.getMinX() + offX, rect.getMinY() + offY);
+			rect.paintCache(g, offX, offY);
 			rect.paintCenter(g,true, offX, offY);
 		}
 		g.drawImage(this.dialogue.getCache(), 10 + offX, 515 + offY);

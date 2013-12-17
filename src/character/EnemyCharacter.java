@@ -17,11 +17,9 @@ import com.japanzai.skr.Party;
 import technique.CombatTechnique;
 
 public class EnemyCharacter extends CombatCapableCharacter implements Serializable{
-		
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
+	
 	private int experienceGivenWhenDefeated;
 	private Item drop;
 	private int dropRate;

@@ -1,11 +1,10 @@
 package character;
 
-import java.io.File;
-
 import interfaces.Photogenic;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -30,7 +29,8 @@ public abstract class Character implements Photogenic{
 	public static final int BACKWARD = 0;
 	private int direction;
 	private final String spriteDirectory;
-	private Animation anim[];
+	private Animation anim[][];
+	private int cFrame = 0;
 	
 	public Character(String firstName, String lastName, 
 							Gender gender, String nickName,
@@ -42,38 +42,43 @@ public abstract class Character implements Photogenic{
 		this.nickName = nickName;
 		this.spriteDirectory = spriteDirectory;
 		this.direction = LEFT;
+		anim = new Animation[4][2];
 		
 	}
 	
 	public void instantiate(int sizeX){
 		try{
-			if (new File(spriteDirectory + "avatar.png").exists()){
-				this.cache = new Image(spriteDirectory + "avatar.png");
-			}
+			this.cache = new Image(spriteDirectory + "avatar.png");
 		}catch (SlickException ex){
+			try {
+				this.cache = new Image(0,0);
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
 			ex.printStackTrace();
 		}
 		SpriteSheet tileSheet;
 		try{
 			tileSheet = new SpriteSheet(this.spriteDirectory + "sheet.png", sizeX, sizeX, new Color(0,0,0));
 		}catch (Exception ex){
-			ex.printStackTrace();
+			//ex.printStackTrace();
 			return;
 		}
-		anim = new Animation[4];
-		for (int y = 0; y < 4; y++) {
-			anim[y] = new Animation(false);
-			for (int x = 0; x < 4; x++) {
-				try{
-					anim[y].addFrame(tileSheet.getSprite(x,y), 30);
-				}catch (Exception e){
-					break;
-				}
+		for (int y = 0; y < tileSheet.getVerticalCount(); y++) {
+			anim[y][0] = new Animation(false);
+			anim[y][1] = new Animation(false);
+			
+			anim[y][0].addFrame(tileSheet.getSprite(0,y), 120 / 2);
+			anim[y][0].addFrame(tileSheet.getSprite(1,y), 120 / 2);
+			anim[y][1].addFrame(tileSheet.getSprite(2,y), 120 / 2);
+			anim[y][1].addFrame(tileSheet.getSprite(1,y), 120 / 2);
+			
+			for (int i = 0; i < 2; i++){
+				anim[y][i].setCurrentFrame(1);
+				anim[y][i].setAutoUpdate(true);
+				anim[y][i].setLooping(false);
+				anim[y][i].stop();
 			}
-			anim[y].setCurrentFrame(1);
-			anim[y].setAutoUpdate(true);
-			anim[y].setLooping(false);
-			anim[y].stop();
 		}
 	}
 
@@ -101,25 +106,30 @@ public abstract class Character implements Photogenic{
 		return (this.spriteDirectory + "avatar.png");
 	}
 	
-	@Override
-	public Image getCache() {
-		return this.cache;
+	public void drawCache(float x, float y, Graphics g){
+		if (cache != null){
+			g.drawImage(cache, x, y);
+		}
+	}
+	
+	public void drawScaled(Graphics g, int x, int y, int width, int height){
+		g.drawImage(cache, x, y, x + width, y + height, 0, 0, cache.getWidth(), cache.getHeight());
 	}
 	
 	public synchronized void draw(int x, int y){
-		this.anim[this.direction].draw(x, y);
+		this.anim[this.direction][cFrame].draw(x, y);
 	}
 
 	public synchronized void draw(float x, float y){
-		this.anim[this.direction].draw(x, y);
+		this.anim[this.direction][cFrame].draw(x, y);
 	}
 	
 	public synchronized Image getBattleIcon(){
-		return anim[LEFT].getCurrentFrame();
+		return anim[LEFT][cFrame].getCurrentFrame();
 	}
 	
 	public synchronized Image getBattleIconEnemy(){
-		return anim[RIGHT].getCurrentFrame();
+		return anim[RIGHT][cFrame].getCurrentFrame();
 	}
 
 	public void setDirection(int direction){
@@ -127,12 +137,13 @@ public abstract class Character implements Photogenic{
 	}
 
 	public synchronized void run(){
-		this.anim[this.direction].restart();
+		cFrame = cFrame == 0 ? 1 : 0;
+		this.anim[this.direction][cFrame].restart();
 		//anim[this.direction].setCurrentFrame(1);
 	}
 	
 	public void restartFrame(){
-		anim[this.direction].setCurrentFrame(1);
+		anim[this.direction][cFrame].setCurrentFrame(1);
 	}
 
 	public int getTimeBetweenFrames() {

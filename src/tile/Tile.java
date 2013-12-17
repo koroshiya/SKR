@@ -14,8 +14,8 @@ public class Tile implements Photogenic{
 	private int x;
 	private int y;
 	
-	private String sprite;
-	private Image cache;
+	protected String sprite;
+	protected Image cache;
 	
 	/**
 	 * TODO: make dynamic tile
@@ -44,7 +44,7 @@ public class Tile implements Photogenic{
 		this.open = reachable && open;
 		this.reachable = reachable;
 		this.cache = cache;
-		this.sprite = " ";
+		this.sprite = "";
 	}
 
 	public void openTile(){
@@ -106,7 +106,15 @@ public class Tile implements Photogenic{
 	}
 	
 	public void instantiate() throws SlickException{
-		this.cache = new Image(this.sprite);
+		if (this.sprite.length() == 0){
+			this.cache = new Image(0,0);
+		}else{
+			this.cache = new Image(this.sprite);
+		}
+	}
+	
+	public Image getCache(){
+		return this.cache;
 	}
 	
 	public void setCache(Image cache){
@@ -133,12 +141,13 @@ public class Tile implements Photogenic{
 		g.drawImage(this.cache, x, y);
 	}
 	
-	public Image getCache(){
-		return this.cache;
+	public void drawScaled(Graphics g, int x, int y, int width, int height){
+		g.drawImage(cache, x, y, x + width, y + height, 0, 0, cache.getWidth(), cache.getHeight());
 	}
 	
 	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y){
-		if (sprite != defaultImage){g.drawImage(cache, x, y, null);}
+		if (sprite != defaultImage){this.draw(g, x, y);}
+		//g.drawImage(cache, x - (cache.getWidth() - MapScreen.ICON_SIZE), y - (cache.getHeight() - MapScreen.ICON_SIZE), null);
 	}
 	
 	public boolean stepOn(){return false;}

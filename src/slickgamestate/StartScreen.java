@@ -1,10 +1,11 @@
 package slickgamestate;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -13,7 +14,6 @@ import screen.GameScreen;
 
 public class StartScreen extends SlickGameState{
 	
-	private Image backgroundImage;
 	private SlickRectangle[] rects;
 	private final String commands[];
 	private final int buttonWidth = 200;
@@ -66,10 +66,10 @@ public class StartScreen extends SlickGameState{
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
-		backgroundImage = new Image("/res/start.png");
+		//backgroundImage = new Image("/res/start.png");
 		rects = new SlickRectangle[commands.length];
 		for (int i = 0; i < commands.length; i++){
-			rects[i] = new SlickRectangle(300, 150 + (i * 100), buttonWidth, buttonHeight, commands[i], "/res/button_onyx_200x50.png");
+			rects[i] = new SlickRectangle(300, 150 + (i * 100), buttonWidth, buttonHeight, commands[i], "/res/buttons/button_onyx_200x50.png");
 			rects[i].initialize();
 		}
 		SlickGameState.initCache(arg0);
@@ -80,10 +80,14 @@ public class StartScreen extends SlickGameState{
 		
 		if (SlickGameState.needFlush()){
 			//g.drawImage(backgroundImage, 0, 0);
-			g.drawImage(backgroundImage, 0, 0, 0, 0, 1920, 1200);
+			GradientFill fill = new GradientFill(0, 0, Color.gray, arg0.getWidth(), arg0.getHeight(), Color.white);
+			//backgroundImage.getGraphics().fill(new SlickRectangle(0, 0, arg0.getWidth(), arg0.getHeight(), ""),  fill);
+			//g.drawImage(backgroundImage, 0, 0, 0, 0, 1920, 1200);
+			g.fill(new SlickRectangle(0, 0, arg0.getWidth(), arg0.getHeight(), ""),  fill);
 			
 			for (int i = 0; i < commands.length; i++){
-				g.drawImage(rects[i].getCache(), rects[i].getMinX(), rects[i].getMinY());
+				//g.drawImage(rects[i].getCache(), rects[i].getMinX(), rects[i].getMinY());
+				rects[i].paintCache(g);
 				rects[i].paintCenter(g, true);
 			}
 			SlickGameState.capture(g);

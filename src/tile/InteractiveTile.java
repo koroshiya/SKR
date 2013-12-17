@@ -13,7 +13,7 @@ public abstract class InteractiveTile extends Tile implements InteractableObject
 	}
 	
 	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y){
-		g.drawImage(super.getCache(), x, y, null);
+		g.drawImage(cache, x, y, null);
 	}
 	
 	@Override

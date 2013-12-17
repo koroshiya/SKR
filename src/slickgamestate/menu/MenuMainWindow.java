@@ -1,6 +1,5 @@
 package slickgamestate.menu;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -58,7 +57,8 @@ public class MenuMainWindow extends SlickGameState{
 		int i = -1;
 		int total = menuItems.length;
 		while (++i < total){
-			g.drawImage(menuItems[i].getCache(), menuItems[i].getMinX(), menuItems[i].getMinY());
+			//g.drawImage(menuItems[i].getCache(), menuItems[i].getMinX(), menuItems[i].getMinY());
+			menuItems[i].paintCache(g);
 			menuItems[i].paintCenter(g, true);
 		}
 		
@@ -71,12 +71,14 @@ public class MenuMainWindow extends SlickGameState{
 		int inc;
 		final int baseInc = 13;
 		for (int i = 0; i < menuCharacters.length; i++){
-			g.drawImage(menuCharacters[i].getCache(), menuCharacters[i].getMinX(), menuCharacters[i].getMinY());
+			//g.drawImage(menuCharacters[i].getCache(), menuCharacters[i].getMinX(), menuCharacters[i].getMinY());
+			menuCharacters[i].paintCache(g);
 			PlayableCharacter c = characters.get(i);
 			inc = baseInc;
 			g.setColor(Color.white);
 			//g.draw(menuCharacters[i]);
-			g.drawImage(c.getCache(), 0, y);
+			//g.drawImage(c.getCache(), 0, y);
+			c.drawCache(0f, y, g);
 			g.drawString(c.getName(), x, y + inc);
 			inc += baseInc;
 			g.drawString(c.getOccupation(), x, y + inc);
@@ -102,10 +104,10 @@ public class MenuMainWindow extends SlickGameState{
 		String s = "";
 		int i = -1;
 		int total = commands.length;
-		menuItems = new SlickRectangle[commands.length];
+		menuItems = new SlickRectangle[total];
 		while (++i < total){
 			s = (String) commands[i];
-			menuItems[i] = new SlickRectangle(x, i * y, 450, y, s, "/res/button_onyx_450x50.png");
+			menuItems[i] = new SlickRectangle(x, i * y, 450, y, s, "/res/buttons/button_onyx_450x50.png");
 			menuItems[i].initialize();
 		}
 		
@@ -115,7 +117,7 @@ public class MenuMainWindow extends SlickGameState{
 		total = menuCharacters.length;
 		while (++i < total){
 			characters.get(i).instantiate();
-			menuCharacters[i] = new SlickRectangle(0, 155 * i, x, 150, Integer.toString(i), "/res/button_brown_376x155.png");
+			menuCharacters[i] = new SlickRectangle(0, 155 * i, x, 150, Integer.toString(i), "/res/buttons/button_brown_376x155.png");
 			menuCharacters[i].initialize();
 		}
 		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 24);
@@ -152,7 +154,7 @@ public class MenuMainWindow extends SlickGameState{
 		
 	}
 
-	public void processMouseClick(int clickCount, int x, int y) throws IOException, ClassNotFoundException {
+	public void processMouseClick(int clickCount, int x, int y) {
 		
 		for (SlickRectangle rect : menuItems){
 			if (rect.isWithinBounds(x, y)){
@@ -180,11 +182,9 @@ public class MenuMainWindow extends SlickGameState{
 					if (c.isInParty()){
 						boolean charAlive = false;
 						for (PlayableCharacter ch : characters){
-							if (!c.getName().equals(ch.getName())){
-								if (ch.isAlive() && ch.isInParty()){
-									charAlive = true;
-									break;
-								}
+							if (!c.getName().equals(ch.getName()) && ch.isAlive() && ch.isInParty()){
+								charAlive = true;
+								break;
 							}
 						}
 						if (!charAlive){
@@ -218,14 +218,7 @@ public class MenuMainWindow extends SlickGameState{
 	
 	@Override
 	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
-		try {
-			processMouseClick(arg3, arg1, arg2);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		processMouseClick(arg3, arg1, arg2);
 	}
 	
 	@Override

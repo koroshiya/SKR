@@ -354,9 +354,6 @@ public class ParentMap {
 			double diffY = 0;
 			
 			double diff = (double)MapScreen.ICON_SIZE / (double)60;
-
-			System.out.println("current: " + this.map.currentPositionx);
-			System.out.println("destination: " + x2);
 			
 			if (x2 > this.map.currentPositionx){
 				diffX = diff;
