@@ -107,7 +107,7 @@ public class MenuMainWindow extends SlickGameState{
 		menuItems = new SlickImageRectangle[total];
 		while (++i < total){
 			s = (String) commands[i];
-			menuItems[i] = new SlickImageRectangle(x, i * y, 450, y, s, "/res/buttons/9x1/onyx.png");
+			menuItems[i] = new SlickImageRectangle(x, i * y, 450, y, s, "/res/buttons/9x1/onyx.png", true);
 			menuItems[i].initialize();
 		}
 		
@@ -117,11 +117,11 @@ public class MenuMainWindow extends SlickGameState{
 		total = menuCharacters.length;
 		while (++i < total){
 			characters.get(i).instantiate();
-			menuCharacters[i] = new SlickImageRectangle(0, 155 * i, x, 150, Integer.toString(i), "/res/buttons/5x2/dbrown.png");
+			menuCharacters[i] = new SlickImageRectangle(0, 155 * i, x, 150, Integer.toString(i), "/res/buttons/5x2/dbrown.png", true);
 			menuCharacters[i].initialize();
 		}
 		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 24);
-		alert = new SlickBlankRectangle(150, 200, 550, 40, "");
+		alert = new SlickBlankRectangle(150, 200, 550, 40, "", false);
 		background = new Image("/res/terrain/refinery.png");
 	}
 	

@@ -13,7 +13,7 @@ public class BattleConsole {
 
 	public static void cleanConsole(){
 		if (console == null){
-			console = new SlickBlankRectangle(0, 0, 817, 100, "");
+			console = new SlickBlankRectangle(0, 0, 817, 100, "", false);
 		}
 		backlog.clear();
 	}

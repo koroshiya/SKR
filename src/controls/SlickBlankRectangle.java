@@ -3,30 +3,25 @@ package controls;
 import org.newdawn.slick.Graphics;
 
 public class SlickBlankRectangle extends SlickRectangle {
+	
+	private static final long serialVersionUID = -1733861031169150097L;
 
-	public SlickBlankRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText) {
-		super(x, y, width, height, tag, enabled, displayText);
-		// TODO Auto-generated constructor stub
+	public SlickBlankRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText, boolean clickable) {
+		super(x, y, width, height, tag, enabled, displayText, clickable);
 	}
 
-	public SlickBlankRectangle(float x, float y, float width, float height, String tag, boolean b) {
-		super(x, y, width, height, tag, b);
+	public SlickBlankRectangle(float x, float y, float width, float height, String tag, boolean enabled, boolean clickable) {
+		super(x, y, width, height, tag, enabled, clickable);
 	}
 
-	public SlickBlankRectangle(float x, float y, float width, float height, String tag) {
-		super(x, y, width, height, tag);
-	}
-
-	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
-
+	public SlickBlankRectangle(float x, float y, float width, float height, String tag, boolean clickable) {
+		super(x, y, width, height, tag, clickable);
 	}
 
 	@Override
-	public void paintCache(Graphics g, int xOff, int yOff) {
-		// TODO Auto-generated method stub
+	public void initialize() {}
 
-	}
+	@Override
+	public void paintCache(Graphics g, int xOff, int yOff) {}
 
 }

@@ -129,7 +129,7 @@ public class UnicodeFont implements org.newdawn.slick.Font {
 		
 		private static final long serialVersionUID = 1365336879730980072L;
 
-		protected boolean removeEldestEntry (Entry eldest) {
+		protected boolean removeEldestEntry (@SuppressWarnings("rawtypes") Entry eldest) {
 			DisplayList displayList = (DisplayList)eldest.getValue();
 			if (displayList != null) eldestDisplayListID = displayList.id;
 			return size() > DISPLAY_LIST_CACHE_SIZE;
@@ -227,13 +227,13 @@ public class UnicodeFont implements org.newdawn.slick.Font {
 	 * @param italic True if the font should be rendered in bold typeface
 	 */
 	private void initializeFont(Font baseFont, int size, boolean bold, boolean italic) {
-		Map attributes = baseFont.getAttributes();
+		@SuppressWarnings("unchecked")
+		Map<TextAttribute, Float> attributes = (Map<TextAttribute, Float>) baseFont.getAttributes();
 		attributes.put(TextAttribute.SIZE, new Float(size));
 		attributes.put(TextAttribute.WEIGHT, bold ? TextAttribute.WEIGHT_BOLD : TextAttribute.WEIGHT_REGULAR);
 		attributes.put(TextAttribute.POSTURE, italic ? TextAttribute.POSTURE_OBLIQUE : TextAttribute.POSTURE_REGULAR);
 		try {
-			attributes.put(TextAttribute.class.getDeclaredField("KERNING").get(null), TextAttribute.class.getDeclaredField(
-				"KERNING_ON").get(null));
+			attributes.put(TextAttribute.KERNING, (float)TextAttribute.KERNING_ON);
 		} catch (Exception ignored) {
 		}
 		font = baseFont.deriveFont(attributes);

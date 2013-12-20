@@ -43,7 +43,7 @@ public class MapConsole extends SlickListener {
 		//TODO: set aside space at bottom for char info, map, etc.
 		//BattleMenuListener listener = new BattleMenuListener();
 
-		background = new SlickImageRectangle(-1, 506, 817, 120, "", false, "/res/buttons/4x1/brown.png");
+		background = new SlickImageRectangle(-1, 506, 817, 120, "", false, "/res/buttons/4x1/brown.png", false);
 		background.initialize();
 		
 		final int buttonWidth = 150;
@@ -51,7 +51,7 @@ public class MapConsole extends SlickListener {
 		final int startX = 650;
 		int startY = 510;
 		for (int i = 0; i < rects.length; i++){
-			rects[i] = new SlickImageRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false, "/res/buttons/6x1/blue.png");
+			rects[i] = new SlickImageRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false, "/res/buttons/6x1/blue.png", true);
 			rects[i].initialize();
 			startY += buttonHeight + 2;
 		}

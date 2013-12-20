@@ -5,7 +5,6 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.util.Log;
 
 public abstract class SlickRectangle extends Rectangle {
 	
@@ -24,7 +23,11 @@ public abstract class SlickRectangle extends Rectangle {
 	/*
 	 * If disabled, text isn't drawn, click events aren't responded to, etc.
 	 * */
-	private boolean enabled; //TODO: change color if disabled?
+	protected boolean enabled; //TODO: change color if disabled?
+	/*
+	 * If disabled, click events aren't responded to.
+	 * */
+	protected final boolean clickable;
 	
 	/**
 	 * @param x X coordinate at which the upper left corner of this rectangle begins
@@ -33,8 +36,8 @@ public abstract class SlickRectangle extends Rectangle {
 	 * @param height Height of this rectangle
 	 * @param tag Text to uniquely identify this rectangle, and also to display when this rectangle is drawn
 	 * */
-	public SlickRectangle(float x, float y, float width, float height, String tag) {
-		this(x, y, width, height, tag, true);
+	public SlickRectangle(float x, float y, float width, float height, String tag, boolean clickable) {
+		this(x, y, width, height, tag, true, clickable);
 	}
 
 	/**
@@ -45,8 +48,8 @@ public abstract class SlickRectangle extends Rectangle {
 	 * @param tag Text to uniquely identify this rectangle, and also to display when this rectangle is drawn
 	 * @param enabled True if this rectangle should be drawn, accept events, etc.
 	 * */
-	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled) {
-		this(x, y, width, height, tag, enabled, "");
+	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, boolean clickable) {
+		this(x, y, width, height, tag, enabled, "", clickable);
 	}
 
 	/**
@@ -57,8 +60,8 @@ public abstract class SlickRectangle extends Rectangle {
 	 * @param tag Text to uniquely identify this rectangle, and also to display when this rectangle is drawn
 	 * @param imgSrc URL of image to draw as the background for this rectangle
 	 * */
-	public SlickRectangle(float x, float y, float width, float height, String tag, String url) {
-		this(x, y, width, height, tag, true, tag, url);
+	public SlickRectangle(float x, float y, float width, float height, String tag, String url, boolean clickable) {
+		this(x, y, width, height, tag, true, tag, url, clickable);
 	}
 
 	/**
@@ -70,8 +73,8 @@ public abstract class SlickRectangle extends Rectangle {
 	 * @param enabled True if this rectangle should be drawn, accept events, etc.
 	 * @param imgSrc URL of image to draw as the background for this rectangle
 	 * */
-	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String url) {
-		this(x, y, width, height, tag, enabled, tag, url);
+	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String url, boolean clickable) {
+		this(x, y, width, height, tag, enabled, tag, url, clickable);
 	}
 
 	/**
@@ -84,7 +87,7 @@ public abstract class SlickRectangle extends Rectangle {
 	 * @param displayText Text to display when this rectangle is drawn
 	 * @param imgSrc URL of image to draw as the background for this rectangle
 	 * */
-	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText, String imgSrc) {
+	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText, String imgSrc, boolean clickable) {
 		super(x, y, width, height);
 		this.tag = tag;
 		this.x = x;
@@ -94,6 +97,7 @@ public abstract class SlickRectangle extends Rectangle {
 		this.enabled = enabled;
 		this.displayText = displayText;
 		this.imgSrc = imgSrc;
+		this.clickable = clickable;
 	}
 
 	/**
@@ -136,7 +140,7 @@ public abstract class SlickRectangle extends Rectangle {
 	 * @return True if point lies within this rectangle, otherwise false.
 	 * */
 	public boolean isWithinBounds(int x, int y){
-		if (enabled && x >= this.x && x < this.x + this.width && y >= this.y && y < this.y + this.height){
+		if (enabled && clickable && x >= this.x && x < this.x + this.width && y >= this.y && y < this.y + this.height){
 			//SlickSKR.PlaySFX("other/public/intro_button.ogg");
 			return true;
 		}

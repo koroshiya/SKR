@@ -5,9 +5,14 @@ Fixed SpanTransitionTile transitioning/placement and changed to extend SpanTile 
 Implemented ScalableGame interface for future scaling*
 Replaced several bitmaps with high quality scaling images
 Imported Slick source into project, fixed tons of warnings, removed unnecessary exceptions, etc.
+Imported jOGG and jOrbis into project, updated to 0.0.17
+Updated LWJGL and native binaries to 2.9.1
+Updated JNLP from 30-Aug-2002 version to 29-nov-2006 version
+Implemented additional parameter for SlickRectangle**
 
 *Currently disabled, but ideally for future implementations when higher resolution icons are available.
 eg. To create the game in 1080p, then scale down as required.
+**New parameter that allows user to declare whether the rectangle is clickable or not.
 
 v0.32
 Removed unnecessary draw cycle from MapScreen render

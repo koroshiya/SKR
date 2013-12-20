@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="natives">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SKR/natives"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="src" path="natives"/>
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="src" path="libs"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="libs/lwjgl.jar"/>
-	<classpathentry kind="lib" path="libs/ibxm.jar"/>
-	<classpathentry kind="lib" path="libs/jnlp.jar"/>
-	<classpathentry kind="lib" path="libs/jogg-0.0.7.jar"/>
-	<classpathentry kind="lib" path="libs/jorbis-0.0.15.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ibxm.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jnlp.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SKR/natives/linux"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

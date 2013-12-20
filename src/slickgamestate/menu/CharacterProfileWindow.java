@@ -82,7 +82,7 @@ public class CharacterProfileWindow extends SlickGameState{
 	public void setCharacter(PlayableCharacter character){
 		
 		this.character = character;
-		lblAvatar = new SlickImageRectangle(0, 0, 450, 624, "", true, this.character.getProfilePicture());
+		lblAvatar = new SlickImageRectangle(0, 0, 450, 624, "", true, this.character.getProfilePicture(), false);
 		lblAvatar.initialize();
 		
 		labels[0] = character.getName(); //All info
@@ -147,7 +147,7 @@ public class CharacterProfileWindow extends SlickGameState{
 		
 		int i = -1;
 		while (++i < total){
-			partyMembers[i] = new SlickBlankRectangle(x + row, startY + 102 * col, 100, 100, Integer.toString(i));
+			partyMembers[i] = new SlickBlankRectangle(x + row, startY + 102 * col, 100, 100, Integer.toString(i), true);
 			row = row == 0 ? 102 : 0;
 			col = i > 1 ? 1 : 0;
 		}

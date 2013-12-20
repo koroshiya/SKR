@@ -32,8 +32,8 @@ public class GameOver extends SlickGameState {
 		
 		label = new Image("/res/terrain/lab-dark.png");
 		rects = new SlickBlankRectangle[2];
-		rects[0] = new SlickBlankRectangle(300, 350, 100, 50, commands[0]);
-		rects[1] = new SlickBlankRectangle(402, 350, 100, 50, commands[1]);
+		rects[0] = new SlickBlankRectangle(300, 350, 100, 50, commands[0], true);
+		rects[1] = new SlickBlankRectangle(402, 350, 100, 50, commands[1], true);
 		
 	}
 	

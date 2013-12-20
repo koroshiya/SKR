@@ -51,7 +51,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 		int i = -1;
 		int total = itemParams.length;
 		while (++i < total){
-			itemParams[i] = new SlickBlankRectangle(x + optX, y, 20, 15, "");
+			itemParams[i] = new SlickBlankRectangle(x + optX, y, 20, 15, "", false);
 
 			optX = optX == 0 ? baseX : 0;
 			y += optY;
@@ -129,7 +129,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 		int i = -1;
 		while (++i < length){
 			filtery = getFilterY(filterBaseY, i);
-			filterItems[i] = new SlickImageRectangle(filterx, filtery, paneWidth, filterBaseY, commands[i], true, "/res/buttons/6x1/gray+border.png");
+			filterItems[i] = new SlickImageRectangle(filterx, filtery, paneWidth, filterBaseY, commands[i], true, "/res/buttons/6x1/gray+border.png", true);
 		}
 	}
 	
@@ -147,7 +147,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 			total = 9;
 		}
 		while (++i < total){
-			items[i] = new SlickImageRectangle(baseX, baseY + incY * i, incX * 3, incY, Integer.toString(i), true, "/res/buttons/9x1/onyx.png");
+			items[i] = new SlickImageRectangle(baseX, baseY + incY * i, incX * 3, incY, Integer.toString(i), true, "/res/buttons/9x1/onyx.png", true);
 			items[i].initialize();
 		}
 		
@@ -212,7 +212,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 	
 	public void getMoneyPane(Graphics g){
 
-		SlickImageRectangle stats = new SlickImageRectangle(0, 550, 300, 72, lblMoney, true, "/res/buttons/4x1/onyx.png");
+		SlickImageRectangle stats = new SlickImageRectangle(0, 550, 300, 72, lblMoney, true, "/res/buttons/4x1/onyx.png", false);
 		stats.initialize();
 		stats.paintCache(g);//TODO: replace 150 with gc size scale
 		stats.paintCenter(g, true);
@@ -232,7 +232,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 		
 		//Rectangle avatar = new Rectangle(300, 0, 100f, 100f);
 		//g.draw(avatar);
-		SlickImageRectangle stats = new SlickImageRectangle(335, 30, 450, 100, "", false, "/res/buttons/9x2/onyx.png");
+		SlickImageRectangle stats = new SlickImageRectangle(335, 30, 450, 100, "", false, "/res/buttons/9x2/onyx.png", false);
 		stats.initialize();
 		stats.paintCache(g);//TODO: replace 150 with gc size scale
 		item.drawScaled(g, 352, 47, 64, 64);

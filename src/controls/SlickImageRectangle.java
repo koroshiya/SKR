@@ -12,16 +12,16 @@ public class SlickImageRectangle extends SlickRectangle {
 	
 	private Image cache = null;
 	
-	public SlickImageRectangle(float x, float y, float width, float height, String tag, String url) {
-		super(x, y, width, height, tag, url);
+	public SlickImageRectangle(float x, float y, float width, float height, String tag, String url, boolean clickable) {
+		super(x, y, width, height, tag, url, clickable);
 	}
 
-	public SlickImageRectangle(float x, float y, float width, float height, String tag, boolean enabled, String url) {
-		super(x, y, width, height, tag, enabled, url);
+	public SlickImageRectangle(float x, float y, float width, float height, String tag, boolean enabled, String url, boolean clickable) {
+		super(x, y, width, height, tag, enabled, url, clickable);
 	}
 
-	public SlickImageRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText, String imgSrc) {
-		super(x, y, width, height, tag, enabled, displayText, imgSrc);
+	public SlickImageRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText, String imgSrc, boolean clickable) {
+		super(x, y, width, height, tag, enabled, displayText, imgSrc, clickable);
 	}
 	
 	public void initialize(){

@@ -78,7 +78,7 @@ public class StartScreen extends SlickGameState{
 		int incY = buttonHeight + 4;
 		int startY = 616 - buttonHeight - ((total - 1) * incY);
 		while (++i < total){
-			rects[i] = new SlickImageRectangle(10, startY + (i * incY), buttonWidth, buttonHeight, commands[i], "/res/buttons/4x1/onyx.png");
+			rects[i] = new SlickImageRectangle(10, startY + (i * incY), buttonWidth, buttonHeight, commands[i], "/res/buttons/4x1/onyx.png", true);
 			rects[i].initialize();
 		}
 		SlickGameState.initCache(arg0);
@@ -94,7 +94,7 @@ public class StartScreen extends SlickGameState{
 		
 		if (SlickGameState.needFlush()){
 			GradientFill fill = new GradientFill(0, 0, Color.gray, arg0.getWidth(), arg0.getHeight(), Color.white);
-			g.fill(new SlickBlankRectangle(0, 0, arg0.getWidth(), arg0.getHeight(), ""),  fill);
+			g.fill(new SlickBlankRectangle(0, 0, arg0.getWidth(), arg0.getHeight(), "", true),  fill);
 			g.setFont(SlickSKR.getFont(18, false));
 			for (int i = 0; i < commands.length; i++){
 				rects[i].paintCache(g);

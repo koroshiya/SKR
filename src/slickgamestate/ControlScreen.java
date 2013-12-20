@@ -10,7 +10,6 @@ import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.state.StateBasedGame;
 
 import controls.SlickBlankRectangle;
-import controls.SlickRectangle;
 import screen.GameScreen;
 
 public class ControlScreen extends SlickGameState{
@@ -18,15 +17,11 @@ public class ControlScreen extends SlickGameState{
 	private SlickBlankRectangle[] rects;
 	
 	public ControlScreen(GameScreen battleScreen) {
-		
 		super(SlickSKR.CONTROLSCREEN, battleScreen);
-		
 	}	
 	
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1){
-		
-	}
+	public void init(GameContainer arg0, StateBasedGame arg1){}
 
 	@Override
 	public void enter(GameContainer gc, StateBasedGame arg1){
@@ -38,7 +33,7 @@ public class ControlScreen extends SlickGameState{
 
 		if (SlickGameState.needFlush()){
 			GradientFill fill = new GradientFill(0, 0, Color.gray, arg0.getWidth(), arg0.getHeight(), Color.white);
-			g.fill(new SlickBlankRectangle(0, 0, arg0.getWidth(), arg0.getHeight(), ""),  fill);
+			g.fill(new SlickBlankRectangle(0, 0, arg0.getWidth(), arg0.getHeight(), "", false),  fill);
 			
 			g.drawString(SlickSKR.getValueFromKey("screen.control.commands.heading"), 20, 100);
 			g.drawString(SlickSKR.getValueFromKey("screen.control.commands.interact"), 20, 120);

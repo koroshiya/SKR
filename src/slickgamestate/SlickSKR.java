@@ -2,7 +2,6 @@ package slickgamestate;
 
 import java.awt.Font;
 import java.awt.Point;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.ScalableGame;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.TrueTypeFont;
@@ -65,10 +63,10 @@ public class SlickSKR extends StateBasedGame {
 	public static final Point size = new Point(816, 624);
 	public static final float scaleSize = 624 / size.y;
 	
-	public SlickSKR(ParentMap current) throws SlickException, FileNotFoundException, IOException{
+	public SlickSKR(ParentMap current) throws SlickException, IOException{
 		
 		super(GAME_NAME);
-		game = this;//new ScalableGame(this, size.x, size.y);
+		game = this;//TODO: new ScalableGame(this, size.x, size.y);
 		GameScreen gs = current.getFrame();
 		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
 		this.addState(new StartScreen(gs));
@@ -87,7 +85,7 @@ public class SlickSKR extends StateBasedGame {
 	
 	public SlickSKR() throws IOException{
 		super(GAME_NAME);
-		game = this;//new ScalableGame(this, size.x, size.y);
+		game = this;//TODO: new ScalableGame(this, size.x, size.y);
 		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
 	}
 	
@@ -98,7 +96,9 @@ public class SlickSKR extends StateBasedGame {
 	        for (DisplayMode mode : modes) {
 	        	if (mode.getFrequency() == 60){
 	        		best.add(mode);
-	        		//Display.sync(fps) TODO instead of/as well as vsync
+	        		//Display.sync(fps) TODO instead of/as well as vsync? 
+	        		//Necessary if already set by Slick? 
+	        		//Handled in fullscreen already?
 	        		System.out.println(mode.getWidth() + "x" + mode.getHeight() + "x" + mode.getBitsPerPixel() + " " + mode.getFrequency() + "Hz");
 	        	}
 	        }

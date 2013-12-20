@@ -14,7 +14,6 @@ import com.japanzai.skr.Inventory;
 
 import controls.SlickBlankRectangle;
 import controls.SlickImageRectangle;
-import controls.SlickRectangle;
 import screen.GameScreen;
 import slickgamestate.SlickGameState;
 import slickgamestate.SlickSKR;
@@ -25,9 +24,9 @@ public class Store extends ItemWindowBase{
 	private boolean boolInventory = true;
 	private int transQuantity = 0;
 	private boolean buyMode = true;
-	private SlickRectangle[] tempPrompts = null;
+	private SlickImageRectangle[] tempPrompts = null;
 	private int timer = 0;
-	private SlickBlankRectangle message = new SlickBlankRectangle(150, 150, 500, 300, "");
+	private SlickBlankRectangle message = new SlickBlankRectangle(150, 150, 500, 300, "", false);
 	
 	public Store(GameScreen parent) {
 		super(SlickSKR.STORE, parent, new String[]{
@@ -49,7 +48,7 @@ public class Store extends ItemWindowBase{
 		int i = commands.length - 3;
 		int total = commands.length;
 		while (++i < total){
-			filterItems[i] = new SlickImageRectangle(paneWidth * (i % 2), 0, paneWidth, filterBaseY, commands[i], true, "/res/buttons/btn_gray+border_500x58.png");
+			filterItems[i] = new SlickImageRectangle(paneWidth * (i % 2), 0, paneWidth, filterBaseY, commands[i], true, "/res/buttons/btn_gray+border_500x58.png", true);
 		}
 		
 	}
@@ -106,10 +105,22 @@ public class Store extends ItemWindowBase{
 		}
 	}
 	
+	private void processSelection(String tag){
+		if (tag == "Accept"){
+			//TODO: purchase
+		}else if (tag == "Cancel"){
+			cancel();
+		}else if (tag == "+"){
+			//TODO: increase qty
+		}else if (tag == "-"){
+			//TODO: decrease qty
+		}
+	}
+	
 	@Override
 	public void processMouseClick(int clickCount, int x, int y) {
 		
-		for (SlickRectangle s : filterItems){
+		for (SlickImageRectangle s : filterItems){
 			if (s.isWithinBounds(x, y)){
 				this.setFilter(s.getTag());
 				return;
@@ -119,10 +130,19 @@ public class Store extends ItemWindowBase{
 		//TODO: check for Inventory/Store
 		//TODO: check for item click
 		
-		for (SlickRectangle s : items){
+		for (SlickImageRectangle s : items){
 			if (s.isWithinBounds(x, y)){
 				setItem(results.get(Integer.parseInt(s.getTag())));
 				return;
+			}
+		}
+		
+		if (tempPrompts != null){
+			for (SlickImageRectangle rect : tempPrompts){
+				if (rect.isWithinBounds(x, y)){
+					processSelection(rect.getTag());
+					return;
+				}
 			}
 		}
 		
@@ -136,17 +156,22 @@ public class Store extends ItemWindowBase{
 		g.setFont(tFont);
 	} //TODO
 	
+	private void cancel(){
+		tempPrompts = null;
+		SlickGameState.setFlush(true, false);
+	}
+	
 	private void selectItem(Item i, Graphics g){
 		transQuantity = 0;
 		//TODO: bring up dialogue
 		SlickGameState.darken();
-		tempPrompts = new SlickBlankRectangle[]{ //TODO: set once and toggle visibility?
-			new SlickBlankRectangle(0, 0, 500f, 300f, ""),
-			new SlickBlankRectangle(0, 0, 150f, 100f, "Accept"),
-			new SlickBlankRectangle(0, 0, 150f, 100f, "Cancel"),
-			new SlickBlankRectangle(0, 0, 50f, 50f, "+"),
-			new SlickBlankRectangle(0, 0, 50f, 50f, "-"),
-			new SlickBlankRectangle(0, 0, 50f, 50f, "0")
+		tempPrompts = new SlickImageRectangle[]{ //TODO: set once and toggle visibility?
+			new SlickImageRectangle(0, 0, 500f, 300f, "", "", false),
+			new SlickImageRectangle(0, 0, 150f, 100f, "Accept", "", true),
+			new SlickImageRectangle(0, 0, 150f, 100f, "Cancel", "", true),
+			new SlickImageRectangle(0, 0, 50f, 50f, "+", "", true),
+			new SlickImageRectangle(0, 0, 50f, 50f, "-", "", true),
+			new SlickImageRectangle(0, 0, 50f, 50f, "0", "", false)
 		};
 		
 	}
@@ -163,7 +188,6 @@ public class Store extends ItemWindowBase{
 	
 	private void buyItem(Item i){
 		if (Inventory.buyItem(i, transQuantity)){
-			
 			transQuantity = 0;
 		}else{
 			//TODO: message, cannot afford or not enough in stock

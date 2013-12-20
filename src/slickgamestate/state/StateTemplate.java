@@ -24,7 +24,7 @@ public abstract class StateTemplate extends SlickGameState {
 	private final String[] commands;
 	private Image[] imageCache;
 	private int back = SlickSKR.CONTROLSCREEN;
-	private SlickBlankRectangle backRect = new SlickBlankRectangle(100, 100, 100, 100, "Back [W]");
+	private SlickBlankRectangle backRect = new SlickBlankRectangle(100, 100, 100, 100, "Back [W]", true);
 	
 	public StateTemplate(int id, GameScreen parent) {
 		
@@ -64,7 +64,7 @@ public abstract class StateTemplate extends SlickGameState {
 		int total = commands.length < 9 ? commands.length : 9;
 		rects = new SlickBlankRectangle[total];
 		while (++i < total){
-			rects[i] = new SlickBlankRectangle(300, i * 50, 200, 50, commands[i]);
+			rects[i] = new SlickBlankRectangle(300, i * 50, 200, 50, commands[i], true);
 		}
 		String[] strCache = SaveState.viewAvatars(arg0);
 		total = strCache.length < 9 ? strCache.length : 9;

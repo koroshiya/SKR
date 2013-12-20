@@ -365,7 +365,7 @@ public class Battle extends SlickGameState{
 		
 		rects = new SlickRectangle[4];
 		String attackTag = this.currentCharacter.getTemper() < 10 ? commands[0] : SlickSKR.getValueFromKey("screen.battle.commands.fury");
-		rects[0] = new SlickBlankRectangle(startX, startY, buttonWidth, buttonHeight, commands[0], false, attackTag);
+		rects[0] = new SlickBlankRectangle(startX, startY, buttonWidth, buttonHeight, commands[0], false, attackTag, true);
 		
 		int i = 0; //NOTE: not a mistake; should be 0
 		int total = rects.length;
@@ -382,7 +382,7 @@ public class Battle extends SlickGameState{
 	}
 	
 	private SlickRectangle setMenuItem(int i) {
-		return new SlickBlankRectangle(startX, startY + buttonHeight * i, buttonWidth, buttonHeight, "");
+		return new SlickBlankRectangle(startX, startY + buttonHeight * i, buttonWidth, buttonHeight, "", true);
 	}
 	
 	public void resetDefaultInterface(){

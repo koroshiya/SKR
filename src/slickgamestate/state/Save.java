@@ -24,7 +24,7 @@ public class Save extends StateTemplate {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		super.init(arg0, arg1);
-		newSave = new SlickBlankRectangle(600,100, 100, 100, "New Save");
+		newSave = new SlickBlankRectangle(600,100, 100, 100, "New Save", true);
 	}
 	
 	@Override

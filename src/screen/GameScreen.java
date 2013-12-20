@@ -2,9 +2,6 @@ package screen;
 
 import interfaces.InteractableObject;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
@@ -133,6 +130,7 @@ public class GameScreen extends AppGameContainer{
 		
 	}
 	
+	@SuppressWarnings("unused")
 	public boolean isEncounter(ParentMap map){
 		
 		if (!SlickSKR.NO_ENCOUNTERS && map.randomEncounter()){
