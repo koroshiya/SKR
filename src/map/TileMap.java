@@ -55,14 +55,14 @@ public class TileMap implements TileBasedMap {
 	
 	public boolean isOpenAndReachable(double x, double y){
 		try{
-			return (tiles[(int) x][(int) y].isReachable() && tiles[(int) x][(int) y].isOpen());
+			return tiles[(int) x][(int) y].isOpen();
 		}catch (ArrayIndexOutOfBoundsException ex){
 			return false;
 		}
 	}
 	
 	public void instantiate(String defaultTile) throws SlickException{
-		Tile def = new Tile(false, false, defaultTile);
+		Tile def = new Tile(false, defaultTile, 0, 0);
 		def.instantiate();
 		for (Tile[] t1 : tiles){
 			for (Tile t2 : t1){

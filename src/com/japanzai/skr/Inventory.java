@@ -9,6 +9,7 @@ import item.Weapon;
 import java.util.ArrayList;
 
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.util.Log;
 
 public class Inventory {
 	
@@ -129,7 +130,7 @@ public class Inventory {
 				return item;
 			}
 		}
-		System.out.println("No item found in getItemByName(" + name + ")");
+		Log.error("No item found in getItemByName(" + name + ")");
 		return null; //assertion?
 			
 	}

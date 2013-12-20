@@ -1,6 +1,5 @@
 package slickgamestate;
 
-import interfaces.SlickDrawableFrame;
 import map.ParentMap;
 
 import org.newdawn.slick.Image;
@@ -30,7 +29,7 @@ public class MapScreen extends SlickGameState{
 	
 	private ParentMap map;
 	public static int ICON_SIZE = 48;
-	private SlickDrawableFrame activeDialog = null;
+	private MapConsole activeDialog = null;
 	public static SlickCache mapCache;
 	private SlickCache bgCache;
 	
@@ -83,6 +82,11 @@ public class MapScreen extends SlickGameState{
 				mapCache.move(xDiff, yDiff);
 				bgCache.move(xDiff, yDiff);
 			}
+		}
+		if (this.activeDialog != null){
+			checkCursor(arg0, this.activeDialog.getRects());
+		}else{
+			SlickSKR.setMouseStateIfDifferent(SlickSKR.MOUSE_STATE_NORMAL, arg0);
 		}
 		
 	}
@@ -155,7 +159,7 @@ public class MapScreen extends SlickGameState{
 
 	public void removeMapConsole() {activeDialog = null;}
 	
-	public void setMapConsole(SlickDrawableFrame activeDialog){this.activeDialog = activeDialog;}
+	public void setMapConsole(MapConsole activeDialog){this.activeDialog = activeDialog;}
 
 	@Override
 	public void processMouseClick(int clickCount, int x, int y) {
@@ -234,7 +238,7 @@ public class MapScreen extends SlickGameState{
 				GameScreen parent = getParentMap().getFrame();
 				parent.setFullScreen();
 			}else {
-				System.out.println("MapScreen KeyReleased: " + code);
+				//System.out.println("MapScreen KeyReleased: " + code);
 			}
 		}
 		

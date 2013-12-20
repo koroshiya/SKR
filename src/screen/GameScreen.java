@@ -2,6 +2,9 @@ package screen;
 
 import interfaces.InteractableObject;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
@@ -25,15 +28,18 @@ import java.util.ArrayList;
 
 public class GameScreen extends AppGameContainer{
 	
+	private StateBasedGame game;
+	
 	public GameScreen(SlickSKR skr) throws SlickException{
 		
-		super(skr);
+		super(skr.getGame());
+		game = skr;
 		this.setIcon("/res/icon.png");
-		
 	}
 	
 	public void setSKR(SlickSKR skr){
-		super.game = skr;
+		super.game = skr.getGame();
+		game = skr;
 		this.setVSync(true);
 		this.setTargetFrameRate(60);
 		this.setSmoothDeltas(true);
@@ -42,11 +48,9 @@ public class GameScreen extends AppGameContainer{
 		this.setMaximumLogicUpdateInterval(10);
 		
 		//this.setShowFPS(false);
-		//TODO: Set animated cursor
-		//TODO: Set icon
 		
 		try{
-			this.setDisplayMode(816, 624, false); //TODO: Change to true for fullscreen
+			this.setDisplayMode(SlickSKR.size.x, SlickSKR.size.y, false); //TODO: Change to true for fullscreen
 		}catch (SlickException ex){
 			ex.printStackTrace();
 		}
@@ -59,7 +63,7 @@ public class GameScreen extends AppGameContainer{
 			((StateTemplate)this.getState(i)).setBack(curr);
 		}
 		if (SlickSKR.NO_TRANSITIONS){
-			((StateBasedGame)super.game).enterState(i);
+			game.enterState(i);
 			return;
 		}
 		
@@ -69,7 +73,7 @@ public class GameScreen extends AppGameContainer{
 			transIn = new FadeOutTransition(Color.black, 400);
 			transOut = new FadeInTransition(Color.black, 400);
 		}else if (i == SlickSKR.MENU || curr == SlickSKR.MENU){
-			((StateBasedGame)super.game).enterState(i);
+			game.enterState(i);
 			return;
 		}else if (i == SlickSKR.GAMEOVER || curr == SlickSKR.GAMEOVER){
 			transIn = new FadeOutTransition(Color.black, 200);
@@ -78,27 +82,27 @@ public class GameScreen extends AppGameContainer{
 			transIn = new FadeOutTransition(Color.white, 800);
 			transOut = new FadeInTransition(Color.white, 800);
 		}else{
-			((StateBasedGame)super.game).enterState(i);
+			game.enterState(i);
 			return;
 		}
-		((StateBasedGame)super.game).enterState(i, transIn, transOut);
+		game.enterState(i, transIn, transOut);
 		if (i == SlickSKR.BATTLE){SlickSKR.PlaySFX("other/public/battle_start.ogg");}
 	}
 	
 	public void swapView(int i, Transition transIn, Transition transOut){
-		((StateBasedGame)super.game).enterState(i, transIn, transOut);
+		game.enterState(i, transIn, transOut);
 	}
 	
-	public int getStateIndex(){return ((StateBasedGame)super.game).getCurrentStateID();}
+	public int getStateIndex(){return game.getCurrentStateID();}
 	
-	public GameState getState(){return ((StateBasedGame)super.game).getCurrentState();}
+	public GameState getState(){return game.getCurrentState();}
 	
-	public GameState getState(int i){return ((StateBasedGame)super.game).getState(i);}
+	public GameState getState(int i){return game.getState(i);}
 	
 	public void setBattle(ArrayList<EnemyCharacter> enemies){
 		
 		((Battle)this.getState(SlickSKR.BATTLE)).setEnemies(enemies);
-		((StateBasedGame)super.game).enterState(SlickSKR.BATTLE);
+		game.enterState(SlickSKR.BATTLE);
 		
 	}
 	

@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.newdawn.slick.util.Log;
+
 
 public class Parameters extends JPanel {
 	
@@ -58,7 +60,7 @@ public class Parameters extends JPanel {
 			encRate = Integer.parseInt(strEnc);
 			
 		}catch (Exception ex){
-			System.out.println("Error encountered - Setting encounter rate to 97");
+			Log.error("Error encountered - Setting encounter rate to 97");
 			encRate = 97;
 		}
 		

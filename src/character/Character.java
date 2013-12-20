@@ -10,6 +10,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 import slickgamestate.MapScreen;
+import slickgamestate.SlickSKR;
 
 import com.japanzai.skr.Gender;
 
@@ -106,14 +107,15 @@ public abstract class Character implements Photogenic{
 		return (this.spriteDirectory + "avatar.png");
 	}
 	
-	public void drawCache(float x, float y, Graphics g){
-		if (cache != null){
-			g.drawImage(cache, x, y);
-		}
+	@Override
+	public void drawScaled(Graphics g, int x, int y, float width, float height){
+		g.drawImage(cache, x, y, x + width, y + height, 0, 0, cache.getWidth(), cache.getHeight());
 	}
 	
-	public void drawScaled(Graphics g, int x, int y, int width, int height){
-		g.drawImage(cache, x, y, x + width, y + height, 0, 0, cache.getWidth(), cache.getHeight());
+	public void drawScaled(Graphics g, int x, int y, float targetHeight){
+		targetHeight *=  SlickSKR.scaleSize;
+		float targetWidth = (float)Math.floor((float)cache.getWidth() * (float)targetHeight / (float)cache.getHeight());
+		drawScaled(g, x, y, targetWidth, targetHeight);
 	}
 	
 	public synchronized void draw(int x, int y){

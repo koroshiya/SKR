@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
 
-import controls.SlickRectangle;
+import controls.SlickBlankRectangle;
 
 public class BattleConsole {
 	
 	private static ArrayList<String> backlog = new ArrayList<String>();
-	private static SlickRectangle console = null;
+	private static SlickBlankRectangle console = null;
 
 	public static void cleanConsole(){
 		if (console == null){
-			console = new SlickRectangle(0, 0, 817, 100, "");
+			console = new SlickBlankRectangle(0, 0, 817, 100, "");
 		}
 		backlog.clear();
 	}

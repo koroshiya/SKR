@@ -1,9 +1,7 @@
 package console;
 
 import interfaces.InteractableObject;
-import interfaces.SlickDrawableFrame;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
@@ -15,12 +13,13 @@ import slickgamestate.SlickGameState;
 import tile.ChestTile;
 import console.dialogue.ComplexDialogue;
 import console.dialogue.Dialogue;
+import controls.SlickImageRectangle;
 import controls.SlickRectangle;
 
-public class MapConsole extends SlickListener implements SlickDrawableFrame {
+public class MapConsole extends SlickListener {
 	
-	private SlickRectangle background;
-	private SlickRectangle[] rects = new SlickRectangle[4];
+	private SlickImageRectangle background;
+	private SlickImageRectangle[] rects = new SlickImageRectangle[4];
 	
 	private Dialogue dialogue;
 	private InteractableObject npc = null;
@@ -44,7 +43,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		//TODO: set aside space at bottom for char info, map, etc.
 		//BattleMenuListener listener = new BattleMenuListener();
 
-		background = new SlickRectangle(-1, 506, 817, 120, "", false, "/res/buttons/button-brown-816x120.png");
+		background = new SlickImageRectangle(-1, 506, 817, 120, "", false, "/res/buttons/4x1/brown.png");
 		background.initialize();
 		
 		final int buttonWidth = 150;
@@ -52,7 +51,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 		final int startX = 650;
 		int startY = 510;
 		for (int i = 0; i < rects.length; i++){
-			rects[i] = new SlickRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false, "/res/buttons/button_blue_150x25.png");
+			rects[i] = new SlickImageRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false, "/res/buttons/6x1/blue.png");
 			rects[i].initialize();
 			startY += buttonHeight + 2;
 		}
@@ -65,9 +64,9 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	}
 	
 	public void paint(Graphics g, int offX, int offY){
-		background.paintCache(g, offX, offY);
+		background.paintCache(g, offX, offY, (int)background.getHeight());//TODO: replace 150 with gc size scale
 		for (SlickRectangle rect : rects){
-			rect.paintCache(g, offX, offY);
+			rect.paintCache(g, offX, offY);//TODO: replace 150 with gc size scale
 			rect.paintCenter(g,true, offX, offY);
 		}
 		g.drawImage(this.dialogue.getCache(), 10 + offX, 515 + offY);
@@ -84,6 +83,8 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 			}
 		}
 	}
+	
+	public SlickRectangle[] getRects(){return this.rects;}
 	
 	public void speak(Dialogue d) {d.increment();}
 
@@ -134,7 +135,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 	public void setDialogue(Dialogue dialogue){this.dialogue = dialogue;}
 	
 	@Override
-	public void processMouseClick(int arg0, int x, int y) throws IOException, ClassNotFoundException {
+	public void processMouseClick(int arg0, int x, int y) {
 
 		for (SlickRectangle rect : rects){
 			if (rect.isWithinBounds(x, y)){
@@ -147,13 +148,7 @@ public class MapConsole extends SlickListener implements SlickDrawableFrame {
 
 	@Override
 	public void mouseReleased(int arg0, int arg1, int arg2) {
-		try {
-			this.processMouseClick(1, arg1, arg2);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.processMouseClick(1, arg1, arg2);
 	}
 	
 	public void process(String tag) {

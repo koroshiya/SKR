@@ -2,8 +2,6 @@ package tile.event;
 
 import item.StoreInstance;
 
-import org.newdawn.slick.SlickException;
-
 import screen.GameScreen;
 import slickgamestate.SlickSKR;
 import slickgamestate.menu.Store;
@@ -13,9 +11,9 @@ public class CharacterEventStoreTile extends CharacterEventTile{
 	
 	private final StoreInstance si;
 	
-	public CharacterEventStoreTile(String spritePath, NonPlayableCharacter npc, StoreInstance store) throws SlickException {
+	public CharacterEventStoreTile(String spritePath, NonPlayableCharacter npc, StoreInstance store, int x, int y) {
 
-		super(spritePath, npc, SlickSKR.STORE);
+		super(spritePath, npc, SlickSKR.STORE, x, y);
 		this.si = store;
 		
 	}

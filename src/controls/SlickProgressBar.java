@@ -5,7 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
-public class SlickProgressBar extends SlickRectangle{
+public class SlickProgressBar extends SlickBlankRectangle{
 	
 	private static final long serialVersionUID = 1L;
 	private int progress;

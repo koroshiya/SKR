@@ -93,7 +93,8 @@ public abstract class Item implements Photogenic, Serial {
 		return (this.avatar);
 	}
 	
-	public void drawScaled(Graphics g, int x, int y, int width, int height){
+	@Override
+	public void drawScaled(Graphics g, int x, int y, float width, float height){
 		g.drawImage(cache, x, y, x + width, y + height, 0, 0, cache.getWidth(), cache.getHeight());
 	}
 	

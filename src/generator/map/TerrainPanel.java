@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import org.newdawn.slick.util.Log;
+
 public class TerrainPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
@@ -75,10 +77,10 @@ public class TerrainPanel extends JPanel {
 	
 	private void parseDir(File dir){
 		
-		System.out.println("Parsing directory: " + dir.getAbsolutePath());
+		Log.error("Parsing directory: " + dir.getAbsolutePath());
 		for (File f : dir.listFiles()){
 			if (isSupportedImage(f)){
-				System.out.println("Found: " + f.getName());
+				Log.error("Found: " + f.getName());
 				ImageIcon i = new ImageIcon(f.getAbsolutePath());
 				images.add(i);
 				names.add(f.getName());
@@ -110,7 +112,7 @@ public class TerrainPanel extends JPanel {
 			if (f.getName().endsWith(s)){
 				ImageIcon i = new ImageIcon(f.getAbsolutePath());
 				if (isSupportedSize(i)){return true;}
-				System.out.println(f.getName() + " is in a supported format, but not 48x48px in size.");
+				Log.error(f.getName() + " is in a supported format, but not 48x48px in size.");
 				return false;
 			}
 			

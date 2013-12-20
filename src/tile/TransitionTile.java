@@ -11,9 +11,13 @@ public class TransitionTile extends Tile {
 	private final int toX;
 	private final int toY;
 	
-	public TransitionTile(String sprite, ParentMap map, ParentMap currentMap, int startX, int startY) {
+	public TransitionTile(String sprite, ParentMap map, ParentMap currentMap, int startX, int startY, int fromX, int fromY) {
+		this(sprite, map, currentMap, startX, startY, true, fromX, fromY);
+	}
+	
+	public TransitionTile(String sprite, ParentMap map, ParentMap currentMap, int startX, int startY, boolean open, int fromX, int fromY) {
 		
-		super(true, true, sprite);
+		super(open, sprite, fromX, fromY);
 		this.map = map;
 		this.currentMap = currentMap;
 		this.toX = startX;

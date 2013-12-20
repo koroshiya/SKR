@@ -19,18 +19,19 @@ import character.PlayableCharacter;
 import com.japanzai.skr.Driver;
 import com.japanzai.skr.Party;
 
-import controls.SlickRectangle;
+import controls.SlickBlankRectangle;
+import controls.SlickImageRectangle;
 
 public class MenuMainWindow extends SlickGameState{
 		
-	private SlickRectangle[] menuItems;
-	private SlickRectangle[] menuCharacters;
+	private SlickImageRectangle[] menuItems;
+	private SlickImageRectangle[] menuCharacters;
 	private final String[] commands;
 	private int[] keys = {Input.KEY_I, Input.KEY_E, Input.KEY_C, Input.KEY_B, 
 							Input.KEY_S, Input.KEY_L, Input.KEY_W, Input.KEY_ESCAPE};
 	private int timer = 0;
 	private String message = "";
-	private SlickRectangle alert;
+	private SlickBlankRectangle alert;
 	private Image background;
 	private TrueTypeFont VICTORY_FONT;
 	
@@ -71,14 +72,13 @@ public class MenuMainWindow extends SlickGameState{
 		int inc;
 		final int baseInc = 13;
 		for (int i = 0; i < menuCharacters.length; i++){
-			//g.drawImage(menuCharacters[i].getCache(), menuCharacters[i].getMinX(), menuCharacters[i].getMinY());
-			menuCharacters[i].paintCache(g);
+			menuCharacters[i].paintCache(g); //TODO: replace 150 with gc size scale
 			PlayableCharacter c = characters.get(i);
 			inc = baseInc;
 			g.setColor(Color.white);
 			//g.draw(menuCharacters[i]);
 			//g.drawImage(c.getCache(), 0, y);
-			c.drawCache(0f, y, g);
+			c.drawScaled(g, 0, (int)y, 150); ////TODO: replace 150 with gc size scale
 			g.drawString(c.getName(), x, y + inc);
 			inc += baseInc;
 			g.drawString(c.getOccupation(), x, y + inc);
@@ -104,24 +104,24 @@ public class MenuMainWindow extends SlickGameState{
 		String s = "";
 		int i = -1;
 		int total = commands.length;
-		menuItems = new SlickRectangle[total];
+		menuItems = new SlickImageRectangle[total];
 		while (++i < total){
 			s = (String) commands[i];
-			menuItems[i] = new SlickRectangle(x, i * y, 450, y, s, "/res/buttons/button_onyx_450x50.png");
+			menuItems[i] = new SlickImageRectangle(x, i * y, 450, y, s, "/res/buttons/9x1/onyx.png");
 			menuItems[i].initialize();
 		}
 		
 		characters = Party.getCharacters();
-		menuCharacters = new SlickRectangle[characters.size()];
+		menuCharacters = new SlickImageRectangle[characters.size()];
 		i = -1;
 		total = menuCharacters.length;
 		while (++i < total){
 			characters.get(i).instantiate();
-			menuCharacters[i] = new SlickRectangle(0, 155 * i, x, 150, Integer.toString(i), "/res/buttons/button_brown_376x155.png");
+			menuCharacters[i] = new SlickImageRectangle(0, 155 * i, x, 150, Integer.toString(i), "/res/buttons/5x2/dbrown.png");
 			menuCharacters[i].initialize();
 		}
 		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 24);
-		alert = new SlickRectangle(150, 200, 550, 40, "");
+		alert = new SlickBlankRectangle(150, 200, 550, 40, "");
 		background = new Image("/res/terrain/refinery.png");
 	}
 	
@@ -156,13 +156,13 @@ public class MenuMainWindow extends SlickGameState{
 
 	public void processMouseClick(int clickCount, int x, int y) {
 		
-		for (SlickRectangle rect : menuItems){
+		for (SlickImageRectangle rect : menuItems){
 			if (rect.isWithinBounds(x, y)){
 				this.processMenuItem(rect.getTag(), clickCount);
 				return;
 			}
 		}
-		for (SlickRectangle rect : menuCharacters){
+		for (SlickImageRectangle rect : menuCharacters){
 			if (rect.isWithinBounds(x, y)){
 				this.processMenuItem(rect.getTag(), clickCount);
 				break;

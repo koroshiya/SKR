@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import org.newdawn.slick.util.Log;
+
 public class MenuListener implements ActionListener{
 
 	private MainFrame parent;
@@ -51,14 +53,14 @@ public class MenuListener implements ActionListener{
 				BufferedWriter writer = new BufferedWriter(new FileWriter(f));
 				writer.write(outputText(s));
 				writer.close();
-				System.out.println("Map successfully written to: " + f.getAbsolutePath());
+				Log.error("Map successfully written to: " + f.getAbsolutePath());
 			} catch (IOException e) {
-				System.out.println("Couldn't write to file - Export aborted");
+				Log.error("Couldn't write to file - Export aborted");
 				return;
 			}
 			
 		}else {
-			System.out.println("Invalid name - Export aborted");
+			Log.error("Invalid name - Export aborted");
 		}
 		
 	}

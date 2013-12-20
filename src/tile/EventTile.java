@@ -6,8 +6,8 @@ public class EventTile extends InteractiveTile {
 	
 	private final int state;
 	
-	public EventTile(String sprite, int state) {
-		super(sprite);
+	public EventTile(String sprite, int state, int x, int y) {
+		super(sprite, x, y);
 		this.state = state;
 	}
 

@@ -13,13 +13,15 @@ public class RandomTile {
 		
 	}
 	
-	public Tile getTile(){
+	public Tile getTile(int x, int y){
 		
 		if (this.t instanceof ChestTile){
 			ChestTile chest = (ChestTile) this.t;
-			return chest.create();
+			return chest.create(x, y);
 		}
 		
+		t.setXCoordinate(x);
+		t.setYCoordinate(y);
 		return t;
 	}
 	

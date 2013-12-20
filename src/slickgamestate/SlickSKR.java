@@ -1,6 +1,7 @@
 package slickgamestate;
 
 import java.awt.Font;
+import java.awt.Point;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,12 +10,18 @@ import java.util.Properties;
 
 import map.ParentMap;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.ScalableGame;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
 import character.EnemyCharacter;
@@ -28,6 +35,8 @@ import slickgamestate.state.Save;
 
 public class SlickSKR extends StateBasedGame {
 
+	private final StateBasedGame game;
+	
 	private static final String GAME_NAME = "SKR";
 	public static final int MAP = 0;
 	public static final int BATTLE = 1;
@@ -43,14 +52,23 @@ public class SlickSKR extends StateBasedGame {
 
 	public static final boolean NO_ENCOUNTERS = true;
 	public static final boolean NO_TRANSITIONS = true;
+
+	public static final int MOUSE_STATE_NORMAL = 0;
+	public static final int MOUSE_STATE_HOVER = 1;
+	public static final int MOUSE_STATE_PRESSED = 2;
+	public static int Mouse_state = 0;
+	public static SpriteSheet mouseStateList;
 	
 	private static final Properties prop = new Properties();
 	
 	private static String musicPlaying = "";
+	public static final Point size = new Point(816, 624);
+	public static final float scaleSize = 624 / size.y;
 	
 	public SlickSKR(ParentMap current) throws SlickException, FileNotFoundException, IOException{
 		
 		super(GAME_NAME);
+		game = this;//new ScalableGame(this, size.x, size.y);
 		GameScreen gs = current.getFrame();
 		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
 		this.addState(new StartScreen(gs));
@@ -64,25 +82,55 @@ public class SlickSKR extends StateBasedGame {
 		this.addState(new Store(gs));
 		this.addState(new ControlScreen(gs));
 		this.addState(new GameOver(gs));
-		
+		availableResolutions();
 	}
 	
 	public SlickSKR() throws IOException{
 		super(GAME_NAME);
+		game = this;//new ScalableGame(this, size.x, size.y);
 		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
+	}
+	
+	private void availableResolutions(){
+		ArrayList<DisplayMode> best = new ArrayList<DisplayMode>();
+		try {
+			DisplayMode[] modes = Display.getAvailableDisplayModes();
+	        for (DisplayMode mode : modes) {
+	        	if (mode.getFrequency() == 60){
+	        		best.add(mode);
+	        		//Display.sync(fps) TODO instead of/as well as vsync
+	        		System.out.println(mode.getWidth() + "x" + mode.getHeight() + "x" + mode.getBitsPerPixel() + " " + mode.getFrequency() + "Hz");
+	        	}
+	        }
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
+
 	}
 		
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		gc.setDefaultFont(SlickSKR.loadFont("Ubuntu-R.ttf", 16));
-		/*try {
-			gc.setMouseCursor("/res/rsword.png", 0, 0);
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}*/
+		mouseStateList = new SpriteSheet("/res/cursor.png", 48, 48);
+		setMousePointer(MOUSE_STATE_NORMAL, gc);
 		this.getState(MAINMENU).init(gc, this);
 		this.enterState(MAINMENU);
 		
+	}
+	
+	private static void setMousePointer(int pointer, GameContainer gc){
+		Mouse_state = pointer;
+		try {
+			gc.setMouseCursor(mouseStateList.getSprite(Mouse_state, 0), 0, 0);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void setMouseStateIfDifferent(int newMouseState, GameContainer gc){
+		if (newMouseState != Mouse_state){
+			setMousePointer(newMouseState, gc);
+		}
 	}
 	
 	public static TrueTypeFont loadFont(String fontName, float size){
@@ -93,9 +141,13 @@ public class SlickSKR extends StateBasedGame {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Font rendering failed");
+			Log.error("Font rendering failed");
 			return null;
 		}
+	}
+	
+	public static TrueTypeFont getFont(float size, boolean bold){
+		return SlickSKR.loadFont(bold ? "Ubuntu-B.ttf" : "Ubuntu-M.ttf", size);
 	}
 	
 	public static void PlaySFX(String location){
@@ -124,10 +176,9 @@ public class SlickSKR extends StateBasedGame {
 	}
 	
 	public static String getValueFromKey(String key){
-		//String result = prop.getProperty(key);
-		//System.out.println(key + ": " + result);
-		//return result == null ? "" : result;
 		return prop.getProperty(key);
 	}
+	
+	public StateBasedGame getGame(){return this.game;}
 	
 }

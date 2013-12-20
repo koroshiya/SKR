@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import screen.GameScreen;
@@ -15,14 +13,15 @@ import slickgamestate.SlickSKR;
 
 import com.japanzai.skr.Party;
 
-import controls.SlickRectangle;
+import controls.SlickBlankRectangle;
+import controls.SlickImageRectangle;
 import character.PlayableCharacter;
 
 public class CharacterProfileWindow extends SlickGameState{
 	
 	private PlayableCharacter character;
-	private Image lblAvatar;
-	private SlickRectangle[] partyMembers;
+	private SlickImageRectangle lblAvatar;
+	private SlickBlankRectangle[] partyMembers;
 	String[] labels;
 	
 	public CharacterProfileWindow(GameScreen gameScreen){
@@ -83,11 +82,8 @@ public class CharacterProfileWindow extends SlickGameState{
 	public void setCharacter(PlayableCharacter character){
 		
 		this.character = character;
-		try {
-			lblAvatar = new Image(this.character.getProfilePicture());
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		lblAvatar = new SlickImageRectangle(0, 0, 450, 624, "", true, this.character.getProfilePicture());
+		lblAvatar.initialize();
 		
 		labels[0] = character.getName(); //All info
 		labels[1] = character.getHeight();
@@ -142,7 +138,7 @@ public class CharacterProfileWindow extends SlickGameState{
 			p.instantiate();
 		}
 		int total = characters.size();
-		partyMembers = new SlickRectangle[total];
+		partyMembers = new SlickBlankRectangle[total];
 		
 		int row = 0;
 		int col = 1;
@@ -151,7 +147,7 @@ public class CharacterProfileWindow extends SlickGameState{
 		
 		int i = -1;
 		while (++i < total){
-			partyMembers[i] = new SlickRectangle(x + row, startY + 102 * col, 100, 100, Integer.toString(i));
+			partyMembers[i] = new SlickBlankRectangle(x + row, startY + 102 * col, 100, 100, Integer.toString(i));
 			row = row == 0 ? 102 : 0;
 			col = i > 1 ? 1 : 0;
 		}
@@ -164,7 +160,7 @@ public class CharacterProfileWindow extends SlickGameState{
 		if (SlickGameState.needFlush()){
 			drawCharacterInfoPanel(g);
 			drawCharacterPanel(g);
-			g.drawImage(lblAvatar, 0, 0);
+			lblAvatar.paintCache(g);
 			SlickGameState.capture(g);
 		}else{
 			SlickGameState.drawCache(g);
@@ -175,7 +171,7 @@ public class CharacterProfileWindow extends SlickGameState{
 	@Override
 	public void processMouseClick(int clickCount, int x, int y) {
 		
-		for (SlickRectangle rect : partyMembers){
+		for (SlickBlankRectangle rect : partyMembers){
 			if (rect.isWithinBounds(x, y)){
 				SlickGameState.setFlush(true, false);
 				this.processMenuItem(rect.getTag(), clickCount);

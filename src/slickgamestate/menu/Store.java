@@ -8,9 +8,12 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 
 import com.japanzai.skr.Inventory;
 
+import controls.SlickBlankRectangle;
+import controls.SlickImageRectangle;
 import controls.SlickRectangle;
 import screen.GameScreen;
 import slickgamestate.SlickGameState;
@@ -24,7 +27,7 @@ public class Store extends ItemWindowBase{
 	private boolean buyMode = true;
 	private SlickRectangle[] tempPrompts = null;
 	private int timer = 0;
-	private SlickRectangle message = new SlickRectangle(150, 150, 500, 300, "");
+	private SlickBlankRectangle message = new SlickBlankRectangle(150, 150, 500, 300, "");
 	
 	public Store(GameScreen parent) {
 		super(SlickSKR.STORE, parent, new String[]{
@@ -37,7 +40,7 @@ public class Store extends ItemWindowBase{
 				SlickSKR.getValueFromKey("screen.mainmenu.store.commands.store")}
 		);
 		
-		filterItems = new SlickRectangle[commands.length];
+		filterItems = new SlickImageRectangle[commands.length];
 		resetFilter(commands.length - 2);
 		
 		final float filterBaseY = 50;
@@ -46,7 +49,7 @@ public class Store extends ItemWindowBase{
 		int i = commands.length - 3;
 		int total = commands.length;
 		while (++i < total){
-			filterItems[i] = new SlickRectangle(paneWidth * (i % 2), 0, paneWidth, filterBaseY, commands[i], true, "/res/buttons/btn_gray+border_500x58.png");
+			filterItems[i] = new SlickImageRectangle(paneWidth * (i % 2), 0, paneWidth, filterBaseY, commands[i], true, "/res/buttons/btn_gray+border_500x58.png");
 		}
 		
 	}
@@ -137,13 +140,13 @@ public class Store extends ItemWindowBase{
 		transQuantity = 0;
 		//TODO: bring up dialogue
 		SlickGameState.darken();
-		tempPrompts = new SlickRectangle[]{ //TODO: set once and toggle visibility?
-			new SlickRectangle(0, 0, 500f, 300f, ""),
-			new SlickRectangle(0, 0, 150f, 100f, "Accept"),
-			new SlickRectangle(0, 0, 150f, 100f, "Cancel"),
-			new SlickRectangle(0, 0, 50f, 50f, "+"),
-			new SlickRectangle(0, 0, 50f, 50f, "-"),
-			new SlickRectangle(0, 0, 50f, 50f, "0")
+		tempPrompts = new SlickBlankRectangle[]{ //TODO: set once and toggle visibility?
+			new SlickBlankRectangle(0, 0, 500f, 300f, ""),
+			new SlickBlankRectangle(0, 0, 150f, 100f, "Accept"),
+			new SlickBlankRectangle(0, 0, 150f, 100f, "Cancel"),
+			new SlickBlankRectangle(0, 0, 50f, 50f, "+"),
+			new SlickBlankRectangle(0, 0, 50f, 50f, "-"),
+			new SlickBlankRectangle(0, 0, 50f, 50f, "0")
 		};
 		
 	}
@@ -198,8 +201,8 @@ public class Store extends ItemWindowBase{
 			setFilter(commands[0]);
 			return;
 		}else {
-			System.out.println("Error: This code should never be reached.");
-			System.out.println("Unhandled filter type: " + filter);
+			Log.error("Error: This code should never be reached.");
+			Log.error("Unhandled filter type: " + filter);
 			return;
 		}
 		

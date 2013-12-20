@@ -9,6 +9,7 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 
 import screen.GameScreen;
 import technique.CombatTechnique;
@@ -23,6 +24,7 @@ import com.japanzai.skr.Inventory;
 import com.japanzai.skr.Party;
 
 import console.BattleConsole;
+import controls.SlickBlankRectangle;
 import controls.SlickRectangle;
 
 public class Battle extends SlickGameState{
@@ -210,6 +212,7 @@ public class Battle extends SlickGameState{
 				SlickGameState.setFlush(true, false);
 			}
 		}
+		super.checkCursor(arg0, rects);
 		
 	}
 	
@@ -362,12 +365,12 @@ public class Battle extends SlickGameState{
 		
 		rects = new SlickRectangle[4];
 		String attackTag = this.currentCharacter.getTemper() < 10 ? commands[0] : SlickSKR.getValueFromKey("screen.battle.commands.fury");
-		rects[0] = new SlickRectangle(startX, startY, buttonWidth, buttonHeight, commands[0], false, attackTag);
+		rects[0] = new SlickBlankRectangle(startX, startY, buttonWidth, buttonHeight, commands[0], false, attackTag);
 		
 		int i = 0; //NOTE: not a mistake; should be 0
 		int total = rects.length;
 		while (++i < total){
-			rects[i] = new SlickRectangle(startX, startY + buttonHeight * i, buttonWidth, buttonHeight, commands[i], false);
+			rects[i] = new SlickBlankRectangle(startX, startY + buttonHeight * i, buttonWidth, buttonHeight, commands[i], false);
 		}
 		
 		rects[0].setEnabled(true);
@@ -379,7 +382,7 @@ public class Battle extends SlickGameState{
 	}
 	
 	private SlickRectangle setMenuItem(int i) {
-		return new SlickRectangle(startX, startY + buttonHeight * i, buttonWidth, buttonHeight, "");
+		return new SlickBlankRectangle(startX, startY + buttonHeight * i, buttonWidth, buttonHeight, "");
 	}
 	
 	public void resetDefaultInterface(){
@@ -417,21 +420,21 @@ public class Battle extends SlickGameState{
 	}
 	
 	public void process(String command){
-		System.out.println(command);
+		Log.debug(command);
 		if (mode == this.ALLY_MODE){
-			System.out.println("ALLY MODE");
+			Log.debug("ALLY MODE");
 			processAllyMode(command);
 		}else if (mode == this.ATTACK_MODE){
-			System.out.println("ATTACK MODE");
+			Log.debug("ATTACK MODE");
 			processAttackMode(command);
 		}else if (mode == this.TECHNIQUE_MODE){
-			System.out.println("TECHNIQUE MODE");
+			Log.debug("TECHNIQUE MODE");
 			processTechniqueMode(command);
 		}else if (mode == this.ITEM_MODE){
-			System.out.println("ITEM MODE");
+			Log.debug("ITEM MODE");
 			processItemMode(command);
 		}else if (mode == this.VICTORY_MODE || mode == this.RUN_MODE || mode == this.LOSS_MODE){
-			System.out.println("VICTORY MODE");
+			Log.debug("VICTORY MODE");
 			end();
 		}else{ //TODO: turn to else if MENU_MODE?
 			processMenuMode(command);
@@ -498,7 +501,7 @@ public class Battle extends SlickGameState{
 					this.tech = t;
 					setTargetAllies();
 				}else{
-					System.out.println(SlickSKR.getValueFromKey("screen.battle.alert.cannotusetechnique"));
+					Log.debug(SlickSKR.getValueFromKey("screen.battle.alert.cannotusetechnique"));
 				}
 				break;
 			}
@@ -517,13 +520,13 @@ public class Battle extends SlickGameState{
 	
 	private void processMenuMode(String command) {
 		if (command.equals(commands[0])){
-			System.out.println("attack");
+			Log.debug("attack");
 			setTargetEnemies();
 		}else if (command.equals(commands[1])){
-			System.out.println("techniques");
+			Log.debug("techniques");
 			setTargetTechniques();
 		}else if (command.equals(commands[2])){
-			System.out.println("items");
+			Log.debug("items");
 			setTargetItems();
 		}else if (command.equals(commands[3])){
 			mode = RUN_MODE;

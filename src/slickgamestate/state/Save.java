@@ -7,13 +7,13 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import com.japanzai.skr.SaveState;
 
-import controls.SlickRectangle;
+import controls.SlickBlankRectangle;
 import screen.GameScreen;
 import slickgamestate.SlickSKR;
 
 public class Save extends StateTemplate {
 	
-	private SlickRectangle newSave;
+	private SlickBlankRectangle newSave;
 	
 	public Save(GameScreen parent) throws SlickException{
 		
@@ -24,7 +24,7 @@ public class Save extends StateTemplate {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		super.init(arg0, arg1);
-		newSave = new SlickRectangle(600,100, 100, 100, "New Save");
+		newSave = new SlickBlankRectangle(600,100, 100, 100, "New Save");
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public class Save extends StateTemplate {
 	
 	@Override
 	public void processMouseClick(int clickCount, int x, int y){
-		for (SlickRectangle rect : rects){
+		for (SlickBlankRectangle rect : rects){
 			if (rect.isWithinBounds(x, y)){
 				SaveState.save(rect.getTag());
 				//TODO: render alert on timer

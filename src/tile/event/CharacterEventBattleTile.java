@@ -2,8 +2,6 @@ package tile.event;
 
 import java.util.ArrayList;
 
-import org.newdawn.slick.SlickException;
-
 import screen.GameScreen;
 import slickgamestate.Battle;
 import slickgamestate.SlickSKR;
@@ -15,16 +13,16 @@ public class CharacterEventBattleTile extends CharacterEventTile{
 	
 	private final ArrayList<EnemyCharacter> enemies;
 	
-	public CharacterEventBattleTile(String spritePath, NonPlayableCharacter npc, EnemyCharacter enemy) throws SlickException {
+	public CharacterEventBattleTile(String spritePath, NonPlayableCharacter npc, EnemyCharacter enemy, int x, int y) {
 
-		this(spritePath, npc, new ArrayList<EnemyCharacter>());
+		this(spritePath, npc, new ArrayList<EnemyCharacter>(), x, y);
 		this.enemies.add(enemy);
 		
 	}
 	
-	public CharacterEventBattleTile(String spritePath, NonPlayableCharacter npc, ArrayList<EnemyCharacter> enemies) throws SlickException {
+	public CharacterEventBattleTile(String spritePath, NonPlayableCharacter npc, ArrayList<EnemyCharacter> enemies, int x, int y) {
 		
-		super(spritePath, npc, SlickSKR.BATTLE);
+		super(spritePath, npc, SlickSKR.BATTLE, x, y);
 		this.enemies = enemies;
 		
 	}

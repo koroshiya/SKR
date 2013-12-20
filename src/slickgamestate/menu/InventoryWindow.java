@@ -1,13 +1,14 @@
 package slickgamestate.menu;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.util.Log;
 
 import screen.GameScreen;
 import slickgamestate.SlickSKR;
 
 import com.japanzai.skr.Inventory;
 
-import controls.SlickRectangle;
+import controls.SlickImageRectangle;
 
 public class InventoryWindow extends ItemWindowBase {
 	
@@ -21,7 +22,7 @@ public class InventoryWindow extends ItemWindowBase {
 			SlickSKR.getValueFromKey("screen.mainmenu.store.commands.backtomap"),
 		});
 		
-		filterItems = new SlickRectangle[commands.length];
+		filterItems = new SlickImageRectangle[commands.length];
 		resetFilter(commands.length);
 		
 	}
@@ -54,8 +55,8 @@ public class InventoryWindow extends ItemWindowBase {
 			this.parent.swapView(SlickSKR.MENU);
 			return;
 		}else {
-			System.out.println("Error: This code should never be reached.");
-			System.out.println("Unhandled filter type: " + filter);
+			Log.error("Error: This code should never be reached.");
+			Log.error("Unhandled filter type: " + filter);
 			return;
 		}
 		

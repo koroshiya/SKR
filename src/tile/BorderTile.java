@@ -7,9 +7,7 @@ public class BorderTile {
 	private String borderDirectory;
 	
 	public BorderTile(String borderDirectory){
-		
 		this.borderDirectory = borderDirectory;
-		
 	}
 	
 	public Tile getTile(int i, int j, int maxX, int maxY) throws SlickException{
@@ -38,7 +36,7 @@ public class BorderTile {
 			return null;
 		}
 		
-		return new Tile(false, false, border);
+		return new Tile(false, border, i, j);
 		
 	}
 	

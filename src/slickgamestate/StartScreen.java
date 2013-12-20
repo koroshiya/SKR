@@ -4,11 +4,13 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 
+import controls.SlickBlankRectangle;
+import controls.SlickImageRectangle;
 import controls.SlickRectangle;
 import screen.GameScreen;
 
@@ -18,7 +20,7 @@ public class StartScreen extends SlickGameState{
 	private final String commands[];
 	private final int buttonWidth = 200;
 	private final int buttonHeight = 50;
-	private final int[] keys = {Input.KEY_C, Input.KEY_N, Input.KEY_L, Input.KEY_M};
+	private final int[] keys = {Input.KEY_C, Input.KEY_N, Input.KEY_L, Input.KEY_M, Input.KEY_S};
 	
 	public StartScreen(GameScreen parent) {
 		super(SlickSKR.MAINMENU, parent);
@@ -26,19 +28,23 @@ public class StartScreen extends SlickGameState{
 			SlickSKR.getValueFromKey("screen.start.controls.continue"),
 			SlickSKR.getValueFromKey("screen.start.controls.newgame"),
 			SlickSKR.getValueFromKey("screen.start.controls.load"),
-			SlickSKR.getValueFromKey("screen.start.controls.controls")
+			SlickSKR.getValueFromKey("screen.start.controls.controls"),
+			SlickSKR.getValueFromKey("screen.start.controls.settings")
 		};
 	}
 	
 	private void processMenuItem(String s){
 		if (s.equals(commands[0])){
-			System.out.println("Continue");
+			Log.debug("Continue");
 		}else if (s.equals(commands[1])){
 			this.parent.swapView(SlickSKR.MAP);
 		}else if (s.equals(commands[2])){
 			this.parent.swapView(SlickSKR.LOAD);
 		}else if (s.equals(commands[3])){
 			this.parent.swapView(SlickSKR.CONTROLSCREEN);
+		}else if (s.equals(commands[4])){
+			//this.parent.swapView(SlickSKR.CONTROLSCREEN);
+			//TODO: implement Settings screen
 		}
 	}
 
@@ -65,28 +71,32 @@ public class StartScreen extends SlickGameState{
 	}
 	
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
-		//backgroundImage = new Image("/res/start.png");
-		rects = new SlickRectangle[commands.length];
-		for (int i = 0; i < commands.length; i++){
-			rects[i] = new SlickRectangle(300, 150 + (i * 100), buttonWidth, buttonHeight, commands[i], "/res/buttons/button_onyx_200x50.png");
+	public void init(GameContainer arg0, StateBasedGame arg1){
+		int i = -1;
+		int total = commands.length;
+		rects = new SlickRectangle[total];
+		int incY = buttonHeight + 4;
+		int startY = 616 - buttonHeight - ((total - 1) * incY);
+		while (++i < total){
+			rects[i] = new SlickImageRectangle(10, startY + (i * incY), buttonWidth, buttonHeight, commands[i], "/res/buttons/4x1/onyx.png");
 			rects[i].initialize();
 		}
 		SlickGameState.initCache(arg0);
 	}
 	
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2){
+		checkCursor(arg0, rects);
+	}
+	
+	@Override
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) {
 		
 		if (SlickGameState.needFlush()){
-			//g.drawImage(backgroundImage, 0, 0);
 			GradientFill fill = new GradientFill(0, 0, Color.gray, arg0.getWidth(), arg0.getHeight(), Color.white);
-			//backgroundImage.getGraphics().fill(new SlickRectangle(0, 0, arg0.getWidth(), arg0.getHeight(), ""),  fill);
-			//g.drawImage(backgroundImage, 0, 0, 0, 0, 1920, 1200);
-			g.fill(new SlickRectangle(0, 0, arg0.getWidth(), arg0.getHeight(), ""),  fill);
-			
+			g.fill(new SlickBlankRectangle(0, 0, arg0.getWidth(), arg0.getHeight(), ""),  fill);
+			g.setFont(SlickSKR.getFont(18, false));
 			for (int i = 0; i < commands.length; i++){
-				//g.drawImage(rects[i].getCache(), rects[i].getMinX(), rects[i].getMinY());
 				rects[i].paintCache(g);
 				rects[i].paintCenter(g, true);
 			}

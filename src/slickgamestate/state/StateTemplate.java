@@ -12,7 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import com.japanzai.skr.SaveState;
 
-import controls.SlickRectangle;
+import controls.SlickBlankRectangle;
 import screen.GameScreen;
 import slickgamestate.SlickGameState;
 import slickgamestate.SlickSKR;
@@ -20,11 +20,11 @@ import slickgamestate.SlickSKR;
 public abstract class StateTemplate extends SlickGameState {
 
 	private Image label;
-	protected SlickRectangle[] rects;
+	protected SlickBlankRectangle[] rects;
 	private final String[] commands;
 	private Image[] imageCache;
 	private int back = SlickSKR.CONTROLSCREEN;
-	private SlickRectangle backRect = new SlickRectangle(100, 100, 100, 100, "Back [W]");
+	private SlickBlankRectangle backRect = new SlickBlankRectangle(100, 100, 100, 100, "Back [W]");
 	
 	public StateTemplate(int id, GameScreen parent) {
 		
@@ -62,9 +62,9 @@ public abstract class StateTemplate extends SlickGameState {
 		label = new Image("/res/terrain/lab-dark.png");
 		int i = -1;
 		int total = commands.length < 9 ? commands.length : 9;
-		rects = new SlickRectangle[total];
+		rects = new SlickBlankRectangle[total];
 		while (++i < total){
-			rects[i] = new SlickRectangle(300, i * 50, 200, 50, commands[i]);
+			rects[i] = new SlickBlankRectangle(300, i * 50, 200, 50, commands[i]);
 		}
 		String[] strCache = SaveState.viewAvatars(arg0);
 		total = strCache.length < 9 ? strCache.length : 9;
@@ -73,9 +73,6 @@ public abstract class StateTemplate extends SlickGameState {
 		while (++i < total){
 			try{
 				String cache = strCache[i];
-				System.out.println(cCache.length);
-				System.out.println(strCache.length);
-				System.out.println(cache);
 				cCache[i] = new Image(cache);
 			}catch (SlickException ex){
 				ex.printStackTrace();

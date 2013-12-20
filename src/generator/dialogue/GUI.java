@@ -17,6 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.newdawn.slick.util.Log;
+
 public class GUI extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
@@ -36,12 +38,12 @@ public class GUI extends JFrame{
 		outputFile = new File(path + ".txt");
 		if (outputFile.exists()){
 			if (!outputFile.canWrite()){
-				System.out.println("Can't write to specified file");
+				Log.error("Can't write to specified file");
 				return;
 			}
 		}else{
 			if (!outputFile.getParentFile().canWrite()){
-				System.out.println("Can't write to specified file");
+				Log.error("Can't write to specified file");
 				return;
 			}
 		}
@@ -163,10 +165,10 @@ public class GUI extends JFrame{
 				writer.write(line + "\n");
 			}
 			writer.close();
-			System.out.println("Map successfully written to: " + outputFile.getAbsolutePath());
+			Log.error("Map successfully written to: " + outputFile.getAbsolutePath());
 			return true;
 		} catch (IOException e) {
-			System.out.println("Couldn't write to file - Export aborted");
+			Log.error("Couldn't write to file - Export aborted");
 			return false;
 		}
 		

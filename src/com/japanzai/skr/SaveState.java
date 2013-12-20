@@ -25,7 +25,7 @@ public class SaveState {
 		try{
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			System.out.println("writing: " + Party.getCharacterByIndex(0).getSpriteDirectory() + "avatar.png");
+			//System.out.println("writing: " + Party.getCharacterByIndex(0).getSpriteDirectory() + "avatar.png");
 			oos.writeObject(Party.getCharacterByIndex(0).getSpriteDirectory() + "avatar.png");
 			oos.writeObject(Inventory.getMoney());
 			oos.writeObject(Inventory.getItemsSaved());

@@ -1,48 +1,89 @@
 package controls;
 
-import interfaces.SlickDrawableFrame;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.util.Log;
 
-public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
+public abstract class SlickRectangle extends Rectangle {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private String tag;
 	private String displayText;
 	
-	private final float x;
-	private final float y;
-	private final float width;
-	private final float height;
+	protected final float x;
+	protected final float y;
+	protected final float width;
+	protected final float height;
 	
-	private final String imgSrc;
-	private Image cache = null;
+	protected final String imgSrc;
 	
+	/*
+	 * If disabled, text isn't drawn, click events aren't responded to, etc.
+	 * */
 	private boolean enabled; //TODO: change color if disabled?
 	
+	/**
+	 * @param x X coordinate at which the upper left corner of this rectangle begins
+	 * @param y Y coordinate at which the upper left corner of this rectangle begins
+	 * @param width Width of this rectangle
+	 * @param height Height of this rectangle
+	 * @param tag Text to uniquely identify this rectangle, and also to display when this rectangle is drawn
+	 * */
 	public SlickRectangle(float x, float y, float width, float height, String tag) {
 		this(x, y, width, height, tag, true);
 	}
 
+	/**
+	 * @param x X coordinate at which the upper left corner of this rectangle begins
+	 * @param y Y coordinate at which the upper left corner of this rectangle begins
+	 * @param width Width of this rectangle
+	 * @param height Height of this rectangle
+	 * @param tag Text to uniquely identify this rectangle, and also to display when this rectangle is drawn
+	 * @param enabled True if this rectangle should be drawn, accept events, etc.
+	 * */
 	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled) {
 		this(x, y, width, height, tag, enabled, "");
 	}
 
+	/**
+	 * @param x X coordinate at which the upper left corner of this rectangle begins
+	 * @param y Y coordinate at which the upper left corner of this rectangle begins
+	 * @param width Width of this rectangle
+	 * @param height Height of this rectangle
+	 * @param tag Text to uniquely identify this rectangle, and also to display when this rectangle is drawn
+	 * @param imgSrc URL of image to draw as the background for this rectangle
+	 * */
 	public SlickRectangle(float x, float y, float width, float height, String tag, String url) {
 		this(x, y, width, height, tag, true, tag, url);
 	}
 
+	/**
+	 * @param x X coordinate at which the upper left corner of this rectangle begins
+	 * @param y Y coordinate at which the upper left corner of this rectangle begins
+	 * @param width Width of this rectangle
+	 * @param height Height of this rectangle
+	 * @param tag Text to uniquely identify this rectangle, and also to display when this rectangle is drawn
+	 * @param enabled True if this rectangle should be drawn, accept events, etc.
+	 * @param imgSrc URL of image to draw as the background for this rectangle
+	 * */
 	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String url) {
 		this(x, y, width, height, tag, enabled, tag, url);
 	}
 
+	/**
+	 * @param x X coordinate at which the upper left corner of this rectangle begins
+	 * @param y Y coordinate at which the upper left corner of this rectangle begins
+	 * @param width Width of this rectangle
+	 * @param height Height of this rectangle
+	 * @param tag Text to uniquely identify this rectangle
+	 * @param enabled True if this rectangle should be drawn, accept events, etc.
+	 * @param displayText Text to display when this rectangle is drawn
+	 * @param imgSrc URL of image to draw as the background for this rectangle
+	 * */
 	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText, String imgSrc) {
 		super(x, y, width, height);
 		this.tag = tag;
@@ -55,22 +96,45 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 		this.imgSrc = imgSrc;
 	}
 
-	public String getTag(){
-		return this.tag;
-	}
+	/**
+	 * @return Unique identifier for this SlickRectangle
+	 * */
+	public String getTag(){return this.tag;}
 	
-	public String getDisplayText(){
-		return this.displayText;
-	}
+	/**
+	 * @return Text to display when this SlickRectangle is drawn
+	 * */
+	public String getDisplayText(){return this.displayText;}
 	
+	/**
+	 * @return X coordinate of the top left corner of this rectangle
+	 * */
 	public float getX(){return this.x;}
 	
+	/**
+	 * @return Y coordinate of the top left corner of this rectangle
+	 * */
 	public float getY(){return this.y;}
 	
+	/**
+	 * @return Width of this rectangle
+	 * */
 	public float getWidth(){return this.width;}
 	
+	/**
+	 * @return Height of this rectangle
+	 * */
 	public float getHeight(){return this.height;}
 	
+	/**
+	 * Checks if the point x,y is within the bounds of this rectangle.
+	 * eg. Point 100,100 is indeed within a rectangle at point 0,0 of size 200,200.
+	 * 
+	 * @param x X coordinate of the point to check against this rectangle
+	 * @param y Y coordinate of the point to check against this rectangle
+	 * 
+	 * @return True if point lies within this rectangle, otherwise false.
+	 * */
 	public boolean isWithinBounds(int x, int y){
 		if (enabled && x >= this.x && x < this.x + this.width && y >= this.y && y < this.y + this.height){
 			//SlickSKR.PlaySFX("other/public/intro_button.ogg");
@@ -79,42 +143,39 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 		return false;
 	}
 	
-	public boolean isEnabled(){
-		return enabled;
-	}
+	/**
+	 * @return True if enabled, otherwise false.
+	 * */
+	public boolean isEnabled(){return enabled;}
 	
-	public void setEnabled(boolean enabled){
-		this.enabled = enabled;
-	}
+	/**
+	 * @param enabled True to enable this SlickRectangle, false to disable
+	 * */
+	public void setEnabled(boolean enabled){this.enabled = enabled;}
 	
-	public void setText(String text){
-		this.tag = text;
-		this.displayText = text;
-	}
+	/**
+	 * @param text Text to use as this rectangle's unique identifier and to display when this rectangle is drawn
+	 * */
+	public void setText(String text){setText(text, text);}
 	
+	/**
+	 * @param text Text to uniquely identify this SlickRectangle
+	 * @param displayText Text to display when this rectangle is drawn
+	 * */
 	public void setText(String text, String displayText){
 		this.tag = text;
 		this.displayText = displayText;
 	}
 	
-	public void initialize(){
-		try {
-			if (!imgSrc.equals("")){
-				cache = new Image(imgSrc);
-			}else{
-				cache = new Image(0,0);
-			}
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-	}
+	public abstract void initialize();
 	
-	@Override
-	public void paint(Graphics g) {
-		paint(g, 0, 0);
-	}
+	public void paint(Graphics g) {paint(g, 0, 0);}
 	
-	@Override
+	/**
+	 * @param g Graphics context within which to paint this rectangle's border
+	 * @param xOff X axis offset at which to paint this rectangle's text
+	 * @param yOff Y axis offset at which to paint this rectangle's text
+	 * */
 	public void paint(Graphics g, int offX, int offY) {
 		if (enabled){
 			Color temp = g.getColor();
@@ -126,15 +187,19 @@ public class SlickRectangle extends Rectangle implements SlickDrawableFrame {
 		}
 	}
 	
+	/**
+	 * @param g Graphics context within which to paint this rectangle's cache
+	 * */
 	public void paintCache(Graphics g){
 		paintCache(g, 0, 0);
 	}
 	
-	public void paintCache(Graphics g, int xOff, int yOff){
-		float newX = x + xOff;
-		float newY = y + yOff;
-		g.drawImage(cache, newX, newY, newX + width, newY + height, 0, 0, cache.getWidth(), cache.getHeight());
-	}
+	/**
+	 * @param g Graphics context within which to paint this rectangle's cache
+	 * @param xOff X axis offset at which to paint this rectangle's cache
+	 * @param yOff Y axis offset at which to paint this rectangle's cache
+	 * */
+	public abstract void paintCache(Graphics g, int xOff, int yOff);
 
 	public void paintCenter(Graphics g, int offX, int offY){
 		paintCenter(g, false, offX, offY);

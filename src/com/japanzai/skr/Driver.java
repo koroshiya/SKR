@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
 import console.dialogue.ComplexDialogue;
@@ -33,7 +34,6 @@ import technique.HealingTechnique;
 import technique.Technique;
 import tile.CharacterTile;
 import tile.ChestTile;
-import tile.PresetTile;
 import tile.RandomTile;
 import tile.ScaleTile;
 import tile.SpanTile;
@@ -328,16 +328,14 @@ public class Driver implements Serializable{
 			e.printStackTrace();
 		} catch (SlickException ex) {
 			ex.printStackTrace();
-			System.out.println("Driver caught error");
+			Log.error("Driver caught error");
 		}
 		
 		
 	}
 	
 	public static void main(String[] args){
-			
 		restart();
-	
 	}
 	
 	private void simulateMap() throws IOException, SlickException{
@@ -383,12 +381,12 @@ public class Driver implements Serializable{
 		items.add(Inventory.getItem("Riceball"));
 		items.add(Inventory.getItem("Kimchi"));
 		
-		Tile grassTile = new ScaleTile(true, true, grass);
-		Tile chestTile = new ChestTile(chestClosed, chestOpen, grass, items);
+		Tile grassTile = new ScaleTile(true, grass,0,0);
+		Tile chestTile = new ChestTile(chestClosed, chestOpen, grass, items,0,0);
 		//Tile rockTile = new Tile(false, false, rock);
-		Tile pineTile = new SpanTile(true, true, pine, 155, 149);
-		Tile weedTile = new Tile(true, true, weed);
-		Tile shrubTile = new Tile(true, true, shrub);
+		Tile pineTile = new SpanTile(true, pine, 155, 149,0,0);
+		Tile weedTile = new Tile(true, weed,0,0);
+		Tile shrubTile = new Tile(true, shrub,0,0);
 		
 		return new RandomTile[]{
 			new RandomTile(chestTile, 99),
@@ -402,7 +400,7 @@ public class Driver implements Serializable{
 		
 	}
 	
-	private PresetTile[] basicPresetTiles(ParentMap current, ParentMap destination) throws IOException, SlickException{
+	private Tile[] basicPresetTiles(ParentMap current, ParentMap destination) throws IOException, SlickException{
 
 		String imgNPC = ("/res/enemy/militia/");
 		String imgKoro = ("/res/enemy/koro/");
@@ -419,23 +417,19 @@ public class Driver implements Serializable{
 		ArrayList<String> dialogue2 = new ArrayList<String>();
 		dialogue2.add("PREPARE TO FACE YOUR DEATH, MAGGOT!");
 
-		CharacterEventTile tileNPC = new CharacterEventStoreTile(imgNPC, InteractiveNPC(imgNPC, dialogue), store);
-		CharacterEventTile tileEnemy = new CharacterEventBattleTile(imgNPC, InteractiveNPC(imgNPC, dialogue2), this.enemies.get(2).create());
-		Tile basicTile = new Tile(true, true, "/res/terrain/grass.png", 16, 12);
-		Tile tTile = new TransitionTile("/res/terrain/border/borderExitTop.png", destination, current, 20, 16);
-		Tile pineTile = new SpanTile(true, true, "/res/terrain/pine-none03.png", 155, 149);
-		Tile tentTile = new SpanTransitionTile("/res/terrain/building/tent.png", destination, current, 10, 20, 228, 216, 2, 2);
+		CharacterEventTile tileNPC = new CharacterEventStoreTile(imgNPC, InteractiveNPC(imgNPC, dialogue), store, 1, 5);
+		CharacterEventTile tileEnemy = new CharacterEventBattleTile(imgNPC, InteractiveNPC(imgNPC, dialogue2), this.enemies.get(2).create(), 3, 17);
+		Tile basicTile = new Tile(true, "/res/terrain/grass.png", 16, 12);
+		Tile tTile = new TransitionTile("/res/terrain/border/borderExitTop.png", destination, current, 20, 16, 20, 0);
+		Tile pineTile = new SpanTile(true, "/res/terrain/pine-none03.png", 155, 149, 19, 10);
+		Tile tentTile = new SpanTransitionTile(destination, current, "/res/terrain/building/tent.png", 228, 216, 3, 3, 10, 20);
 		/*
 		 String sprite, ParentMap map,
 			ParentMap currentMap, int startX, int startY, 
 			int width, int height, int entranceXIndex, int entranceYIndex
 		 * */
 		
-		return new PresetTile[]{
-			new PresetTile(tileNPC, 1, 5), new PresetTile(basicTile, 16, 12), new PresetTile(NPC(imgKoro), 16, 10),
-			new PresetTile(tTile, 20, 0), new PresetTile(tileEnemy, 3, 17), new PresetTile(pineTile, 19, 10),
-			new PresetTile(tentTile, 10, 20)
-		};
+		return new Tile[]{tileNPC, basicTile, NPC(imgKoro, 16, 10), tTile, tileEnemy, pineTile, tentTile};
 		
 	}
 	
@@ -453,7 +447,7 @@ public class Driver implements Serializable{
 		
 		for (int i = 0; i < x; i++){
 			for (int j = 0; j < y; j++){				
-				tile[i][j] = new Tile(true, true, mud, i, j);
+				tile[i][j] = new Tile(true, mud, i, j);
 			}
 		}
 		
@@ -461,7 +455,7 @@ public class Driver implements Serializable{
 		
 	}
 	
-	private CharacterTile NPC(String imgNPC) throws SlickException{
+	private CharacterTile NPC(String imgNPC, int x, int y) throws SlickException{
 		
 		NonPlayableCharacter npc = new NonPlayableCharacter("Random", "NPC", genders.get(0), null, "NPC", "/res/enemy/koro/");
 		//Dialogue dialogue = new Dialogue(d, npc); //Character hasn't been created yet
@@ -496,7 +490,7 @@ public class Driver implements Serializable{
 		
 		npc.setDialogue(cd);
 		
-		return new CharacterTile(imgNPC, npc);
+		return new CharacterTile(imgNPC, npc, x, y);
 		
 	}
 	

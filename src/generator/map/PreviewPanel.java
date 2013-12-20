@@ -77,7 +77,6 @@ public class PreviewPanel extends JScrollPane{
 	
 	public void setTile(JLabel lbl){
 		
-		//System.out.println(appliedTile.getIconHeight());
 		lbl.setIcon(appliedTile);
 		lbl.repaint();
 		

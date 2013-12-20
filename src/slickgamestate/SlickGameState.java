@@ -7,6 +7,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import controls.SlickCache;
+import controls.SlickRectangle;
 
 import screen.GameScreen;
 import interfaces.SlickEventHandler;
@@ -30,6 +31,20 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	
 	@Override
 	public int getID() {return state;}
+	
+	public void checkCursor(GameContainer arg0, SlickRectangle[] rects){
+		if (arg0.getInput().isMouseButtonDown(0)){
+			SlickSKR.setMouseStateIfDifferent(SlickSKR.MOUSE_STATE_PRESSED, arg0);
+		}else{
+			for (SlickRectangle rect : rects){
+				if (rect.isWithinBounds(arg0.getInput().getMouseX(), arg0.getInput().getMouseY())){
+					SlickSKR.setMouseStateIfDifferent(SlickSKR.MOUSE_STATE_HOVER, arg0);
+					return;
+				}
+			}
+			SlickSKR.setMouseStateIfDifferent(SlickSKR.MOUSE_STATE_NORMAL, arg0);
+		}
+	}
 	
 	public static void initCache(GameContainer arg0){
 		try {

@@ -1,3 +1,14 @@
+v0.33
+Added custom cursor and MouseDown/Over events
+Further work/fixes for SpanTile and children
+Fixed SpanTransitionTile transitioning/placement and changed to extend SpanTile instead
+Implemented ScalableGame interface for future scaling*
+Replaced several bitmaps with high quality scaling images
+Imported Slick source into project, fixed tons of warnings, removed unnecessary exceptions, etc.
+
+*Currently disabled, but ideally for future implementations when higher resolution icons are available.
+eg. To create the game in 1080p, then scale down as required.
+
 v0.32
 Removed unnecessary draw cycle from MapScreen render
 Moved background to secondary cache to fix out of border issues

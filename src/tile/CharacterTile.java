@@ -16,9 +16,9 @@ public class CharacterTile extends Tile implements InteractableObject {
 	
 	private final NonPlayableCharacter npc;
 
-	public CharacterTile(String spritePath, NonPlayableCharacter npc) throws SlickException {
+	public CharacterTile(String spritePath, NonPlayableCharacter npc, int x, int y) {
 
-		super(false, false, spritePath);
+		super(false, spritePath, x, y);
 		this.npc = npc;
 		
 	}

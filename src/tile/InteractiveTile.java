@@ -8,8 +8,8 @@ import interfaces.InteractableObject;
 
 public abstract class InteractiveTile extends Tile implements InteractableObject {
 	
-	public InteractiveTile(String sprite) {
-		super(false, false, sprite);
+	public InteractiveTile(String sprite, int x, int y) {
+		super(false, sprite, x, y);
 	}
 	
 	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y){

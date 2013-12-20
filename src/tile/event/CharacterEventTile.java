@@ -1,7 +1,5 @@
 package tile.event;
 
-import org.newdawn.slick.SlickException;
-
 import screen.GameScreen;
 import tile.CharacterTile;
 
@@ -11,8 +9,8 @@ public class CharacterEventTile extends CharacterTile{
 	
 	private final int state;
 
-	public CharacterEventTile(String spritePath, NonPlayableCharacter npc, int state) throws SlickException {
-		super(spritePath, npc);
+	public CharacterEventTile(String spritePath, NonPlayableCharacter npc, int state, int x, int y) {
+		super(spritePath, npc, x, y);
 		this.state = state;
 	}
 	

@@ -7,6 +7,7 @@ import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.MouseListener;
 
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.util.Log;
 
 import slickgamestate.SlickSKR;
 
@@ -113,7 +114,7 @@ public class MovementListener implements KeyListener, MouseListener {
 		try{
 			moveToClick(new Point(x, y));
 		}catch (Exception ex){
-			System.out.println("Can't move there");
+			Log.error("Can't move there");
 			ex.printStackTrace();
 		}
 		
@@ -139,7 +140,7 @@ public class MovementListener implements KeyListener, MouseListener {
 			}else if (code == Input.KEY_DOWN){
 				map.getParentMap().moveDown();
 			}else {
-				System.out.println(code);
+				//System.out.println(code);
 			}
 		}catch (Exception ex){
 			
