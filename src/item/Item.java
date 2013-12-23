@@ -4,6 +4,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import slickgamestate.SlickSKR;
 import interfaces.Photogenic;
 import interfaces.Serial;
 
@@ -17,7 +18,6 @@ public abstract class Item implements Photogenic, Serial {
 	
 	private final String name;
 	private final String avatar;
-	private Image cache;
 	
 	public Item(String name, int value, int rarity, String avatar2){
 		
@@ -31,10 +31,6 @@ public abstract class Item implements Photogenic, Serial {
 	}
 	
 	public abstract Item create(int quantity);
-	
-	public void instantiate() throws SlickException{
-		this.cache = new Image(this.avatar);
-	}
 	
 	public String getName(){return this.name;}
 	
@@ -94,8 +90,12 @@ public abstract class Item implements Photogenic, Serial {
 	}
 	
 	@Override
-	public void drawScaled(Graphics g, int x, int y, float width, float height){
-		g.drawImage(cache, x, y, x + width, y + height, 0, 0, cache.getWidth(), cache.getHeight());
+	public void draw(Graphics g, int x, int y){
+		try {
+			new Image(this.avatar).getScaledCopy(SlickSKR.scaleSize).draw(x, y);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

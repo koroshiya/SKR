@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
 
-import slickgamestate.MapScreen;
+import slickgamestate.SlickSKR;
 import tile.BorderTile;
 import tile.SpanTile;
 import tile.SpanTransitionTile;
@@ -54,8 +54,8 @@ public class MapGenerator {
 						int maxY = j;
 						if(t instanceof SpanTransitionTile){
 							SpanTransitionTile stile = (SpanTransitionTile) t;
-							maxX += (int)Math.floor(((float)stile.getWidth())/((float)MapScreen.ICON_SIZE));
-							maxY += (int)Math.floor(((float)stile.getHeight())/((float)MapScreen.ICON_SIZE));
+							maxX += (int)Math.floor(((float)stile.getWidth())/((float)SlickSKR.scaled_icon_size));
+							maxY += (int)Math.floor(((float)stile.getHeight())/((float)SlickSKR.scaled_icon_size));
 							while (++curX < maxX){
 								curY = j-1;
 								while (++curY < maxY){
@@ -70,8 +70,8 @@ public class MapGenerator {
 							}
 						}else{
 							SpanTile stile = (SpanTile) t;
-							maxX += (int)Math.floor(((float)stile.getWidth())/((float)MapScreen.ICON_SIZE));
-							maxY += (int)Math.floor(((float)stile.getHeight())/((float)MapScreen.ICON_SIZE));
+							maxX += (int)Math.floor(((float)stile.getWidth())/((float)SlickSKR.scaled_icon_size));
+							maxY += (int)Math.floor(((float)stile.getHeight())/((float)SlickSKR.scaled_icon_size));
 							while (++curX < maxX){
 								curY = j-1;
 								while (++curY < maxY){
@@ -99,7 +99,7 @@ public class MapGenerator {
 		
 		for (Point p : fPointList){
 			//System.out.println("Creating blocked tile at: " + p.x + ", " + p.y);
-			tile[p.x][p.y] = new Tile(false, "", p.x, p.y);
+			tile[p.x][p.y] = new Tile(false, "", p.x, p.y, false);
 		}
 		for (Point p : sPointList){
 			

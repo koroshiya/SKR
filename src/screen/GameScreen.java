@@ -23,10 +23,22 @@ import console.dialogue.Dialogue;
 
 import java.util.ArrayList;
 
+/**
+ * @author Koroshiya
+ * This class serves as a container for the actual game being played.
+ * It manages the swapping of states, transitions, and provides methods via which states
+ * can interact with one another or check the status of the game.
+ */
 public class GameScreen extends AppGameContainer{
 	
-	private StateBasedGame game;
+	private StateBasedGame game; //Game this container is wrapped around.
 	
+	/**
+	 * Instantiates an instance of this class and sets the game for it to manage henceforth.
+	 * Game can be swapped later via setSKR, but any SlickSKR passed in must be valid.
+	 * 
+	 * @param skr Game to be contained by this class.
+	 * */
 	public GameScreen(SlickSKR skr) throws SlickException{
 		
 		super(skr.getGame());
@@ -34,16 +46,23 @@ public class GameScreen extends AppGameContainer{
 		this.setIcon("/res/icon.png");
 	}
 	
+	/**
+	 * Sets the game for this class to manage henceforth.
+	 * 
+	 * @param skr Game to be contained by this class.
+	 * */
 	public void setSKR(SlickSKR skr){
 		super.game = skr.getGame();
 		game = skr;
 		this.setVSync(true);
-		this.setTargetFrameRate(60);
+		final int refreshrate = 60;
+		this.setTargetFrameRate(refreshrate);
+		SlickSKR.setRefreshRate(refreshrate);
 		this.setSmoothDeltas(true);
 		this.setUpdateOnlyWhenVisible(true);
 		this.setAlwaysRender(true);
 		this.setMaximumLogicUpdateInterval(10);
-		
+		this.setVerbose(false);
 		//this.setShowFPS(false);
 		
 		try{
@@ -53,6 +72,13 @@ public class GameScreen extends AppGameContainer{
 		}
 	}
 	
+	/**
+	 * Swaps from one state to another.
+	 * eg. From a battle to the map or vice versa.
+	 * This method is also responsible for transitions, or the lack thereof.
+	 * 
+	 * @param i ID of the game state to change to, as defined by the constants in SlickSKR.
+	 * */
 	public void swapView(int i){
 		SlickGameState.setFlush(true, false);
 		int curr = this.getState().getID();
@@ -86,16 +112,47 @@ public class GameScreen extends AppGameContainer{
 		if (i == SlickSKR.BATTLE){SlickSKR.PlaySFX("other/public/battle_start.ogg");}
 	}
 	
+	/**
+	 * Swaps from one state to another.
+	 * eg. From a battle to the map or vice versa.
+	 * This method is also responsible for transitions, or the lack thereof.
+	 * 
+	 * @param i ID of the game state to change to, as defined by the constants in SlickSKR.
+	 * @param transIn Transition to use when leaving the current state.
+	 * @param transOut Transition to use when entering the specified state.
+	 * */
 	public void swapView(int i, Transition transIn, Transition transOut){
 		game.enterState(i, transIn, transOut);
 	}
 	
+	/**
+	 * Returns the ID of the current state of the game.
+	 * 
+	 * @return ID of the state currently active.
+	 * */
 	public int getStateIndex(){return game.getCurrentStateID();}
 	
+	/**
+	 * Returns the current state of the game.
+	 * 
+	 * @return Game state currently active.
+	 * */
 	public GameState getState(){return game.getCurrentState();}
 	
-	public GameState getState(int i){return game.getState(i);}
+	/**
+	 * Retrieves the game state specified by the input ID.
+	 * 
+	 * @param id ID of the state to retrieve.
+	 * 
+	 * @return Game state specified by the input ID.
+	 * */
+	public GameState getState(int id){return game.getState(id);}
 	
+	/**
+	 * Sets up and forces the character into a battle.
+	 * 
+	 * @param enemies Enemy formation with which the character should do battle.
+	 * */
 	public void setBattle(ArrayList<EnemyCharacter> enemies){
 		
 		((Battle)this.getState(SlickSKR.BATTLE)).setEnemies(enemies);
@@ -103,6 +160,9 @@ public class GameScreen extends AppGameContainer{
 		
 	}
 	
+	/**
+	 * Attempts to set the game into fullscreen mode.
+	 * */
 	public void setFullScreen(){
 				
 		try {
@@ -113,8 +173,19 @@ public class GameScreen extends AppGameContainer{
 				
 	}
 		
+	/**
+	 * Checks if the character is currently in a battle.
+	 * 
+	 * @return True if the character is currently in a battle.
+	 * */
 	public boolean isInBattle(){return getState() instanceof Battle;}
 	
+	/**
+	 * Displays a conversation/dialogue on the map via a console at the bottom of the screen.
+	 * 
+	 * @param dialogue Dialogue for which to display text and iterate through.
+	 * @param npc Object, such as a character or treasure chest, with which to interact.
+	 * */
 	public void WriteOnMap(Dialogue dialogue, InteractableObject npc) {
 		
 		GameState comp = getState();
@@ -130,18 +201,32 @@ public class GameScreen extends AppGameContainer{
 		
 	}
 	
+	/**
+	 * Tests whether random encounters are enabled.
+	 * If they are, chances a random encounter.
+	 * Returns true if a random encounter is induced.
+	 * 
+	 * @param map Map on which to chance a random encounter.
+	 * 
+	 * @return True if random encounter induced, otherwise false.
+	 * */
 	@SuppressWarnings("unused")
 	public boolean isEncounter(ParentMap map){
-		
-		if (!SlickSKR.NO_ENCOUNTERS && map.randomEncounter()){
-			return true;
-		}
-		return false;
-		
+		return !SlickSKR.NO_ENCOUNTERS && map.randomEncounter();
 	}
 	
+	/**
+	 * Induces a random encounter.
+	 * 
+	 * @param map Map for which to form a random enemy formation.
+	 * */
 	public void encounter(ParentMap map){encounter(map.getEnemyFormation());}
 	
+	/**
+	 * Induces a random encounter, but with a pre-defined enemy (so not really "random" as such).
+	 * 
+	 * @param enemy Opponent to face. As a single enemy, this is often a BossCharacter.
+	 * */
 	public void encounter(EnemyCharacter enemy){
 		
 		ArrayList<EnemyCharacter> enemies = new ArrayList<EnemyCharacter>();
@@ -150,6 +235,11 @@ public class GameScreen extends AppGameContainer{
 		
 	}
 	
+	/**
+	 * Induces a random encounter, but with a pre-defined set of enemies (so not really "random" as such).
+	 * 
+	 * @param enemies Opponents to face.
+	 * */
 	public void encounter(ArrayList<EnemyCharacter> enemies){
 		
 		setBattle(enemies);
@@ -157,10 +247,20 @@ public class GameScreen extends AppGameContainer{
 		
 	}
 
-	public void setMap(ParentMap map, float startX, float startY) {
-		((MapScreen)this.getState()).setMap(map, startX, startY);
+	/**
+	 * Swaps the currently displayed map.
+	 * 
+	 * @param x X coordinate at which to place the character.
+	 * @param y Y coordinate at which to place the character.
+	 * */
+	public void setMap(ParentMap map, float x, float y) {
+		((MapScreen)this.getState()).setMap(map, x, y);
 	}
 	
+	/**
+	 * Removes the map console, if present, from the screen.
+	 * Used to dismiss character dialogues, item notifications, etc.
+	 * */
 	public void removeMapConsole(){
 		
 		GameState comp = getState();

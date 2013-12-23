@@ -79,7 +79,6 @@ public class StartScreen extends SlickGameState{
 		int startY = 616 - buttonHeight - ((total - 1) * incY);
 		while (++i < total){
 			rects[i] = new SlickImageRectangle(10, startY + (i * incY), buttonWidth, buttonHeight, commands[i], "/res/buttons/4x1/onyx.png", true);
-			rects[i].initialize();
 		}
 		SlickGameState.initCache(arg0);
 	}

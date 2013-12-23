@@ -18,7 +18,7 @@ public class CharacterTile extends Tile implements InteractableObject {
 
 	public CharacterTile(String spritePath, NonPlayableCharacter npc, int x, int y) {
 
-		super(false, spritePath, x, y);
+		super(false, spritePath, x, y, true);
 		this.npc = npc;
 		
 	}

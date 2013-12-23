@@ -68,7 +68,7 @@ public class CharacterProfileWindow extends SlickGameState{
 		int i = -1;
 		int total = partyMembers.length;
 		while (++i < total){
-			characters.get(i).drawScaled(g, (int)partyMembers[i].getX(), (int)partyMembers[i].getY(), 100, 100);
+			characters.get(i).draw(g, (int)partyMembers[i].getX(), (int)partyMembers[i].getY());
 		}
 		
 	}
@@ -83,7 +83,6 @@ public class CharacterProfileWindow extends SlickGameState{
 		
 		this.character = character;
 		lblAvatar = new SlickImageRectangle(0, 0, 450, 624, "", true, this.character.getProfilePicture(), false);
-		lblAvatar.initialize();
 		
 		labels[0] = character.getName(); //All info
 		labels[1] = character.getHeight();

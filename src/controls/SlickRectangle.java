@@ -171,8 +171,6 @@ public abstract class SlickRectangle extends Rectangle {
 		this.displayText = displayText;
 	}
 	
-	public abstract void initialize();
-	
 	public void paint(Graphics g) {paint(g, 0, 0);}
 	
 	/**
@@ -194,9 +192,7 @@ public abstract class SlickRectangle extends Rectangle {
 	/**
 	 * @param g Graphics context within which to paint this rectangle's cache
 	 * */
-	public void paintCache(Graphics g){
-		paintCache(g, 0, 0);
-	}
+	public void paintCache(Graphics g){paintCache(g, 0, 0);}
 	
 	/**
 	 * @param g Graphics context within which to paint this rectangle's cache

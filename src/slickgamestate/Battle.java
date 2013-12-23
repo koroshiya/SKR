@@ -182,7 +182,7 @@ public class Battle extends SlickGameState{
 	public void run(CombatCapableCharacter c){
 		if (c.getGauge() >= 10){ //add check for qued? allow for overlap
 			running = false;
-			BattleConsole.writeConsole(c.getName() + SlickSKR.getValueFromKey("screen.battle.turn"));
+			BattleConsole.writeConsole(c.getNickName() + SlickSKR.getValueFromKey("screen.battle.turn"));
 			if (c instanceof PlayableCharacter){
 				PlayableCharacter character = (PlayableCharacter) c;
 				this.currentCharacter = character;
@@ -284,12 +284,18 @@ public class Battle extends SlickGameState{
 		int i = -1;
 		int total = this.enemies.size();
 		CombatCapableCharacter c;
+		int inc;
 		while (++i < total){
 			c = this.enemies.get(i);
+			inc = c instanceof BossCharacter ? SlickSKR.scaled_icon_size * 2 : SlickSKR.scaled_icon_size;
 			if (c.isAttacking()){
-				c.getAnimatedFrame().draw(0, partyY + constY * i);
+				c.getAnimatedFrame().draw(0, partyY + constY * i, 0 + inc, (partyY + constY * i) + inc, 
+										0, 0, c.getAnimatedFrame().getWidth(), c.getAnimatedFrame().getHeight());
+				//c.getAnimatedFrame().draw(0, partyY + constY * i);
 			}else{
-				c.getSprite().draw(0, partyY + constY * i);
+				//c.getSprite().draw(0, partyY + constY * i);
+				c.getSprite().draw(0, partyY + constY * i, 0 + inc, (partyY + constY * i) + inc, 
+						0, 0, c.getSprite().getWidth(), c.getSprite().getHeight());
 			}
 		}
 		

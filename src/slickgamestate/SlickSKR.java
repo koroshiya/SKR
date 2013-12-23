@@ -13,6 +13,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.ScalableGame;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.TrueTypeFont;
@@ -33,7 +34,7 @@ import slickgamestate.state.Save;
 
 public class SlickSKR extends StateBasedGame {
 
-	private final StateBasedGame game;
+	private final ScalableGame game;
 	
 	private static final String GAME_NAME = "SKR";
 	public static final int MAP = 0;
@@ -60,13 +61,16 @@ public class SlickSKR extends StateBasedGame {
 	private static final Properties prop = new Properties();
 	
 	private static String musicPlaying = "";
-	public static final Point size = new Point(816, 624);
-	public static final float scaleSize = 624 / size.y;
+	public static final Point size = new Point(1000, 750);
+	public static final Point targetSize = new Point(816, 624);
+	public static final float scaleSize = (float)size.y / (float)targetSize.y;
+	public static final int scaled_icon_size = (int)Math.floor(scaleSize * 48);
+	public static int refreshRate;
 	
 	public SlickSKR(ParentMap current) throws SlickException, IOException{
 		
 		super(GAME_NAME);
-		game = this;//TODO: new ScalableGame(this, size.x, size.y);
+		game = new ScalableGame(this, size.x, size.y);
 		GameScreen gs = current.getFrame();
 		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
 		this.addState(new StartScreen(gs));
@@ -85,7 +89,7 @@ public class SlickSKR extends StateBasedGame {
 	
 	public SlickSKR() throws IOException{
 		super(GAME_NAME);
-		game = this;//TODO: new ScalableGame(this, size.x, size.y);
+		game = new ScalableGame(this, size.x, size.y);
 		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
 	}
 	
@@ -179,6 +183,10 @@ public class SlickSKR extends StateBasedGame {
 		return prop.getProperty(key);
 	}
 	
-	public StateBasedGame getGame(){return this.game;}
+	public ScalableGame getGame(){return this.game;}
+	
+	public static void setRefreshRate(int rate){
+		refreshRate = rate;
+	}
 	
 }

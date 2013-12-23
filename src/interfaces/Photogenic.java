@@ -7,8 +7,6 @@ public interface Photogenic {
 
 	public String getAvatar() throws SlickException;
 	
-	public void drawScaled(Graphics g, int x, int y, float width, float height);
-	
-	public void instantiate() throws SlickException;
+	public void draw(Graphics g, int x, int y);
 	
 }

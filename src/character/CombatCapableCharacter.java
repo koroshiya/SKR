@@ -17,7 +17,6 @@ import com.japanzai.skr.Gender;
 import com.japanzai.skr.Inventory;
 
 import console.BattleConsole;
-import slickgamestate.MapScreen;
 import slickgamestate.SlickSKR;
 import technique.CombatTechnique;
 import technique.HealingTechnique;
@@ -229,7 +228,6 @@ public abstract class CombatCapableCharacter extends Character{
 		BattleConsole.cleanConsole();
 		BattleConsole.writeConsole(getName() + " went up to level " + this.level);
 		//TODO: level up sfx
-		//loss = AudioLoader.getAudio("WAV", ResourceLoader.getResourceAsStream("/res/sfx/game-over.wav"));
 		
 		int curHP = this.status.getHP();
 		
@@ -283,9 +281,7 @@ public abstract class CombatCapableCharacter extends Character{
 	
 	public boolean isAlive(){return this.currentStatus.getHP() != 0;}
 	
-	public void revive(){
-		revive(50);
-	}
+	public void revive(){revive(50);}
 	
 	public void revive(int percentHP){
 		this.currentStatus.setHP((int) Math.ceil(this.status.getHP() * ((double)percentHP / 100)));
@@ -298,7 +294,6 @@ public abstract class CombatCapableCharacter extends Character{
 		BattleConsole.writeConsole(this.getName() + " recovered " + amount + " HP");
 		if (this.currentStatus.getHP() > this.status.getHP()){this.currentStatus.setHP(this.status.getHP());}
 		//TODO: healing sfx
-		//loss = AudioLoader.getAudio("WAV", ResourceLoader.getResourceAsStream("/res/sfx/game-over.wav"));
 		
 	}
 	
@@ -393,15 +388,21 @@ public abstract class CombatCapableCharacter extends Character{
 	
 	public abstract void instantiateForBattle();
 	
-	public void instantiate(int sizeX){
-		super.instantiate(sizeX);
+	public void instantiate(){
+		super.instantiate();
+		int sizeX = 48;
+		try {
+			sizeX = new Image(spriteDirectory + "avatar.png").getWidth();
+		} catch (SlickException e1) {
+			e1.printStackTrace();
+		}
 		attack = new Animation();
 		try {
 			SpriteSheet tileSheet = new SpriteSheet(this.getSpriteDirectory() + "attack.png", sizeX, sizeX, new Color(0,0,0));
 			for (int y = 0; y < tileSheet.getVerticalCount(); y++) {
 				for (int x = 0; x < tileSheet.getHorizontalCount(); x++) {
 					try{
-						attack.addFrame(tileSheet.getSprite(x,y), 120 / tileSheet.getHorizontalCount());
+						attack.addFrame(tileSheet.getSprite(x,y).getScaledCopy(SlickSKR.scaleSize), 120 / tileSheet.getHorizontalCount());
 					}catch (Exception e){
 						break;
 					}
@@ -415,12 +416,8 @@ public abstract class CombatCapableCharacter extends Character{
 		System.out.println("Frame Count: " + this.attack.getFrame());
 	}
 	
-	public void instantiate(){
-		this.instantiate(MapScreen.ICON_SIZE);
-	}
-	
-	public void instantiateSuper(int sizeX){
-		super.instantiate(sizeX);
+	public void instantiateSuper(){
+		super.instantiate();
 	}
 	
 	public boolean isAttacking(){

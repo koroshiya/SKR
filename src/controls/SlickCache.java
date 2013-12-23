@@ -27,6 +27,7 @@ public class SlickCache extends Image {
 	public void resetPosition(){
 		this.initPosX = this.xPos;
 		this.initPosY = this.yPos;
+		//Log.error("initPosX: " + initPosX);
 	}
 	
 	public boolean needFlush(){
@@ -39,11 +40,13 @@ public class SlickCache extends Image {
 	
 	public void draw(Graphics g){
 		g.drawImage(this, -xPos, -yPos);
+		//Log.error("Drawing at " + -xPos + ", " + -yPos);
 	}
 	
 	public void move(float xDiff, float yDiff){
 		xPos = this.initPosX + xDiff;
 		yPos = this.initPosY + yDiff;
+		//Log.error("xPos " + xPos);
 	}
 	
 	public float getInitX(){

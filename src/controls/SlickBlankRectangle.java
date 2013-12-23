@@ -19,9 +19,6 @@ public class SlickBlankRectangle extends SlickRectangle {
 	}
 
 	@Override
-	public void initialize() {}
-
-	@Override
 	public void paintCache(Graphics g, int xOff, int yOff) {}
 
 }

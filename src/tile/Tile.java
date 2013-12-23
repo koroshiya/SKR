@@ -5,16 +5,21 @@ import interfaces.Photogenic;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.util.Log;
+
+import slickgamestate.SlickSKR;
 
 public class Tile implements Photogenic{
 	
 	private boolean open; //can be stepped on
+	private final boolean fore;
 	
 	protected int x;
 	protected int y;
+	protected int targetWidth;
+	protected int targetHeight;
 	
 	protected String sprite;
-	protected Image cache;
 	
 	/**
 	 * TODO: make dynamic tile
@@ -25,45 +30,43 @@ public class Tile implements Photogenic{
 	 * @param sprite String pointing to image resource to display when Tile is drawn
 	 * @param x X coordinate of Tile on map
 	 * @param y Y coordinate of Tile on map
+	 * @param fore True if this tile should be displayed in front of the character
 	 * */
-	public Tile(boolean open, String sprite, int x, int y){
+	public Tile(boolean open, String sprite, int x, int y, boolean fore){
+		this(open, sprite, x, y, fore, SlickSKR.scaled_icon_size, SlickSKR.scaled_icon_size);
+	}
+	
+	/**
+	 * @param open Whether or not the file can be stepped on, reached, etc.
+	 * @param sprite String pointing to image resource to display when Tile is drawn
+	 * @param x X coordinate of Tile on map
+	 * @param y Y coordinate of Tile on map
+	 * @param fore True if this tile should be displayed in front of the character
+	 * */
+	public Tile(boolean open, String sprite, int x, int y, boolean fore, float width, float height){
 		
 		this.open = open;
 		this.sprite = sprite;
+		this.fore = fore;
 		
 		this.x = x;
 		this.y = y;
+		this.targetWidth = (int)width;
+		this.targetHeight = (int)height;
 		
 	}
-
-	public void openTile(){this.open = true;}
 	
-	public void closeTile(){this.open = false;}
+	public void setTileOpen(boolean open){this.open = open;}
 	
 	public boolean isOpen(){return this.open;}
 	
 	public void setSprite(String icon){
 		this.sprite = icon;
-		try {
-			this.setCache(new Image(this.sprite));
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
 	}
-	
-	public void setSprite(Image icon){this.setCache(icon);}
 
 	@Override
 	public String getAvatar() {return this.sprite;}
 	
-	public void instantiate() throws SlickException{
-		this.cache = this.sprite.length() == 0 ? new Image(0,0) : new Image(this.sprite);
-	}
-	
-	public Image getCache(){return this.cache;}
-	
-	public void setCache(Image cache){this.cache = cache;}
-
 	public int getXCoordinate(){return this.x;}
 	
 	public int getYCoordinate(){return this.y;}
@@ -72,19 +75,31 @@ public class Tile implements Photogenic{
 	
 	public void setYCoordinate(int y){this.y = y;}
 	
-	public void draw(Graphics g, float x, float y){
-		g.drawImage(this.cache, x, y);
-	}
-	
 	@Override
-	public void drawScaled(Graphics g, int x, int y, float width, float height){
-		g.drawImage(cache, x, y, x + width, y + height, 0, 0, cache.getWidth(), cache.getHeight());
+	public void draw(Graphics g, int x, int y){
+		if (this.sprite != ""){
+			try {
+				new Image(this.sprite).getScaledCopy((int)(this.targetWidth * SlickSKR.scaleSize), (int)(this.targetHeight * SlickSKR.scaleSize)).draw(x, y);
+			} catch (SlickException e) {
+				e.printStackTrace();
+			} catch (NullPointerException npe){
+				Log.error("Resource " + this.sprite + " does not exist");
+			}
+		}
 	}
 	
 	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y){
-		if (sprite != defaultImage){this.draw(g, x, y);}
+		if (sprite != defaultImage){this.draw(g, (int)x, (int)y);}
 	}
 	
-	public boolean stepOn(){return false;}
+	/**
+	 * Used to determine whether this tile is in the foreground (drawn in front of the character on the map)
+	 * or the background (drawn behind the character on the map).
+	 * 
+	 * @return True if tile is drawn in front of character, other tiles, etc.
+	 * */
+	public boolean isFore(){return fore;}
+	
+	public boolean stepOn(Graphics g){return false;}
 	
 }

@@ -48,7 +48,7 @@ public class Store extends ItemWindowBase{
 		int i = commands.length - 3;
 		int total = commands.length;
 		while (++i < total){
-			filterItems[i] = new SlickImageRectangle(paneWidth * (i % 2), 0, paneWidth, filterBaseY, commands[i], true, "/res/buttons/btn_gray+border_500x58.png", true);
+			filterItems[i] = new SlickImageRectangle(paneWidth * (i % 2), 0, paneWidth, filterBaseY, commands[i], true, "/res/buttons/10x1/gray+border.png", true);
 		}
 		
 	}
@@ -57,7 +57,6 @@ public class Store extends ItemWindowBase{
 	public void enter(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 
 		super.enter(arg0, arg1);
-		store.initialize();
 		this.setFilter(commands[6]);
 		
 	}

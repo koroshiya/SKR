@@ -20,8 +20,8 @@ public class SpanTransitionTile extends SpanTile{
 	 * */
 	public SpanTransitionTile(
 			ParentMap map, ParentMap currentMap, String sprite, int width, int height, 
-			int entranceXIndex, int entranceYIndex, int x, int y) {
-		super(false, sprite, width, height, x, y);
+			int entranceXIndex, int entranceYIndex, int x, int y, boolean fore) {
+		super(false, sprite, width, height, x, y, fore);
 		this.width = width;
 		this.height = height;
 		this.transitionX = this.x + entranceXIndex;
@@ -48,7 +48,7 @@ public class SpanTransitionTile extends SpanTile{
 	public boolean isTransition(int x, int y){return transitionX == x && transitionY == y;}
 	
 	public TransitionTile getTransition(){
-		return new TransitionTile("", map, currentMap, transitionX, transitionY, transitionX, transitionY);
+		return new TransitionTile("", map, currentMap, transitionX, transitionY, transitionX, transitionY, super.isFore());
 	}
 	
 	public int getTransitionX(){return this.transitionX;}

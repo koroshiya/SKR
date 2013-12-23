@@ -36,7 +36,7 @@ public class BorderTile {
 			return null;
 		}
 		
-		return new Tile(false, border, i, j);
+		return new Tile(false, border, i, j, true);
 		
 	}
 	

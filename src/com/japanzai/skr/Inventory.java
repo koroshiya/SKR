@@ -8,7 +8,6 @@ import item.Weapon;
 
 import java.util.ArrayList;
 
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
 
 public class Inventory {
@@ -324,14 +323,6 @@ public class Inventory {
 		}
 		
 		return itemList;
-		
-	}
-	
-	public static void initialize() throws SlickException {
-		
-		for (Item i : items){
-			i.instantiate();
-		}
 		
 	}
 	

@@ -61,6 +61,7 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	public static void setFlush(boolean needed, boolean map){
 		if (map){
 			MapScreen.mapCache.setFlush(needed);
+			MapScreen.fgCache.setFlush(needed);
 		}else{
 			screenCache.setFlush(needed);
 		}

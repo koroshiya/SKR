@@ -36,8 +36,8 @@ public class MovementListener implements KeyListener, MouseListener {
 	
 	private void moveToClick(Point p) throws SlickException{
 		
-		int x = (int) Math.floor(p.x / MapScreen.ICON_SIZE);
-		int y = (int) Math.floor(p.y / MapScreen.ICON_SIZE);
+		int x = (int) Math.floor(p.x / SlickSKR.scaled_icon_size);
+		int y = (int) Math.floor(p.y / SlickSKR.scaled_icon_size);
 		
 		map.getParentMap().tryMoveToTile(x, y);
 		
@@ -50,13 +50,13 @@ public class MovementListener implements KeyListener, MouseListener {
 		int y = (int)map.getParentMap().getCurrentPositionY();
 		
 		if (dir == ParentMap.UP){
-			y -= MapScreen.ICON_SIZE;
+			y -= SlickSKR.scaled_icon_size;
 		}else if (dir == ParentMap.RIGHT){
-			x += MapScreen.ICON_SIZE;
+			x += SlickSKR.scaled_icon_size;
 		}else if (dir == ParentMap.LEFT){
-			x -= MapScreen.ICON_SIZE;
+			x -= SlickSKR.scaled_icon_size;
 		}else if (dir == ParentMap.DOWN){
-			y += MapScreen.ICON_SIZE;
+			y += SlickSKR.scaled_icon_size;
 		}
 		
 		if (map.getParentMap().tileExists(x, y)){

@@ -21,15 +21,13 @@ public class ChestTile extends InteractiveTile implements InteractableObject {
 	private ArrayList<Item> treasure;
 	private String sprite;
 	private String closed;
-	private String background;
 
-	public ChestTile(String chestClosed, String chestOpen, String grass, ArrayList<Item> treasure, int x, int y) {
+	public ChestTile(String chestClosed, String chestOpen, ArrayList<Item> treasure, int x, int y, boolean fore) {
 		
-		super(chestClosed, x, y);
+		super(chestClosed, x, y, fore);
 		this.open = false;
 		this.sprite = chestOpen;
 		this.closed = chestClosed;
-		this.background = grass;
 		this.treasure = treasure;
 		
 	}
@@ -63,7 +61,7 @@ public class ChestTile extends InteractiveTile implements InteractableObject {
 	}
 	
 	public ChestTile create(int x, int y){
-		return new ChestTile(this.closed, this.sprite, this.background, this.treasure, x, y);
+		return new ChestTile(this.closed, this.sprite, this.treasure, x, y, super.isFore());
 	}
 
 	

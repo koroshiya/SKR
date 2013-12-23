@@ -1,9 +1,9 @@
 package map;
 
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.pathfinding.PathFindingContext;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
+import tile.CharacterTile;
 import tile.Tile;
 
 public class TileMap implements TileBasedMap {
@@ -61,15 +61,11 @@ public class TileMap implements TileBasedMap {
 		}
 	}
 	
-	public void instantiate(String defaultTile) throws SlickException{
-		Tile def = new Tile(false, defaultTile, 0, 0);
-		def.instantiate();
-		for (Tile[] t1 : tiles){
-			for (Tile t2 : t1){
-				if (t2.getAvatar().equals(def.getAvatar())){
-					t2.setCache(def.getCache());
-				}else{
-					t2.instantiate();					
+	public void instantiate(){
+		for (Tile[] tileset : this.tiles){
+			for (Tile tile : tileset){
+				if (tile instanceof CharacterTile){
+					((CharacterTile)tile).getCharacter().instantiate();
 				}
 			}
 		}

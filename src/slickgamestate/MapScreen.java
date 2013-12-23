@@ -1,5 +1,7 @@
 package slickgamestate;
 
+import java.awt.Point;
+
 import map.ParentMap;
 
 import org.newdawn.slick.Image;
@@ -18,9 +20,19 @@ import tile.Tile;
 import tile.event.CharacterEventTile;
 import tile.event.EventTile;
 
+/**
+ * @author Koroshiya
+ * MapScreen is the game state responsible for managing the "map".
+ * ie. It draws and emulates an area, a field, a jungle, or whatever vicinity the character is in.
+ * This class provides methods and listeners for interacting with the map, but is predominantly 
+ * responsible for any rendering that must take place. 
+ * 
+ * Difference between MapScreen and ParentMap:
+ * MapScreen is the game state. It renders the images you see, listens for keystrokes, etc.
+ * ParentMap is the underlying "grid" of tiles that MapScreen draws and interacts with.
+ * Think of ParentMap as a blueprint, and MapScreen as the class responsible for rendering and interacting with the blueprint. 
+ */
 public class MapScreen extends SlickGameState{
-	
-	private Image sprite;
 	
 	private final int INTERACT = Input.KEY_A;
 	private final int MENU = Input.KEY_W;
@@ -28,16 +40,17 @@ public class MapScreen extends SlickGameState{
 	private final int FULLSCREEN = Input.KEY_F;
 	
 	private ParentMap map;
-	public static int ICON_SIZE = 48;
 	private MapConsole activeDialog = null;
-	public static SlickCache mapCache;
-	private SlickCache bgCache;
+	public static Point step = null;
+	
+	public static SlickCache mapCache; //Cache for the objects on the map. eg. Trees, rocks, chests, etc.
+	public static SlickCache fgCache; //Same as mapCache, but in the foreground.
+	public static SlickCache dCache; //Dialogue cache
+	private SlickCache bgCache; //Cache for the map itself. This is usually a repeating background pattern.
 	
 	public MapScreen(ParentMap map){
-		
 		super(SlickSKR.MAP, map.getFrame());
 		this.map = map;
-		
 	}
 	
 	@Override
@@ -45,7 +58,9 @@ public class MapScreen extends SlickGameState{
 
 		try { //TODO: check for leak over time
 			mapCache = new SlickCache((float)map.getPositionX(), (float)map.getPositionY(), map.getWidth(), map.getHeight());
-			bgCache = new SlickCache(ICON_SIZE, ICON_SIZE, gc.getWidth() + ICON_SIZE * 2, gc.getHeight() + ICON_SIZE * 2);
+			fgCache = new SlickCache((float)map.getPositionX(), (float)map.getPositionY(), map.getWidth(), map.getHeight());
+			bgCache = new SlickCache(SlickSKR.scaled_icon_size, SlickSKR.scaled_icon_size, gc.getWidth() + SlickSKR.scaled_icon_size * 2, gc.getHeight() + SlickSKR.scaled_icon_size * 2);
+			dCache = new SlickCache(0,0,gc.getWidth(),gc.getHeight());
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -54,10 +69,10 @@ public class MapScreen extends SlickGameState{
 	@Override
 	public void enter(GameContainer gc, StateBasedGame arg1) throws SlickException {
 		
-		sprite = new Image(map.getDefaultTile());
 		map.instantiateImages();
 		SlickSKR.PlayMusic(map.getThemeMusic());
 		mapCache.setFlush(true);
+		bgCache.setFlush(true);
 		
 	}
 	
@@ -80,6 +95,7 @@ public class MapScreen extends SlickGameState{
 			float xDiff = map.getXDiff();
 			if (xDiff != 0 || yDiff != 0){
 				mapCache.move(xDiff, yDiff);
+				fgCache.move(xDiff, yDiff);
 				bgCache.move(xDiff, yDiff);
 			}
 		}
@@ -91,80 +107,135 @@ public class MapScreen extends SlickGameState{
 		
 	}
 	
+	/**
+	 * Resets the offset of all caches.
+	 * Should be used when character movement ceases, or the underlying map changes.
+	 * */
 	public void resetPosition(){
 		mapCache.resetPosition();
+		fgCache.resetPosition();
 		bgCache.resetPosition();
 	}
 	
+	/**
+	 * Moves both caches by the offset indicated, then resets their internal offsets to match the new coordinates.
+	 * 
+	 * @param xDiff Distance on the x-axis for the caches to move before resetting.
+	 * @param yDiff Distance on the y-axis for the caches to move before resetting.
+	 * */
 	public void resetPosition(float xDiff, float yDiff){
 		mapCache.move(xDiff, yDiff);
-		mapCache.resetPosition();
+		fgCache.move(xDiff, yDiff);
 		bgCache.move(xDiff, yDiff);
-		bgCache.resetPosition(ICON_SIZE, ICON_SIZE);
+		mapCache.resetPosition();
+		fgCache.resetPosition();
+		bgCache.resetPosition(SlickSKR.scaled_icon_size, SlickSKR.scaled_icon_size);
+		//Log.error("Resetting to " + xDiff);
+		//mapCache.setFlush(true);
 	}
 	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
+
+		if (step != null){
+			map.getTileByPosition(step.x, step.y).stepOn(g);
+			step = null;
+		}
 		
-		//g.setFont(SlickSKR.DEFAULT_FONT);
 		if (mapCache.needFlush()){
-			try { //TODO: check for leak over time
-				Graphics gc = mapCache.getGraphics();
-				gc.clear();
+			//Log.error("Flush Cycle");
+			if (bgCache.needFlush()){
+				g.clear();
 				Graphics gb = bgCache.getGraphics();
 				gb.clear();
-				gb.fillRect(0, 0, bgCache.getWidth(), bgCache.getHeight(), sprite, 0, 0);
-				
-				String defaultTile = map.getDefaultTile();
-				
-				int i = -1;
-				int j;
-				while (++i < mapCache.getWidth()){
-					j = -1;
-					while (++j < mapCache.getHeight()){
-						try{
-							map.getTileByIndex(i, j).drawIfNotDefault(gc, defaultTile, i * ICON_SIZE, j * ICON_SIZE);
-						}catch (Exception ex){
-							//g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
-						}
+				gb.fillRect(0, 0, bgCache.getWidth(), bgCache.getHeight(), new Image(map.getDefaultTile()), 0, 0);
+			}
+			Graphics gc = mapCache.getGraphics();
+			gc.clear();
+			Graphics gf = fgCache.getGraphics();
+			gf.clear();
+			
+			String defaultTile = map.getDefaultTile();
+			
+			int i = -1;
+			int j;
+			Tile temp;
+			while (++i < mapCache.getWidth()){
+				j = -1;
+				while (++j < mapCache.getHeight()){
+					temp = map.getTileByIndex(i, j);
+					if (temp != null){
+						temp.drawIfNotDefault(temp.isFore() ? gf : gc, defaultTile, i * SlickSKR.scaled_icon_size, j * SlickSKR.scaled_icon_size);
 					}
 				}
-				
-				if (this.activeDialog != null){
-					
-					this.activeDialog.paint(gc, (int)mapCache.getInitX(), (int)mapCache.getInitY());
-					this.activeDialog.paint(gb, ICON_SIZE, ICON_SIZE);
-				}
-				
-				mapCache.setFlush(false);
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+			
+			if (this.activeDialog != null){
+				Graphics gd = dCache.getGraphics();
+				gd.clear();
+				this.activeDialog.paint(gd, 0, 0);
+			}
+			
+			mapCache.setFlush(false);
+			dCache.setFlush(false);
+			
 		}
 		bgCache.draw(g);
 		mapCache.draw(g);
 		g.flush();
 
-		this.map.getAnimatedSprite().draw(this.map.getCharacterPositionX() * ICON_SIZE, this.map.getCharacterPositionY() * ICON_SIZE);
+		this.map.getAnimatedSprite().draw(this.map.getCharacterPositionX() * SlickSKR.scaled_icon_size, this.map.getCharacterPositionY() * SlickSKR.scaled_icon_size);
+		
+		fgCache.draw(g);
+		if (this.activeDialog != null){dCache.draw(g);}
+		g.flush();
 		
 	}
 	
+	/**
+	 * Returns the underlying map layout that this state emulates.
+	 * 
+	 * @return Map contained by this class, responsible for the layout, preset tiles, etc.
+	 * */
 	public ParentMap getParentMap() {return map;}
 	
-	public void setMap(ParentMap map2, float startX, float startY) {
+	/**
+	 * Sets the map associated with this screen.
+	 * 
+	 * @param map2 Map to set for this screen.
+	 * @param x X coordinate at which to place the character.
+	 * @param y Y coordinate at which to place the character.
+	 * */
+	public void setMap(ParentMap map2, float x, float y) {
 		this.map = map2;
-		super.parent.swapView(SlickSKR.MAP);
 		mapCache.setFlush(true);
+		bgCache.setFlush(true);
+		this.map.moveToPosition(x, y);
+		super.parent.swapView(SlickSKR.MAP);
 	}
 
-	public void removeMapConsole() {activeDialog = null;}
+	/**
+	 * Sets any active on-screen dialogues to null, effectively clearing them from the screen.
+	 * eg. Used to end a dialogue with an NPC, or to dismiss a notification about picking up an item.
+	 * */
+	public void removeMapConsole() {
+		activeDialog = null;
+		mapCache.setFlush(true);
+		bgCache.setFlush(true);
+	}
 	
+	/**
+	 * Sets an on-screen dialogue.
+	 * eg. A prompt that the player can interact with, an alert, etc.
+	 * 
+	 * @param activeDialog Console to display on the screen.
+	 */
 	public void setMapConsole(MapConsole activeDialog){this.activeDialog = activeDialog;}
 
 	@Override
 	public void processMouseClick(int clickCount, int x, int y) {
-		int px = (int) Math.floor(x / MapScreen.ICON_SIZE);
-		int py = (int) Math.floor(y / MapScreen.ICON_SIZE);
+		int px = (int) Math.floor(x / SlickSKR.scaled_icon_size);
+		int py = (int) Math.floor(y / SlickSKR.scaled_icon_size);
 		
 		getParentMap().tryMoveToTile(px, py);
 		mapCache.setFlush(true);
@@ -181,20 +252,24 @@ public class MapScreen extends SlickGameState{
 		
 	}
 	
+	/**
+	 * Attempts to interact with the tile directly in front of the character.
+	 * Used to open treasure chests, talk to NPCs, etc.
+	 */
 	private void interact() {
 		
 		int dir = getParentMap().getDirection();
-		int x = (int)getParentMap().getCurrentPositionX() + getParentMap().getCharacterPositionX() * MapScreen.ICON_SIZE;
-		int y = (int)getParentMap().getCurrentPositionY() + getParentMap().getCharacterPositionY() * MapScreen.ICON_SIZE;
+		int x = (int)getParentMap().getCurrentPositionX() + getParentMap().getCharacterPositionX() * SlickSKR.scaled_icon_size;
+		int y = (int)getParentMap().getCurrentPositionY() + getParentMap().getCharacterPositionY() * SlickSKR.scaled_icon_size;
 		
 		if (dir == ParentMap.UP){
-			y -= MapScreen.ICON_SIZE;
+			y -= SlickSKR.scaled_icon_size;
 		}else if (dir == ParentMap.RIGHT){
-			x += MapScreen.ICON_SIZE;
+			x += SlickSKR.scaled_icon_size;
 		}else if (dir == ParentMap.LEFT){
-			x -= MapScreen.ICON_SIZE;
+			x -= SlickSKR.scaled_icon_size;
 		}else if (dir == ParentMap.DOWN){
-			y += MapScreen.ICON_SIZE;
+			y += SlickSKR.scaled_icon_size;
 		}
 		
 		if (getParentMap().tileExists(x, y)){

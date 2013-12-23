@@ -141,15 +141,15 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	
 	public void healAlly(PlayableCharacter ally, HealingTechnique tech, ConsumableItem item, PlayableCharacter user){
 	
-			if (tech != null){
-				BattleConsole.writeConsole(user.getName() + " used " + tech.getName());
-				tech.use(ally);
-			}else{
-				BattleConsole.writeConsole(user.getName() + " used " + item.getName());
-				item.consume(ally);
-			}
-			
-			resetGauge();
+		if (tech != null){
+			BattleConsole.writeConsole(user.getName() + " used " + tech.getName());
+			tech.use(ally);
+		}else{
+			BattleConsole.writeConsole(user.getName() + " used " + item.getName());
+			item.consume(ally);
+		}
+		
+		resetGauge();
 			
 	}
 		
@@ -179,11 +179,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 		this.temper = boolTemper ? 10 : 0; //Used to set temper to max or min. eg. use an item to max it, opponent technique can reduce it.
 	}
 	
-	public FuryBreak getFuryBreak(){
-		
-		return this.fury;
-		
-	}
+	public FuryBreak getFuryBreak(){return this.fury;}
 	
 	public String getProfilePicture() {
 		return this.getSpriteDirectory() + "profile.png";		
@@ -201,12 +197,20 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 		}
 	}
 	
-	public void instantiate(int sizeX){
+	public void instantiate(){
 		//super.instantiate(sizeX);
-		this.instantiateSuper(sizeX);
+		super.instantiateSuper();
+		int sizeY = 48;
+		try {
+			sizeY = new Image(spriteDirectory + "avatar.png").getHeight();
+		} catch (SlickException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		int sizeX = sizeY * 4 / 3;
 		attack = new Animation();
 		try {
-			SpriteSheet tileSheet = new SpriteSheet(this.getSpriteDirectory() + "attack.png", 64, 48, new Color(0,0,0));
+			SpriteSheet tileSheet = new SpriteSheet(this.getSpriteDirectory() + "attack.png", sizeX, sizeY, new Color(0,0,0));
 			int y = 0; //this.getWeapon().getTypeOfWeaponIndex(); //TODO:
 			for (int x = 0; x < tileSheet.getHorizontalCount(); x++) {
 				try{

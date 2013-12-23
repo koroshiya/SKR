@@ -48,7 +48,7 @@ public class Driver implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private final String grass = "/res/terrain/grass.png";
+	private final String grass = "/res/terrain/grass8.png";
 	private final String mud = "/res/terrain/mud.png";
 	
 	ArrayList<FightingStyle> styles = new ArrayList<FightingStyle>();
@@ -343,16 +343,16 @@ public class Driver implements Serializable{
 		ParentMap current = null;
 		ParentMap destination = null;
 		
-		Point mapSize = new Point(16 * MapScreen.ICON_SIZE, 13 * MapScreen.ICON_SIZE);
-		Point coordinates = new Point(32 * MapScreen.ICON_SIZE, 24 * MapScreen.ICON_SIZE); //Multiple base by pix size?
-		Point currentPosition = new Point(8 * MapScreen.ICON_SIZE, 6 * MapScreen.ICON_SIZE);
+		Point mapSize = new Point(16 * SlickSKR.scaled_icon_size, 13 * SlickSKR.scaled_icon_size);
+		Point coordinates = new Point(32 * SlickSKR.scaled_icon_size, 24 * SlickSKR.scaled_icon_size); //Multiple base by pix size?
+		Point currentPosition = new Point(8 * SlickSKR.scaled_icon_size, 6 * SlickSKR.scaled_icon_size);
 		PlayableCharacter animatedSprite = Party.getCharacterByIndex(0);
 
 		//SlickSKR sk = null;
 		current = new ParentMap(coordinates, currentPosition, animatedSprite, enemies, bs, mapSize, 97, grass, "other/public/summeropenfielddusk.ogg");
 
-		Tile[][] deadTile = createDeadMap(32 * MapScreen.ICON_SIZE, 26 * MapScreen.ICON_SIZE);
-		Point newCurPos = new Point(20 * MapScreen.ICON_SIZE, 0);
+		Tile[][] deadTile = createDeadMap(32 * SlickSKR.scaled_icon_size, 26 * SlickSKR.scaled_icon_size,destination,current);
+		Point newCurPos = new Point(20 * SlickSKR.scaled_icon_size, 0);
 		destination = new ParentMap(coordinates, newCurPos, animatedSprite, bossEnemies, bs, mapSize, 5, mud, "other/public/Cavern.ogg");	
 		destination.setTiles(deadTile);
 		
@@ -368,7 +368,7 @@ public class Driver implements Serializable{
 	
 	private RandomTile[] basicRandomTiles() throws SlickException{
 
-		String grass = ("/res/terrain/grass.png");
+		String grass = ("/res/terrain/grass8.png");
 		//String grass = ("/res/terrain/grass3.png");
 		//String rock = ("/res/terrain/rock.png");
 		String weed = ("/res/terrain/weed02.png");
@@ -376,23 +376,27 @@ public class Driver implements Serializable{
 		String shrub = ("/res/terrain/shrub2-05.png");
 		String chestClosed = ("/res/terrain/closedChest.png");
 		String chestOpen = ("/res/terrain/openChest.png");
+		String boxO = ("/res/terrain/box-open.png");
+		String boxC = ("/res/terrain/box-closed.png");
 		
 		ArrayList<Item> items = new ArrayList<Item>();
 		items.add(Inventory.getItem("Riceball"));
 		items.add(Inventory.getItem("Kimchi"));
 		
-		Tile grassTile = new ScaleTile(true, grass,0,0);
-		Tile chestTile = new ChestTile(chestClosed, chestOpen, grass, items,0,0);
+		Tile grassTile = new ScaleTile(true, grass,0,0,false);
+		Tile chestTile = new ChestTile(chestClosed, chestOpen, items, 0, 0, false);
 		//Tile rockTile = new Tile(false, false, rock);
-		Tile pineTile = new SpanTile(true, pine, 155, 149,0,0);
-		Tile weedTile = new Tile(true, weed,0,0);
-		Tile shrubTile = new Tile(true, shrub,0,0);
+		Tile pineTile = new SpanTile(true, pine, 155, 149,0,0,true);
+		Tile weedTile = new Tile(true, weed,0,0,true);
+		Tile shrubTile = new Tile(true, shrub,0,0,true);
+		Tile boxCTile = new ChestTile(boxC, boxO, items, 0, 0, false);
 		
 		return new RandomTile[]{
 			new RandomTile(chestTile, 99),
 			new RandomTile(pineTile, 98),
 			new RandomTile(shrubTile, 98),
 			new RandomTile(weedTile, 98),
+			new RandomTile(boxCTile, 98),
 			//new RandomTile(rockTile, 98),
 
 			new RandomTile(grassTile, 0)
@@ -419,37 +423,37 @@ public class Driver implements Serializable{
 
 		CharacterEventTile tileNPC = new CharacterEventStoreTile(imgNPC, InteractiveNPC(imgNPC, dialogue), store, 1, 5);
 		CharacterEventTile tileEnemy = new CharacterEventBattleTile(imgNPC, InteractiveNPC(imgNPC, dialogue2), this.enemies.get(2).create(), 3, 17);
-		Tile basicTile = new Tile(true, "/res/terrain/grass.png", 16, 12);
-		Tile tTile = new TransitionTile("/res/terrain/border/borderExitTop.png", destination, current, 20, 16, 20, 0);
-		Tile pineTile = new SpanTile(true, "/res/terrain/pine-none03.png", 155, 149, 19, 10);
-		Tile tentTile = new SpanTransitionTile(destination, current, "/res/terrain/building/tent.png", 228, 216, 3, 3, 10, 20);
+		Tile basicTile = new Tile(true, "/res/terrain/grass8.png", 16, 12,false);
+		Tile tTile = new TransitionTile("/res/terrain/border/borderExitTop.png", destination, current, 20, 16, 20, 0,false);
+		//Tile pineTile = new SpanTile(true, "/res/terrain/pine-none03.png", 155, 149, 19, 10,false);
+		Tile tentTile = new SpanTransitionTile(destination, current, "/res/terrain/building/tent.png", 228, 216, 3, 3, 10, 20,false);
 		/*
 		 String sprite, ParentMap map,
 			ParentMap currentMap, int startX, int startY, 
 			int width, int height, int entranceXIndex, int entranceYIndex
 		 * */
 		
-		return new Tile[]{tileNPC, basicTile, NPC(imgKoro, 16, 10), tTile, tileEnemy, pineTile, tentTile};
+		return new Tile[]{tileNPC, basicTile, NPC(imgKoro, 16, 10), tTile, tileEnemy, /*pineTile,*/ tentTile};
 		
 	}
 	
-	private Tile[][] createDeadMap(int a, int b) throws SlickException{
+	private Tile[][] createDeadMap(int a, int b, ParentMap current, ParentMap destination) throws SlickException{
 		
-		int x = (int)Math.floor((double)a / MapScreen.ICON_SIZE);
-		int y = (int)Math.floor((double)b / MapScreen.ICON_SIZE);
+		int x = (int)Math.floor((double)a / SlickSKR.scaled_icon_size);
+		int y = (int)Math.floor((double)b / SlickSKR.scaled_icon_size);
 		
 		Tile[][] tile = new Tile[x][y];
 		String mud = ("/res/terrain/mud.png");
 		ArrayList<Item> items = new ArrayList<Item>();
 		items.add(Inventory.getItem("Riceball"));
 		items.add(Inventory.getItem("Kimchi"));
-
 		
 		for (int i = 0; i < x; i++){
 			for (int j = 0; j < y; j++){				
-				tile[i][j] = new Tile(true, mud, i, j);
+				tile[i][j] = new Tile(true, mud, i, j,false);
 			}
 		}
+		tile[20][16] = new TransitionTile("/res/terrain/weed02.png", current, destination, 20, 0, 20, 16,false);
 		
 		return tile;
 		

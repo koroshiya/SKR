@@ -10,8 +10,6 @@ public class SlickImageRectangle extends SlickRectangle {
 	
 	private static final long serialVersionUID = 8892796440483186655L;
 	
-	private Image cache = null;
-	
 	public SlickImageRectangle(float x, float y, float width, float height, String tag, String url, boolean clickable) {
 		super(x, y, width, height, tag, url, clickable);
 	}
@@ -24,31 +22,15 @@ public class SlickImageRectangle extends SlickRectangle {
 		super(x, y, width, height, tag, enabled, displayText, imgSrc, clickable);
 	}
 	
-	public void initialize(){
-		//Log.debug(imgSrc);
-		try {
-			if (!imgSrc.equals("")){
-				cache = new Image(imgSrc);
-			}else{
-				cache = new Image(0,0);
-			}
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	public void paintCache(Graphics g, int xOff, int yOff){
-		paintCache(g, xOff, yOff, (float)this.getHeight());
-	}
-	
-	public void paintCache(Graphics g, int xOff, int yOff, float targetHeight){
-		targetHeight *=  SlickSKR.scaleSize;
-		float newX = x + xOff;
-		float newY = y + yOff;
-		float targetWidth = (float)Math.floor((float)cache.getWidth() * (float)targetHeight / (float)cache.getHeight());
-		g.drawImage(cache, newX, newY, newX + targetWidth, newY + targetHeight, 0, 0, cache.getWidth(), cache.getHeight());
-		//Log.debug("SlickRectangle - paintCache(Graphics, int, int, float) - Drawing at size of " + (targetWidth) + ", " + (targetHeight));
+		if (!imgSrc.equals("")){
+			try {
+				new Image(imgSrc).getScaledCopy((int)(width * SlickSKR.scaleSize), (int)(height * SlickSKR.scaleSize)).draw(x + xOff, y + yOff);
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

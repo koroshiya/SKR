@@ -72,13 +72,11 @@ public class MenuMainWindow extends SlickGameState{
 		int inc;
 		final int baseInc = 13;
 		for (int i = 0; i < menuCharacters.length; i++){
-			menuCharacters[i].paintCache(g); //TODO: replace 150 with gc size scale
+			menuCharacters[i].paintCache(g);
 			PlayableCharacter c = characters.get(i);
 			inc = baseInc;
 			g.setColor(Color.white);
-			//g.draw(menuCharacters[i]);
-			//g.drawImage(c.getCache(), 0, y);
-			c.drawScaled(g, 0, (int)y, 150); ////TODO: replace 150 with gc size scale
+			c.drawAvatar(0, y);
 			g.drawString(c.getName(), x, y + inc);
 			inc += baseInc;
 			g.drawString(c.getOccupation(), x, y + inc);
@@ -108,7 +106,6 @@ public class MenuMainWindow extends SlickGameState{
 		while (++i < total){
 			s = (String) commands[i];
 			menuItems[i] = new SlickImageRectangle(x, i * y, 450, y, s, "/res/buttons/9x1/onyx.png", true);
-			menuItems[i].initialize();
 		}
 		
 		characters = Party.getCharacters();
@@ -118,7 +115,6 @@ public class MenuMainWindow extends SlickGameState{
 		while (++i < total){
 			characters.get(i).instantiate();
 			menuCharacters[i] = new SlickImageRectangle(0, 155 * i, x, 150, Integer.toString(i), "/res/buttons/5x2/dbrown.png", true);
-			menuCharacters[i].initialize();
 		}
 		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 24);
 		alert = new SlickBlankRectangle(150, 200, 550, 40, "", false);

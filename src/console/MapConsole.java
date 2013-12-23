@@ -10,6 +10,7 @@ import org.newdawn.slick.Input;
 import screen.GameScreen;
 import screen.SlickListener;
 import slickgamestate.SlickGameState;
+import slickgamestate.SlickSKR;
 import tile.ChestTile;
 import console.dialogue.ComplexDialogue;
 import console.dialogue.Dialogue;
@@ -44,7 +45,6 @@ public class MapConsole extends SlickListener {
 		//BattleMenuListener listener = new BattleMenuListener();
 
 		background = new SlickImageRectangle(-1, 506, 817, 120, "", false, "/res/buttons/4x1/brown.png", false);
-		background.initialize();
 		
 		final int buttonWidth = 150;
 		final int buttonHeight = 25;
@@ -52,7 +52,6 @@ public class MapConsole extends SlickListener {
 		int startY = 510;
 		for (int i = 0; i < rects.length; i++){
 			rects[i] = new SlickImageRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false, "/res/buttons/6x1/blue.png", true);
-			rects[i].initialize();
 			startY += buttonHeight + 2;
 		}
 		rects[1].setEnabled(true);
@@ -64,12 +63,13 @@ public class MapConsole extends SlickListener {
 	}
 	
 	public void paint(Graphics g, int offX, int offY){
-		background.paintCache(g, offX, offY, (int)background.getHeight());//TODO: replace 150 with gc size scale
+		background.paintCache(g, offX, offY);
 		for (SlickRectangle rect : rects){
-			rect.paintCache(g, offX, offY);//TODO: replace 150 with gc size scale
+			rect.paintCache(g, offX, offY);
 			rect.paintCenter(g,true, offX, offY);
 		}
-		g.drawImage(this.dialogue.getCache(), 10 + offX, 515 + offY);
+		//g.drawImage(this.dialogue.getCache(), 10 + offX, 515 + offY);
+		this.dialogue.getCache().draw(10 + offX, 515 + offY, 100 * SlickSKR.scaleSize, 100 * SlickSKR.scaleSize);
 		
 		final int x = 140 + offX;
 		int y = 518 + offY;
@@ -112,7 +112,7 @@ public class MapConsole extends SlickListener {
 		rects[1].setEnabled(!question);
 		rects[2].setEnabled(question);
 		rects[3].setEnabled(question);
-		SlickGameState.setFlush(true, true);
+		SlickGameState.setFlush(true, true); //TODO: in future, consider only flushing dCache
 	}
 	
 	//If currently talking normally, return true. If asking a question, return false

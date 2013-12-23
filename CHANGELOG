@@ -1,3 +1,12 @@
+v0.34
+Change to sheet/animation size reading, updated some avatars and sheets
+Changed walk animation to use refresh rate instead of assuming 60hz
+Introduced foreground cache, so some graphics can be drawn in front of the character, other tiles, etc.
+Updated ScalableGame setup
+Images now scaled on initialization instead to reduce memory usage
+Implemented Dialogue cache for MapScreen
+Reduced non-MapScreen caching; the main screencaches will be used instead
+
 v0.33
 Added custom cursor and MouseDown/Over events
 Further work/fixes for SpanTile and children
