@@ -51,7 +51,6 @@ public class Battle extends SlickGameState{
 	private final int LOSS_MODE = 229;
 	private final int RUN_MODE = 230;
 	private final String VICTORY = SlickSKR.getValueFromKey("screen.battle.commands.end");
-	private Font VICTORY_FONT;
 	private int mode = MENU_MODE;
 	
 	private Technique tech;
@@ -68,6 +67,8 @@ public class Battle extends SlickGameState{
 	/**
 	 * TODO: test furybreak
 	 * TODO: panel down bottom with names and hp bars
+	 * TODO: fix battle animations
+	 * TODO: add delays
 	 * ATB gauge
 	 * 
 	 * */
@@ -148,11 +149,17 @@ public class Battle extends SlickGameState{
 		
 	}
 	
+	/**
+	 * Ends battle, swaps back to map
+	 * */
 	public void end(){
 		BattleConsole.cleanConsole();
 		parent.swapView(SlickSKR.MAP);
 	}
 	
+	/**
+	 * @return True if all party characters participating in battle have been defeated
+	 * */
 	private boolean partyLost(){
 		
 		for (PlayableCharacter c : Party.getCharactersInParty()){
@@ -164,6 +171,9 @@ public class Battle extends SlickGameState{
 		return true;
 	}
 	
+	/**
+	 * @return True if all enemy characters have been defeated
+	 * */
 	private boolean partyWon(){
 
 		for (EnemyCharacter c : enemies){
@@ -175,10 +185,16 @@ public class Battle extends SlickGameState{
 		return true;
 	}
 	
-	private synchronized void takeTurn(CombatCapableCharacter c){
-		run(c);
-	}
+	/**
+	 * @param c Character whose turn it is
+	 */
+	private synchronized void takeTurn(CombatCapableCharacter c){run(c);}
 	
+	/**
+	 * Gives the player an opportunity to attack, heal, run, etc.
+	 * 
+	 * @param c Character whose turn it is
+	 */
 	public void run(CombatCapableCharacter c){
 		if (c.getGauge() >= 10){ //add check for qued? allow for overlap
 			running = false;
@@ -196,11 +212,6 @@ public class Battle extends SlickGameState{
 		}else {
 			c.incrementGauge();
 		}
-	}
-	
-	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1) {
-		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 48);
 	}
 	
 	@Override
@@ -271,7 +282,7 @@ public class Battle extends SlickGameState{
 				message = SlickSKR.getValueFromKey("screen.battle.escape");
 			}
 			if (!message.equals("")){
-				VICTORY_FONT.drawString(300, 250, message);
+				SlickSKR.loadFont("Ubuntu-B.ttf", 48).drawString(300, 250, message);
 			}
 			SlickGameState.capture(g);
 		}else{
@@ -280,6 +291,11 @@ public class Battle extends SlickGameState{
 		
 	}
 	
+	/**
+	 * Draws all enemy and player sprites. Potentially animations, usually static figures.
+	 * 
+	 * @param g Graphics context within which to draw the battle pane
+	 */
 	public void drawBattlePane(Graphics g){
 		int i = -1;
 		int total = this.enemies.size();

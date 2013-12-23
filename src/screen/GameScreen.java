@@ -66,7 +66,7 @@ public class GameScreen extends AppGameContainer{
 		//this.setShowFPS(false);
 		
 		try{
-			this.setDisplayMode(SlickSKR.size.x, SlickSKR.size.y, false); //TODO: Change to true for fullscreen
+			this.setDisplayMode(SlickSKR.size.x, SlickSKR.size.y, SlickSKR.FULLSCREEN); //TODO: Change to true for fullscreen
 		}catch (SlickException ex){
 			ex.printStackTrace();
 		}

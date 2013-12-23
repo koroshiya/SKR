@@ -9,6 +9,8 @@ import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
 
+import com.japanzai.skr.Driver;
+
 import controls.SlickBlankRectangle;
 import controls.SlickImageRectangle;
 import controls.SlickRectangle;
@@ -20,7 +22,7 @@ public class StartScreen extends SlickGameState{
 	private final String commands[];
 	private final int buttonWidth = 200;
 	private final int buttonHeight = 50;
-	private final int[] keys = {Input.KEY_C, Input.KEY_N, Input.KEY_L, Input.KEY_M, Input.KEY_S};
+	private final int[] keys = {Input.KEY_C, Input.KEY_N, Input.KEY_L, Input.KEY_M, Input.KEY_S, Input.KEY_ESCAPE};
 	
 	public StartScreen(GameScreen parent) {
 		super(SlickSKR.MAINMENU, parent);
@@ -29,7 +31,8 @@ public class StartScreen extends SlickGameState{
 			SlickSKR.getValueFromKey("screen.start.controls.newgame"),
 			SlickSKR.getValueFromKey("screen.start.controls.load"),
 			SlickSKR.getValueFromKey("screen.start.controls.controls"),
-			SlickSKR.getValueFromKey("screen.start.controls.settings")
+			SlickSKR.getValueFromKey("screen.start.controls.settings"),
+			"Exit [Esc]"
 		};
 	}
 	
@@ -45,6 +48,8 @@ public class StartScreen extends SlickGameState{
 		}else if (s.equals(commands[4])){
 			//this.parent.swapView(SlickSKR.CONTROLSCREEN);
 			//TODO: implement Settings screen
+		}else if (s.equals(commands[5])){
+			Driver.quit();
 		}
 	}
 
@@ -76,9 +81,10 @@ public class StartScreen extends SlickGameState{
 		int total = commands.length;
 		rects = new SlickRectangle[total];
 		int incY = buttonHeight + 4;
-		int startY = 616 - buttonHeight - ((total - 1) * incY);
+		float startY = (10 + buttonHeight + ((total - 1) * incY));
+		startY = SlickSKR.size.y - startY * SlickSKR.scaleSize;
 		while (++i < total){
-			rects[i] = new SlickImageRectangle(10, startY + (i * incY), buttonWidth, buttonHeight, commands[i], "/res/buttons/4x1/onyx.png", true);
+			rects[i] = new SlickImageRectangle(10, startY + (i * incY) * SlickSKR.scaleSize, buttonWidth, buttonHeight, commands[i], "/res/buttons/4x1/onyx.png", true);
 		}
 		SlickGameState.initCache(arg0);
 	}

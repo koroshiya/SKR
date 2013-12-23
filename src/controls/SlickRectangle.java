@@ -6,6 +6,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 
+import slickgamestate.SlickSKR;
+
 public abstract class SlickRectangle extends Rectangle {
 	
 	private static final long serialVersionUID = 1L;
@@ -236,7 +238,7 @@ public abstract class SlickRectangle extends Rectangle {
 			}
 			final int textx = f.getWidth(displayText);
 			final int texty = f.getHeight(displayText);
-			g.drawString(displayText, offX + x + (int)((width - textx) / 2), offY + y + (int)((height - texty) / 2));
+			g.drawString(displayText, offX + x + (int)((width * SlickSKR.scaleSize - textx) / 2), offY + y + (int)((height * SlickSKR.scaleSize - texty) / 2));
 		}
 	}
 	

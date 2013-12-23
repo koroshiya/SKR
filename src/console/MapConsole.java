@@ -44,15 +44,15 @@ public class MapConsole extends SlickListener {
 		//TODO: set aside space at bottom for char info, map, etc.
 		//BattleMenuListener listener = new BattleMenuListener();
 
-		background = new SlickImageRectangle(-1, 506, 817, 120, "", false, "/res/buttons/4x1/brown.png", false);
+		background = new SlickImageRectangle(-1, SlickSKR.size.y - 118 * SlickSKR.scaleSize, 817, 120, "", false, "/res/buttons/4x1/brown.png", false);
 		
 		final int buttonWidth = 150;
 		final int buttonHeight = 25;
 		final int startX = 650;
-		int startY = 510;
+		int startY = (int)(SlickSKR.size.y - 114 * SlickSKR.scaleSize);
 		for (int i = 0; i < rects.length; i++){
 			rects[i] = new SlickImageRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false, "/res/buttons/6x1/blue.png", true);
-			startY += buttonHeight + 2;
+			startY += (buttonHeight + 2) * SlickSKR.scaleSize;
 		}
 		rects[1].setEnabled(true);
 			
@@ -63,23 +63,26 @@ public class MapConsole extends SlickListener {
 	}
 	
 	public void paint(Graphics g, int offX, int offY){
+		//offY *= SlickSKR.size.y;
 		background.paintCache(g, offX, offY);
 		for (SlickRectangle rect : rects){
 			rect.paintCache(g, offX, offY);
 			rect.paintCenter(g,true, offX, offY);
 		}
 		//g.drawImage(this.dialogue.getCache(), 10 + offX, 515 + offY);
-		this.dialogue.getCache().draw(10 + offX, 515 + offY, 100 * SlickSKR.scaleSize, 100 * SlickSKR.scaleSize);
+		int floatY = (int)(SlickSKR.size.y - 111 * SlickSKR.scaleSize);
+		this.dialogue.getCache().draw(10 + offX, floatY + offY, 100 * SlickSKR.scaleSize, 100 * SlickSKR.scaleSize);
 		
 		final int x = 140 + offX;
-		int y = 518 + offY;
+		floatY += 3 + offY;
+		//int y = 518 + offY;
 		
 		if (!(npc instanceof ChestTile)){
-			g.drawString(this.dialogue.speak(), x, y);
+			g.drawString(this.dialogue.speak(), x, floatY);
 		}else{
 			for (String s : this.dialogue.getDialog()){
-				g.drawString(s, x, y);
-				y += 14;
+				g.drawString(s, x, floatY);
+				floatY += 14;
 			}
 		}
 	}

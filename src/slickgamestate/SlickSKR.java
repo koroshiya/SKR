@@ -59,9 +59,10 @@ public class SlickSKR extends StateBasedGame {
 	public static SpriteSheet mouseStateList;
 	
 	private static final Properties prop = new Properties();
+	public static final boolean FULLSCREEN = true;
 	
 	private static String musicPlaying = "";
-	public static final Point size = new Point(1000, 750);
+	public static final Point size = new Point(1366,768);
 	public static final Point targetSize = new Point(816, 624);
 	public static final float scaleSize = (float)size.y / (float)targetSize.y;
 	public static final int scaled_icon_size = (int)Math.floor(scaleSize * 48);

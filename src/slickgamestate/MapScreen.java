@@ -148,7 +148,7 @@ public class MapScreen extends SlickGameState{
 				g.clear();
 				Graphics gb = bgCache.getGraphics();
 				gb.clear();
-				gb.fillRect(0, 0, bgCache.getWidth(), bgCache.getHeight(), new Image(map.getDefaultTile()), 0, 0);
+				gb.fillRect(0, 0, bgCache.getWidth(), bgCache.getHeight(), new Image(map.getDefaultTile()).getScaledCopy(SlickSKR.scaleSize), 0, 0);
 			}
 			Graphics gc = mapCache.getGraphics();
 			gc.clear();

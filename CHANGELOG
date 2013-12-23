@@ -6,6 +6,7 @@ Updated ScalableGame setup
 Images now scaled on initialization instead to reduce memory usage
 Implemented Dialogue cache for MapScreen
 Reduced non-MapScreen caching; the main screencaches will be used instead
+Misc fixes to Map scaling, some placements, etc.
 
 v0.33
 Added custom cursor and MouseDown/Over events

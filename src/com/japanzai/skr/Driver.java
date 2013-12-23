@@ -345,7 +345,12 @@ public class Driver implements Serializable{
 		
 		Point mapSize = new Point(16 * SlickSKR.scaled_icon_size, 13 * SlickSKR.scaled_icon_size);
 		Point coordinates = new Point(32 * SlickSKR.scaled_icon_size, 24 * SlickSKR.scaled_icon_size); //Multiple base by pix size?
-		Point currentPosition = new Point(8 * SlickSKR.scaled_icon_size, 6 * SlickSKR.scaled_icon_size);
+
+		int flX = SlickSKR.size.x / 2;
+		flX -= flX % SlickSKR.scaled_icon_size;
+		int flY = SlickSKR.size.y / 2;
+		flY -= flY % SlickSKR.scaled_icon_size;
+		Point currentPosition = new Point(flX, flY);
 		PlayableCharacter animatedSprite = Party.getCharacterByIndex(0);
 
 		//SlickSKR sk = null;
