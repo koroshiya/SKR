@@ -2,7 +2,6 @@ package com.japanzai.skr;
 
 import item.ConsumableItem;
 import item.Item;
-import item.ItemSave;
 import item.StoreInstance;
 import item.Weapon;
 
@@ -324,22 +323,6 @@ public class Inventory {
 		
 		return itemList;
 		
-	}
-	
-	public static ArrayList<ItemSave> getItemsSaved(){
-		ArrayList<ItemSave> saved = new ArrayList<ItemSave>();
-		for (Item i : items){
-			saved.add(new ItemSave(i));
-		}
-		return saved;
-	}
-	
-	public static void setItemsSaved(ArrayList<ItemSave> saved){
-		ArrayList<Item> chars = new ArrayList<Item>();
-		for (ItemSave s : saved){
-			chars.add((Item) s.serialLoad());
-		}
-		items = chars;
 	}
 	
 }

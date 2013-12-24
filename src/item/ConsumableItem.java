@@ -1,8 +1,11 @@
 package item;
 
+import interfaces.HealingCommand;
 import character.CombatCapableCharacter;
 
-public class ConsumableItem extends Item {
+public class ConsumableItem extends Item implements HealingCommand {
+	
+	private static final long serialVersionUID = 8302874840028702136L;
 	
 	private int potency;
 	
@@ -13,7 +16,7 @@ public class ConsumableItem extends Item {
 		
 	}
 	
-	public void consume(CombatCapableCharacter target){
+	public void use(CombatCapableCharacter target){
 		
 		super.decreaseQuantity(1);
 		

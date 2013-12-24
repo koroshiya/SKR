@@ -1,14 +1,17 @@
 package item;
 
+import java.io.Serializable;
+
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import slickgamestate.SlickSKR;
 import interfaces.Photogenic;
-import interfaces.Serial;
 
-public abstract class Item implements Photogenic, Serial {
+public abstract class Item implements Photogenic, Serializable {
+	
+	private static final long serialVersionUID = -8563039334149363189L;
 	
 	private int value; //Value an item can be sold for. Set to 0 if not sellable
 	private final int rarity; //Rarity: Scale of 1-5 with color coding? Rarity as a measure of change? eg. 1 in 1000 drop

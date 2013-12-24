@@ -24,6 +24,8 @@ import technique.Technique;
 
 public abstract class CombatCapableCharacter extends Character{
 	
+	private static final long serialVersionUID = 6024399234511553080L;
+	
 	private FightingStyle style;
 	private Weapon weapon; //Weapon type. eg. Fists, pickaxe, etc.   //Weapon leftHand and rightHand?
 	private ArrayList<Technique> techniques;

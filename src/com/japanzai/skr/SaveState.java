@@ -1,6 +1,6 @@
 package com.japanzai.skr;
 
-import item.ItemSave;
+import item.Item;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 
-import character.PlayableCharacterSave;
+import character.PlayableCharacter;
 
 public class SaveState {
 
@@ -28,8 +28,8 @@ public class SaveState {
 			//System.out.println("writing: " + Party.getCharacterByIndex(0).getSpriteDirectory() + "avatar.png");
 			oos.writeObject(Party.getCharacterByIndex(0).getSpriteDirectory() + "avatar.png");
 			oos.writeObject(Inventory.getMoney());
-			oos.writeObject(Inventory.getItemsSaved());
-			oos.writeObject(Party.getCharactersSaved());
+			oos.writeObject(Inventory.getItems());
+			oos.writeObject(Party.getCharacters());
 			//oos.writeObject(d.bs);
 			oos.close();
 			return true;
@@ -52,8 +52,8 @@ public class SaveState {
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			ois.readObject();
 			Inventory.setMoney((Integer)ois.readObject());
-			Inventory.setItemsSaved((ArrayList<ItemSave>)ois.readObject());
-			Party.setCharactersSaved((ArrayList<PlayableCharacterSave>)ois.readObject());
+			Inventory.setItems((ArrayList<Item>)ois.readObject());
+			Party.setParty((ArrayList<PlayableCharacter>)ois.readObject());
 			ois.close();
 			return true;
 		} catch (FileNotFoundException e) {

@@ -1,6 +1,6 @@
 package character;
 
-import interfaces.Serial;
+import interfaces.HealingCommand;
 import item.ConsumableItem;
 import item.Weapon;
 
@@ -21,9 +21,11 @@ import slickgamestate.SlickSKR;
 import technique.FuryBreak;
 import technique.HealingTechnique;
 
-public class PlayableCharacter extends CombatCapableCharacter implements Serial {
+public class PlayableCharacter extends CombatCapableCharacter {
+	
+	private static final long serialVersionUID = 1929673242482264948L;
 
-	private final ArrayList<Weapon> supportedWeapons;
+	private final ArrayList<Integer> supportedWeapons;
 	
 	private final String height;
 	private final String occupation;
@@ -40,7 +42,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	public PlayableCharacter (String nameEntry, FightingStyle style, 
 					Weapon weapon, Gender gender,
 					int level, FuryBreak fury, 
-					ArrayList<Weapon> supportedWeapons){
+					ArrayList<Integer> supportedWeapons){
 						
 		this(nameEntry, style, weapon, gender, supportedWeapons);
 		setLevel(level, null);
@@ -49,7 +51,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	
 	public PlayableCharacter (String nameEntry, FightingStyle style, 
 							Weapon weapon, Gender gender,
-							ArrayList<Weapon> supportedWeapons){
+							ArrayList<Integer> supportedWeapons){
 						
 		super(nameEntry, style, weapon, gender);
 	
@@ -71,17 +73,10 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	
 	/**
 	 * Called when seeing if a character can use a certain Weapon.
-	 * Invole the weapon's getType method to check its parent's name
+	 * Invoke the weapon's getType method to check its parent's name
 	 * */
 	public boolean isSupportedWeapon(Weapon newWeapon){
-	
-		for (Weapon w : supportedWeapons){
-			if (w.getTypeOfWeapon() == newWeapon.getTypeOfWeapon()){
-				return true;
-			}
-		}
-		return false;
-		
+		return supportedWeapons.contains(newWeapon.getTypeOfWeaponIndex());
 	}
 	
 	@Override
@@ -106,9 +101,10 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 		
 		this.experience += xp;
 		BattleConsole.writeConsole("Experience gained: " + xp);
+		int overflow;
 		
 		while (this.experience >= this.experienceToNextLevel && this.getLevel() < 100){
-			int overflow = this.experience - this.experienceToNextLevel;
+			overflow = this.experience - this.experienceToNextLevel;
 			levelUp();
 			this.experience = overflow;
 		}
@@ -118,7 +114,7 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	@Override
 	public void setLevel(int level, BattleConsole bc){
 		
-		int difference = level - super.getLevel();
+		int difference = level - this.level;
 		if (difference <= 0){return;}
 		for (int i = 1; i <= difference; i++){levelUp();}
 		
@@ -126,34 +122,30 @@ public class PlayableCharacter extends CombatCapableCharacter implements Serial 
 	
 	@Override
 	public void levelUp(){
-	
 		this.experience = 0;
-		
 		super.levelUp();
-		
-		if (this.getLevel() < 100){
-			this.experienceToNextLevel = (int) Math.ceil((this.getLevel() + this.getLevel() - 1) * 21);
-		}else{
-			this.experienceToNextLevel = 0;
-		}
-		
+		this.experienceToNextLevel = level < 100 ? (int) Math.ceil((level * 2 - 1) * 21) : 0;
 	}
 	
+	/**
+	 * Heals an ally using a particular healing item or technique.
+	 * 
+	 * @param ally Player on whom to use the healing item or technique.
+	 * @param tech Healing technique with which to potentially heal an ally.
+	 * @param item Healing item with which to potentially heal an ally.
+	 * @param user Player performing the healing.
+	 * */
 	public void healAlly(PlayableCharacter ally, HealingTechnique tech, ConsumableItem item, PlayableCharacter user){
-	
-		if (tech != null){
-			BattleConsole.writeConsole(user.getName() + " used " + tech.getName());
-			tech.use(ally);
-		}else{
-			BattleConsole.writeConsole(user.getName() + " used " + item.getName());
-			item.consume(ally);
-		}
-		
-		resetGauge();
-			
+		HealingCommand command = (tech != null) ? tech : item;
+		BattleConsole.writeConsole(user.getName() + " used " + command.getName());
+		command.use(ally);
+		resetGauge();	
 	}
 		
-	public ArrayList<Weapon> getSupportedWeapons(){return this.supportedWeapons;}
+	/**
+	 * Returns a list of supported weapons.
+	 * */
+	public ArrayList<Integer> getSupportedWeapons(){return this.supportedWeapons;}
 	
 	public String getHeight(){return this.height;}
 	

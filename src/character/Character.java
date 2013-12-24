@@ -1,5 +1,7 @@
 package character;
 
+import java.io.Serializable;
+
 import interfaces.Photogenic;
 
 import org.newdawn.slick.Animation;
@@ -14,7 +16,9 @@ import slickgamestate.SlickSKR;
 
 import com.japanzai.skr.Gender;
 
-public abstract class Character implements Photogenic{
+public abstract class Character implements Photogenic, Serializable{
+	
+	private static final long serialVersionUID = -265227303212544557L;
 	
 	private String firstName;
 	private String lastName;

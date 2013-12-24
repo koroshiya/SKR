@@ -416,10 +416,7 @@ public class Battle extends SlickGameState{
 	}
 	
 	@Override
-	public void keyReleased(int arg0, char arg1) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyReleased(int arg0, char arg1) {}
 	
 	private void alert(PlayableCharacter c, String origin){
 		if (mode == this.ALLY_MODE){
@@ -463,6 +460,11 @@ public class Battle extends SlickGameState{
 		}
 	}
 	
+	/**
+	 * Directs and coordinates a player attack towards an opponent.
+	 * 
+	 * @param command String containing the ID of the opponent to attack.
+	 * */
 	private void processAttackMode(String command) {
 		if (command.equals("")){return;}
 		int i;
@@ -494,6 +496,11 @@ public class Battle extends SlickGameState{
 		
 	}
 	
+	/**
+	 * Uses a healing item or technique on an ally.
+	 * 
+	 * @param command Name of the ally to heal.
+	 * */
 	private void processAllyMode(String command) {
 		for (PlayableCharacter c : Party.getCharactersInParty()){
 			if (c.getName().equals(command)){

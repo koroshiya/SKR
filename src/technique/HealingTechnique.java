@@ -1,10 +1,12 @@
 package technique;
 
+import interfaces.HealingCommand;
+
 import java.io.Serializable;
 
 import character.CombatCapableCharacter;
 
-public class HealingTechnique extends Technique implements Serializable{
+public class HealingTechnique extends Technique implements Serializable, HealingCommand{
 
 	/**
 	 * 
@@ -35,10 +37,6 @@ public class HealingTechnique extends Technique implements Serializable{
 	
 	public int getPotency(){return this.healingPotency;}
 	
-	/**
-	 * Returns true if the tech can be used on the dead (ie. it revives)
-	 * Returns false if used on the living (ie. it heals)
-	 * */
 	public boolean usedOnDead(){return this.healingPotency < 0;}
 
 }

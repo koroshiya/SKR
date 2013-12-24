@@ -6,6 +6,8 @@ import character.Status;
 
 public class Weapon extends Item {
 	
+	private static final long serialVersionUID = -6669888337641654571L;
+	
 	private Status stats;
 	private int critical;
 	//Critical hit ratio. Value between 0 and 100 //Multiple attacks in quick succession? Lower critical for rapid attacks?

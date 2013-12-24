@@ -27,7 +27,6 @@ import character.EnemyCharacter;
 import character.NonPlayableCharacter;
 import character.PlayableCharacter;
 import screen.GameScreen;
-import slickgamestate.MapScreen;
 import slickgamestate.SlickSKR;
 import technique.CombatTechnique;
 import technique.HealingTechnique;
@@ -149,10 +148,16 @@ public class Driver implements Serializable{
 		
 		//String doUnique = "Favorite weapon:" + "\n" + "4x2 plank" + "\n" + "\n" + "Enormous build. Loves his car.";
 		
-		PlayableCharacter ken = new PlayableCharacter(kenInfo, styles.get(0), weapons.get(0), genders.get(1), weapons);
-		PlayableCharacter yumin = new PlayableCharacter(yuminInfo, styles.get(1), weapons.get(2), genders.get(0), weapons);
-		PlayableCharacter pickaxe = new PlayableCharacter(pickaxeInfo, styles.get(2), weapons.get(3), genders.get(1), weapons);
-		PlayableCharacter taesoo = new PlayableCharacter(taesooInfo, styles.get(3), weapons.get(0), genders.get(1), weapons);
+		ArrayList<Integer> wList = new ArrayList<Integer>();
+		int i = -1;
+		while (++i < Weapon.TYPE.length){
+			wList.add(i);
+		}
+		
+		PlayableCharacter ken = new PlayableCharacter(kenInfo, styles.get(0), weapons.get(0), genders.get(1), wList);
+		PlayableCharacter yumin = new PlayableCharacter(yuminInfo, styles.get(1), weapons.get(2), genders.get(0), wList);
+		PlayableCharacter pickaxe = new PlayableCharacter(pickaxeInfo, styles.get(2), weapons.get(3), genders.get(1), wList);
+		PlayableCharacter taesoo = new PlayableCharacter(taesooInfo, styles.get(3), weapons.get(0), genders.get(1), wList);
 		/*PlayableCharacter doheun = new PlayableCharacter("Do-Heun", "Chang", 
 				styles.get(4), weapons.get(7), techniques, genders.get(1), 
 				"info", "Henchman", "212cm", "Korean", null, kenSprite, i);*/
