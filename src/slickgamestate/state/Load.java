@@ -1,7 +1,6 @@
 package slickgamestate.state;
 
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
 
@@ -13,10 +12,8 @@ import slickgamestate.SlickSKR;
 
 public class Load extends StateTemplate {
 	
-	public Load(GameScreen parent) throws SlickException{
-		
+	public Load(GameScreen parent) {
 		super(SlickSKR.LOAD, parent);
-		
 	}
 	
 	@Override

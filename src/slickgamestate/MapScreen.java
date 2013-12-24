@@ -1,6 +1,8 @@
 package slickgamestate;
 
 import java.awt.Point;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 import map.ParentMap;
 
@@ -48,17 +50,49 @@ public class MapScreen extends SlickGameState{
 	public static SlickCache dCache; //Dialogue cache
 	private SlickCache bgCache; //Cache for the map itself. This is usually a repeating background pattern.
 	
+	private MapScreenSave cache;
+	
 	public MapScreen(ParentMap map){
 		super(SlickSKR.MAP, map.getFrame());
 		this.map = map;
+	}
+	
+	private class MapScreenSave implements Serializable{
+		ArrayList<Object> args;
+		public MapScreenSave(ArrayList<Object> args){
+			this.args = args;
+		}
+		public ArrayList<Object> getArgs(){
+			return this.args;
+		}
+	}
+	
+	public void load(Object obj){
+		cache = (MapScreenSave) obj;
+		ArrayList<Object> args = cache.getArgs();
+		mapCache = ((SlickCacheSave)args.get(0)).load();
+		fgCache = ((SlickCacheSave)args.get(0)).load();
+		dCache = ((SlickCacheSave)args.get(0)).load();
+		bgCache = ((SlickCacheSave)args.get(0)).load();
+	}
+	
+	public MapScreenSave save(){
+		ArrayList<Object> args = new ArrayList<Object>();
+
+		args.add(mapCache.save());
+		args.add(fgCache.save());
+		args.add(dCache.save());
+		args.add(bgCache.save());
+		cache = new MapScreenSave(args);
+		return this.cache;
 	}
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame arg1){
 
 		try { //TODO: check for leak over time
-			mapCache = new SlickCache((float)map.getPositionX(), (float)map.getPositionY(), map.getWidth(), map.getHeight());
-			fgCache = new SlickCache((float)map.getPositionX(), (float)map.getPositionY(), map.getWidth(), map.getHeight());
+			mapCache = new SlickCache(map.getPositionX(), map.getPositionY(), map.getWidth(), map.getHeight());
+			fgCache = new SlickCache(map.getPositionX(), map.getPositionY(), map.getWidth(), map.getHeight());
 			bgCache = new SlickCache(SlickSKR.scaled_icon_size, SlickSKR.scaled_icon_size, gc.getWidth() + SlickSKR.scaled_icon_size * 2, gc.getHeight() + SlickSKR.scaled_icon_size * 2);
 			dCache = new SlickCache(0,0,gc.getWidth(),gc.getHeight());
 		} catch (SlickException e) {

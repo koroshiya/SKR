@@ -16,6 +16,7 @@ public class ConsumableItem extends Item implements HealingCommand {
 		
 	}
 	
+	@Override
 	public void use(CombatCapableCharacter target){
 		
 		super.decreaseQuantity(1);
@@ -30,13 +31,10 @@ public class ConsumableItem extends Item implements HealingCommand {
 		
 	}
 	
+	@Override
 	public int getPotency(){return this.potency;}
 	
 	@Override
-	/**
-	 * Returns true if the tech can be used on the dead (ie. it revives)
-	 * Returns false if used on the living (ie. it heals)
-	 * */
 	public boolean usedOnDead(){return this.potency < 0;}
 
 	@Override

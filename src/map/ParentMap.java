@@ -22,8 +22,8 @@ import character.PlayableCharacter;
 public class ParentMap {
 	
 	private Point coordinates;
-	private double currentPositionx;
-	private double currentPositiony;
+	private float currentPositionx;
+	private float currentPositiony;
 	private TileMap tileMap;
 	private int direction;
 	private ArrayList<EnemyCharacter> enemies;
@@ -74,7 +74,7 @@ public class ParentMap {
 	
 	public void moveToPosition(Point p){moveToPosition(p.x, p.y);}
 	
-	public synchronized void moveToPosition(double x, double y){
+	public synchronized void moveToPosition(float x, float y){
 
 		this.currentPositionx = x;
 		this.currentPositiony = y;
@@ -85,10 +85,10 @@ public class ParentMap {
 		
 	}
 	
-	public boolean canMoveToPosition(double d, double currentPositiony2){
+	public boolean canMoveToPosition(float d, float currentPositiony2){
 		
-		double x = d / SlickSKR.scaled_icon_size + this.getCharacterPositionX();
-		double y = currentPositiony2 / SlickSKR.scaled_icon_size + this.getCharacterPositionY();
+		float x = d / SlickSKR.scaled_icon_size + this.getCharacterPositionX();
+		float y = currentPositiony2 / SlickSKR.scaled_icon_size + this.getCharacterPositionY();
 		
 		if (!tileExists(x, y)){return false;}
 		
@@ -142,34 +142,30 @@ public class ParentMap {
 		
 	}
 	
-	public boolean tileExists(double x, double y){
-		
+	public boolean tileExists(float x, float y){
 		return getTileByPosition(x, y) != null;
-		
 	}
 	
-	public Tile getTileByPosition(double x2, double y2){
+	public Tile getTileByPosition(float x2, float y2){
 		
-		double x = x2 / SlickSKR.scaled_icon_size;
-		double y = y2 / SlickSKR.scaled_icon_size;
+		float x = x2 / SlickSKR.scaled_icon_size;
+		float y = y2 / SlickSKR.scaled_icon_size;
 		
 		return getTileByIndex(x, y);
 		
 	}
 	
-	public Tile getTileByIndex(double x, double y){
-		
+	public Tile getTileByIndex(float x, float y){
 		return this.tileMap.getTileByIndex(x, y);
-		
 	}
 	
 	public int getHeight(){return this.tileMap.getHeightInTiles() * SlickSKR.scaled_icon_size;}
 	
 	public int getWidth(){return this.tileMap.getWidthInTiles() * SlickSKR.scaled_icon_size;}
 	
-	public double getPositionX(){return this.currentPositionx;}
+	public float getPositionX(){return this.currentPositionx;}
 	
-	public double getPositionY(){return this.currentPositiony;}
+	public float getPositionY(){return this.currentPositiony;}
 	
 	public int getXBoundary(){return this.coordinates.x;}
 	
@@ -183,11 +179,11 @@ public class ParentMap {
 		return (int) Math.floor(this.coordinates.getY() / 4 / SlickSKR.scaled_icon_size);
 	}
 	
-	public synchronized double getRelativeX(){
+	public synchronized float getRelativeX(){
 		return (this.currentPositionx / SlickSKR.scaled_icon_size) + this.getCharacterPositionX();
 	}
 	
-	public synchronized double getRelativeY(){
+	public synchronized float getRelativeY(){
 		return (this.currentPositiony / SlickSKR.scaled_icon_size) + this.getCharacterPositionY();
 	}
 	
@@ -252,7 +248,7 @@ public class ParentMap {
 		}
 	}
 	
-	private synchronized void move(double d, double currentPositiony2, int dir) {
+	private synchronized void move(float d, float currentPositiony2, int dir) {
 
 		if (!isLocked()){
 		
@@ -290,11 +286,11 @@ public class ParentMap {
 		
 		private ParentMap map;
 		private PlayableCharacter sprite;
-		private double x;
-		private double y;
+		private float x;
+		private float y;
 		private ArrayList<Point> points;
 		
-		public spriteThread(ParentMap map, PlayableCharacter sprite, double x, double y){
+		public spriteThread(ParentMap map, PlayableCharacter sprite, float x, float y){
 			this.map = map;
 			this.sprite = sprite;
 			this.x = x;
@@ -347,12 +343,12 @@ public class ParentMap {
 			
 		}
 		
-		private void takeStep(double x2, double y2) {
+		private void takeStep(float x2, float y2) {
 			
-			double diffX = 0;
-			double diffY = 0;
+			float diffX = 0;
+			float diffY = 0;
 			
-			double diff = (double)SlickSKR.scaled_icon_size / (double)SlickSKR.refreshRate;
+			float diff = (float)SlickSKR.scaled_icon_size / (float)SlickSKR.refreshRate;
 			
 			if (x2 > this.map.currentPositionx){
 				diffX = diff;
@@ -474,9 +470,9 @@ public class ParentMap {
 	
 	public float getYDiff(){return this.yDiff;}
 	
-	public double getCurrentPositionX() {return this.currentPositionx;}
+	public float getCurrentPositionX() {return this.currentPositionx;}
 
-	public double getCurrentPositionY() {return this.currentPositiony;}
+	public float getCurrentPositionY() {return this.currentPositiony;}
 	
 	public String getThemeMusic(){return this.themeMusic;}
 	

@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import slickgamestate.MapScreen;
 import character.PlayableCharacter;
 
 public class SaveState {
@@ -37,6 +38,7 @@ public class SaveState {
 			oos.writeObject(Inventory.getMoney());
 			oos.writeObject(Inventory.getItems());
 			oos.writeObject(Party.getCharacters());
+			oos.writeObject(); //TODO: MapScreen
 			//oos.writeObject(d.bs);
 			oos.close();
 			return true;
@@ -73,6 +75,7 @@ public class SaveState {
 			Inventory.setMoney((Integer)ois.readObject());
 			Inventory.setItems((ArrayList<Item>)ois.readObject());
 			Party.setParty((ArrayList<PlayableCharacter>)ois.readObject());
+			oos.writeObject(); //TODO: MapScreen
 			ois.close();
 			return true;
 		} catch (FileNotFoundException e) {

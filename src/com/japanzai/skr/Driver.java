@@ -237,10 +237,8 @@ public class Driver implements Serializable{
 		try {
 			bs = new GameScreen(new SlickSKR());
 		} catch (SlickException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
@@ -273,9 +271,7 @@ public class Driver implements Serializable{
 		
 	}
 	
-	public static void main(String[] args){
-		restart();
-	}
+	public static void main(String[] args){restart();}
 	
 	private void simulateMap() throws IOException, SlickException{
 		

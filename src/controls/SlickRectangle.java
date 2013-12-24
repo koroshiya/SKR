@@ -142,7 +142,7 @@ public abstract class SlickRectangle extends Rectangle {
 	 * @return True if point lies within this rectangle, otherwise false.
 	 * */
 	public boolean isWithinBounds(int x, int y){
-		if (enabled && clickable && x >= this.x && x < this.x + this.width && y >= this.y && y < this.y + this.height){
+		if (enabled && clickable && x >= this.x && x < this.x + this.width * SlickSKR.scaleSize && y >= this.y && y < this.y + this.height * SlickSKR.scaleSize){
 			//SlickSKR.PlaySFX("other/public/intro_button.ogg");
 			return true;
 		}

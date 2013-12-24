@@ -56,5 +56,17 @@ public class SlickCache extends Image {
 	public float getInitY(){
 		return this.initPosY;
 	}
+	
+	public float getXPos(){
+		return this.xPos;
+	}
+	
+	public float getYPos(){
+		return this.yPos;
+	}
+	
+	public SlickCacheSave save(){
+		return new SlickCacheSave(this);
+	}
 
 }

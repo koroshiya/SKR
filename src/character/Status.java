@@ -16,27 +16,17 @@ public class Status implements Serializable{
 	
 	public Status (
 					int statHP, int statStrength, int statDefence,
-					int statMind, double statEvasion, double statAccuracy,
-					int statSpeed
-					){
-		
-		setStats (
-				statHP, statStrength, statDefence,
-				statMind, statEvasion, statAccuracy,
-				statSpeed
-				);
-		
+					int statMind, double statEvasion, double statAccuracy, int statSpeed
+	){
+		setStats (statHP, statStrength, statDefence, statMind, statEvasion, statAccuracy, statSpeed);
 	}
 	
-	public Status(Status baseStats) {
-		setStats(baseStats);
-	}
+	public Status(Status baseStats) {setStats(baseStats);}
 
 	public void setStats (
 					int statHP, int statStrength, int statDefence,
 					int statMind, double statEvasion, double statAccuracy,
-					int statSpeed
-					){
+					int statSpeed){
 		
 		this.statHP = statHP;
 		this.statStrength = statStrength;
@@ -50,42 +40,27 @@ public class Status implements Serializable{
 	
 	public void setStats (Status newStatus){
 		
-		this.statHP = newStatus.getHP();
-		this.statStrength = newStatus.getStrength();
-		this.statDefence = newStatus.getDefence();
-		this.statMind = newStatus.getMind();
-		this.statEvasion = newStatus.getEvasion();
-		this.statAccuracy = newStatus.getAccuracy();
-		this.statSpeed = newStatus.getSpeed();
+		this.setStats(
+			newStatus.getHP(), newStatus.getStrength(), newStatus.getDefence(), 
+			newStatus.getMind(), newStatus.getEvasion(), newStatus.getAccuracy(), newStatus.getSpeed()
+		);
 		
 	}
 
 	public int getHP(){return this.statHP;}
-	
 	public int getStrength(){return this.statStrength;}
-	
 	public int getDefence(){return this.statDefence;}
-	
 	public int getMind(){return this.statMind;}
-	
 	public double getEvasion(){return this.statEvasion;}
-	
 	public double getAccuracy(){return this.statAccuracy;}
-
 	public int getSpeed(){return this.statSpeed;}
 	
 	public void setHP(int currentHP){this.statHP = currentHP;}
-	
 	public void setStrength(int currentStrength){this.statStrength = currentStrength;}
-	
 	public void setDefence(int currentDefence){this.statDefence = currentDefence;}
-	
 	public void setMind(int currentMind){this.statMind = currentMind;}
-	
 	public void setEvasion(double currentEvasion){this.statEvasion = currentEvasion;}
-	
 	public void setAccuracy(double currentAccuracy){this.statAccuracy = currentAccuracy;}
-	
 	public void setSpeed(int currentSpeed){this.statSpeed = currentSpeed;}
 	
 }

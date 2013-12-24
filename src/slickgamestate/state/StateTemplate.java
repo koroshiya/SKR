@@ -39,11 +39,7 @@ public abstract class StateTemplate extends SlickGameState {
                return false;
             }
         });
-		if (cList != null){
-			commands = cList;
-		}else{
-			commands = new String[0];
-		}
+		commands = (cList != null) ? cList : new String[0];
 		
 	}
 	
@@ -52,9 +48,7 @@ public abstract class StateTemplate extends SlickGameState {
 	 * 
 	 * @param i Integer corresponding to an existing SlickGameState
 	 * */
-	public void setBack(int i){
-		this.back = i;
-	}
+	public void setBack(int i){this.back = i;}
 
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
