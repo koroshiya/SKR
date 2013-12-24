@@ -2,6 +2,7 @@ package item;
 
 import java.lang.Math;
 
+import character.CombatCapableCharacter;
 import character.Status;
 
 public class Weapon extends Item {
@@ -180,6 +181,11 @@ public class Weapon extends Item {
 		w.setValue(super.getValue());
 		return w;
 		
+	}
+
+	@Override
+	public void use(CombatCapableCharacter ccc) {
+		//TODO: create subclass for mystic weapons? eg. Weapons that double back with magic spells? eg. Staff that heals allies.
 	}
 
 }

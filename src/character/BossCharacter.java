@@ -2,9 +2,6 @@ package character;
 
 import java.io.Serializable;
 
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-
 import interfaces.NPC;
 import item.Item;
 import item.Weapon;
@@ -47,7 +44,7 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 				getFightingStyle(), getWeapon(), getGender(), 
 				getExperienceGivenWhenDefeated(), dialogue, 
 				getDrop(), getDropRate(), getMoney(), getEncounterRate(), this.battleMusic);
-		ex.setLevel(getLevel(), null);
+		ex.setLevel(level);
 		return ex;
 	}
 	
@@ -69,17 +66,6 @@ public class BossCharacter extends EnemyCharacter implements NPC, Serializable{
 	
 	public String getBattleMusic(){
 		return this.battleMusic;
-	}
-	
-	@Override
-	public void instantiateForBattle(){
-		try {
-			super.instantiate();
-			this.setAliveIcon(getBattleIconEnemy());
-			this.setDeadIcon(new Image("/res/dead.png"));
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
 	}
 
 	//TODO: implement boss dialog

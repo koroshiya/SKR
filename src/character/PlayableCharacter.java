@@ -5,6 +5,7 @@ import item.ConsumableItem;
 import item.Weapon;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.lang.Math;
 
 import org.newdawn.slick.Animation;
@@ -21,7 +22,7 @@ import slickgamestate.SlickSKR;
 import technique.FuryBreak;
 import technique.HealingTechnique;
 
-public class PlayableCharacter extends CombatCapableCharacter {
+public class PlayableCharacter extends CombatCapableCharacter implements Serializable {
 	
 	private static final long serialVersionUID = 1929673242482264948L;
 
@@ -45,7 +46,7 @@ public class PlayableCharacter extends CombatCapableCharacter {
 					ArrayList<Integer> supportedWeapons){
 						
 		this(nameEntry, style, weapon, gender, supportedWeapons);
-		setLevel(level, null);
+		setLevel(level);
 		
 	}
 	
@@ -112,15 +113,6 @@ public class PlayableCharacter extends CombatCapableCharacter {
 	}
 	
 	@Override
-	public void setLevel(int level, BattleConsole bc){
-		
-		int difference = level - this.level;
-		if (difference <= 0){return;}
-		for (int i = 1; i <= difference; i++){levelUp();}
-		
-	}
-	
-	@Override
 	public void levelUp(){
 		this.experience = 0;
 		super.levelUp();
@@ -174,19 +166,32 @@ public class PlayableCharacter extends CombatCapableCharacter {
 	public FuryBreak getFuryBreak(){return this.fury;}
 	
 	public String getProfilePicture() {
-		return this.getSpriteDirectory() + "profile.png";		
+		return this.getSpriteDirectory() + "profile.png";
+	}
+	
+	@Override
+	public Image getBattleIcon(){
+		if (this.isAlive()){
+			return getBattleIcon();
+		}else{
+			try {
+				return new Image("/res/dead.png");
+			} catch (SlickException e) {
+				e.printStackTrace();
+				try {
+					return new Image(0,0);
+				} catch (SlickException e1) {
+					e1.printStackTrace();
+					return null;
+				}
+			}
+		}
 	}
 	
 	@Override
 	public void instantiateForBattle(){
 		super.resetGauge();
-		try {
-			this.instantiate();
-			this.setAliveIcon(getBattleIcon());
-			this.setDeadIcon(new Image("/res/dead.png"));
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		this.instantiate();
 	}
 	
 	public void instantiate(){

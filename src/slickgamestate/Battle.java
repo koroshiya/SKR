@@ -310,8 +310,8 @@ public class Battle extends SlickGameState{
 				//c.getAnimatedFrame().draw(0, partyY + constY * i);
 			}else{
 				//c.getSprite().draw(0, partyY + constY * i);
-				c.getSprite().draw(0, partyY + constY * i, 0 + inc, (partyY + constY * i) + inc, 
-						0, 0, c.getSprite().getWidth(), c.getSprite().getHeight());
+				c.getBattleIcon().draw(0, partyY + constY * i, 0 + inc, (partyY + constY * i) + inc, 
+						0, 0, c.getBattleIcon().getWidth(), c.getBattleIcon().getHeight());
 			}
 		}
 		
@@ -322,7 +322,7 @@ public class Battle extends SlickGameState{
 			if (c.isAttacking()){
 				c.getAnimatedFrame().draw(727, partyY + constY * i);
 			}else{
-				c.getSprite().draw(727, partyY + constY * i);
+				c.getBattleIcon().draw(727, partyY + constY * i);
 			}
 		}
 	}

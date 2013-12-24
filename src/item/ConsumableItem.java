@@ -32,6 +32,7 @@ public class ConsumableItem extends Item implements HealingCommand {
 	
 	public int getPotency(){return this.potency;}
 	
+	@Override
 	/**
 	 * Returns true if the tech can be used on the dead (ie. it revives)
 	 * Returns false if used on the living (ie. it heals)

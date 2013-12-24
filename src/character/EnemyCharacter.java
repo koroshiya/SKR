@@ -46,22 +46,32 @@ public class EnemyCharacter extends CombatCapableCharacter implements Serializab
 				getFightingStyle(), getWeapon(), getGender(), 
 				getExperienceGivenWhenDefeated(), 
 				getDrop(), getDropRate(), getMoney(), getEncounterRate());
-		ex.setLevel(getLevel(), null);
+		ex.setLevel(level);
 		return ex;
 	}
 
-	public void attack(PlayableCharacter opponent){
-			
-		super.attack(opponent);
-		
-	}
+	/**
+	 * Performs an attack on the player specified.
+	 * 
+	 * @param opponent Character to attack.
+	 * */
+	public void attack(PlayableCharacter opponent){super.attack(opponent);}
 	
+	/**
+	 * Performs an attacking technique on the player specified.
+	 * 
+	 * @param opponent Character on whom to use the technique.
+	 * @param tech Technique to use on opponent.
+	 * */
 	public void attack(PlayableCharacter opponent, CombatTechnique tech){
-		
 		super.attack(opponent, tech);
-		
 	}
 	
+	/**
+	 * Invokes the character's AI.
+	 * The character may then attack an opponent, heal an ally, etc.
+	 * **Currently only performs standard attacks.
+	 * */
 	public void invokeAI(){
 		
 		super.resetGauge();
@@ -83,33 +93,71 @@ public class EnemyCharacter extends CombatCapableCharacter implements Serializab
 		
 	}
 	
+	/**
+	 * Retrieves XP given for defeating this character.
+	 * 
+	 * @return Returns the experience given to a character when they defeat this character.
+	 * */
 	public int getExperienceGivenWhenDefeated(){return this.experienceGivenWhenDefeated;}
 	
-	public Item getDrop(){
-		return Math.random() * 100 > dropRate ? drop : null;
-	}
+	/**
+	 * Attempts to cause this character to drop an item.
+	 * Likelihood is determined by character's droprate.
+	 * 
+	 * @return Held item if successful, otherwise null.
+	 * */
+	public Item getDrop(){return Math.random() * 100 > dropRate ? drop : null;} //TODO: factor in item's rarity as well/instead?
 	
-	public int getDropRate(){
-		return this.dropRate;
-	}
+	/**
+	 * Returns the droprate of this character.
+	 * Higher number means lower likelihood of drop and vice-versa.
+	 * Value should be less than 100, and greater than or equal to 0.
+	 * 0 = always drop
+	 * 100 = never drop
+	 * 
+	 * @return Value of 1-100 indicating the inverse likelihood out of 100 of a drop occurring.
+	 * */
+	public int getDropRate(){return this.dropRate;}
 	
-	public int getMoney(){
-		return this.money;
-	}
+	/**
+	 * Returns the money held by this character such that the one who
+	 * defeats this character may collect it.
+	 * 
+	 * @return Money held by this character.
+	 * */
+	public int getMoney(){return this.money;}
 	
-	public int getEncounterRate(){
-		return this.encounterRate;
+	/**
+	 * Returns likelihood of encountering this opponent by random.
+	 * Higher number means lower likelihood and vice-versa.
+	 * 0 = always encounter
+	 * 100 = never encounter
+	 * 
+	 * @return Value of 1-100 indicating the inverse likelihood out of 100 of randomly encountering this opponent.
+	 * */
+	public int getEncounterRate(){return this.encounterRate;}
+
+	public Image getBattleIcon(){
+		if (this.isAlive()){
+			return getBattleIconEnemy();
+		}else{
+			try {
+				return new Image("/res/dead.png");
+			} catch (SlickException e) {
+				e.printStackTrace();
+				try {
+					return new Image(0,0);
+				} catch (SlickException e1) {
+					e1.printStackTrace();
+					return null;
+				}
+			}
+		}
 	}
 	
 	@Override
 	public void instantiateForBattle(){
-		try {
-			super.instantiate();
-			this.setAliveIcon(getBattleIconEnemy());
-			this.setDeadIcon(new Image("/res/dead.png"));
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		super.instantiate();
 	}
 	
 }

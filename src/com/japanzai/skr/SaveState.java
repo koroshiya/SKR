@@ -12,15 +12,22 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import org.newdawn.slick.GameContainer;
-
 import character.PlayableCharacter;
 
 public class SaveState {
 
 	public final static String SAVE_DIRECTORY = "/home/mitch/";
 
-	public static boolean save(File f) {
+	/**
+	 * Saves the current state to a file on disk.
+	 * This method should ALWAYS correspond to load(File).
+	 * As one becomes more complex, or changes in any way, so should the other.
+	 * 
+	 * @param f File within which to store the current game state.
+	 * 
+	 * @return True if save was successful, otherwise false.
+	 * */
+	private static boolean save(File f) {
 
 		try{
 			FileOutputStream fos = new FileOutputStream(f);
@@ -40,12 +47,24 @@ public class SaveState {
 		
 	}
 	
-	public static boolean save(String s){
-		return save(new File(SAVE_DIRECTORY + s));
-	}
+	/**
+	 * Saves the current state to disk at the location specified.
+	 * See save(File) for more details.
+	 * 
+	 * @param s String representing the file path at which to save this state.
+	 * eg. "/home/user/game/gamestate.sks" on Unix, or "C:\\gamestate.sks" on Windows.
+	 * 
+	 * @return True if save was successful, otherwise false.
+	 * */
+	public static boolean save(String s){return save(new File(SAVE_DIRECTORY + s));}
 	
 	@SuppressWarnings("unchecked")
-	public static boolean load(File f){
+	/**
+	 * Loads the saved state from a file on disk.
+	 * This method should ALWAYS correspond to save(File).
+	 * As one becomes more complex, or changes in any way, so should the other.
+	 * */
+	private static boolean load(File f){
 		
 		try{
 			FileInputStream fis = new FileInputStream(f);
@@ -67,19 +86,29 @@ public class SaveState {
 		
 	}
 	
-	public static boolean load(String s){
-		return load(new File(s));
-	}
+	/**
+	 * Loads the saved state from a file on disk.
+	 * For more info, see load(File).
+	 * 
+	 * @param s Filepath from which to load the save state.
+	 * eg. "/home/user/game/gamestate.sks" on Unix, or "C:\\gamestate.sks" on Windows.
+	 * 
+	 * @return True if save was successful, otherwise false.
+	 * */
+	public static boolean load(String s){return load(new File(s));}
 	
-	public static String[] viewAvatars(GameContainer g){
+	/**
+	 * Retrieves the avatars from each available save state as strings.
+	 * This is so the separate avatars can be displayed on the load/save screen, or wherever else desired.
+	 * 
+	 * @return Array of strings representing paths to character avatars.
+	 * */
+	public static String[] viewAvatars(){
 		File f = new File(SAVE_DIRECTORY);
 		File[] fList = f.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-               if (name.lastIndexOf('.')>0){
-                  return name.substring(name.lastIndexOf('.')).equals(".sks");
-               }
-               return false;
+               return (name.lastIndexOf('.')>0) && name.substring(name.lastIndexOf('.')).equals(".sks");
             }
          });
 		if (fList != null){

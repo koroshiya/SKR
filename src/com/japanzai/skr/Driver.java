@@ -174,72 +174,6 @@ public class Driver implements Serializable{
 		
 	}
 	
-	/*
-	private void instantiateMinorCharacters(){
-		
-		String marinSprite = "/res/party/marin/";
-		String yooSprite = "/res/party/yoo/";
-		String kimSprite = "/res/party/ban-phuong/";
-		String zenSprite = "/res/party/zen/";
-		String kaeSprite = "/res/party/kae-lyn/";
-		String ryuSprite = "/res/party/ryu/";
-		String rainSprite = "/res/party/rain/";
-		String benitoSprite = "/res/party/benito/";
-		
-		String marinUnique = "Favourite weapon:" + "\n" + "Dual wrenches" + "\n" + "\n" + "Ex Korean soldier; Tae-soo's loyal underling.";
-		String yooUnique = "Ex Barmaid";
-		String kimUnique = "Favourite martial art:" + "\n" + "Muai Thai" + "\n" + "\n" + "Korean father and Vietnamese mother. Ken's rival.";
-		String zenUnique = "Ex-monk";
-		String kaeUnique = "Favorite weapon:" + "\n" + "Dual sashimi knives" + "\n" + "\n" + "Weapons specialist. Bust size over 100cm.";
-		String ryuUnique = "Yumin's father. Boss of the White Dragon Clan.";
-		String rainUnique = "Favourite weapon:" + "\n" + "Dual semi-auto handguns, katana" + "\n" + "\n" + "White Dragon Clan hitman and Boss's right hand man.";
-		String benitoUnique = "Well-endowed.";
-		
-		PlayableCharacter marin = new PlayableCharacter("San-Ki", "Lee", 
-				styles.get(0), weapons.get(0), genders.get(1), marinUnique, 
-				"Henchman", "180cm", "Korean", "Marin", marinSprite, weapons);
-		
-		PlayableCharacter yoo = new PlayableCharacter("Ji-Hae", "Yoo", 
-				styles.get(1), weapons.get(2), genders.get(0), yooUnique, 
-				"Cabaret owner", "Unknown", "Korean", "Miss Yoo", yooSprite, weapons);
-		
-		PlayableCharacter kim = new PlayableCharacter("Ban-Phuong", "Kim", 
-				styles.get(2), weapons.get(3), genders.get(1), kimUnique, 
-				"Assassin", "Unknown", "Korean", null, kimSprite, weapons);
-		
-		PlayableCharacter zen = new PlayableCharacter("Bae-Dal", "Choi", 
-				styles.get(3), weapons.get(0), genders.get(1), zenUnique,
-				"Casino Director", "Unknown", "Korean", "Master Zen", zenSprite, weapons);
-
-		PlayableCharacter kae = new PlayableCharacter("Kae-Lyn", "Kim", 
-				styles.get(1), weapons.get(2), genders.get(0), kaeUnique, 
-				"Weapons specialist", "Unknown", "Korean", null, kaeSprite, weapons);
-		
-		PlayableCharacter ryu = new PlayableCharacter("Ryu", "Yoshizawa", 
-				styles.get(0), weapons.get(0), genders.get(1), ryuUnique, 
-				"Boss", "Unknown", "Japanese", "Godfather", ryuSprite, weapons);
-		
-		PlayableCharacter rain = new PlayableCharacter("Rain", "Fujimi", 
-				styles.get(0), weapons.get(0), genders.get(1), rainUnique, 
-				"Hitman", "Unknown", "Japanese", "Crow", rainSprite, weapons);
-		
-		PlayableCharacter benito = new PlayableCharacter("Benito", "Armani", 
-				styles.get(0), weapons.get(0), genders.get(1), benitoUnique, 
-				"Henchman", "Unknown", "Italian", "Italian Stallion", benitoSprite, weapons);
-
-		PlayableCharacter[] chars = {marin, yoo, kim, zen, kae, ryu, rain, benito};
-		
-		for (PlayableCharacter c : chars){
-			for (Technique t : c.getFightingStyle().getTechnique(c.getLevel())){
-				c.learnTechnique(t);
-			}
-			Party.toggleCharacterInParty(c);
-			Party.addCharacter(c);
-		}
-		
-	}
-	*/
-	
 	private void instantiateEnemies(){
 
 		ConsumableItem rice = new ConsumableItem(getValueFromKey("consumable.riceball.name"), 1, 0, 10, getValueFromKey("consumable.riceball.img"));
@@ -248,8 +182,8 @@ public class Driver implements Serializable{
 		EnemyCharacter henchman2 = new EnemyCharacter("enemy.eye.", styles.get(0), weapons.get(0), genders.get(1), 16, rice, 50, 30, 80);
 		EnemyCharacter henchman3 = new EnemyCharacter("enemy.slime.", styles.get(4), weapons.get(0), genders.get(1), 20, rice, 60, 40, 95);
 
-		henchman2.setLevel(3, null);
-		henchman3.setLevel(6, null);
+		henchman2.setLevel(3);
+		henchman3.setLevel(6);
 		
 		enemies.add(henchman);
 		enemies.add(henchman2);
@@ -262,7 +196,7 @@ public class Driver implements Serializable{
 		d.addLine(new Line(fatty, str3, 0, false));
 		fatty.setDialogue(d);
 		
-		fatty.setLevel(10, null);
+		fatty.setLevel(10);
 		
 		bossEnemies.add(fatty);
 		

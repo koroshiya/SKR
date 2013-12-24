@@ -66,7 +66,7 @@ public abstract class StateTemplate extends SlickGameState {
 		while (++i < total){
 			rects[i] = new SlickBlankRectangle(300, i * 50, 200, 50, commands[i], true);
 		}
-		String[] strCache = SaveState.viewAvatars(arg0);
+		String[] strCache = SaveState.viewAvatars();
 		total = strCache.length < 9 ? strCache.length : 9;
 		Image[] cCache = new Image[total];
 		i = -1;

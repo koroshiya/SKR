@@ -4,6 +4,7 @@ import item.Item;
 import item.Weapon;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.lang.Math;
 
 import org.newdawn.slick.Animation;
@@ -22,7 +23,7 @@ import technique.CombatTechnique;
 import technique.HealingTechnique;
 import technique.Technique;
 
-public abstract class CombatCapableCharacter extends Character{
+public abstract class CombatCapableCharacter extends Character implements Serializable{
 	
 	private static final long serialVersionUID = 6024399234511553080L;
 	
@@ -30,8 +31,8 @@ public abstract class CombatCapableCharacter extends Character{
 	private Weapon weapon; //Weapon type. eg. Fists, pickaxe, etc.   //Weapon leftHand and rightHand?
 	private ArrayList<Technique> techniques;
 	
-	private Image dead;
-	private Image alive;
+	private String dead;
+	private String alive;
 	
 	protected int level;
 	
@@ -45,7 +46,7 @@ public abstract class CombatCapableCharacter extends Character{
 	public CombatCapableCharacter(String property, FightingStyle style, Weapon weapon, Gender gender, int level){
 		
 		this(property, style, weapon, gender);
-		setLevel(level, null);
+		setLevel(level);
 		
 	}
 	
@@ -70,6 +71,11 @@ public abstract class CombatCapableCharacter extends Character{
 		
 	}
 	
+	/**
+	 * Attacks the CombatCapableCharacter specified.
+	 * 
+	 * @param opponent CombatCapableCharacter to attack.
+	 * */
 	public void attack(CombatCapableCharacter opponent){
 		
 		double accuracy = this.currentStatus.getAccuracy() * this.weapon.getAccuracy();
@@ -81,10 +87,16 @@ public abstract class CombatCapableCharacter extends Character{
 		
 	}
 	
+	/**
+	 * Uses a combat technique on the CombatCapableCharacter specified.
+	 * 
+	 * @param opponent CombatCapableCharacter to attack.
+	 * @param tech Attacking technique to use on the character specified.
+	 * */
 	public void attack(CombatCapableCharacter opponent, CombatTechnique tech){
 		
 		boolean hit;
-		tech.use();
+		tech.use(opponent);
 		
 		if (tech.getAlwaysHits()){
 			hit = true;
@@ -102,6 +114,13 @@ public abstract class CombatCapableCharacter extends Character{
 		
 	}
 	
+	/**
+	 * Attempts to deal damage to the character specified.
+	 * 
+	 * @param hit Whether or not the attack hit.
+	 * @param str Strength of the attack.
+	 * @param opponent Target of the attack.
+	 */
 	private void dealDamage(boolean hit, int str, CombatCapableCharacter opponent){
 		
 		System.out.println("cFrame: " + attack.getFrame());
@@ -127,12 +146,18 @@ public abstract class CombatCapableCharacter extends Character{
 		
 	}
 	
+	/**
+	 * Vanquishes the opponent specified.
+	 * In doing so receives experience, money, potentially items.
+	 * 
+	 * @param vanquishedOpponent Opponent to vanquish.
+	 * */
 	private void vanquishOpponent(EnemyCharacter vanquishedOpponent){
 		PlayableCharacter victor = (PlayableCharacter) this;
 		victor.gainExperience(vanquishedOpponent.getExperienceGivenWhenDefeated());
 		
 		int money = vanquishedOpponent.getMoney();
-		BattleConsole.writeConsole("Obtained " + money + " yen from " + vanquishedOpponent.getName());
+		BattleConsole.writeConsole("Obtained " + money + " gold from " + vanquishedOpponent.getName());
 		Inventory.receiveMoney(money);
 		
 		Item item = vanquishedOpponent.getDrop();
@@ -150,11 +175,12 @@ public abstract class CombatCapableCharacter extends Character{
 		
 	}
 	
-	public boolean calcEvade(){
-		
-		return calculate(this.currentStatus.getEvasion());
-		
-	}
+	/**
+	 * Attempts to evade an attack.
+	 * 
+	 * @return True if evasion was successful, otherwise false.
+	 * */
+	public boolean calcEvade(){return calculate(this.currentStatus.getEvasion());}
 	
 	public boolean calcParry(){
 		//Add ability/chance to parry? Or just leave evasion?
@@ -162,6 +188,13 @@ public abstract class CombatCapableCharacter extends Character{
 		
 	}
 	
+	/**
+	 * Calculates the odds of an event occurring and attempts to invoke it.
+	 * 
+	 * @param chance Likelihood of an event occurring. 0-1, with 1 being likely, 0 meaning never.
+	 * 
+	 * @return True if event occurred, otherwise false.
+	 * */
 	private boolean calculate(double chance){
 				
 		double result = Math.random() * 100;
@@ -175,16 +208,9 @@ public abstract class CombatCapableCharacter extends Character{
 		double ratio = (double)attackPower / (double)this.currentStatus.getDefence();
 		int damageTaken = (int) Math.ceil((double)damage * ratio);
 		
-		
 		if (this.currentStatus.getHP() <= damageTaken){
 			this.currentStatus.setHP(0);
-			//SlickSKR.PlaySFX("weeden/die-or-lose-life.ogg");
-			//this.status.setFont(this.strike); //TODO: set this on start if dead?
-			
-			/**
-			 * TODO: fix strikethrough when reviving - same with sprite
-			 * TODO: when implementing real sprites, change with dead sprite
-			 * */
+			//TODO: SlickSKR.PlaySFX("weeden/die-or-lose-life.ogg");
 		}else{
 			this.currentStatus.setHP(this.currentStatus.getHP() - damageTaken);
 			//TODO: sound of getting hit
@@ -194,6 +220,9 @@ public abstract class CombatCapableCharacter extends Character{
 		
 	}
 	
+	/**
+	 * Initializes temporary stats, resets temper gauge, resets number of uses for all techniques, etc.
+	 * */
 	public void startBattle(){
 		
 		if (!(this instanceof PlayableCharacter)){
@@ -215,34 +244,41 @@ public abstract class CombatCapableCharacter extends Character{
 		
 	}
 	
-	//Status ailments?
-	//Revive? Attitude? (eg. angry raises critical and/or damage)
+	//TODO: Status ailments?
 	
-	public void setLevel(int level, BattleConsole bc){
+	/**
+	 * Sets the character's level as specified.
+	 * Character still receives bonuses for each level gained.
+	 * 
+	 * @param level Level to set character at.
+	 * */
+	public void setLevel(int level){
 		int difference = level - this.level;
 		if (difference <= 0){return;}
 		for (int i = 1; i <= difference; i++){levelUp();}
 	}
 	
+	/**
+	 * Increments the character's level, increases stats, learns new techniques, etc. 
+	 * */
 	public void levelUp(){
 	
 		this.level++;
-		BattleConsole.cleanConsole();
-		BattleConsole.writeConsole(getName() + " went up to level " + this.level);
+		BattleConsole.cleanConsole(); //TODO: remove cleanConsole declaration?
+		BattleConsole.writeConsole(getName() + " went up to level " + this.level); //TODO: replace with brief onscreen alert?
 		//TODO: level up sfx
 		
 		int curHP = this.status.getHP();
 		
 		this.status.setStats(
-				this.status.getHP() + levelUpBonus() + getGender().getHPBonus() + style.getHPBonus(),  //Bigger bonus for HP?
-				this.status.getStrength() + levelUpBonus() + getGender().getStrengthBonus() + style.getStrengthBonus(),
-				this.status.getDefence() + levelUpBonus() + getGender().getDefenceBonus() + style.getDefenceBonus(),
-				this.status.getMind() + levelUpBonus() + getGender().getMindBonus() + style.getMindBonus(),
-				this.status.getAccuracy() + slightBonus(),
-				this.status.getEvasion() + slightBonus(),
-				this.status.getSpeed() + levelUpBonus() + getGender().getSpeedBonus() + style.getSpeedBonus()
-							);
-		
+			this.status.getHP() + levelUpBonus() + getGender().getHPBonus() + style.getHPBonus(),  //Bigger bonus for HP?
+			this.status.getStrength() + levelUpBonus() + getGender().getStrengthBonus() + style.getStrengthBonus(),
+			this.status.getDefence() + levelUpBonus() + getGender().getDefenceBonus() + style.getDefenceBonus(),
+			this.status.getMind() + levelUpBonus() + getGender().getMindBonus() + style.getMindBonus(),
+			this.status.getAccuracy() + slightBonus(),
+			this.status.getEvasion() + slightBonus(),
+			this.status.getSpeed() + levelUpBonus() + getGender().getSpeedBonus() + style.getSpeedBonus()
+		);
 
 		curHP = this.status.getHP() - curHP;
 		this.currentStatus.setHP(this.currentStatus.getHP() + curHP);
@@ -379,11 +415,9 @@ public abstract class CombatCapableCharacter extends Character{
 		
 	}
 	
-	public Image getSprite(){return this.isAlive() ? this.alive : this.dead;}
+	public String getSprite(){return this.isAlive() ? this.alive : this.dead;}
 	
-	public void setAliveIcon(Image icon){this.alive = icon;}
-	
-	public void setDeadIcon(Image icon){this.dead = icon;}
+	public abstract Image getBattleIcon();
 	
 	public String getStatus(){return this.currentStatus.getHP() + "/" + this.status.getHP();}
 	//this.status.setFont(this.currentHP == 0 ? this.strike : this.genericFont);

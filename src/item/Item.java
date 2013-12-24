@@ -8,8 +8,9 @@ import org.newdawn.slick.SlickException;
 
 import slickgamestate.SlickSKR;
 import interfaces.Photogenic;
+import interfaces.QuantitativeCommand;
 
-public abstract class Item implements Photogenic, Serializable {
+public abstract class Item implements Photogenic, Serializable, QuantitativeCommand {
 	
 	private static final long serialVersionUID = -8563039334149363189L;
 	
@@ -35,22 +36,49 @@ public abstract class Item implements Photogenic, Serializable {
 	
 	public abstract Item create(int quantity);
 	
+	@Override
 	public String getName(){return this.name;}
 	
 	public int getValue(){return this.value;}
 	
 	public void setValue(int value){this.value = value;}
 	
+	/**
+	 * Checks how rare the item is.
+	 * Defines the drop rate of the item, helps determine the price, etc.
+	 * 
+	 * @return Rarity of this item.
+	 * */
 	public int getRarity(){return this.rarity;}
 	
+	/**
+	 * Checks whether the item has been marked as unsellable or not.
+	 * 
+	 * @return True if the item can be sold, otherwise false.
+	 * */
 	public boolean isSellable(){return this.sellable;}
 	
+	/**
+	 * Checks how many instances of this item are in the inventory.
+	 * 
+	 * @return Number of copies of this item in the inventory.
+	 * */
 	public int getQuantity(){return this.quantity;}
 	
-	public boolean buy(){
-		return buy(1);
-	}
+	/**
+	 * Attempts to purchase a single copy of this item.
+	 * 
+	 * @return True if transaction was successful, otherwise false.
+	 * */
+	public boolean buy(){return buy(1);}
 	
+	/**
+	 * Attempts to purchase a specified number of copies of this item.
+	 * 
+	 * @param quantity How many copies of this item should be purchased.
+	 * 
+	 * @return True if transaction was successful, otherwise false.
+	 * */
 	public boolean buy(int quantity){
 		if (canBuy(quantity)){
 			increaseQuantity(quantity);
@@ -59,10 +87,20 @@ public abstract class Item implements Photogenic, Serializable {
 		return false;
 	}
 	
-	public boolean sell(){
-		return sell(1);
-	}
+	/**
+	 * Attempts to sell a single copy of this item.
+	 * 
+	 * @return True if transaction was successful, otherwise false.
+	 * */
+	public boolean sell(){return sell(1);}
 	
+	/**
+	 * Attempts to sell a specified number of copies of this item.
+	 * 
+	 * @param quantity How many copies of this item should be sold.
+	 * 
+	 * @return True if transaction was successful, otherwise false.
+	 * */
 	public boolean sell(int quantity){
 		if (canSell(quantity)){
 			decreaseQuantity(quantity);
@@ -71,26 +109,51 @@ public abstract class Item implements Photogenic, Serializable {
 		return false;
 	}
 	
+	/**
+	 * Increases the number of copies of this item in the inventory.
+	 * This method does NOT check to see how many copies, if any, are available.
+	 * It is assumed you have already checked with canBuy(int) or a similar method.
+	 * 
+	 * @param quantity Number by which to increase the quantity of this item.
+	 * */
 	public void increaseQuantity(int quantity){this.quantity += quantity;}
 	
+	/**
+	 * Decreases the number of copies of this item in the inventory.
+	 * This method does NOT check to see how many copies, if any, are available.
+	 * It is assumed you have already checked with canSell(int) or a similar method.
+	 * 
+	 * @param quantity Number by which to decrease the quantity of this item.
+	 * */
 	public void decreaseQuantity(int quantity){this.quantity -= quantity;}
 	
+	/**
+	 * Tests if there is enough space to purchase the specified number of copies of this item.
+	 * 
+	 * @param quantity Number of copies that should be purchased.
+	 * 
+	 * @return True if there's enough space, otherwise false.
+	 * */
 	public boolean canBuy(int quantity){
 		return this.quantity + quantity <= 99 ? true : false;
 	}
 	
+	/**
+	 * Tests if there are enough copies of this item to be sold.
+	 * 
+	 * @param quantity Number of copies that should be sold.
+	 * 
+	 * @return True if there are enough copies, otherwise false.
+	 * */
 	public boolean canSell(int quantity){
-		return this.quantity >= quantity ? true : false;
-	}
-	
-	public boolean canUse(){
-		return this.quantity != 0;
+		return this.sellable && this.quantity >= quantity ? true : false;
 	}
 	
 	@Override
-	public String getAvatar() {
-		return (this.avatar);
-	}
+	public boolean canUse(){return this.quantity != 0;}
+	
+	@Override
+	public String getAvatar() {return this.avatar;}
 	
 	@Override
 	public void draw(Graphics g, int x, int y){
