@@ -106,24 +106,17 @@ public abstract class Character implements Photogenic, Serializable{
 		return (this.spriteDirectory + "avatar.png");
 	}
 	
-	public void draw(Graphics g, int x, int y){
-		draw(x, y);
-	}
-	
-	public synchronized void draw(int x, int y){
-		this.anim[this.direction][cFrame].getCurrentFrame().draw(x, y);
+	@Override
+	public synchronized void draw(Graphics g, int x, int y, int targetHeight){
+		SlickSKR.drawImageScaled(g, x, y, targetHeight, this.anim[this.direction][cFrame].getCurrentFrame());
 	}
 
-	public synchronized void draw(float x, float y){
-		this.anim[this.direction][cFrame].draw(x, y);
+	public synchronized void draw(Graphics g, float x, float y, int targetHeight){
+		SlickSKR.drawImageScaled(g, x, y, targetHeight, this.anim[this.direction][cFrame].getCurrentFrame());
 	}
 
-	public synchronized void drawAvatar(float x, float y){
-		try {
-			new Image(this.spriteDirectory + "avatar.png").getScaledCopy(SlickSKR.scaleSize).draw(x, y);
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+	public synchronized void drawAvatar(Graphics g, float x, float y, int targetHeight){
+		SlickSKR.drawImageScaled(g, x, y, targetHeight, this.spriteDirectory + "avatar.png");
 	}
 	
 	public synchronized Image getBattleIcon(){

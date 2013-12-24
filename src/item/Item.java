@@ -156,9 +156,12 @@ public abstract class Item implements Photogenic, Serializable, QuantitativeComm
 	public String getAvatar() {return this.avatar;}
 	
 	@Override
-	public void draw(Graphics g, int x, int y){
+	public void draw(Graphics g, int x, int y, int targetHeight){
 		try {
-			new Image(this.avatar).getScaledCopy(SlickSKR.scaleSize).draw(x, y);
+			targetHeight *= SlickSKR.scaleSize;
+			Image tmp = new Image(this.avatar);
+			float scale = (float)tmp.getWidth() / (float)tmp.getHeight();
+			new Image(this.avatar).getScaledCopy((int)Math.floor(targetHeight*scale), targetHeight).draw(x, y);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}

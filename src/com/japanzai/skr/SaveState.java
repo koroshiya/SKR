@@ -12,7 +12,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import org.newdawn.slick.SlickException;
+
+import screen.GameScreen;
 import slickgamestate.MapScreen;
+import slickgamestate.SlickSKR;
 import character.PlayableCharacter;
 
 public class SaveState {
@@ -38,7 +42,7 @@ public class SaveState {
 			oos.writeObject(Inventory.getMoney());
 			oos.writeObject(Inventory.getItems());
 			oos.writeObject(Party.getCharacters());
-			oos.writeObject(); //TODO: MapScreen
+			oos.writeObject(MapManager.getMap());
 			//oos.writeObject(d.bs);
 			oos.close();
 			return true;
@@ -66,7 +70,7 @@ public class SaveState {
 	 * This method should ALWAYS correspond to save(File).
 	 * As one becomes more complex, or changes in any way, so should the other.
 	 * */
-	private static boolean load(File f){
+	private static boolean load(File f, GameScreen gs){
 		
 		try{
 			FileInputStream fis = new FileInputStream(f);
@@ -75,7 +79,7 @@ public class SaveState {
 			Inventory.setMoney((Integer)ois.readObject());
 			Inventory.setItems((ArrayList<Item>)ois.readObject());
 			Party.setParty((ArrayList<PlayableCharacter>)ois.readObject());
-			oos.writeObject(); //TODO: MapScreen
+			((MapScreen)gs.getState(SlickSKR.MAP)).load(ois.readObject());
 			ois.close();
 			return true;
 		} catch (FileNotFoundException e) {
@@ -83,6 +87,8 @@ public class SaveState {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -98,7 +104,7 @@ public class SaveState {
 	 * 
 	 * @return True if save was successful, otherwise false.
 	 * */
-	public static boolean load(String s){return load(new File(s));}
+	public static boolean load(String s, GameScreen gs){return load(new File(s), gs);}
 	
 	/**
 	 * Retrieves the avatars from each available save state as strings.

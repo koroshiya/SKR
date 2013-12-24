@@ -53,12 +53,13 @@ public class CharacterTile extends Tile implements InteractableObject {
 		}
 	}
 	
-	public void draw(int x, int y){
-		this.npc.draw(x, y);
+	@Override
+	public void draw(Graphics g, int x, int y, int targetHeight){
+		this.npc.draw(g, x, y, targetHeight);
 	}
 	
-	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y){
-		this.npc.draw(x, y);
+	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y, int targetHeight){
+		this.npc.draw(g, x, y, targetHeight);
 	}
 	
 	@Override

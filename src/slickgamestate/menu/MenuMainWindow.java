@@ -76,7 +76,7 @@ public class MenuMainWindow extends SlickGameState{
 			PlayableCharacter c = characters.get(i);
 			inc = baseInc;
 			g.setColor(Color.white);
-			c.drawAvatar(0, y);
+			c.drawAvatar(g, 0, y, 115);
 			g.drawString(c.getName(), x, y + inc);
 			inc += baseInc;
 			g.drawString(c.getOccupation(), x, y + inc);

@@ -2,7 +2,6 @@ package slickgamestate;
 
 import java.awt.Point;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import map.ParentMap;
 
@@ -15,6 +14,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import console.MapConsole;
 import controls.SlickCache;
+import controls.SlickCacheSave;
 import screen.GameScreen;
 import tile.CharacterTile;
 import tile.InteractiveTile;
@@ -50,41 +50,44 @@ public class MapScreen extends SlickGameState{
 	public static SlickCache dCache; //Dialogue cache
 	private SlickCache bgCache; //Cache for the map itself. This is usually a repeating background pattern.
 	
-	private MapScreenSave cache;
-	
 	public MapScreen(ParentMap map){
 		super(SlickSKR.MAP, map.getFrame());
 		this.map = map;
 	}
 	
 	private class MapScreenSave implements Serializable{
-		ArrayList<Object> args;
-		public MapScreenSave(ArrayList<Object> args){
-			this.args = args;
+		private static final long serialVersionUID = -3313109186859812280L;
+		private final SlickCacheSave mapCacheSave;
+		private final SlickCacheSave fgCacheSave;
+		private final SlickCacheSave dCacheSave;
+		private final SlickCacheSave bgCacheSave;
+		public MapScreenSave(
+				SlickCacheSave mapCacheSave, 
+				SlickCacheSave fgCacheSave, 
+				SlickCacheSave dCacheSave, 
+				SlickCacheSave bgCacheSave
+		){
+			this.mapCacheSave = mapCacheSave; 
+			this.fgCacheSave = fgCacheSave; 
+			this.dCacheSave = dCacheSave; 
+			this.bgCacheSave = bgCacheSave;
 		}
-		public ArrayList<Object> getArgs(){
-			return this.args;
-		}
+		public SlickCacheSave getMapCacheSave(){return this.mapCacheSave;}
+		public SlickCacheSave getFgCacheSave(){return this.fgCacheSave;}
+		public SlickCacheSave getDCacheSave(){return this.dCacheSave;}
+		public SlickCacheSave getBgCacheSave(){return this.bgCacheSave;}
 	}
 	
-	public void load(Object obj){
-		cache = (MapScreenSave) obj;
-		ArrayList<Object> args = cache.getArgs();
-		mapCache = ((SlickCacheSave)args.get(0)).load();
-		fgCache = ((SlickCacheSave)args.get(0)).load();
-		dCache = ((SlickCacheSave)args.get(0)).load();
-		bgCache = ((SlickCacheSave)args.get(0)).load();
+	public void load(Object obj) throws SlickException{
+		MapScreenSave cache = (MapScreenSave) obj;
+		mapCache = cache.getMapCacheSave().load();
+		fgCache = cache.getFgCacheSave().load();
+		dCache = cache.getDCacheSave().load();
+		bgCache = cache.getBgCacheSave().load();
 	}
 	
 	public MapScreenSave save(){
-		ArrayList<Object> args = new ArrayList<Object>();
-
-		args.add(mapCache.save());
-		args.add(fgCache.save());
-		args.add(dCache.save());
-		args.add(bgCache.save());
-		cache = new MapScreenSave(args);
-		return this.cache;
+		return new MapScreenSave(mapCache.save(),fgCache.save(),dCache.save(),bgCache.save());
 	}
 	
 	@Override
@@ -199,7 +202,7 @@ public class MapScreen extends SlickGameState{
 				while (++j < mapCache.getHeight()){
 					temp = map.getTileByIndex(i, j);
 					if (temp != null){
-						temp.drawIfNotDefault(temp.isFore() ? gf : gc, defaultTile, i * SlickSKR.scaled_icon_size, j * SlickSKR.scaled_icon_size);
+						temp.drawIfNotDefault(temp.isFore() ? gf : gc, defaultTile, i * SlickSKR.scaled_icon_size, j * SlickSKR.scaled_icon_size, SlickSKR.icon_size);
 					}
 				}
 			}
@@ -218,7 +221,7 @@ public class MapScreen extends SlickGameState{
 		mapCache.draw(g);
 		g.flush();
 
-		this.map.getAnimatedSprite().draw(this.map.getCharacterPositionX() * SlickSKR.scaled_icon_size, this.map.getCharacterPositionY() * SlickSKR.scaled_icon_size);
+		this.map.getAnimatedSprite().draw(g, this.map.getCharacterPositionX() * SlickSKR.scaled_icon_size, this.map.getCharacterPositionY() * SlickSKR.scaled_icon_size, SlickSKR.icon_size);
 		
 		fgCache.draw(g);
 		if (this.activeDialog != null){dCache.draw(g);}

@@ -10,6 +10,8 @@ Misc fixes to Map scaling, some placements, etc.
 Removed Serial, SerialChild, etc. and implemented full Serialization support.
 Fixed mouseover/click for SlickRectangles that have been scaled
 Changed mouse bitmaps for more noticeable hover, click, etc.
+Further scaling fixes in regards to drawing methods
+New Save/Load mechanism for ParentMap (untested)
 
 v0.33
 Added custom cursor and MouseDown/Over events

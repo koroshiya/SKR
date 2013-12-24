@@ -228,7 +228,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 		//g.draw(avatar);
 		SlickImageRectangle stats = new SlickImageRectangle(335, 30, 450, 100, "", false, "/res/buttons/9x2/onyx.png", false);
 		stats.paintCache(g);//TODO: replace 150 with gc size scale
-		item.draw(g, 352, 47);
+		item.draw(g, 352, 47, 100);
 		
 		int i = -1;
 		int total = itemParams.length;

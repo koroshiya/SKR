@@ -68,7 +68,7 @@ public class CharacterProfileWindow extends SlickGameState{
 		int i = -1;
 		int total = partyMembers.length;
 		while (++i < total){
-			characters.get(i).draw(g, (int)partyMembers[i].getX(), (int)partyMembers[i].getY());
+			characters.get(i).draw(g, (int)partyMembers[i].getX(), (int)partyMembers[i].getY(), 150);
 		}
 		
 	}

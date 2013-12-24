@@ -25,7 +25,7 @@ public class Load extends StateTemplate {
 	public void processMouseClick(int clickCount, int x, int y) {
 		for (SlickRectangle rect : rects){
 			if (rect.isWithinBounds(x, y)){
-				if (SaveState.load(rect.getTag())){
+				if (SaveState.load(rect.getTag(), this.parent)){
 					parent.swapView(SlickSKR.MAP);
 				}else{
 					Log.error("Load class - processMouseClick - Load failed");

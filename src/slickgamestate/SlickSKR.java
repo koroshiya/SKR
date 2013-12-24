@@ -13,6 +13,8 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.ScalableGame;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -65,6 +67,7 @@ public class SlickSKR extends StateBasedGame {
 	public static final Point size = new Point(1366,768);
 	public static final Point targetSize = new Point(816, 624);
 	public static final float scaleSize = (float)size.y / (float)targetSize.y;
+	public static final int icon_size = 48;
 	public static final int scaled_icon_size = (int)Math.floor(scaleSize * 48);
 	public static int refreshRate;
 	
@@ -188,6 +191,21 @@ public class SlickSKR extends StateBasedGame {
 	
 	public static void setRefreshRate(int rate){
 		refreshRate = rate;
+	}
+
+	public static void drawImageScaled(Graphics g, float x, float y, int targetHeight, String image){
+		try {
+			Image tmp = new Image(image);
+			drawImageScaled(g, x, y, targetHeight, tmp);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void drawImageScaled(Graphics g, float x, float y, int targetHeight, Image tmp){
+		targetHeight *= SlickSKR.scaleSize;
+		float scale = (float)tmp.getWidth() / (float)tmp.getHeight();
+		tmp.getScaledCopy((int)Math.floor(targetHeight*scale), targetHeight).draw(x, y);
 	}
 	
 }

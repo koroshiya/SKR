@@ -76,20 +76,14 @@ public class Tile implements Photogenic{
 	public void setYCoordinate(int y){this.y = y;}
 	
 	@Override
-	public void draw(Graphics g, int x, int y){
+	public void draw(Graphics g, int x, int y, int targetHeight){
 		if (this.sprite != ""){
-			try {
-				new Image(this.sprite).getScaledCopy((int)(this.targetWidth * SlickSKR.scaleSize), (int)(this.targetHeight * SlickSKR.scaleSize)).draw(x, y);
-			} catch (SlickException e) {
-				e.printStackTrace();
-			} catch (NullPointerException npe){
-				Log.error("Resource " + this.sprite + " does not exist");
-			}
+			SlickSKR.drawImageScaled(g, x, y, targetHeight, this.sprite);
 		}
 	}
 	
-	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y){
-		if (sprite != defaultImage){this.draw(g, (int)x, (int)y);}
+	public void drawIfNotDefault(Graphics g, String defaultImage, float x, float y, int targetHeight){
+		if (sprite != defaultImage){this.draw(g, (int)x, (int)y, targetHeight);}
 	}
 	
 	/**

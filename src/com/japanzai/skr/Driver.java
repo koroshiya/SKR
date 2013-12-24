@@ -115,13 +115,8 @@ public class Driver implements Serializable{
 		
 		weapons.add(new Weapon(getValueFromKey(wpName + "barehanded"), 0, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, getValueFromKey("weapon.image.barehanded.url")));
 		weapons.add(new Weapon(getValueFromKey(wpName + "firearm"), 3, 10, 10, 0.1, 10, 10, 0.99, 20, true, 0, 0, getValueFromKey("weapon.image.firearm.url")));
-		weapons.add(new Weapon(getValueFromKey(wpName + "katana"), 4, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.katana.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "bat"), 4, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.bat.url")));
 		weapons.add(new Weapon(getValueFromKey(wpName + "pickaxe"), 1, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.pickaxe.url")));
-		weapons.add(new Weapon(getValueFromKey(wpName + "axe"), 2, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.axe.url")));
-		weapons.add(new Weapon(getValueFromKey(wpName + "knife"), 5, 10, 10, 0.1, 10, 10, 0.99, 1, true, 0, 0, getValueFromKey("weapon.image.knife.url")));
-		weapons.add(new Weapon(getValueFromKey(wpName + "twohandsword"), 6, 10, 10, 0.1, 10, 10, 0.99, 1, true, 0, 0, getValueFromKey("weapon.image.twohandsword.url")));
-		weapons.add(new Weapon(getValueFromKey(wpName + "mace"), 7, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, getValueFromKey("weapon.image.mace.url")));
-		weapons.add(new Weapon(getValueFromKey(wpName + "spear"), 8, 10, 10, 0.1, 10, 10, 0.99, 8, false, 0, 0, getValueFromKey("weapon.image.spear.url")));
 		
 		/*for (Weapon weapon : weapons){
 			weapon.increaseQuantity(1);

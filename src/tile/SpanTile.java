@@ -23,7 +23,7 @@ public class SpanTile extends Tile {
 	public int getHeight(){return this.height;}
 
 	@Override
-	public void draw(Graphics g, int x, int y){
+	public void draw(Graphics g, int x, int y, int targetHeight){
 		if (this.sprite != ""){
 			try {
 				new Image(this.sprite).getScaledCopy(SlickSKR.scaleSize).draw(x, y);
