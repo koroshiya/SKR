@@ -5,6 +5,7 @@ import interfaces.InteractableObject;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -63,7 +64,10 @@ public class GameScreen extends AppGameContainer{
 		this.setAlwaysRender(true);
 		this.setMaximumLogicUpdateInterval(10);
 		this.setVerbose(false);
+		this.setDefaultFont(SlickSKR.getFont(14, false));
 		//this.setShowFPS(false);
+		SoundStore.get().setMusicVolume(0.3f);
+		SoundStore.get().setSoundVolume(0.3f);
 		
 		try{
 			this.setDisplayMode(SlickSKR.size.x, SlickSKR.size.y, SlickSKR.FULLSCREEN); //TODO: Change to true for fullscreen

@@ -68,8 +68,6 @@ public class StartScreen extends SlickGameState{
 	public void enter(GameContainer gc, StateBasedGame arg1){
 		//SoundStore.get().setMusicOn(false);
 		//SoundStore.get().setSoundsOn(false);
-		SoundStore.get().setMusicVolume(0.3f);
-		SoundStore.get().setSoundVolume(0.3f);
 		//gc.setMusicOn(false);
 		SlickSKR.PlayMusic("other/public/intro.ogg");
 		SlickGameState.setFlush(true, false);

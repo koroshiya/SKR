@@ -132,13 +132,13 @@ public class MovementListener implements KeyListener, MouseListener {
 		
 		try{
 			if (code == Input.KEY_UP){
-				map.getParentMap().moveUp();
+				map.getParentMap().move(ParentMap.UP);
 			}else if (code == Input.KEY_RIGHT){
-				map.getParentMap().moveRight();
+				map.getParentMap().move(ParentMap.RIGHT);
 			}else if (code == Input.KEY_LEFT){
-				map.getParentMap().moveLeft();
+				map.getParentMap().move(ParentMap.LEFT);
 			}else if (code == Input.KEY_DOWN){
-				map.getParentMap().moveDown();
+				map.getParentMap().move(ParentMap.DOWN);
 			}else {
 				//System.out.println(code);
 			}

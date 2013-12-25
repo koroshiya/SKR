@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.pathfinding.Path;
 import org.newdawn.slick.util.pathfinding.Path.Step;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
@@ -20,8 +21,9 @@ import character.EnemyCharacter;
 import character.PlayableCharacter;
 
 public class ParentMap {
-	
-	private Point coordinates;
+
+	private final float coordinatex;
+	private final float coordinatey;
 	private float currentPositionx;
 	private float currentPositiony;
 	private TileMap tileMap;
@@ -47,13 +49,19 @@ public class ParentMap {
 	private float xDiff;
 	private float yDiff;
 	
-	public ParentMap(Point coordinates, Point currentPosition, 
+	public ParentMap(Point currentPosition, 
 			PlayableCharacter animatedSprite2, ArrayList<EnemyCharacter> enemies,
 			GameScreen parent, Point mapSize, int encounterRate, String grass,
 			String theme){
 
+		float coordX = SlickSKR.size.x / 2;
+		coordX -= coordX % SlickSKR.scaled_icon_size;
+		float coordY = SlickSKR.size.y / 2;
+		coordY -= coordY % SlickSKR.scaled_icon_size;
+		
 		this.parent = parent;
-		this.coordinates = coordinates;
+		this.coordinatex = coordX;
+		this.coordinatey = coordY;
 		this.currentPositionx = currentPosition.x;
 		this.currentPositiony = currentPosition.y;
 		this.tileMap = null;
@@ -92,7 +100,7 @@ public class ParentMap {
 		
 		if (!tileExists(x, y)){return false;}
 		
-		if (x <= getXBoundary() && y <= getYBoundary()){
+		if (x <= this.coordinatex && y <= this.coordinatey){
 			if (x != this.currentPositionx || y != this.currentPositiony){
 				return tileMap.isOpenAndReachable(x, y);
 			}
@@ -167,16 +175,12 @@ public class ParentMap {
 	
 	public float getPositionY(){return this.currentPositiony;}
 	
-	public int getXBoundary(){return this.coordinates.x;}
-	
-	public int getYBoundary(){return this.coordinates.y;}
-	
 	public synchronized int getCharacterPositionX(){
-		return (int) Math.floor(this.coordinates.getX() / 4 / SlickSKR.scaled_icon_size);
+		return (int) Math.floor(this.coordinatex / SlickSKR.scaled_icon_size);
 	}
 	
 	public synchronized int getCharacterPositionY(){
-		return (int) Math.floor(this.coordinates.getY() / 4 / SlickSKR.scaled_icon_size);
+		return (int) Math.floor(this.coordinatey / SlickSKR.scaled_icon_size);
 	}
 	
 	public synchronized float getRelativeX(){
@@ -196,42 +200,21 @@ public class ParentMap {
 		
 	}
 	
-	public int getDirection(){return this.direction;}
-	
-	public void moveDown() {
-		
-		move(this.currentPositionx, this.currentPositiony + SlickSKR.scaled_icon_size, DOWN);
-		
-	}
-	
-	public void moveUp() {
-		
-		move(this.currentPositionx, this.currentPositiony - SlickSKR.scaled_icon_size, UP);
-		
-	}
-	
-	public void moveLeft() {
-		
-		move(this.currentPositionx - SlickSKR.scaled_icon_size, this.currentPositiony, LEFT);
-		
-	}
-	 
-	public void moveRight() {
-		
-		move(this.currentPositionx + SlickSKR.scaled_icon_size, this.currentPositiony, RIGHT);
-		
-	}
+	public int getDirection(){return this.direction;}	
 	
 	public void move(int dir) {
-		
+
+		this.direction = dir;
 		if (dir == LEFT){
-			moveLeft();
+			move(this.currentPositionx - SlickSKR.scaled_icon_size, this.currentPositiony);
 		}else if (dir == RIGHT){
-			moveRight();
+			move(this.currentPositionx + SlickSKR.scaled_icon_size, this.currentPositiony);
 		}else if (dir == UP){
-			moveUp();
+			move(this.currentPositionx, this.currentPositiony - SlickSKR.scaled_icon_size);
 		}else if (dir == DOWN){
-			moveDown();
+			move(this.currentPositionx, this.currentPositiony + SlickSKR.scaled_icon_size);
+		}else{
+			Log.error("ParentMap - move(int) - Unspecified direction");
 		}
 		
 	}
@@ -248,12 +231,11 @@ public class ParentMap {
 		}
 	}
 	
-	private synchronized void move(float d, float currentPositiony2, int dir) {
+	private synchronized void move(float d, float currentPositiony2) {
 
 		if (!isLocked()){
 		
 			lock();
-			this.direction = dir;
 			showSprite();
 			
 			if (canMoveToPosition(d, currentPositiony2)){

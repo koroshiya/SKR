@@ -114,10 +114,10 @@ public class Driver implements Serializable{
 		String wpName = "weapon.class.name.";
 		
 		weapons.add(new Weapon(getValueFromKey(wpName + "barehanded"), 0, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, getValueFromKey("weapon.image.barehanded.url")));
-		weapons.add(new Weapon(getValueFromKey(wpName + "firearm"), 3, 10, 10, 0.1, 10, 10, 0.99, 20, true, 0, 0, getValueFromKey("weapon.image.firearm.url")));
-		weapons.add(new Weapon(getValueFromKey(wpName + "bat"), 4, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.bat.url")));
-		weapons.add(new Weapon(getValueFromKey(wpName + "pickaxe"), 1, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.pickaxe.url")));
-		
+		weapons.add(new Weapon(getValueFromKey(wpName + "firearm"), 1, 10, 10, 0.1, 10, 10, 0.99, 20, true, 0, 0, getValueFromKey("weapon.image.firearm.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "bat"), 2, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.bat.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "pickaxe"), 3, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.pickaxe.url")));
+		//weapons.add katana
 		/*for (Weapon weapon : weapons){
 			weapon.increaseQuantity(1);
 		}*/
@@ -150,14 +150,14 @@ public class Driver implements Serializable{
 		}
 		
 		PlayableCharacter ken = new PlayableCharacter(kenInfo, styles.get(0), weapons.get(0), genders.get(1), wList);
-		PlayableCharacter yumin = new PlayableCharacter(yuminInfo, styles.get(1), weapons.get(2), genders.get(0), wList);
-		PlayableCharacter pickaxe = new PlayableCharacter(pickaxeInfo, styles.get(2), weapons.get(3), genders.get(1), wList);
-		PlayableCharacter taesoo = new PlayableCharacter(taesooInfo, styles.get(3), weapons.get(0), genders.get(1), wList);
+		//PlayableCharacter yumin = new PlayableCharacter(yuminInfo, styles.get(1), weapons.get(2), genders.get(0), wList);
+		//PlayableCharacter pickaxe = new PlayableCharacter(pickaxeInfo, styles.get(2), weapons.get(3), genders.get(1), wList);
+		//PlayableCharacter taesoo = new PlayableCharacter(taesooInfo, styles.get(3), weapons.get(0), genders.get(1), wList);
 		/*PlayableCharacter doheun = new PlayableCharacter("Do-Heun", "Chang", 
 				styles.get(4), weapons.get(7), techniques, genders.get(1), 
 				"info", "Henchman", "212cm", "Korean", null, kenSprite, i);*/
 
-		PlayableCharacter[] chars = {ken, yumin, pickaxe, taesoo};
+		PlayableCharacter[] chars = {ken/*, yumin, pickaxe, taesoo*/};
 		
 		for (PlayableCharacter c : chars){
 			for (Technique t : c.getFightingStyle().getTechnique(c.getLevel())){
@@ -274,7 +274,7 @@ public class Driver implements Serializable{
 		ParentMap destination = null;
 		
 		Point mapSize = new Point(16 * SlickSKR.scaled_icon_size, 13 * SlickSKR.scaled_icon_size);
-		Point coordinates = new Point(32 * SlickSKR.scaled_icon_size, 24 * SlickSKR.scaled_icon_size); //Multiple base by pix size?
+		//Point coordinates = new Point(32 * SlickSKR.scaled_icon_size, 24 * SlickSKR.scaled_icon_size); //Multiple base by pix size?
 
 		int flX = SlickSKR.size.x / 2;
 		flX -= flX % SlickSKR.scaled_icon_size;
@@ -284,11 +284,11 @@ public class Driver implements Serializable{
 		PlayableCharacter animatedSprite = Party.getCharacterByIndex(0);
 
 		//SlickSKR sk = null;
-		current = new ParentMap(coordinates, currentPosition, animatedSprite, enemies, bs, mapSize, 97, grass, "other/public/summeropenfielddusk.ogg");
+		current = new ParentMap(currentPosition, animatedSprite, enemies, bs, mapSize, 97, grass, "other/public/summeropenfielddusk.ogg");
 
 		Tile[][] deadTile = createDeadMap(32 * SlickSKR.scaled_icon_size, 26 * SlickSKR.scaled_icon_size,destination,current);
 		Point newCurPos = new Point(20 * SlickSKR.scaled_icon_size, 0);
-		destination = new ParentMap(coordinates, newCurPos, animatedSprite, bossEnemies, bs, mapSize, 5, mud, "other/public/Cavern.ogg");	
+		destination = new ParentMap(newCurPos, animatedSprite, bossEnemies, bs, mapSize, 5, mud, "other/public/Cavern.ogg");	
 		destination.setTiles(deadTile);
 		
 		TileGenerator tGenerator = new TileGenerator(basicRandomTiles());

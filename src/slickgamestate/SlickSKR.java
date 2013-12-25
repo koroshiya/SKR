@@ -61,7 +61,7 @@ public class SlickSKR extends StateBasedGame {
 	public static SpriteSheet mouseStateList;
 	
 	private static final Properties prop = new Properties();
-	public static final boolean FULLSCREEN = false;
+	public static final boolean FULLSCREEN = true;
 	
 	private static String musicPlaying = "";
 	public static final Point size = new Point(1366,768);
@@ -143,6 +143,7 @@ public class SlickSKR extends StateBasedGame {
 	
 	public static TrueTypeFont loadFont(String fontName, float size){
 		try {
+			size *= SlickSKR.scaleSize;
 			InputStream inputStream	= ResourceLoader.getResourceAsStream("/res/font/" + fontName);
 			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
 			return new TrueTypeFont(awtFont2.deriveFont(size), true);

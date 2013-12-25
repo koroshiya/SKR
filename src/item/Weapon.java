@@ -13,7 +13,7 @@ public class Weapon extends Item {
 	private int critical;
 	//Critical hit ratio. Value between 0 and 100 //Multiple attacks in quick succession? Lower critical for rapid attacks?
 	
-	public final static String[] TYPE = {"Fist", "Pickaxe", "Battleaxe", "Gun", "Katana", "Knife", "Greatsword", "Mace"};
+	public final static String[] TYPE = {"Fist", "Gun", "Bat", "Pickaxe", "Katana"};
 	private int intType;
 	private int range;
 	private boolean onehanded;

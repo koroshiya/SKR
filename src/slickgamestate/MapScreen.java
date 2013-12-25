@@ -109,7 +109,9 @@ public class MapScreen extends SlickGameState{
 		map.instantiateImages();
 		SlickSKR.PlayMusic(map.getThemeMusic());
 		mapCache.setFlush(true);
+		fgCache.setFlush(true);
 		bgCache.setFlush(true);
+		dCache.setFlush(false);
 		
 	}
 	
@@ -118,13 +120,13 @@ public class MapScreen extends SlickGameState{
 		Input i = super.parent.getInput();
 		if (!getParentMap().isLocked() && this.activeDialog == null){
 			if (i.isKeyDown(Input.KEY_UP)){
-				getParentMap().moveUp();
+				getParentMap().move(ParentMap.UP);
 			}else if (i.isKeyDown(Input.KEY_RIGHT)){
-				getParentMap().moveRight();
+				getParentMap().move(ParentMap.RIGHT);
 			}else if (i.isKeyDown(Input.KEY_LEFT)){
-				getParentMap().moveLeft();
+				getParentMap().move(ParentMap.LEFT);
 			}else if (i.isKeyDown(Input.KEY_DOWN)){
-				getParentMap().moveDown();
+				getParentMap().move(ParentMap.DOWN);
 			}
 		}
 		if (!mapCache.needFlush()){
@@ -179,14 +181,16 @@ public class MapScreen extends SlickGameState{
 			step = null;
 		}
 		
+		if (bgCache.needFlush()){
+			g.clear();
+			Graphics gb = bgCache.getGraphics();
+			gb.clear();
+			gb.fillRect(0, 0, bgCache.getWidth(), bgCache.getHeight(), new Image(map.getDefaultTile()).getScaledCopy(SlickSKR.scaleSize), 0, 0);
+			bgCache.setFlush(false);
+		}
+		
 		if (mapCache.needFlush()){
 			//Log.error("Flush Cycle");
-			if (bgCache.needFlush()){
-				g.clear();
-				Graphics gb = bgCache.getGraphics();
-				gb.clear();
-				gb.fillRect(0, 0, bgCache.getWidth(), bgCache.getHeight(), new Image(map.getDefaultTile()).getScaledCopy(SlickSKR.scaleSize), 0, 0);
-			}
 			Graphics gc = mapCache.getGraphics();
 			gc.clear();
 			Graphics gf = fgCache.getGraphics();
@@ -207,16 +211,18 @@ public class MapScreen extends SlickGameState{
 				}
 			}
 			
-			if (this.activeDialog != null){
-				Graphics gd = dCache.getGraphics();
-				gd.clear();
-				this.activeDialog.paint(gd, 0, 0);
-			}
-			
 			mapCache.setFlush(false);
-			dCache.setFlush(false);
+			fgCache.setFlush(false);
 			
 		}
+		
+		if (dCache.needFlush() && this.activeDialog != null){
+			Graphics gd = dCache.getGraphics();
+			gd.clear();
+			this.activeDialog.paint(gd, 0, 0);
+			dCache.setFlush(false);
+		}
+		
 		bgCache.draw(g);
 		mapCache.draw(g);
 		g.flush();
@@ -275,7 +281,7 @@ public class MapScreen extends SlickGameState{
 		int py = (int) Math.floor(y / SlickSKR.scaled_icon_size);
 		
 		getParentMap().tryMoveToTile(px, py);
-		mapCache.setFlush(true);
+		//mapCache.setFlush(true);
 	}
 	
 	@Override
@@ -319,17 +325,19 @@ public class MapScreen extends SlickGameState{
 				InteractiveTile tile = (InteractiveTile)t;
 				tile.interact(getParentMap().getFrame());
 			}
+			dCache.setFlush(true);
 		}
-		mapCache.setFlush(true);
+		//mapCache.setFlush(true);
 		
 	}
 
 	@Override
 	public void keyPressed(int code, char arg1) {
-		if (activeDialog != null){
-			MapConsole console = (MapConsole)activeDialog;
-			console.keyPressed(code, arg1);
-		}
+		//if (activeDialog != null){
+			//MapConsole console = (MapConsole)activeDialog;
+			//console.keyPressed(code, arg1);
+			//dCache.setFlush(true);
+		//}
 		
 	}
 
@@ -338,6 +346,7 @@ public class MapScreen extends SlickGameState{
 		if (activeDialog != null){
 			MapConsole console = (MapConsole)activeDialog;
 			console.keyReleased(code, arg1);
+			dCache.setFlush(true);
 		}else {
 			if (code == MENU){
 				super.parent.swapView(SlickSKR.MENU);

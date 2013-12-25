@@ -37,8 +37,8 @@ public class CharacterProfileWindow extends SlickGameState{
 	 * */
 	private void drawCharacterInfoPanel(Graphics g){
 
-		final int x = 455;
-		final int y = 15;
+		final float x = 455 * SlickSKR.scaleSize;
+		final float y = 15 * SlickSKR.scaleSize;
 		
 		int i = -1;
 		int total = labels.length;

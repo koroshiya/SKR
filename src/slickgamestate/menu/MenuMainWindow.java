@@ -67,10 +67,10 @@ public class MenuMainWindow extends SlickGameState{
 	
 	public void characterPane(Graphics g){
 		
-		final float x = 155;
+		final float x = 155 * SlickSKR.scaleSize;
 		float y = 0;
-		int inc;
-		final int baseInc = 13;
+		float inc;
+		final float baseInc = 13 * SlickSKR.scaleSize;
 		for (int i = 0; i < menuCharacters.length; i++){
 			menuCharacters[i].paintCache(g);
 			PlayableCharacter c = characters.get(i);
@@ -89,15 +89,15 @@ public class MenuMainWindow extends SlickGameState{
 			inc += baseInc;
 			g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.main.characterpanel." + (c.isInParty() ? "inparty" : "notinparty")), x, y + inc);
 			inc += baseInc;
-			y += 155f;
+			y += 155f * SlickSKR.scaleSize;
 		}
 	}
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException{
 		
-		final float x = 376;
-		final float y = 50;
+		final float x = 376 * SlickSKR.scaleSize;
+		final float y = 50 * SlickSKR.scaleSize;
 
 		String s = "";
 		int i = -1;
@@ -105,7 +105,7 @@ public class MenuMainWindow extends SlickGameState{
 		menuItems = new SlickImageRectangle[total];
 		while (++i < total){
 			s = (String) commands[i];
-			menuItems[i] = new SlickImageRectangle(x, i * y, 450, y, s, "/res/buttons/9x1/onyx.png", true);
+			menuItems[i] = new SlickImageRectangle(x, i * y, 450, 50, s, "/res/buttons/9x1/onyx.png", true);
 		}
 		
 		characters = Party.getCharacters();
@@ -114,7 +114,7 @@ public class MenuMainWindow extends SlickGameState{
 		total = menuCharacters.length;
 		while (++i < total){
 			characters.get(i).instantiate();
-			menuCharacters[i] = new SlickImageRectangle(0, 155 * i, x, 150, Integer.toString(i), "/res/buttons/5x2/dbrown.png", true);
+			menuCharacters[i] = new SlickImageRectangle(0, 155 * SlickSKR.scaleSize * i, 376, 150, Integer.toString(i), "/res/buttons/5x2/dbrown.png", true);
 		}
 		VICTORY_FONT = SlickSKR.loadFont("Ubuntu-B.ttf", 24);
 		alert = new SlickBlankRectangle(150, 200, 550, 40, "", false);

@@ -1,3 +1,8 @@
+v0.35
+Improved MapScreen operations such that interactions only affect dCache
+Fixed character centering on scaled screen
+Removed unnecessary flush cycles from MapScreen
+
 v0.34
 Change to sheet/animation size reading, updated some avatars and sheets
 Changed walk animation to use refresh rate instead of assuming 60hz

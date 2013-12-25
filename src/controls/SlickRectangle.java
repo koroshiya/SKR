@@ -94,8 +94,8 @@ public abstract class SlickRectangle extends Rectangle {
 		this.tag = tag;
 		this.x = x;
 		this.y = y;
-		this.width = width;
-		this.height = height;
+		this.width = width * SlickSKR.scaleSize;
+		this.height = height * SlickSKR.scaleSize;
 		this.enabled = enabled;
 		this.displayText = displayText;
 		this.imgSrc = imgSrc;
@@ -142,7 +142,7 @@ public abstract class SlickRectangle extends Rectangle {
 	 * @return True if point lies within this rectangle, otherwise false.
 	 * */
 	public boolean isWithinBounds(int x, int y){
-		if (enabled && clickable && x >= this.x && x < this.x + this.width * SlickSKR.scaleSize && y >= this.y && y < this.y + this.height * SlickSKR.scaleSize){
+		if (enabled && clickable && x >= this.x && x < this.x + this.width && y >= this.y && y < this.y + this.height){
 			//SlickSKR.PlaySFX("other/public/intro_button.ogg");
 			return true;
 		}
@@ -238,7 +238,7 @@ public abstract class SlickRectangle extends Rectangle {
 			}
 			final int textx = f.getWidth(displayText);
 			final int texty = f.getHeight(displayText);
-			g.drawString(displayText, offX + x + (int)((width * SlickSKR.scaleSize - textx) / 2), offY + y + (int)((height * SlickSKR.scaleSize - texty) / 2));
+			g.drawString(displayText, offX + x + (int)((width - textx) / 2), offY + y + (int)((height - texty) / 2));
 		}
 	}
 	
