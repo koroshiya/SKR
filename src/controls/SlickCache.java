@@ -1,20 +1,19 @@
 package controls;
 
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-
-public class SlickCache extends Image {
+public class SlickCache {
 	
 	private boolean flush = false;
-	private float xPos = 0;
-	private float yPos = 0;
+	protected float xPos = 0;
+	protected float yPos = 0;
 	private float initPosX = 0;
 	private float initPosY = 0;
+	private final int width;
+	private final int height;
 	
-	public SlickCache(float xPos, float yPos, int width, int height) throws SlickException{
-		super(width, height);
+	public SlickCache(float xPos, float yPos, int width, int height){
 		resetPosition(xPos, yPos);
+		this.width = width;
+		this.height = height;
 	}
 	
 	public void resetPosition(float xPos, float yPos){
@@ -38,15 +37,9 @@ public class SlickCache extends Image {
 		flush = needed;
 	}
 	
-	public void draw(Graphics g){
-		g.drawImage(this, -xPos, -yPos);
-		//Log.error("Drawing at " + -xPos + ", " + -yPos);
-	}
-	
 	public void move(float xDiff, float yDiff){
 		xPos = this.initPosX + xDiff;
 		yPos = this.initPosY + yDiff;
-		//Log.error("xPos " + xPos);
 	}
 	
 	public float getInitX(){
@@ -63,6 +56,14 @@ public class SlickCache extends Image {
 	
 	public float getYPos(){
 		return this.yPos;
+	}
+	
+	public int getWidth(){
+		return this.width;
+	}
+	
+	public int getHeight(){
+		return this.height;
 	}
 	
 	public SlickCacheSave save(){

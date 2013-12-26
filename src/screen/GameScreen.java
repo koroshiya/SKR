@@ -64,7 +64,6 @@ public class GameScreen extends AppGameContainer{
 		this.setAlwaysRender(true);
 		this.setMaximumLogicUpdateInterval(10);
 		this.setVerbose(false);
-		this.setDefaultFont(SlickSKR.getFont(14, false));
 		//this.setShowFPS(false);
 		SoundStore.get().setMusicVolume(0.3f);
 		SoundStore.get().setSoundVolume(0.3f);
@@ -85,6 +84,7 @@ public class GameScreen extends AppGameContainer{
 	 * */
 	public void swapView(int i){
 		SlickGameState.setFlush(true, false);
+		SlickGameState.setRectFlush(true);
 		int curr = this.getState().getID();
 		if (i == SlickSKR.SAVE || i == SlickSKR.LOAD){
 			((StateTemplate)this.getState(i)).setBack(curr);

@@ -92,8 +92,8 @@ public abstract class SlickRectangle extends Rectangle {
 	public SlickRectangle(float x, float y, float width, float height, String tag, boolean enabled, String displayText, String imgSrc, boolean clickable) {
 		super(x, y, width, height);
 		this.tag = tag;
-		this.x = x;
-		this.y = y;
+		this.x = x * SlickSKR.scaleSize;
+		this.y = y * SlickSKR.scaleSize;
 		this.width = width * SlickSKR.scaleSize;
 		this.height = height * SlickSKR.scaleSize;
 		this.enabled = enabled;

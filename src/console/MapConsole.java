@@ -44,15 +44,18 @@ public class MapConsole extends SlickListener {
 		//TODO: set aside space at bottom for char info, map, etc.
 		//BattleMenuListener listener = new BattleMenuListener();
 
-		background = new SlickImageRectangle(-1, SlickSKR.size.y - 118 * SlickSKR.scaleSize, 817, 120, "", false, "/res/buttons/4x1/brown.png", false);
+		float startY = SlickSKR.size.y - 118 * SlickSKR.scaleSize;
+		startY /= SlickSKR.scaleSize;
+		background = new SlickImageRectangle(-1, startY, 817, 120, "", false, "/res/buttons/4x1/brown.png", false);
 		
+		startY = SlickSKR.size.y - 111 * SlickSKR.scaleSize;
+		startY /= SlickSKR.scaleSize;
 		final int buttonWidth = 150;
 		final int buttonHeight = 25;
 		final int startX = 650;
-		int startY = (int)(SlickSKR.size.y - 114 * SlickSKR.scaleSize);
 		for (int i = 0; i < rects.length; i++){
 			rects[i] = new SlickImageRectangle(startX, startY, buttonWidth, buttonHeight, tags[i], false, "/res/buttons/6x1/blue.png", true);
-			startY += (buttonHeight + 2) * SlickSKR.scaleSize;
+			startY += (buttonHeight + 2);
 		}
 		rects[1].setEnabled(true);
 			
@@ -67,10 +70,10 @@ public class MapConsole extends SlickListener {
 		background.paintCache(g, offX, offY);
 		for (SlickRectangle rect : rects){
 			rect.paintCache(g, offX, offY);
-			rect.paintCenter(g,true, offX, offY);
+			rect.paintCenter(g, true, offX, offY);
 		}
 		//g.drawImage(this.dialogue.getCache(), 10 + offX, 515 + offY);
-		int floatY = (int)(SlickSKR.size.y - 111 * SlickSKR.scaleSize);
+		float floatY = SlickSKR.size.y - 111 * SlickSKR.scaleSize;
 		this.dialogue.getCache().draw(10 + offX, floatY + offY, 100 * SlickSKR.scaleSize, 100 * SlickSKR.scaleSize);
 		
 		final int x = 140 + offX;
@@ -87,7 +90,7 @@ public class MapConsole extends SlickListener {
 		}
 	}
 	
-	public SlickRectangle[] getRects(){return this.rects;}
+	public SlickImageRectangle[] getRects(){return this.rects;}
 	
 	public void speak(Dialogue d) {d.increment();}
 

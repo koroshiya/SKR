@@ -2,6 +2,9 @@ v0.35
 Improved MapScreen operations such that interactions only affect dCache
 Fixed character centering on scaled screen
 Removed unnecessary flush cycles from MapScreen
+Implemented global SlickRectangle cache (not yet implemented everywhere)
+Changed the way SlickRectangle objects are sized, drawn, etc.
+Modified existing weapons, icons, etc.
 
 v0.34
 Change to sheet/animation size reading, updated some avatars and sheets

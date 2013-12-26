@@ -118,22 +118,16 @@ public class Weapon extends Item {
 	
 	public int getSpeed(){return this.stats.getSpeed();}
 
-	public String getSFXHit(){
+	public String getSFXHit(){ //fist gun bat pick katana
 		switch(intType){
+			case 1:
+				return "other/public/hit_bullet.ogg";
 			case 2:
 				return "other/public/hit_bat.ogg";
 			case 3:
-				return "other/public/hit_bullet.ogg";
+				return "other/public/hit_knife.ogg"; //pickaxe
 			case 4:
 				return "other/public/hit_katana.ogg";
-			case 1:
-				//return "pickaxe.ogg";
-			case 5:
-				return "other/public/hit_knife.ogg";
-			case 6:
-				return "other/public/hit_wrench.ogg";
-			case 7:
-				return "other/public/hit_log.ogg";
 			default:
 				return "other/public/hit_punch.ogg";
 		}
@@ -142,19 +136,13 @@ public class Weapon extends Item {
 	public String getSFXHitCritical(){
 		switch(intType){
 			case 1:
-				return "pickaxe.ogg";
+				return "other/public/hit_bullet_critical.ogg";
 			case 2:
 				return "other/public/hit_bat_critical.ogg";
-			case 3:
-				return "other/public/hit_bullet_critical.ogg";
+			//case 3:
+				//return "other/public/hit_knife_critical.ogg"; //pickaxe
 			case 4:
 				return "other/public/hit_katana_critical.ogg";
-			case 7:
-				return "other/public/hit_log_critical.ogg";
-			case 5:
-				//return "knife.ogg";
-			case 6:
-				//return "wrench.ogg";
 			default:
 				return "other/public/hit_punch_critical.ogg";
 		}
@@ -162,10 +150,11 @@ public class Weapon extends Item {
 
 	public String getSFXMiss(){
 		switch(intType){
-			case 3:
+			case 1:
 				return "other/public/miss_bullet.ogg";
-			case 5:
-				return "other/public/miss_knife.ogg";
+			case 3:
+			case 4:
+				return "other/public/miss_knife.ogg"; //pickaxe
 			default:
 				return "other/public/miss_melee.ogg";
 		}

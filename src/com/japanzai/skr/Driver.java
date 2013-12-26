@@ -112,12 +112,14 @@ public class Driver implements Serializable{
 	private void instantiateWeapons(){
 		
 		String wpName = "weapon.class.name.";
-		
-		weapons.add(new Weapon(getValueFromKey(wpName + "barehanded"), 0, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, getValueFromKey("weapon.image.barehanded.url")));
+		weapons.add(new Weapon(getValueFromKey(wpName + "gloved"), 0, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, getValueFromKey("weapon.image.gloved.url")));
+		//weapons.add(new Weapon(getValueFromKey(wpName + "barehanded"), 0, 10, 10, 0.1, 10, 10, 0.99, 0, false, 0, 0, getValueFromKey("weapon.image.barehanded.url")));
 		weapons.add(new Weapon(getValueFromKey(wpName + "firearm"), 1, 10, 10, 0.1, 10, 10, 0.99, 20, true, 0, 0, getValueFromKey("weapon.image.firearm.url")));
 		weapons.add(new Weapon(getValueFromKey(wpName + "bat"), 2, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.bat.url")));
 		weapons.add(new Weapon(getValueFromKey(wpName + "pickaxe"), 3, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.pickaxe.url")));
-		//weapons.add katana
+		weapons.add(new Weapon(getValueFromKey(wpName + "katana"), 4, 10, 10, 0.1, 10, 10, 0.99, 3, false, 0, 0, getValueFromKey("weapon.image.katana.url")));
+		
+		//
 		/*for (Weapon weapon : weapons){
 			weapon.increaseQuantity(1);
 		}*/

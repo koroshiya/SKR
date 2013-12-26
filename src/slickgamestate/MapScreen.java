@@ -15,6 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import console.MapConsole;
 import controls.SlickCache;
 import controls.SlickCacheSave;
+import controls.SlickImageCache;
 import screen.GameScreen;
 import tile.CharacterTile;
 import tile.InteractiveTile;
@@ -45,10 +46,10 @@ public class MapScreen extends SlickGameState{
 	private MapConsole activeDialog = null;
 	public static Point step = null;
 	
-	public static SlickCache mapCache; //Cache for the objects on the map. eg. Trees, rocks, chests, etc.
-	public static SlickCache fgCache; //Same as mapCache, but in the foreground.
-	public static SlickCache dCache; //Dialogue cache
-	private SlickCache bgCache; //Cache for the map itself. This is usually a repeating background pattern.
+	public static SlickImageCache mapCache; //Cache for the objects on the map. eg. Trees, rocks, chests, etc.
+	public static SlickImageCache fgCache; //Same as mapCache, but in the foreground.
+	public static SlickImageCache dCache; //Dialogue cache
+	private SlickImageCache bgCache; //Cache for the map itself. This is usually a repeating background pattern.
 	
 	public MapScreen(ParentMap map){
 		super(SlickSKR.MAP, map.getFrame());
@@ -80,10 +81,10 @@ public class MapScreen extends SlickGameState{
 	
 	public void load(Object obj) throws SlickException{
 		MapScreenSave cache = (MapScreenSave) obj;
-		mapCache = cache.getMapCacheSave().load();
-		fgCache = cache.getFgCacheSave().load();
-		dCache = cache.getDCacheSave().load();
-		bgCache = cache.getBgCacheSave().load();
+		mapCache = (SlickImageCache) cache.getMapCacheSave().load();
+		fgCache = (SlickImageCache) cache.getFgCacheSave().load();
+		dCache = (SlickImageCache) cache.getDCacheSave().load();
+		bgCache = (SlickImageCache) cache.getBgCacheSave().load();
 	}
 	
 	public MapScreenSave save(){
@@ -91,16 +92,11 @@ public class MapScreen extends SlickGameState{
 	}
 	
 	@Override
-	public void init(GameContainer gc, StateBasedGame arg1){
-
-		try { //TODO: check for leak over time
-			mapCache = new SlickCache(map.getPositionX(), map.getPositionY(), map.getWidth(), map.getHeight());
-			fgCache = new SlickCache(map.getPositionX(), map.getPositionY(), map.getWidth(), map.getHeight());
-			bgCache = new SlickCache(SlickSKR.scaled_icon_size, SlickSKR.scaled_icon_size, gc.getWidth() + SlickSKR.scaled_icon_size * 2, gc.getHeight() + SlickSKR.scaled_icon_size * 2);
-			dCache = new SlickCache(0,0,gc.getWidth(),gc.getHeight());
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+	public void init(GameContainer gc, StateBasedGame arg1) throws SlickException{
+		mapCache = new SlickImageCache(map.getPositionX(), map.getPositionY(), map.getWidth(), map.getHeight());
+		fgCache = new SlickImageCache(map.getPositionX(), map.getPositionY(), map.getWidth(), map.getHeight());
+		bgCache = new SlickImageCache(SlickSKR.scaled_icon_size, SlickSKR.scaled_icon_size, gc.getWidth() + SlickSKR.scaled_icon_size * 2, gc.getHeight() + SlickSKR.scaled_icon_size * 2);
+		dCache = new SlickImageCache(0,0,gc.getWidth(),gc.getHeight());
 	}
 	
 	@Override
@@ -140,8 +136,6 @@ public class MapScreen extends SlickGameState{
 		}
 		if (this.activeDialog != null){
 			checkCursor(arg0, this.activeDialog.getRects());
-		}else{
-			SlickSKR.setMouseStateIfDifferent(SlickSKR.MOUSE_STATE_NORMAL, arg0);
 		}
 		
 	}

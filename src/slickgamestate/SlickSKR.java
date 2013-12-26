@@ -12,6 +12,7 @@ import map.ParentMap;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -25,6 +26,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
+import controls.SlickImageRectangle;
 import character.EnemyCharacter;
 import screen.GameScreen;
 import slickgamestate.menu.CharacterProfileWindow;
@@ -58,10 +60,10 @@ public class SlickSKR extends StateBasedGame {
 	public static final int MOUSE_STATE_HOVER = 1;
 	public static final int MOUSE_STATE_PRESSED = 2;
 	public static int Mouse_state = 0;
-	public static SpriteSheet mouseStateList;
+	public static Animation mouseStateList;
 	
 	private static final Properties prop = new Properties();
-	public static final boolean FULLSCREEN = true;
+	public static final boolean FULLSCREEN = false;
 	
 	private static String musicPlaying = "";
 	public static final Point size = new Point(1366,768);
@@ -119,7 +121,15 @@ public class SlickSKR extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		gc.setDefaultFont(SlickSKR.loadFont("Ubuntu-R.ttf", 16));
-		mouseStateList = new SpriteSheet("/res/cursor.png", 48, 48);
+		
+		SpriteSheet sprites = new SpriteSheet("/res/cursor.png", 48, 48);
+		mouseStateList = new Animation();
+		mouseStateList.addFrame(sprites.getSprite(MOUSE_STATE_NORMAL, 0), 1);
+		mouseStateList.addFrame(sprites.getSprite(MOUSE_STATE_HOVER, 0), 1);
+		mouseStateList.addFrame(sprites.getSprite(MOUSE_STATE_PRESSED, 0), 1);
+		mouseStateList.setAutoUpdate(false);
+		mouseStateList.stop();
+		
 		setMousePointer(MOUSE_STATE_NORMAL, gc);
 		this.getState(MAINMENU).init(gc, this);
 		this.enterState(MAINMENU);
@@ -129,13 +139,13 @@ public class SlickSKR extends StateBasedGame {
 	private static void setMousePointer(int pointer, GameContainer gc){
 		Mouse_state = pointer;
 		try {
-			gc.setMouseCursor(mouseStateList.getSprite(Mouse_state, 0), 0, 0);
+			gc.setMouseCursor(mouseStateList.getImage(Mouse_state), 0, 0);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void setMouseStateIfDifferent(int newMouseState, GameContainer gc){
+	public static void setMouseStateIfDifferent(int newMouseState, GameContainer gc, SlickImageRectangle rect){
 		if (newMouseState != Mouse_state){
 			setMousePointer(newMouseState, gc);
 		}

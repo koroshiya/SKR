@@ -6,9 +6,9 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import controls.SlickCache;
-import controls.SlickRectangle;
-
+import controls.SlickImageCache;
+import controls.SlickImageRectangle;
+import controls.SlickRectCache;
 import screen.GameScreen;
 import interfaces.SlickEventHandler;
 
@@ -16,7 +16,8 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	
 	protected final int state;
 	protected final GameScreen parent;
-	private static SlickCache screenCache;
+	private static SlickImageCache screenCache;
+	private static SlickRectCache rectCache;
 	
 	public SlickGameState(int state, GameScreen parent){
 		this.state = state;
@@ -32,30 +33,59 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 	@Override
 	public int getID() {return state;}
 	
-	public void checkCursor(GameContainer arg0, SlickRectangle[] rects){
-		if (arg0.getInput().isMouseButtonDown(0)){
-			SlickSKR.setMouseStateIfDifferent(SlickSKR.MOUSE_STATE_PRESSED, arg0);
-		}else{
-			for (SlickRectangle rect : rects){
+	public void checkCursor(GameContainer arg0, SlickImageRectangle[] rects){
+		if (!arg0.getInput().isMouseButtonDown(0)){
+			boolean changeOccurred = false;
+			for (SlickImageRectangle rect : rects){
 				if (rect.isWithinBounds(arg0.getInput().getMouseX(), arg0.getInput().getMouseY())){
-					SlickSKR.setMouseStateIfDifferent(SlickSKR.MOUSE_STATE_HOVER, arg0);
-					return;
+					if (rect.setHighlighted(true)){
+						changeOccurred = true;
+					}
+				}else{
+					if (rect.setHighlighted(false)){
+						changeOccurred = true;
+					}
 				}
 			}
-			SlickSKR.setMouseStateIfDifferent(SlickSKR.MOUSE_STATE_NORMAL, arg0);
+			setRectFlush(changeOccurred);
+		}
+	}
+	
+	public void checkCursor(GameContainer arg0, SlickImageRectangle[][] rects2){
+		if (!arg0.getInput().isMouseButtonDown(0)){
+			boolean changeOccurred = false;
+			for (SlickImageRectangle[] rects : rects2){
+				for (SlickImageRectangle rect : rects){
+					if (rect.isWithinBounds(arg0.getInput().getMouseX(), arg0.getInput().getMouseY())){
+						if (rect.setHighlighted(true)){
+							changeOccurred = true;
+						}
+					}else{
+						if (rect.setHighlighted(false)){
+							changeOccurred = true;
+						}
+					}
+				}
+			}
+			setRectFlush(changeOccurred);
 		}
 	}
 	
 	public static void initCache(GameContainer arg0){
 		try {
-			screenCache = new SlickCache(0, 0, arg0.getWidth(),arg0.getHeight());
+			screenCache = new SlickImageCache(0, 0, arg0.getWidth(),arg0.getHeight());
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+		rectCache = new SlickRectCache(0, 0, arg0.getWidth(), arg0.getHeight());
 	}
 	
 	public static boolean needFlush(){
 		return screenCache.needFlush();
+	}
+	
+	public static boolean needRectFlush(){
+		return rectCache.needFlush();
 	}
 	
 	public static void setFlush(boolean needed, boolean map){
@@ -67,17 +97,29 @@ public abstract class SlickGameState extends BasicGameState implements SlickEven
 		}
 	}
 	
+	public static void setRectFlush(boolean needed){
+		rectCache.setFlush(needed);
+	}
+	
 	public static void capture(Graphics g){
-		g.copyArea(screenCache, 0, 0);
-		SlickGameState.setFlush(false, false);
+		screenCache.copyArea(g);
+	}
+	
+	public static void captureRect(SlickImageRectangle[] rects){
+		rectCache.setRects(rects);
+		SlickGameState.setRectFlush(false);
 	}
 	
 	public static void drawCache(Graphics g){
-		g.drawImage(screenCache, 0, 0);
+		screenCache.draw(g);
+	}
+	
+	public static void drawRectCache(Graphics g){
+		rectCache.draw(g);
 	}
 	
 	public static void darken(){
-		screenCache.setColor(0, 155, 155, 155);
+		screenCache.darken();
 	}
 		
 }

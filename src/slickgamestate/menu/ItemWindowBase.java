@@ -44,8 +44,8 @@ public abstract class ItemWindowBase extends SlickGameState{
 		float optX = 0;
 		float optY = 0;
 		
-		final int baseX = 200;
-		final int baseY = 12;
+		final float baseX = 200;
+		final float baseY = 12;
 		
 		itemParams = new SlickBlankRectangle[7];
 		int i = -1;
@@ -57,6 +57,11 @@ public abstract class ItemWindowBase extends SlickGameState{
 			y += optY;
 			optY = optY == 0 ? baseY : 0;
 		}
+	}
+	
+	@Override
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2){
+		checkCursor(arg0, new SlickImageRectangle[][]{items, filterItems});
 	}
 	
 	@Override
@@ -119,7 +124,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 	protected void resetFilter(int length){
 		final int filterx = 0;
 		float filtery;
-		final int filterBaseY = 50;
+		final int filterBaseY = 70;
 		final int paneWidth = 300;
 		
 		int i = -1;
@@ -131,10 +136,10 @@ public abstract class ItemWindowBase extends SlickGameState{
 	
 	protected void setInventoryFilter(){
 		
-		final int incX = 150;
-		final int baseX = 335;
-		final int incY = 50;
-		final int baseY = 160;
+		final float incX = 150;
+		final float baseX = 335;
+		final float incY = 60;
+		final float baseY = 186;
 		
 		items = new SlickImageRectangle[results.size()];
 		int i = -1;
@@ -143,7 +148,7 @@ public abstract class ItemWindowBase extends SlickGameState{
 			total = 9;
 		}
 		while (++i < total){
-			items[i] = new SlickImageRectangle(baseX, baseY + incY * i, incX * 3, incY, Integer.toString(i), true, "/res/buttons/9x1/onyx.png", true);
+			items[i] = new SlickImageRectangle(baseX, baseY + 62 * i, incX * 3, incY, Integer.toString(i), true, "/res/buttons/9x1/onyx.png", true);
 		}
 		
 		if (total > 0){
@@ -170,14 +175,15 @@ public abstract class ItemWindowBase extends SlickGameState{
 
 	protected void displayResults(Graphics g){
 
-		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.name"), 350, 140); //TODO: SlickRectangle for headings
-		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.quantity"), 500, 140);
-		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.value"), 650, 140);
+		float headerY = 160 * SlickSKR.scaleSize;
+		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.name"), 350 * SlickSKR.scaleSize, headerY); //TODO: SlickRectangle for headings
+		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.quantity"), 500 * SlickSKR.scaleSize, headerY);
+		g.drawString(SlickSKR.getValueFromKey("screen.mainmenu.itemwindowbase.displayresults.value"), 650 * SlickSKR.scaleSize, headerY);
 		
-		final int incX = 150;
-		final int baseX = 350;
-		final int incY = 50;
-		int baseY = 174;
+		final float incX = 150 * SlickSKR.scaleSize;
+		final float baseX = 370 * SlickSKR.scaleSize;
+		final float incY = 62 * SlickSKR.scaleSize;
+		float baseY = 204 * SlickSKR.scaleSize;
 		
 		int i = -1;
 		int total = items.length;
@@ -216,19 +222,19 @@ public abstract class ItemWindowBase extends SlickGameState{
 	
 	public void getInventorySelectedItem(Graphics g){
 		
-		float x = 435;
-		float y = 40;
+		float x = 455 * SlickSKR.scaleSize;
+		float y = 60 * SlickSKR.scaleSize;
 		float optX = 0;
 		float optY = 0;
 		
-		int baseX = 200;
-		int baseY = 16;
+		float baseX = 200 * SlickSKR.scaleSize;
+		float baseY = 18 * SlickSKR.scaleSize;
 		
 		//Rectangle avatar = new Rectangle(300, 0, 100f, 100f);
 		//g.draw(avatar);
-		SlickImageRectangle stats = new SlickImageRectangle(335, 30, 450, 100, "", false, "/res/buttons/9x2/onyx.png", false);
+		SlickImageRectangle stats = new SlickImageRectangle(335, 50, 450, 100, "", false, "/res/buttons/9x2/onyx.png", false);
 		stats.paintCache(g);//TODO: replace 150 with gc size scale
-		item.draw(g, 352, 47, 100);
+		item.draw(g, (int)(352 * SlickSKR.scaleSize), (int)(55 * SlickSKR.scaleSize), 80);
 		
 		int i = -1;
 		int total = itemParams.length;
