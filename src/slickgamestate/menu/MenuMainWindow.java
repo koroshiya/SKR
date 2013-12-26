@@ -68,7 +68,7 @@ public class MenuMainWindow extends SlickGameState{
 	public void characterPane(Graphics g){
 		
 		final float x = 155 * SlickSKR.scaleSize;
-		float y = 0;
+		float y = 10 * SlickSKR.scaleSize;
 		float inc;
 		final float baseInc = 13 * SlickSKR.scaleSize;
 		for (int i = 0; i < menuCharacters.length; i++){

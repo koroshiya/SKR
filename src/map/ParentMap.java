@@ -89,7 +89,7 @@ public class ParentMap {
 		((MapScreen)parent.getState()).resetPosition((float)xDiff, (float)yDiff);
 		xDiff = 0;
 		yDiff = 0;
-		MapScreen.step = new Point((int)(x/SlickSKR.scaled_icon_size), (int)(y/SlickSKR.scaled_icon_size));
+		this.getTileByPosition(x + this.coordinatex, y + this.coordinatey).stepOn();
 		
 	}
 	
@@ -246,8 +246,7 @@ public class ParentMap {
 				Tile tile = getTileByPosition(d + (this.getCharacterPositionX() * SlickSKR.scaled_icon_size), 
 												currentPositiony2 + (this.getCharacterPositionY() * SlickSKR.scaled_icon_size));
 				if (tile instanceof TransitionTile){
-					MapScreen.step = new Point((int)(d + (this.getCharacterPositionX() * SlickSKR.scaled_icon_size)), 
-												(int)(currentPositiony2 + (this.getCharacterPositionY() * SlickSKR.scaled_icon_size)));
+					tile.stepOn();
 				}
 	
 			}else {
@@ -305,8 +304,7 @@ public class ParentMap {
 							py + (getCharacterPositionY() * SlickSKR.scaled_icon_size));
 					
 					if (tile instanceof TransitionTile){
-						MapScreen.step = new Point((int)(px + (getCharacterPositionX() * SlickSKR.scaled_icon_size)), 
-								(int)(py + (getCharacterPositionY() * SlickSKR.scaled_icon_size)));
+						tile.stepOn();
 						break;
 					}else if (parent.isEncounter(map)){
 						parent.encounter(map);

@@ -56,9 +56,7 @@ public class GameScreen extends AppGameContainer{
 		super.game = skr.getGame();
 		game = skr;
 		this.setVSync(true);
-		final int refreshrate = 60;
-		this.setTargetFrameRate(refreshrate);
-		SlickSKR.setRefreshRate(refreshrate);
+		this.setTargetFrameRate(SlickSKR.refreshRate);
 		this.setSmoothDeltas(true);
 		this.setUpdateOnlyWhenVisible(true);
 		this.setAlwaysRender(true);
@@ -84,6 +82,7 @@ public class GameScreen extends AppGameContainer{
 	 * */
 	public void swapView(int i){
 		SlickGameState.setFlush(true, false);
+		//SlickGameState.setFlush(true, true);
 		SlickGameState.setRectFlush(true);
 		int curr = this.getState().getID();
 		if (i == SlickSKR.SAVE || i == SlickSKR.LOAD){

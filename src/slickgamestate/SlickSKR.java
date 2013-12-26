@@ -1,6 +1,7 @@
 package slickgamestate;
 
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +55,7 @@ public class SlickSKR extends StateBasedGame {
 	public static final int GAMEOVER = 666;
 
 	public static final boolean NO_ENCOUNTERS = true;
-	public static final boolean NO_TRANSITIONS = true;
+	public static final boolean NO_TRANSITIONS = false;
 
 	public static final int MOUSE_STATE_NORMAL = 0;
 	public static final int MOUSE_STATE_HOVER = 1;
@@ -66,18 +67,25 @@ public class SlickSKR extends StateBasedGame {
 	public static final boolean FULLSCREEN = false;
 	
 	private static String musicPlaying = "";
-	public static final Point size = new Point(1366,768);
+	public static Point size;
 	public static final Point targetSize = new Point(816, 624);
-	public static final float scaleSize = (float)size.y / (float)targetSize.y;
+	public static float scaleSize;
 	public static final int icon_size = 48;
-	public static final int scaled_icon_size = (int)Math.floor(scaleSize * 48);
+	public static int scaled_icon_size;
 	public static int refreshRate;
 	
 	public SlickSKR(ParentMap current) throws SlickException, IOException{
 		
 		super(GAME_NAME);
-		game = new ScalableGame(this, size.x, size.y);
+
+		Display.setLocation(-1, -1);
+		DisplayMode mode = availableResolutions();
+		size = new Point(mode.getWidth(),mode.getHeight());
+		scaleSize = (float)size.y / (float)targetSize.y;
+		scaled_icon_size = (int)Math.floor(scaleSize * 48);
+
 		GameScreen gs = current.getFrame();
+		game = new ScalableGame(this, size.x, size.y);
 		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
 		this.addState(new StartScreen(gs));
 		this.addState(new Save(gs));
@@ -90,31 +98,55 @@ public class SlickSKR extends StateBasedGame {
 		this.addState(new Store(gs));
 		this.addState(new ControlScreen(gs));
 		this.addState(new GameOver(gs));
-		availableResolutions();
 	}
 	
 	public SlickSKR() throws IOException{
 		super(GAME_NAME);
+		Display.setLocation(-1, -1);
+		DisplayMode mode = availableResolutions();
+		size = new Point(mode.getWidth(),mode.getHeight());
+		scaleSize = (float)size.y / (float)targetSize.y;
+		scaled_icon_size = (int)Math.floor(scaleSize * 48);
 		game = new ScalableGame(this, size.x, size.y);
 		prop.load(ResourceLoader.getResourceAsStream("/res/script/en_US.properties"));
 	}
 	
-	private void availableResolutions(){
+	private DisplayMode availableResolutions(){
+		GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		java.awt.DisplayMode device = g.getDefaultScreenDevice().getDisplayMode();
+		
 		ArrayList<DisplayMode> best = new ArrayList<DisplayMode>();
+		
+		int topFreq = 0;
+		int topWidth = 0;
+		int topHeight = 0;
+		DisplayMode choice = null;
 		try {
 			DisplayMode[] modes = Display.getAvailableDisplayModes();
 	        for (DisplayMode mode : modes) {
-	        	if (mode.getFrequency() == 60){
+        		System.out.println(mode.getWidth() + "x" + mode.getHeight());
+	        	if (topWidth <= mode.getWidth() && topHeight <= mode.getHeight() && mode.getWidth() <= device.getWidth() && mode.getHeight() <= device.getHeight()){
+	        		topWidth = mode.getWidth();
+	        		topHeight = mode.getHeight();
+	        	}
+	        }
+	        for (DisplayMode mode : modes){
+	        	if (topWidth == mode.getWidth() && topHeight == mode.getHeight()){
 	        		best.add(mode);
-	        		//Display.sync(fps) TODO instead of/as well as vsync? 
-	        		//Necessary if already set by Slick? 
-	        		//Handled in fullscreen already?
-	        		System.out.println(mode.getWidth() + "x" + mode.getHeight() + "x" + mode.getBitsPerPixel() + " " + mode.getFrequency() + "Hz");
+        		}
+	        }
+	        for (DisplayMode mode : best) {
+	        	if (topFreq <= mode.getFrequency()){
+	        		topFreq = mode.getFrequency();
+	        		choice = mode;
+	        		refreshRate = mode.getFrequency();
+	        		System.out.println(mode.getWidth() + "x" + mode.getHeight() + "x" + mode.getBitsPerPixel() + " " + mode.getFrequency() + "hz");
 	        	}
 	        }
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
+		return choice;
 
 	}
 		
@@ -153,7 +185,6 @@ public class SlickSKR extends StateBasedGame {
 	
 	public static TrueTypeFont loadFont(String fontName, float size){
 		try {
-			size *= SlickSKR.scaleSize;
 			InputStream inputStream	= ResourceLoader.getResourceAsStream("/res/font/" + fontName);
 			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
 			return new TrueTypeFont(awtFont2.deriveFont(size), true);

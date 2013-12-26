@@ -3,9 +3,6 @@ package tile;
 import interfaces.Photogenic;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.util.Log;
 
 import slickgamestate.SlickSKR;
 
@@ -94,6 +91,6 @@ public class Tile implements Photogenic{
 	 * */
 	public boolean isFore(){return fore;}
 	
-	public boolean stepOn(Graphics g){return false;}
+	public boolean stepOn(){return false;}
 	
 }

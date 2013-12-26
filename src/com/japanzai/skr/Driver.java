@@ -138,12 +138,7 @@ public class Driver implements Serializable{
 	
 	private void instantiatePlayableCharacters(){
 
-		String kenInfo = "character.ken.";
-		String yuminInfo = "character.yumin.";
-		String pickaxeInfo = "character.pickaxe.";
-		String taesooInfo = "character.taesoo.";
-		
-		//String doUnique = "Favorite weapon:" + "\n" + "4x2 plank" + "\n" + "\n" + "Enormous build. Loves his car.";
+		String maxInfo = "character.max.";
 		
 		ArrayList<Integer> wList = new ArrayList<Integer>();
 		int i = -1;
@@ -151,15 +146,10 @@ public class Driver implements Serializable{
 			wList.add(i);
 		}
 		
-		PlayableCharacter ken = new PlayableCharacter(kenInfo, styles.get(0), weapons.get(0), genders.get(1), wList);
+		PlayableCharacter max = new PlayableCharacter(maxInfo, styles.get(0), weapons.get(0), genders.get(1), wList);
 		//PlayableCharacter yumin = new PlayableCharacter(yuminInfo, styles.get(1), weapons.get(2), genders.get(0), wList);
-		//PlayableCharacter pickaxe = new PlayableCharacter(pickaxeInfo, styles.get(2), weapons.get(3), genders.get(1), wList);
-		//PlayableCharacter taesoo = new PlayableCharacter(taesooInfo, styles.get(3), weapons.get(0), genders.get(1), wList);
-		/*PlayableCharacter doheun = new PlayableCharacter("Do-Heun", "Chang", 
-				styles.get(4), weapons.get(7), techniques, genders.get(1), 
-				"info", "Henchman", "212cm", "Korean", null, kenSprite, i);*/
 
-		PlayableCharacter[] chars = {ken/*, yumin, pickaxe, taesoo*/};
+		PlayableCharacter[] chars = {max};
 		
 		for (PlayableCharacter c : chars){
 			for (Technique t : c.getFightingStyle().getTechnique(c.getLevel())){

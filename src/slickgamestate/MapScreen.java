@@ -13,7 +13,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import console.MapConsole;
-import controls.SlickCache;
 import controls.SlickCacheSave;
 import controls.SlickImageCache;
 import screen.GameScreen;
@@ -43,8 +42,9 @@ public class MapScreen extends SlickGameState{
 	private final int FULLSCREEN = Input.KEY_F;
 	
 	private ParentMap map;
+	private ParentMap tempMap;
 	private MapConsole activeDialog = null;
-	public static Point step = null;
+	private Point step = null;
 	
 	public static SlickImageCache mapCache; //Cache for the objects on the map. eg. Trees, rocks, chests, etc.
 	public static SlickImageCache fgCache; //Same as mapCache, but in the foreground.
@@ -169,11 +169,6 @@ public class MapScreen extends SlickGameState{
 	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
-
-		if (step != null){
-			map.getTileByPosition(step.x, step.y).stepOn(g);
-			step = null;
-		}
 		
 		if (bgCache.needFlush()){
 			g.clear();
@@ -226,6 +221,12 @@ public class MapScreen extends SlickGameState{
 		fgCache.draw(g);
 		if (this.activeDialog != null){dCache.draw(g);}
 		g.flush();
+
+		if (step != null){
+			this.setMap(tempMap, step.x, step.y, g);
+			step = null;
+		}
+		g.flush();
 		
 	}
 	
@@ -243,12 +244,20 @@ public class MapScreen extends SlickGameState{
 	 * @param x X coordinate at which to place the character.
 	 * @param y Y coordinate at which to place the character.
 	 * */
-	public void setMap(ParentMap map2, float x, float y) {
+	public void setMap(ParentMap map2, float x, float y, Graphics g) {
 		this.map = map2;
-		mapCache.setFlush(true);
-		bgCache.setFlush(true);
+		try {
+			this.map.instantiateImages();
+		} catch (SlickException ex) {
+			ex.printStackTrace();
+		}
 		this.map.moveToPosition(x, y);
 		super.parent.swapView(SlickSKR.MAP);
+	}
+	
+	public void setMap(ParentMap map2, float x, float y) {
+		this.step = new Point((int)x,(int)y);
+		this.tempMap = map2;
 	}
 
 	/**
